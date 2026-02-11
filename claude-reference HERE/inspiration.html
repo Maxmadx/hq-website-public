@@ -4,17 +4,27 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HQ Aviation - Approved Components Inspiration Board</title>
-  <link rel="stylesheet" href="../public/assets/css/hq-redesign/pages/variations.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+  <!-- Full CSS Stack (includes tokens with CSS variables) -->
+  <link rel="stylesheet" href="../public/assets/css/hq-redesign/main.css">
+
   <style>
+    /* Inspiration Board Layout Styles */
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    body.inspiration-board {
+      font-family: var(--hq-font-primary);
       background: #0f0f0f;
       color: #fff;
     }
 
-    /* Navigation */
-    .nav-container {
+    /* Navigation Sidebar */
+    .inspiration-nav {
       position: fixed;
       top: 0;
       left: 0;
@@ -26,7 +36,8 @@
       z-index: 1000;
       padding: 1.5rem;
     }
-    .nav-title {
+    .inspiration-nav__title {
+      font-family: var(--hq-font-accent);
       font-size: 1.1rem;
       font-weight: 600;
       color: #fff;
@@ -34,17 +45,18 @@
       padding-bottom: 1rem;
       border-bottom: 1px solid #333;
     }
-    .nav-section {
+    .inspiration-nav__section {
       margin-bottom: 1.5rem;
     }
-    .nav-section h3 {
-      font-size: 0.75rem;
+    .inspiration-nav__section h3 {
+      font-family: var(--hq-font-accent);
+      font-size: 0.7rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #888;
+      letter-spacing: 0.15em;
+      color: var(--hq-accent);
       margin-bottom: 0.5rem;
     }
-    .nav-section a {
+    .inspiration-nav__section a {
       display: block;
       color: #ccc;
       text-decoration: none;
@@ -52,34 +64,38 @@
       font-size: 0.85rem;
       transition: color 0.2s;
     }
-    .nav-section a:hover {
+    .inspiration-nav__section a:hover {
       color: #fff;
     }
 
-    /* Main Content */
-    .main-content {
+    /* Main Content Area */
+    .inspiration-main {
       margin-left: 280px;
       padding: 2rem;
     }
 
-    /* Component Display */
-    .component-section {
+    /* Component Section Groups */
+    .inspiration-section {
       margin-bottom: 4rem;
     }
-    .component-section > h2 {
+    .inspiration-section__title {
+      font-family: var(--hq-font-display);
       font-size: 1.5rem;
       color: #fff;
       margin-bottom: 2rem;
       padding-bottom: 0.5rem;
-      border-bottom: 2px solid #333;
+      border-bottom: 2px solid var(--hq-accent);
     }
-    .component-block {
+
+    /* Individual Component Blocks */
+    .inspiration-block {
       margin-bottom: 3rem;
       background: #1a1a1a;
-      border-radius: 8px;
+      border-radius: 12px;
       overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
-    .component-header {
+    .inspiration-block__header {
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -87,21 +103,28 @@
       background: #252525;
       border-bottom: 1px solid #333;
     }
-    .component-header h3 {
+    .inspiration-block__header h3 {
+      font-family: var(--hq-font-accent);
       font-size: 1rem;
       font-weight: 500;
+      color: #fff;
     }
-    .component-header .component-id {
+    .inspiration-block__header .inspiration-block__id {
       font-size: 0.75rem;
-      color: #888;
+      color: var(--hq-accent);
       font-family: monospace;
+      background: rgba(224,74,47,0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
     }
-    .component-render {
-      background: #fff;
-      color: #000;
+
+    /* Component Render Area - White background for proper component rendering */
+    .inspiration-block__render {
+      background: var(--hq-ivory);
+      color: var(--hq-black);
     }
-    .component-render.dark-bg {
-      background: #111;
+    .inspiration-block__render--dark {
+      background: #0A0A0A;
       color: #fff;
     }
 
@@ -111,43 +134,50 @@
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 1.5rem;
       padding: 1.5rem;
-      background: #fff;
+      background: var(--hq-ivory);
     }
     .hq-quote-card {
-      background: #f5f5f5;
+      background: var(--hq-white);
       padding: 1.5rem;
-      border-radius: 8px;
+      border-radius: var(--hq-radius-lg);
+      box-shadow: var(--hq-card-shadow);
     }
     .hq-quote-card blockquote {
+      font-family: var(--hq-font-display);
       font-size: 1.1rem;
       font-style: italic;
-      color: #333;
+      color: var(--hq-charcoal);
       margin-bottom: 0.5rem;
     }
     .hq-quote-use {
+      font-family: var(--hq-font-accent);
       font-size: 0.75rem;
-      color: #888;
+      color: var(--hq-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
     }
 
-    /* Basic component styles for rendering */
-    .hq-container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; }
-    .hq-section { padding: 4rem 0; }
-    .hq-section-header { text-align: center; margin-bottom: 3rem; }
-    .hq-overline { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px; color: #8b5cf6; display: block; margin-bottom: 0.5rem; }
-    .hq-section-title { font-size: 2.5rem; font-weight: 700; }
-    .hq-btn { display: inline-block; padding: 0.75rem 1.5rem; border-radius: 4px; text-decoration: none; font-weight: 500; transition: all 0.2s; }
-    .hq-btn--primary { background: #8b5cf6; color: #fff; }
-    .hq-btn--outline, .hq-btn--ghost { border: 1px solid currentColor; background: transparent; }
-    .hq-btn-group { display: flex; gap: 1rem; }
-    .hq-btn-group--center { justify-content: center; }
+    /* Keyframe animations for hero elements */
+    @keyframes hq-fade-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes hq-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes hq-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
   </style>
 </head>
-<body>
+<body class="inspiration-board">
   <!-- Navigation Sidebar -->
-  <nav class="nav-container">
-    <div class="nav-title">Approved Components<br><small style="font-weight:normal;color:#888;">From Feedback Document</small></div>
+  <nav class="inspiration-nav">
+    <div class="inspiration-nav__title">Approved Components<br><small style="font-weight:normal;color:#888;">From Feedback Document</small></div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Product & Showcase</h3>
       <a href="#hero-product-showcase">Product Showcase</a>
       <a href="#fleet-model-spotlight">Model Spotlight</a>
@@ -155,7 +185,7 @@
       <a href="#aircraft-comparison-table">Comparison Table</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Trust & Credibility</h3>
       <a href="#hero-trust-heritage">Heritage Focus</a>
       <a href="#stats-counter-animated">Animated Stats</a>
@@ -164,7 +194,7 @@
       <a href="#testimonial-carousel">Testimonial Carousel</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Editorial & Content</h3>
       <a href="#hero-editorial-magazine">Magazine Style</a>
       <a href="#hero-editorial-quote">Large Quote</a>
@@ -172,28 +202,28 @@
       <a href="#content-split-image-left">Split Content</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Layout & Navigation</h3>
       <a href="#aircraft-carousel">Horizontal Scroll</a>
       <a href="#cards-stacked">Stacked Cards</a>
       <a href="#nav-breadcrumbs">Breadcrumbs</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>CTA & Conversion</h3>
       <a href="#cta-simple-centered">Centered CTA</a>
       <a href="#hero-minimal-centered">Centered Statement</a>
       <a href="#footer-mega">Mega Footer</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Team & About</h3>
       <a href="#team-grid-4">Team Grid</a>
       <a href="#team-leadership">Leadership Team</a>
       <a href="#team-founder-spotlight">Founder Spotlight</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Services</h3>
       <a href="#tabbed-services">Tabbed Services</a>
       <a href="#tabbed-specs">Tabbed Specs</a>
@@ -201,30 +231,30 @@
       <a href="#maintenance-capabilities">Maintenance Capabilities</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Gallery</h3>
       <a href="#gallery-masonry">Masonry Grid</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Training</h3>
       <a href="#journey-pilot-pathway">Pilot Pathway</a>
       <a href="#process-timeline">Process Timeline</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Lifestyle</h3>
       <a href="#lifestyle-destinations">Where Will You Go?</a>
       <a href="#expedition-showcase">Expedition Showcase</a>
       <a href="#lifestyle-ownership-benefits">Ownership Benefits</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Events</h3>
       <a href="#events-upcoming">Upcoming Events</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Page Showcases</h3>
       <a href="#showcase-training-environment">Training Experience</a>
       <a href="#showcase-trial-experience">Trial Flight</a>
@@ -233,29 +263,29 @@
       <a href="#opening-hours">Opening Hours</a>
     </div>
 
-    <div class="nav-section">
+    <div class="inspiration-nav__section">
       <h3>Approved Quotes</h3>
       <a href="#quotes-section">View All Quotes</a>
     </div>
   </nav>
 
   <!-- Main Content -->
-  <main class="main-content">
+  <main class="inspiration-main">
 
     <!-- PRODUCT & SHOWCASE -->
-    <section class="component-section">
-      <h2>Product & Showcase Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Product & Showcase Components</h2>
 
-      <div class="component-block" id="hero-product-showcase">
-        <div class="component-header">
+      <div class="inspiration-block" id="hero-product-showcase">
+        <div class="inspiration-block__header">
           <h3>Product Showcase - Aircraft as Hero</h3>
-          <span class="component-id">hero-product-showcase</span>
+          <span class="inspiration-block__id">hero-product-showcase</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-hero hq-hero--product">
             <div class="hq-hero__bg hq-hero__bg--gradient-light"></div>
             <div class="hq-hero__product-image">
-              <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
             </div>
             <div class="hq-hero__content hq-hero__content--center hq-hero__content--dark">
               <span class="hq-overline">New Aircraft</span>
@@ -276,15 +306,15 @@
         </div>
       </div>
 
-      <div class="component-block" id="fleet-model-spotlight">
-        <div class="component-header">
+      <div class="inspiration-block" id="fleet-model-spotlight">
+        <div class="inspiration-block__header">
           <h3>Model Spotlight - "This component looks absolutely beautiful"</h3>
-          <span class="component-id">fleet-model-spotlight</span>
+          <span class="inspiration-block__id">fleet-model-spotlight</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-model-spotlight">
             <div class="hq-model-spotlight__bg">
-              <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="Robinson R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="Robinson R66">
             </div>
             <div class="hq-container">
               <div class="hq-model-spotlight__content">
@@ -308,12 +338,108 @@
         </div>
       </div>
 
-      <div class="component-block" id="fleet-interactive">
-        <div class="component-header">
-          <h3>Interactive Fleet - "This looks amazing for explore our fleet" (Include Hughes 500 and AS355)</h3>
-          <span class="component-id">fleet-interactive</span>
+      <div class="inspiration-block" id="fleet-model-spotlight-r44">
+        <div class="inspiration-block__header">
+          <h3>Model Spotlight R44 - "The versatile 4-seat workhorse"</h3>
+          <span class="inspiration-block__id">fleet-model-spotlight-r44</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
+          <section class="hq-section hq-model-spotlight hq-model-spotlight--r44">
+            <div class="hq-model-spotlight__bg">
+              <img src="/assets/images/new-aircraft/r44/raven-ii-front-alpha.png" alt="Robinson R44 Raven II">
+            </div>
+            <div class="hq-container">
+              <div class="hq-model-spotlight__content">
+                <span class="hq-overline hq-overline--light">New Aircraft</span>
+                <h1 class="hq-model-spotlight__title">Robinson R44</h1>
+                <p class="hq-model-spotlight__tagline">Versatile Performance. Proven Reliability.</p>
+                <div class="hq-model-spotlight__specs">
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">4</span><span class="hq-spec-pill__label">Seats</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">113</span><span class="hq-spec-pill__label">Knots</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">300</span><span class="hq-spec-pill__label">NM Range</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">IO-540</span><span class="hq-spec-pill__label">Engine</span></div>
+                </div>
+                <div class="hq-model-spotlight__actions">
+                  <a href="#configure" class="hq-btn hq-btn--primary hq-btn--lg">Configure Yours</a>
+                  <a href="#specs" class="hq-btn hq-btn--ghost">Full Specifications</a>
+                </div>
+                <div class="hq-model-spotlight__price"><span>From</span><strong>$565,000</strong><span>ex-factory</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="inspiration-block" id="fleet-model-spotlight-r22">
+        <div class="inspiration-block__header">
+          <h3>Model Spotlight R22 - "The world's most popular training helicopter"</h3>
+          <span class="inspiration-block__id">fleet-model-spotlight-r22</span>
+        </div>
+        <div class="inspiration-block__render">
+          <section class="hq-section hq-model-spotlight hq-model-spotlight--r22">
+            <div class="hq-model-spotlight__bg">
+              <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="Robinson R22 Beta II">
+            </div>
+            <div class="hq-container">
+              <div class="hq-model-spotlight__content">
+                <span class="hq-overline hq-overline--light">New Aircraft</span>
+                <h1 class="hq-model-spotlight__title">Robinson R22</h1>
+                <p class="hq-model-spotlight__tagline">Where Every Pilot's Journey Begins.</p>
+                <div class="hq-model-spotlight__specs">
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">2</span><span class="hq-spec-pill__label">Seats</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">96</span><span class="hq-spec-pill__label">Knots</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">185</span><span class="hq-spec-pill__label">NM Range</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">O-360</span><span class="hq-spec-pill__label">Engine</span></div>
+                </div>
+                <div class="hq-model-spotlight__actions">
+                  <a href="#configure" class="hq-btn hq-btn--primary hq-btn--lg">Configure Yours</a>
+                  <a href="#specs" class="hq-btn hq-btn--ghost">Full Specifications</a>
+                </div>
+                <div class="hq-model-spotlight__price"><span>From</span><strong>$340,000</strong><span>ex-factory</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="inspiration-block" id="fleet-model-spotlight-r88">
+        <div class="inspiration-block__header">
+          <h3>Model Spotlight R88 - "Robinson's flagship twin-turbine"</h3>
+          <span class="inspiration-block__id">fleet-model-spotlight-r88</span>
+        </div>
+        <div class="inspiration-block__render">
+          <section class="hq-section hq-model-spotlight hq-model-spotlight--r88">
+            <div class="hq-model-spotlight__bg">
+              <img src="/assets/images/new-aircraft/r88/r88-jellybean-left.png" alt="Robinson R88">
+            </div>
+            <div class="hq-container">
+              <div class="hq-model-spotlight__content">
+                <span class="hq-overline hq-overline--light">New Aircraft</span>
+                <h1 class="hq-model-spotlight__title">Robinson R88</h1>
+                <p class="hq-model-spotlight__tagline">Twin-Turbine Excellence. Unmatched Capability.</p>
+                <div class="hq-model-spotlight__specs">
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">10</span><span class="hq-spec-pill__label">Seats</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">150</span><span class="hq-spec-pill__label">Knots</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">400</span><span class="hq-spec-pill__label">NM Range</span></div>
+                  <div class="hq-spec-pill"><span class="hq-spec-pill__value">Safran</span><span class="hq-spec-pill__label">Engines</span></div>
+                </div>
+                <div class="hq-model-spotlight__actions">
+                  <a href="#configure" class="hq-btn hq-btn--primary hq-btn--lg">Configure Yours</a>
+                  <a href="#specs" class="hq-btn hq-btn--ghost">Full Specifications</a>
+                </div>
+                <div class="hq-model-spotlight__price"><span>From</span><strong>$2,850,000</strong><span>ex-factory</span></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="inspiration-block" id="fleet-interactive">
+        <div class="inspiration-block__header">
+          <h3>Interactive Fleet - "This looks amazing for explore our fleet" (Include Hughes 500 and AS355)</h3>
+          <span class="inspiration-block__id">fleet-interactive</span>
+        </div>
+        <div class="inspiration-block__render">
           <section class="hq-section hq-fleet hq-fleet--interactive">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -330,7 +456,7 @@
                 </div>
                 <div class="hq-fleet__display">
                   <div class="hq-fleet__aircraft active" data-aircraft="r66">
-                    <div class="hq-fleet__image"><img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
+                    <div class="hq-fleet__image"><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
                     <div class="hq-fleet__info">
                       <h3>Robinson R66 Turbine</h3>
                       <p>The pinnacle of personal aviation. 5-seat turbine helicopter with Rolls-Royce power.</p>
@@ -353,12 +479,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="aircraft-comparison-table">
-        <div class="component-header">
+      <div class="inspiration-block" id="aircraft-comparison-table">
+        <div class="inspiration-block__header">
           <h3>Comparison Table - "I love this comparison"</h3>
-          <span class="component-id">aircraft-comparison-table</span>
+          <span class="inspiration-block__id">aircraft-comparison-table</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-aircraft hq-aircraft--comparison">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -368,9 +494,9 @@
               <div class="hq-comparison-table">
                 <div class="hq-comparison-table__header">
                   <div class="hq-comparison-table__cell"></div>
-                  <div class="hq-comparison-table__cell"><img src="/assets/images/r22-cutout.png" alt="R22"><h3>R22 Beta II</h3></div>
-                  <div class="hq-comparison-table__cell"><img src="/assets/images/r44-cutout.png" alt="R44"><h3>R44 Raven II</h3></div>
-                  <div class="hq-comparison-table__cell hq-comparison-table__cell--featured"><span class="hq-badge">Popular</span><img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66"><h3>R66 Turbine</h3></div>
+                  <div class="hq-comparison-table__cell"><img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22"><h3>R22 Beta II</h3></div>
+                  <div class="hq-comparison-table__cell"><img src="/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg" alt="R44"><h3>R44 Raven II</h3></div>
+                  <div class="hq-comparison-table__cell hq-comparison-table__cell--featured"><span class="hq-badge">Popular</span><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66"><h3>R66 Turbine</h3></div>
                 </div>
                 <div class="hq-comparison-table__row">
                   <div class="hq-comparison-table__cell hq-comparison-table__cell--label">Seats</div>
@@ -404,17 +530,17 @@
     </section>
 
     <!-- TRUST & CREDIBILITY -->
-    <section class="component-section">
-      <h2>Trust & Credibility Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Trust & Credibility Components</h2>
 
-      <div class="component-block" id="hero-trust-heritage">
-        <div class="component-header">
+      <div class="inspiration-block" id="hero-trust-heritage">
+        <div class="inspiration-block__header">
           <h3>Heritage Focus - "I like the 30+ years experience credibility"</h3>
-          <span class="component-id">hero-trust-heritage</span>
+          <span class="inspiration-block__id">hero-trust-heritage</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-hero hq-hero--trust">
-            <div class="hq-hero__bg"><img src="/assets/images/busy-hangar.jpg" alt="Hangar"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar"></div>
             <div class="hq-hero__overlay hq-hero__overlay--trust"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <div class="hq-hero__trust-badge">
@@ -432,12 +558,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="stats-counter-animated">
-        <div class="component-header">
+      <div class="inspiration-block" id="stats-counter-animated">
+        <div class="inspiration-block__header">
           <h3>Animated Counter Stats - "Numbers that increase are really cool"</h3>
-          <span class="component-id">stats-counter-animated</span>
+          <span class="inspiration-block__id">stats-counter-animated</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <section class="hq-section hq-stats hq-stats--counter">
             <div class="hq-container">
               <div class="hq-stats__grid hq-stats__grid--4">
@@ -463,12 +589,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="trust-stats-simple">
-        <div class="component-header">
+      <div class="inspiration-block" id="trust-stats-simple">
+        <div class="inspiration-block__header">
           <h3>Simple Stats Row - "I like the stats row here"</h3>
-          <span class="component-id">trust-stats-simple</span>
+          <span class="inspiration-block__id">trust-stats-simple</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <section class="hq-section hq-trust hq-trust--stats-simple">
             <div class="hq-container">
               <div class="hq-trust__stats hq-trust__stats--4">
@@ -494,12 +620,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="trust-testimonials-grid">
-        <div class="component-header">
+      <div class="inspiration-block" id="trust-testimonials-grid">
+        <div class="inspiration-block__header">
           <h3>Testimonials Grid - "Quite good, 3-column testimonial cards"</h3>
-          <span class="component-id">trust-testimonials-grid</span>
+          <span class="inspiration-block__id">trust-testimonials-grid</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-trust hq-trust--testimonials-grid">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -528,12 +654,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="testimonial-carousel">
-        <div class="component-header">
+      <div class="inspiration-block" id="testimonial-carousel">
+        <div class="inspiration-block__header">
           <h3>Testimonial Carousel - "We need testimonials, still working on layout"</h3>
-          <span class="component-id">testimonial-carousel</span>
+          <span class="inspiration-block__id">testimonial-carousel</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-testimonial hq-testimonial--carousel">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -578,15 +704,15 @@
     </section>
 
     <!-- EDITORIAL & CONTENT -->
-    <section class="component-section">
-      <h2>Editorial & Content Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Editorial & Content Components</h2>
 
-      <div class="component-block" id="hero-editorial-magazine">
-        <div class="component-header">
+      <div class="inspiration-block" id="hero-editorial-magazine">
+        <div class="inspiration-block__header">
           <h3>Magazine Style - "Maybe for the blog/news or list of adventures"</h3>
-          <span class="component-id">hero-editorial-magazine</span>
+          <span class="inspiration-block__id">hero-editorial-magazine</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-hero hq-hero--magazine">
             <div class="hq-hero__magazine-grid">
               <div class="hq-magazine-header">
@@ -595,7 +721,7 @@
                 <span class="hq-magazine-tagline">The Art of Helicopter Excellence</span>
               </div>
               <div class="hq-magazine-feature">
-                <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Featured">
+                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Featured">
               </div>
               <div class="hq-magazine-sidebar">
                 <div class="hq-magazine-story">
@@ -616,12 +742,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="hero-editorial-quote">
-        <div class="component-header">
+      <div class="inspiration-block" id="hero-editorial-quote">
+        <div class="inspiration-block__header">
           <h3>Large Quote - "We need to include some large quotes"</h3>
-          <span class="component-id">hero-editorial-quote</span>
+          <span class="inspiration-block__id">hero-editorial-quote</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <section class="hq-section hq-section--dark hq-hero hq-hero--quote">
             <div class="hq-container">
               <div class="hq-quote hq-quote--hero">
@@ -638,12 +764,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="aircraft-featured-large">
-        <div class="component-header">
+      <div class="inspiration-block" id="aircraft-featured-large">
+        <div class="inspiration-block__header">
           <h3>Large Featured - "I love the component of the large featured"</h3>
-          <span class="component-id">aircraft-featured-large</span>
+          <span class="inspiration-block__id">aircraft-featured-large</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-aircraft hq-aircraft--featured-large">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -653,7 +779,7 @@
               <div class="hq-aircraft__featured-layout">
                 <a href="#r66" class="hq-aircraft-card hq-aircraft-card--large">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66">
                     <span class="hq-badge">Featured</span>
                   </div>
                   <div class="hq-aircraft-card__body">
@@ -664,14 +790,14 @@
                 </a>
                 <div class="hq-aircraft__side-cards">
                   <a href="#r44" class="hq-aircraft-card hq-aircraft-card--mini">
-                    <img src="/assets/images/r44-cutout.png" alt="R44" class="hq-aircraft-card__thumb">
+                    <img src="/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg" alt="R44" class="hq-aircraft-card__thumb">
                     <div>
                       <span class="hq-aircraft-card__make">Robinson</span>
                       <h4 class="hq-aircraft-card__name">R44 Raven II</h4>
                     </div>
                   </a>
                   <a href="#r22" class="hq-aircraft-card hq-aircraft-card--mini">
-                    <img src="/assets/images/r22-cutout.png" alt="R22" class="hq-aircraft-card__thumb">
+                    <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22" class="hq-aircraft-card__thumb">
                     <div>
                       <span class="hq-aircraft-card__make">Robinson</span>
                       <h4 class="hq-aircraft-card__name">R22 Beta II</h4>
@@ -684,17 +810,17 @@
         </div>
       </div>
 
-      <div class="component-block" id="content-split-image-left">
-        <div class="component-header">
+      <div class="inspiration-block" id="content-split-image-left">
+        <div class="inspiration-block__header">
           <h3>Split Content (Image Left) - "This is a cool component"</h3>
-          <span class="component-id">content-split-image-left</span>
+          <span class="inspiration-block__id">content-split-image-left</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-content hq-content--split">
             <div class="hq-container">
               <div class="hq-content__split" style="display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;">
                 <div class="hq-content__image">
-                  <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Training" style="width:100%;border-radius:12px;">
+                  <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Training" style="width:100%;border-radius:12px;">
                 </div>
                 <div class="hq-content__text">
                   <span class="hq-overline">About Our Training</span>
@@ -714,15 +840,15 @@
     </section>
 
     <!-- LAYOUT & NAVIGATION -->
-    <section class="component-section">
-      <h2>Layout & Navigation Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Layout & Navigation Components</h2>
 
-      <div class="component-block" id="aircraft-carousel">
-        <div class="component-header">
+      <div class="inspiration-block" id="aircraft-carousel">
+        <div class="inspiration-block__header">
           <h3>Horizontal Scroll Carousel - "I quite like this"</h3>
-          <span class="component-id">aircraft-carousel</span>
+          <span class="inspiration-block__id">aircraft-carousel</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-aircraft hq-aircraft--carousel">
             <div class="hq-container">
               <div class="hq-section-header" style="display:flex;justify-content:space-between;align-items:center;">
@@ -739,17 +865,17 @@
             <div class="hq-aircraft__carousel" style="overflow-x:auto;padding:2rem 0;">
               <div class="hq-aircraft__carousel-track" style="display:flex;gap:2rem;padding:0 2rem;">
                 <a href="#r66" style="flex:0 0 300px;background:#f5f5f5;border-radius:12px;padding:2rem;text-decoration:none;color:inherit;text-align:center;">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66" style="max-height:150px;margin-bottom:1rem;">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66" style="max-height:150px;margin-bottom:1rem;">
                   <span style="display:block;color:#888;font-size:0.75rem;">Robinson</span>
                   <h3 style="margin:0.25rem 0 0;">R66 Turbine</h3>
                 </a>
                 <a href="#r44" style="flex:0 0 300px;background:#f5f5f5;border-radius:12px;padding:2rem;text-decoration:none;color:inherit;text-align:center;">
-                  <img src="/assets/images/r44-cutout.png" alt="R44" style="max-height:150px;margin-bottom:1rem;">
+                  <img src="/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg" alt="R44" style="max-height:150px;margin-bottom:1rem;">
                   <span style="display:block;color:#888;font-size:0.75rem;">Robinson</span>
                   <h3 style="margin:0.25rem 0 0;">R44 Raven II</h3>
                 </a>
                 <a href="#r22" style="flex:0 0 300px;background:#f5f5f5;border-radius:12px;padding:2rem;text-decoration:none;color:inherit;text-align:center;">
-                  <img src="/assets/images/r22-cutout.png" alt="R22" style="max-height:150px;margin-bottom:1rem;">
+                  <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22" style="max-height:150px;margin-bottom:1rem;">
                   <span style="display:block;color:#888;font-size:0.75rem;">Robinson</span>
                   <h3 style="margin:0.25rem 0 0;">R22 Beta II</h3>
                 </a>
@@ -759,12 +885,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="cards-stacked">
-        <div class="component-header">
+      <div class="inspiration-block" id="cards-stacked">
+        <div class="inspiration-block__header">
           <h3>Stacked Overlap Cards - Services section</h3>
-          <span class="component-id">cards-stacked</span>
+          <span class="inspiration-block__id">cards-stacked</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-cards hq-cards--stacked">
             <div class="hq-container">
               <h2 class="hq-section-title" style="text-align:center;margin-bottom:3rem;">Featured Services</h2>
@@ -772,17 +898,17 @@
                 <div style="background:#f5f5f5;padding:2rem;border-radius:12px;">
                   <h3>Pre-Purchase Inspections</h3>
                   <p style="color:#666;margin:1rem 0;">Comprehensive evaluation of pre-owned aircraft before purchase. Our engineers will assess condition, compliance, and value.</p>
-                  <a href="#ppi" style="color:#8b5cf6;">Learn More →</a>
+                  <a href="#ppi" style="color:var(--hq-accent);">Learn More →</a>
                 </div>
                 <div style="background:#f5f5f5;padding:2rem;border-radius:12px;transform:translateY(-10px);">
                   <h3>AOG Support</h3>
                   <p style="color:#666;margin:1rem 0;">Aircraft on ground? Our 24/7 emergency support ensures minimal downtime with parts and engineers ready.</p>
-                  <a href="#aog" style="color:#8b5cf6;">Contact →</a>
+                  <a href="#aog" style="color:var(--hq-accent);">Contact →</a>
                 </div>
                 <div style="background:#f5f5f5;padding:2rem;border-radius:12px;">
                   <h3>Aircraft Management</h3>
                   <p style="color:#666;margin:1rem 0;">Full management services including scheduling, maintenance tracking, and regulatory compliance.</p>
-                  <a href="#management" style="color:#8b5cf6;">Enquire →</a>
+                  <a href="#management" style="color:var(--hq-accent);">Enquire →</a>
                 </div>
               </div>
             </div>
@@ -790,19 +916,19 @@
         </div>
       </div>
 
-      <div class="component-block" id="nav-breadcrumbs">
-        <div class="component-header">
+      <div class="inspiration-block" id="nav-breadcrumbs">
+        <div class="inspiration-block__header">
           <h3>Breadcrumb Navigation - "To be implemented"</h3>
-          <span class="component-id">nav-breadcrumbs</span>
+          <span class="inspiration-block__id">nav-breadcrumbs</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <nav class="hq-breadcrumbs" style="padding:1rem 2rem;background:#f5f5f5;">
             <ol style="display:flex;gap:0.5rem;list-style:none;font-size:0.85rem;">
-              <li><a href="/" style="color:#8b5cf6;text-decoration:none;">Home</a></li>
+              <li><a href="/" style="color:var(--hq-accent);text-decoration:none;">Home</a></li>
               <li style="color:#999;">/</li>
-              <li><a href="/aircraft" style="color:#8b5cf6;text-decoration:none;">Aircraft</a></li>
+              <li><a href="/aircraft" style="color:var(--hq-accent);text-decoration:none;">Aircraft</a></li>
               <li style="color:#999;">/</li>
-              <li><a href="/aircraft/r66" style="color:#8b5cf6;text-decoration:none;">Robinson R66</a></li>
+              <li><a href="/aircraft/r66" style="color:var(--hq-accent);text-decoration:none;">Robinson R66</a></li>
               <li style="color:#999;">/</li>
               <li style="color:#666;">G-HQAV</li>
             </ol>
@@ -812,15 +938,15 @@
     </section>
 
     <!-- TRAINING -->
-    <section class="component-section">
-      <h2>Training Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Training Components</h2>
 
-      <div class="component-block" id="journey-pilot-pathway">
-        <div class="component-header">
+      <div class="inspiration-block" id="journey-pilot-pathway">
+        <div class="inspiration-block__header">
           <h3>Pilot Pathway - "I like the pathway for students"</h3>
-          <span class="component-id">journey-pilot-pathway</span>
+          <span class="inspiration-block__id">journey-pilot-pathway</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-section--cream hq-pathway" style="background:#f9f7f4;padding:4rem 0;">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -830,21 +956,21 @@
               </div>
               <div class="hq-pathway__track" style="display:flex;justify-content:space-between;margin:3rem 0;position:relative;">
                 <div style="position:absolute;top:20px;left:10%;right:10%;height:4px;background:#ddd;"></div>
-                <div style="position:absolute;top:20px;left:10%;width:35%;height:4px;background:#8b5cf6;"></div>
+                <div style="position:absolute;top:20px;left:10%;width:35%;height:4px;background:var(--hq-accent);"></div>
                 <div style="text-align:center;position:relative;z-index:1;">
-                  <div style="width:40px;height:40px;background:#8b5cf6;border-radius:50%;margin:0 auto 1rem;"></div>
+                  <div style="width:40px;height:40px;background:var(--hq-accent);border-radius:50%;margin:0 auto 1rem;"></div>
                   <span style="font-weight:600;display:block;">Trial Flight</span>
-                  <strong style="color:#8b5cf6;">£299</strong>
+                  <strong style="color:var(--hq-accent);">£299</strong>
                   <p style="font-size:0.85rem;color:#666;">30-minute hands-on</p>
                 </div>
                 <div style="text-align:center;position:relative;z-index:1;">
-                  <div style="width:40px;height:40px;background:#8b5cf6;border-radius:50%;margin:0 auto 1rem;"></div>
+                  <div style="width:40px;height:40px;background:var(--hq-accent);border-radius:50%;margin:0 auto 1rem;"></div>
                   <span style="font-weight:600;display:block;">First Solo</span>
-                  <strong style="color:#8b5cf6;">~15 hours</strong>
+                  <strong style="color:var(--hq-accent);">~15 hours</strong>
                   <p style="font-size:0.85rem;color:#666;">Your first flight alone</p>
                 </div>
                 <div style="text-align:center;position:relative;z-index:1;">
-                  <div style="width:40px;height:40px;background:#ddd;border-radius:50%;margin:0 auto 1rem;border:3px solid #8b5cf6;"></div>
+                  <div style="width:40px;height:40px;background:#ddd;border-radius:50%;margin:0 auto 1rem;border:3px solid var(--hq-accent);"></div>
                   <span style="font-weight:600;display:block;">Skills Test</span>
                   <strong>45 hours min</strong>
                   <p style="font-size:0.85rem;color:#666;">Demonstrate abilities</p>
@@ -859,7 +985,7 @@
               <div style="display:flex;justify-content:center;gap:2rem;margin:2rem 0;padding:1rem;background:#fff;border-radius:8px;">
                 <span>✓ Flexible scheduling</span>
                 <span>✓ 1-on-1 CAA approved instruction</span>
-                <span style="color:#8b5cf6;font-weight:600;">✓ Ground school included</span>
+                <span style="color:var(--hq-accent);font-weight:600;">✓ Ground school included</span>
               </div>
               <div style="text-align:center;margin-top:2rem;">
                 <a href="#training" class="hq-btn hq-btn--primary">Book Your Trial Flight</a>
@@ -869,12 +995,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="process-timeline">
-        <div class="component-header">
+      <div class="inspiration-block" id="process-timeline">
+        <div class="inspiration-block__header">
           <h3>Process Timeline - "Needs better styling but idea is good"</h3>
-          <span class="component-id">process-timeline</span>
+          <span class="inspiration-block__id">process-timeline</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-process hq-process--timeline">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -883,28 +1009,28 @@
               </div>
               <div class="hq-process__timeline" style="max-width:600px;margin:2rem auto;">
                 <div style="display:flex;gap:2rem;margin-bottom:2rem;align-items:flex-start;">
-                  <span style="font-size:2rem;font-weight:700;color:#8b5cf6;">01</span>
+                  <span style="font-size:2rem;font-weight:700;color:var(--hq-accent);">01</span>
                   <div>
                     <h3 style="margin:0 0 0.5rem;">Discovery Flight</h3>
                     <p style="color:#666;">Experience flight firsthand with a 30-minute trial lesson. You'll take the controls and discover if helicopter flying is for you.</p>
                   </div>
                 </div>
                 <div style="display:flex;gap:2rem;margin-bottom:2rem;align-items:flex-start;">
-                  <span style="font-size:2rem;font-weight:700;color:#8b5cf6;">02</span>
+                  <span style="font-size:2rem;font-weight:700;color:var(--hq-accent);">02</span>
                   <div>
                     <h3 style="margin:0 0 0.5rem;">Ground School</h3>
                     <p style="color:#666;">Learn aviation theory with our comprehensive ground school covering meteorology, navigation, and regulations.</p>
                   </div>
                 </div>
                 <div style="display:flex;gap:2rem;margin-bottom:2rem;align-items:flex-start;">
-                  <span style="font-size:2rem;font-weight:700;color:#8b5cf6;">03</span>
+                  <span style="font-size:2rem;font-weight:700;color:var(--hq-accent);">03</span>
                   <div>
                     <h3 style="margin:0 0 0.5rem;">Flight Training</h3>
                     <p style="color:#666;">Build your skills through structured flight lessons with experienced instructors. Minimum 45 hours required for PPL(H).</p>
                   </div>
                 </div>
                 <div style="display:flex;gap:2rem;align-items:flex-start;">
-                  <span style="font-size:2rem;font-weight:700;color:#8b5cf6;">04</span>
+                  <span style="font-size:2rem;font-weight:700;color:var(--hq-accent);">04</span>
                   <div>
                     <h3 style="margin:0 0 0.5rem;">Skills Test</h3>
                     <p style="color:#666;">Demonstrate your proficiency to a CAA examiner and earn your Private Pilot License (Helicopters).</p>
@@ -918,15 +1044,15 @@
     </section>
 
     <!-- LIFESTYLE -->
-    <section class="component-section">
-      <h2>Lifestyle & Aspirational Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Lifestyle & Aspirational Components</h2>
 
-      <div class="component-block" id="lifestyle-destinations">
-        <div class="component-header">
+      <div class="inspiration-block" id="lifestyle-destinations">
+        <div class="inspiration-block__header">
           <h3>Where Will You Go? - "Absolutely amazing component"</h3>
-          <span class="component-id">lifestyle-destinations</span>
+          <span class="inspiration-block__id">lifestyle-destinations</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-destinations">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -962,15 +1088,15 @@
         </div>
       </div>
 
-      <div class="component-block" id="expedition-showcase">
-        <div class="component-header">
+      <div class="inspiration-block" id="expedition-showcase">
+        <div class="inspiration-block__header">
           <h3>Expedition Showcase - "We definitely need this"</h3>
-          <span class="component-id">expedition-showcase</span>
+          <span class="inspiration-block__id">expedition-showcase</span>
         </div>
-        <div class="component-render">
-          <section class="hq-section hq-expedition hq-expedition--showcase" style="background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.7)),url('/assets/images/helicopter-expeditions-quentin-smith.webp') center/cover;color:#fff;padding:6rem 2rem;text-align:center;">
+        <div class="inspiration-block__render">
+          <section class="hq-section hq-expedition hq-expedition--showcase" style="background:linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.7)),url('/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp') center/cover;color:#fff;padding:6rem 2rem;text-align:center;">
             <div class="hq-container">
-              <span class="hq-overline" style="color:#8b5cf6;">Expeditions</span>
+              <span class="hq-overline" style="color:var(--hq-accent);">Expeditions</span>
               <h2 style="font-size:3rem;margin:1rem 0;">Adventure Awaits</h2>
               <p style="max-width:600px;margin:0 auto 2rem;opacity:0.9;">Join world-record holding pilots on extraordinary helicopter journeys. From Alpine crossings to Arctic expeditions.</p>
               <div style="display:flex;justify-content:center;gap:3rem;margin:2rem 0;">
@@ -984,12 +1110,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="lifestyle-ownership-benefits">
-        <div class="component-header">
+      <div class="inspiration-block" id="lifestyle-ownership-benefits">
+        <div class="inspiration-block__header">
           <h3>Ownership Benefits - "I like the idea of having a benefit component"</h3>
-          <span class="component-id">lifestyle-ownership-benefits</span>
+          <span class="inspiration-block__id">lifestyle-ownership-benefits</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-section--cream hq-ownership-benefits">
             <div class="hq-container">
               <div class="hq-ownership-benefits__layout">
@@ -1037,7 +1163,7 @@
                   <a href="#ownership" class="hq-btn hq-btn--primary">Explore Ownership Options</a>
                 </div>
                 <div class="hq-ownership-benefits__image">
-                  <img src="/assets/images/lifestyle/owner-with-r66.jpg" alt="Happy owner with R66">
+                  <img src="/assets/images/used-aircraft/r66/r66s-italy.jpg" alt="Happy owner with R66">
                 </div>
               </div>
             </div>
@@ -1047,15 +1173,15 @@
     </section>
 
     <!-- EVENTS -->
-    <section class="component-section">
-      <h2>Events Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Events Components</h2>
 
-      <div class="component-block" id="events-upcoming">
-        <div class="component-header">
+      <div class="inspiration-block" id="events-upcoming">
+        <div class="inspiration-block__header">
           <h3>Upcoming Events - "Quite good to have upcoming events at HQ"</h3>
-          <span class="component-id">events-upcoming</span>
+          <span class="inspiration-block__id">events-upcoming</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-events hq-events--upcoming">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -1069,7 +1195,7 @@
                     <span style="font-size:0.75rem;color:#666;">JAN</span>
                   </div>
                   <div style="flex:1;">
-                    <span style="font-size:0.75rem;color:#8b5cf6;text-transform:uppercase;">Open Day</span>
+                    <span style="font-size:0.75rem;color:var(--hq-accent);text-transform:uppercase;">Open Day</span>
                     <h3 style="margin:0.25rem 0;">Winter Open Day & Discovery Flight Offers</h3>
                     <p style="color:#666;margin:0;font-size:0.85rem;">10am - 4pm • Denham Aerodrome • Free Entry</p>
                   </div>
@@ -1081,7 +1207,7 @@
                     <span style="font-size:0.75rem;color:#666;">JAN</span>
                   </div>
                   <div style="flex:1;">
-                    <span style="font-size:0.75rem;color:#8b5cf6;text-transform:uppercase;">Webinar</span>
+                    <span style="font-size:0.75rem;color:var(--hq-accent);text-transform:uppercase;">Webinar</span>
                     <h3 style="margin:0.25rem 0;">PPL vs CPL: Which Licence is Right For You?</h3>
                     <p style="color:#666;margin:0;font-size:0.85rem;">7pm - 8:30pm • Online • Free</p>
                   </div>
@@ -1093,7 +1219,7 @@
                     <span style="font-size:0.75rem;color:#666;">FEB</span>
                   </div>
                   <div style="flex:1;">
-                    <span style="font-size:0.75rem;color:#8b5cf6;text-transform:uppercase;">Expedition</span>
+                    <span style="font-size:0.75rem;color:var(--hq-accent);text-transform:uppercase;">Expedition</span>
                     <h3 style="margin:0.25rem 0;">Scotland Fly-Out: Highland Adventure</h3>
                     <p style="color:#666;margin:0;font-size:0.85rem;">4 days • All experience levels • Limited spots</p>
                   </div>
@@ -1107,15 +1233,15 @@
     </section>
 
     <!-- CTA & FOOTER -->
-    <section class="component-section">
-      <h2>CTA & Footer Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">CTA & Footer Components</h2>
 
-      <div class="component-block" id="cta-simple-centered">
-        <div class="component-header">
+      <div class="inspiration-block" id="cta-simple-centered">
+        <div class="inspiration-block__header">
           <h3>Centered CTA - "The simple CTA is very good"</h3>
-          <span class="component-id">cta-simple-centered</span>
+          <span class="inspiration-block__id">cta-simple-centered</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <section class="hq-section hq-cta hq-cta--centered" style="text-align:center;padding:6rem 2rem;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%);">
             <h2 style="font-size:2.5rem;color:#fff;margin-bottom:1rem;">Ready to Take Flight?</h2>
             <p style="color:#aaa;margin-bottom:2rem;">Contact our team to discuss your aviation needs.</p>
@@ -1127,13 +1253,13 @@
         </div>
       </div>
 
-      <div class="component-block" id="hero-minimal-centered">
-        <div class="component-header">
+      <div class="inspiration-block" id="hero-minimal-centered">
+        <div class="inspiration-block__header">
           <h3>Centered Statement - "I like the scroll element here"</h3>
-          <span class="component-id">hero-minimal-centered</span>
+          <span class="inspiration-block__id">hero-minimal-centered</span>
         </div>
-        <div class="component-render">
-          <section class="hq-section hq-hero hq-hero--minimal-centered" style="min-height:500px;background:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.6)),url('/assets/images/chris-r66-alps.jpg') center/cover;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;position:relative;">
+        <div class="inspiration-block__render">
+          <section class="hq-section hq-hero hq-hero--minimal-centered" style="min-height:500px;background:linear-gradient(rgba(0,0,0,0.4),rgba(0,0,0,0.6)),url('/assets/images/used-aircraft/r66/chris-r66-alps.jpg') center/cover;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;position:relative;">
             <h1 style="font-size:4rem;margin:0;">Elevate Your Journey</h1>
             <p style="font-size:1.25rem;opacity:0.9;margin:1rem 0 2rem;">Robinson helicopter specialists since 1990</p>
             <a href="#aircraft" class="hq-btn hq-btn--primary" style="font-size:1.1rem;padding:1rem 2rem;">Explore Aircraft</a>
@@ -1145,19 +1271,19 @@
         </div>
       </div>
 
-      <div class="component-block" id="footer-mega">
-        <div class="component-header">
+      <div class="inspiration-block" id="footer-mega">
+        <div class="inspiration-block__header">
           <h3>Mega Footer - "Yes we need a cool footer"</h3>
-          <span class="component-id">footer-mega</span>
+          <span class="inspiration-block__id">footer-mega</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <footer class="hq-footer hq-footer--mega" style="background:#0a0a0a;padding:4rem 2rem 2rem;color:#fff;">
             <div class="hq-container">
               <div style="display:grid;grid-template-columns:2fr repeat(4,1fr);gap:2rem;margin-bottom:3rem;">
                 <div>
                   <h3 style="font-size:1.5rem;margin-bottom:0.5rem;">HQ Aviation</h3>
                   <p style="color:#666;margin-bottom:1rem;">UK's Premier Robinson Helicopter Dealer</p>
-                  <a href="tel:+441753868976" style="display:block;color:#8b5cf6;font-size:1.25rem;margin-bottom:0.5rem;text-decoration:none;">01753 868 976</a>
+                  <a href="tel:+441753868976" style="display:block;color:var(--hq-accent);font-size:1.25rem;margin-bottom:0.5rem;text-decoration:none;">01753 868 976</a>
                   <a href="mailto:info@hqaviation.com" style="color:#888;text-decoration:none;">info@hqaviation.com</a>
                 </div>
                 <div>
@@ -1214,15 +1340,15 @@
     </section>
 
     <!-- TEAM & ABOUT -->
-    <section class="component-section">
-      <h2>Team & About Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Team & About Components</h2>
 
-      <div class="component-block" id="team-grid-4">
-        <div class="component-header">
+      <div class="inspiration-block" id="team-grid-4">
+        <div class="inspiration-block__header">
           <h3>Team Grid - "The team grid is very good"</h3>
-          <span class="component-id">team-grid-4</span>
+          <span class="inspiration-block__id">team-grid-4</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-team hq-team--grid" id="team">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -1233,7 +1359,7 @@
               <div class="hq-team__grid">
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team/quentin-smith.jpg" alt="Quentin Smith">
+                    <img src="/assets/images/team/quentin-smith-world-record-holder-helicopter-aerobatics.webp" alt="Quentin Smith">
                     <div class="hq-team-card__overlay">
                       <p>Founder & Chief Pilot with 30+ years experience. Led expeditions to 50+ countries. 7 World Records.</p>
                       <div class="hq-team-card__social">
@@ -1248,7 +1374,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team/mackie-alcantara.jpg" alt="Mackie Alcantara">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="Mackie Alcantara">
                     <div class="hq-team-card__overlay">
                       <p>Chief Flight Instructor leading a team of 4 instructors. CAA examiner with thousands of instruction hours.</p>
                     </div>
@@ -1260,7 +1386,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team/david-cross.jpg" alt="David Cross">
+                    <img src="/assets/images/facility/hq-aviation-helicopter-hangar.webp" alt="David Cross">
                     <div class="hq-team-card__overlay">
                       <p>Chief Engineer heading a team of 20 engineers. Factory-trained at Robinson HQ. Includes parts specialist and scheduling/support team.</p>
                     </div>
@@ -1272,7 +1398,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team/alex-nicola.jpg" alt="Alex & Nicola">
+                    <img src="/assets/images/facility/hq-helicopter-hangarage-the-robinson-specialists-1.webp" alt="Alex & Nicola">
                     <div class="hq-team-card__overlay">
                       <p>Head of Operations with a team of 4. Keeping everything running smoothly - scheduling, client support, and administration.</p>
                     </div>
@@ -1288,12 +1414,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="team-leadership">
-        <div class="component-header">
+      <div class="inspiration-block" id="team-leadership">
+        <div class="inspiration-block__header">
           <h3>Leadership Team - "Yes important"</h3>
-          <span class="component-id">team-leadership</span>
+          <span class="inspiration-block__id">team-leadership</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-leadership">
             <div class="hq-container">
               <div class="hq-section-header hq-section-header--center">
@@ -1304,7 +1430,7 @@
               <div class="hq-leadership__grid" style="grid-template-columns: repeat(2, 1fr);">
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/quentin-smith.jpg" alt="Quentin Smith">
+                    <img src="/assets/images/team/quentin-smith-world-record-holder-helicopter-aerobatics.webp" alt="Quentin Smith">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Quentin Smith</h3>
@@ -1314,7 +1440,7 @@
                 </div>
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/mackie-alcantara.jpg" alt="Mackie Alcantara">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="Mackie Alcantara">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Mackie Alcantara</h3>
@@ -1324,7 +1450,7 @@
                 </div>
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/david-cross.jpg" alt="David Cross">
+                    <img src="/assets/images/facility/hq-aviation-helicopter-hangar.webp" alt="David Cross">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>David Cross</h3>
@@ -1334,7 +1460,7 @@
                 </div>
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/alex-nicola.jpg" alt="Alex & Nicola">
+                    <img src="/assets/images/facility/hq-helicopter-hangarage-the-robinson-specialists-1.webp" alt="Alex & Nicola">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Alex & Nicola</h3>
@@ -1348,16 +1474,16 @@
         </div>
       </div>
 
-      <div class="component-block" id="team-founder-spotlight">
-        <div class="component-header">
+      <div class="inspiration-block" id="team-founder-spotlight">
+        <div class="inspiration-block__header">
           <h3>Founder Spotlight - "Large founder feature with story"</h3>
-          <span class="component-id">team-founder-spotlight</span>
+          <span class="inspiration-block__id">team-founder-spotlight</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-team hq-team--founder" id="team">
             <div class="hq-team__founder-split">
               <div class="hq-team__founder-image">
-                <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
+                <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
               </div>
               <div class="hq-team__founder-content">
                 <span class="hq-overline">Our Story</span>
@@ -1389,15 +1515,15 @@
     </section>
 
     <!-- SERVICES -->
-    <section class="component-section">
-      <h2>Services Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Services Components</h2>
 
-      <div class="component-block" id="tabbed-services">
-        <div class="component-header">
+      <div class="inspiration-block" id="tabbed-services">
+        <div class="inspiration-block__header">
           <h3>Tabbed Services - "Tabbed Services is neat"</h3>
-          <span class="component-id">tabbed-services</span>
+          <span class="inspiration-block__id">tabbed-services</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-tabbed hq-tabbed--services" id="services-tabs">
             <div class="hq-container">
               <div class="hq-section-header hq-section-header--center">
@@ -1426,7 +1552,7 @@
                         <a href="#aircraft" class="hq-btn hq-btn--primary">View Aircraft</a>
                       </div>
                       <div class="hq-tabs__panel-image">
-                        <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66 Helicopter">
+                        <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 Helicopter">
                       </div>
                     </div>
                   </div>
@@ -1444,7 +1570,7 @@
                         <a href="#training" class="hq-btn hq-btn--primary">View Courses</a>
                       </div>
                       <div class="hq-tabs__panel-image">
-                        <img src="/assets/images/british-helicopter-team.webp" alt="Training">
+                        <img src="/assets/images/team/british-helicopter-team.webp" alt="Training">
                       </div>
                     </div>
                   </div>
@@ -1455,12 +1581,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="tabbed-specs">
-        <div class="component-header">
+      <div class="inspiration-block" id="tabbed-specs">
+        <div class="inspiration-block__header">
           <h3>Tabbed Specifications - "The Tabbed Specifications is quite neat"</h3>
-          <span class="component-id">tabbed-specs</span>
+          <span class="inspiration-block__id">tabbed-specs</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-tabbed hq-tabbed--specs" id="specs">
             <div class="hq-container">
               <h2 class="hq-section-title">R66 Turbine Specifications</h2>
@@ -1499,12 +1625,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="features-icon-grid">
-        <div class="component-header">
+      <div class="inspiration-block" id="features-icon-grid">
+        <div class="inspiration-block__header">
           <h3>Icon Feature Grid - "Interesting idea but needs improvement"</h3>
-          <span class="component-id">features-icon-grid</span>
+          <span class="inspiration-block__id">features-icon-grid</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-features hq-features--grid" id="features">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -1548,12 +1674,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="maintenance-capabilities">
-        <div class="component-header">
+      <div class="inspiration-block" id="maintenance-capabilities">
+        <div class="inspiration-block__header">
           <h3>Maintenance Capabilities - "Breakdown of everything we do for service"</h3>
-          <span class="component-id">maintenance-capabilities</span>
+          <span class="inspiration-block__id">maintenance-capabilities</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-maintenance-services">
             <div class="hq-container">
               <div class="hq-section-header hq-section-header--center">
@@ -1612,9 +1738,9 @@
                 </div>
               </div>
               <div class="hq-maintenance-services__certifications">
-                <img src="/assets/images/logos/easa-part145.svg" alt="EASA Part-145">
-                <img src="/assets/images/logos/caa.svg" alt="CAA Approved">
-                <img src="/assets/images/logos/robinson-authorized.svg" alt="Robinson Authorized">
+                <img src="/assets/images/logos/certifications/easa1.png" alt="EASA Part-145">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA Approved">
+                <img src="/assets/images/logos/certifications/logo_robinson_authorized_repair_center1.jpg" alt="Robinson Authorized">
               </div>
             </div>
           </section>
@@ -1623,15 +1749,15 @@
     </section>
 
     <!-- GALLERY -->
-    <section class="component-section">
-      <h2>Gallery Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Gallery Components</h2>
 
-      <div class="component-block" id="gallery-masonry">
-        <div class="component-header">
+      <div class="inspiration-block" id="gallery-masonry">
+        <div class="inspiration-block__header">
           <h3>Masonry Grid - "Pinterest-style varied heights"</h3>
-          <span class="component-id">gallery-masonry</span>
+          <span class="inspiration-block__id">gallery-masonry</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-section hq-gallery hq-gallery--masonry" id="gallery">
             <div class="hq-container">
               <div class="hq-section-header">
@@ -1640,27 +1766,27 @@
               </div>
               <div class="hq-gallery__masonry">
                 <a href="#" class="hq-gallery-item hq-gallery-item--tall">
-                  <img src="/assets/images/chris-r66-alps.jpg" alt="Alps Flight">
+                  <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alps Flight">
                   <div class="hq-gallery-item__caption">Alpine Expedition 2024</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+                  <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
                   <div class="hq-gallery-item__caption">Our Facility</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
+                  <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
                   <div class="hq-gallery-item__caption">World Tour</div>
                 </a>
                 <a href="#" class="hq-gallery-item hq-gallery-item--wide">
-                  <img src="/assets/images/british-helicopter-team.webp" alt="Team">
+                  <img src="/assets/images/team/british-helicopter-team.webp" alt="Team">
                   <div class="hq-gallery-item__caption">Training Team</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/20251217_183027.jpg" alt="Sunset">
+                  <img src="/assets/images/legacy/dated/20251217_183027.jpg" alt="Sunset">
                   <div class="hq-gallery-item__caption">Golden Hour</div>
                 </a>
                 <a href="#" class="hq-gallery-item hq-gallery-item--tall">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                   <div class="hq-gallery-item__caption">R66 Showcase</div>
                 </a>
               </div>
@@ -1671,15 +1797,15 @@
     </section>
 
     <!-- PAGE SHOWCASES -->
-    <section class="component-section">
-      <h2>Page-Specific Showcase Components</h2>
+    <section class="inspiration-section">
+      <h2 class="inspiration-section__title">Page-Specific Showcase Components</h2>
 
-      <div class="component-block" id="showcase-training-environment">
-        <div class="component-header">
+      <div class="inspiration-block" id="showcase-training-environment">
+        <div class="inspiration-block__header">
           <h3>The HQ Training Experience - "Good but needs differentiators"</h3>
-          <span class="component-id">showcase-training-environment</span>
+          <span class="inspiration-block__id">showcase-training-environment</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-showcase hq-showcase--environment">
             <div class="hq-container">
               <div class="hq-showcase__header">
@@ -1690,7 +1816,7 @@
               <div class="hq-showcase__features-grid">
                 <div class="hq-showcase__feature-card hq-showcase__feature-card--large">
                   <div class="hq-showcase__feature-img">
-                    <img src="/assets/images/british-helicopter-team.webp" alt="R22 Training">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="R22 Training">
                   </div>
                   <div class="hq-showcase__feature-content">
                     <h3>1-to-1 Instruction</h3>
@@ -1740,12 +1866,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="showcase-trial-experience">
-        <div class="component-header">
+      <div class="inspiration-block" id="showcase-trial-experience">
+        <div class="inspiration-block__header">
           <h3>Your Trial Flight - "I quite like the preflight to debrief component"</h3>
-          <span class="component-id">showcase-trial-experience</span>
+          <span class="inspiration-block__id">showcase-trial-experience</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-showcase hq-showcase--trial">
             <div class="hq-container">
               <div class="hq-showcase__trial-header">
@@ -1792,12 +1918,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="showcase-cost-transparency">
-        <div class="component-header">
+      <div class="inspiration-block" id="showcase-cost-transparency">
+        <div class="inspiration-block__header">
           <h3>What It Really Costs - "Pricing page is important"</h3>
-          <span class="component-id">showcase-cost-transparency</span>
+          <span class="inspiration-block__id">showcase-cost-transparency</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-showcase hq-showcase--costs">
             <div class="hq-container">
               <div class="hq-showcase__header hq-showcase__header--centered">
@@ -1854,12 +1980,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="showcase-denham-location">
-        <div class="component-header">
+      <div class="inspiration-block" id="showcase-denham-location">
+        <div class="inspiration-block__header">
           <h3>Visit Us at Denham - "This page is not bad"</h3>
-          <span class="component-id">showcase-denham-location</span>
+          <span class="inspiration-block__id">showcase-denham-location</span>
         </div>
-        <div class="component-render">
+        <div class="inspiration-block__render">
           <section class="hq-showcase hq-showcase--location">
             <div class="hq-container">
               <div class="hq-showcase__split">
@@ -1906,12 +2032,12 @@
         </div>
       </div>
 
-      <div class="component-block" id="opening-hours">
-        <div class="component-header">
+      <div class="inspiration-block" id="opening-hours">
+        <div class="inspiration-block__header">
           <h3>Opening Hours - "Make sure opening times are included"</h3>
-          <span class="component-id">opening-hours</span>
+          <span class="inspiration-block__id">opening-hours</span>
         </div>
-        <div class="component-render dark-bg">
+        <div class="inspiration-block__render inspiration-block__render--dark">
           <section class="hq-section hq-section--dark hq-section--compact">
             <div class="hq-container">
               <div class="hq-hours-bar">
@@ -1942,13 +2068,13 @@
     </section>
 
     <!-- APPROVED QUOTES -->
-    <section class="component-section" id="quotes-section">
+    <section class="inspiration-section" id="quotes-section">
       <h2>Approved Quotes (from component-feedback.md)</h2>
 
-      <div class="component-block">
-        <div class="component-header">
+      <div class="inspiration-block">
+        <div class="inspiration-block__header">
           <h3>Approved Quote Collection</h3>
-          <span class="component-id">quote-001, 002, 006, 010, 034, 041, 043, 051, 060, 067, 084, 100</span>
+          <span class="inspiration-block__id">quote-001, 002, 006, 010, 034, 041, 043, 051, 060, 067, 084, 100</span>
         </div>
         <div class="quotes-grid">
           <div class="hq-quote-card"><blockquote>"The sky is not the limit. It's home."</blockquote><span class="hq-quote-use">quote-001: Rise Above - Approved</span></div>
@@ -1962,7 +2088,7 @@
           <div class="hq-quote-card"><blockquote>"New perspectives aren't found on the ground."</blockquote><span class="hq-quote-use">quote-060: New Perspective - Approved</span></div>
           <div class="hq-quote-card"><blockquote>"A family business that treats you like family."</blockquote><span class="hq-quote-use">quote-067: Family Business - Strong point</span></div>
           <div class="hq-quote-card"><blockquote>"The world's best-selling helicopters. For a reason."</blockquote><span class="hq-quote-use">quote-084: Best Seller - Approved</span></div>
-          <div class="hq-quote-card" style="background:#8b5cf6;color:#fff;"><blockquote style="color:#fff;">"Your turn to fly."</blockquote><span class="hq-quote-use" style="color:rgba(255,255,255,0.8);">quote-100: Your Turn - KEY MESSAGE</span></div>
+          <div class="hq-quote-card" style="background:var(--hq-accent);color:#fff;"><blockquote style="color:#fff;">"Your turn to fly."</blockquote><span class="hq-quote-use" style="color:rgba(255,255,255,0.8);">quote-100: Your Turn - KEY MESSAGE</span></div>
         </div>
       </div>
     </section>
@@ -1971,7 +2097,7 @@
 
   <script>
     // Smooth scroll for nav links
-    document.querySelectorAll('.nav-section a').forEach(link => {
+    document.querySelectorAll('.inspiration-nav__section a').forEach(link => {
       link.addEventListener('click', function(e) {
         const href = this.getAttribute('href');
         if (href.startsWith('#')) {

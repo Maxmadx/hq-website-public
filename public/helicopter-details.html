@@ -12,7 +12,7 @@ window.Static = window.Static || { SQUARESPACE_CONTEXT: {} };
 <meta charset="utf-8">
 <title>HQ Aviation — Helicopter Details</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="icon" type="image/png" href="/assets/images/hq-aviation-logo-black.png"/>
+<link rel="icon" type="image/png" href="/assets/images/logos/hq/hq-aviation-logo-black.png"/>
 <link rel="stylesheet" href="/assets/css/helicopters.css">
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -309,7 +309,7 @@ async function loadHelicopterDetails() {
   document.title = `HQ Aviation — ${helicopter.model}`;
 
   const images = helicopter.images || [];
-  const primaryImage = images.find(img => img.isPrimary) || images[0] || { url: '/assets/images/placeholder-helicopter.jpg', alt: helicopter.model };
+  const primaryImage = images.find(img => img.isPrimary) || images[0] || { url: '/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg', alt: helicopter.model };
 
   const thumbsHtml = images.length > 1 ? images.map((img, i) => `
     <div class="gallery-thumb ${i === 0 ? 'active' : ''}" data-index="${i}">

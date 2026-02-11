@@ -24,7 +24,7 @@
         desc: 'Tesla-style. Full-bleed image, centered text, single CTA.',
         html: `
           <section class="hq-section hq-hero hq-hero--minimal-centered">
-            <div class="hq-hero__bg"><img src="/assets/images/chris-r66-alps.jpg" alt="R66 Alps"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="R66 Alps"></div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-bottom"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <h1 class="hq-hero__headline hq-text-hero">Elevate Your Journey</h1>
@@ -41,7 +41,7 @@
         desc: 'Asymmetric. Text anchored left with breathing room.',
         html: `
           <section class="hq-section hq-hero hq-hero--minimal-left">
-            <div class="hq-hero__bg"><img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition"></div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-right"></div>
             <div class="hq-hero__content hq-hero__content--left">
               <span class="hq-overline">Robinson Helicopter Dealer</span>
@@ -61,7 +61,7 @@
         desc: 'Oversized single word. Maximum impact.',
         html: `
           <section class="hq-section hq-hero hq-hero--minimal-bold">
-            <div class="hq-hero__bg"><img src="/assets/images/busy-hangar.jpg" alt="Hangar"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar"></div>
             <div class="hq-hero__overlay hq-hero__overlay--dark"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <h1 class="hq-hero__headline hq-text-massive">FLY</h1>
@@ -77,7 +77,7 @@
         desc: 'Stacked headline with elegant break.',
         html: `
           <section class="hq-section hq-hero hq-hero--minimal-centered">
-            <div class="hq-hero__bg"><img src="/assets/images/british-helicopter-team.webp" alt="Team"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/team/british-helicopter-team.webp" alt="Team"></div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-bottom"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <h1 class="hq-hero__headline hq-text-hero">Freedom<br><em>Redefined</em></h1>
@@ -109,7 +109,7 @@
               </div>
             </div>
             <div class="hq-hero__split-image">
-              <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
             </div>
           </section>`
       },
@@ -121,7 +121,7 @@
         html: `
           <section class="hq-section hq-hero hq-hero--split-reverse">
             <div class="hq-hero__split-image">
-              <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Training">
+              <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Training">
             </div>
             <div class="hq-hero__split-content hq-hero__split-content--cream">
               <div class="hq-hero__content hq-hero__content--left hq-hero__content--dark">
@@ -144,7 +144,7 @@
         html: `
           <section class="hq-section hq-hero hq-hero--split-asymmetric">
             <div class="hq-hero__bg-section">
-              <img src="/assets/images/british-helicopter-team.webp" alt="Team">
+              <img src="/assets/images/team/british-helicopter-team.webp" alt="Team">
             </div>
             <div class="hq-hero__card">
               <span class="hq-badge hq-badge--primary">Robinson Authorized</span>
@@ -152,7 +152,7 @@
               <p class="hq-hero__tagline hq-hero__tagline--dark">EASA Part-145 certified. Factory-trained engineers.</p>
               <a href="#services" class="hq-btn hq-btn--dark">Our Services</a>
               <div class="hq-hero__logos">
-                <img src="/assets/images/caa.jpg" alt="CAA">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
               </div>
             </div>
           </section>`
@@ -173,7 +173,7 @@
               </div>
             </div>
             <div class="hq-hero__split-image hq-hero__split-image--diagonal">
-              <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66">
             </div>
           </section>`
       },
@@ -188,7 +188,7 @@
           <section class="hq-section hq-hero hq-hero--product">
             <div class="hq-hero__bg hq-hero__bg--gradient-light"></div>
             <div class="hq-hero__product-image">
-              <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
             </div>
             <div class="hq-hero__content hq-hero__content--center hq-hero__content--dark">
               <span class="hq-overline">New Aircraft</span>
@@ -221,18 +221,18 @@
             </div>
             <div class="hq-hero__lineup-grid">
               <a href="#r22" class="hq-lineup-card">
-                <div class="hq-lineup-card__image"><img src="/assets/images/r22-cutout.png" alt="R22"></div>
+                <div class="hq-lineup-card__image"><img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22"></div>
                 <h3 class="hq-lineup-card__name">R22</h3>
                 <p class="hq-lineup-card__desc">Training & Personal</p>
               </a>
               <a href="#r44" class="hq-lineup-card">
-                <div class="hq-lineup-card__image"><img src="/assets/images/r44-cutout.png" alt="R44"></div>
+                <div class="hq-lineup-card__image"><img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44"></div>
                 <h3 class="hq-lineup-card__name">R44</h3>
                 <p class="hq-lineup-card__desc">Versatile 4-Seat</p>
               </a>
               <a href="#r66" class="hq-lineup-card hq-lineup-card--featured">
                 <span class="hq-lineup-card__badge">Most Popular</span>
-                <div class="hq-lineup-card__image"><img src="/assets/images/blue-r66-palo-verde-front-v4-1.png" alt="R66"></div>
+                <div class="hq-lineup-card__image"><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4-1.png" alt="R66"></div>
                 <h3 class="hq-lineup-card__name">R66 Turbine</h3>
                 <p class="hq-lineup-card__desc">Power & Luxury</p>
               </a>
@@ -254,7 +254,7 @@
             </div>
             <div class="hq-hero__comparison-grid">
               <div class="hq-compare-item">
-                <img src="/assets/images/r44-cutout.png" alt="R44">
+                <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                 <h3>R44 Raven II</h3>
                 <ul class="hq-compare-specs">
                   <li>4 Seats</li>
@@ -264,7 +264,7 @@
               </div>
               <div class="hq-compare-vs">VS</div>
               <div class="hq-compare-item">
-                <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                 <h3>R66 Turbine</h3>
                 <ul class="hq-compare-specs">
                   <li>4+1 Seats</li>
@@ -285,7 +285,7 @@
         desc: 'Moody, atmospheric. Premium luxury feel.',
         html: `
           <section class="hq-section hq-hero hq-hero--cinematic">
-            <div class="hq-hero__bg"><img src="/assets/images/20251217_183027.jpg" alt="Dusk"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/legacy/dated/20251217_183027.jpg" alt="Dusk"></div>
             <div class="hq-hero__overlay hq-hero__overlay--cinematic"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <h1 class="hq-hero__headline hq-text-elegant">Beyond<br>Boundaries</h1>
@@ -306,10 +306,10 @@
         html: `
           <section class="hq-section hq-hero hq-hero--video">
             <div class="hq-hero__video-container">
-              <video autoplay muted loop playsinline poster="/assets/images/helicopter-expeditions-quentin-smith.webp">
+              <video autoplay muted loop playsinline poster="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp">
                 <source src="/assets/video/hero-loop.mp4" type="video/mp4">
               </video>
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Flight" class="hq-hero__video-fallback">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Flight" class="hq-hero__video-fallback">
             </div>
             <div class="hq-hero__overlay hq-hero__overlay--video"></div>
             <div class="hq-hero__content hq-hero__content--center">
@@ -331,7 +331,7 @@
         html: `
           <section class="hq-section hq-hero hq-hero--parallax">
             <div class="hq-hero__parallax-bg" data-speed="0.3">
-              <img src="/assets/images/chris-r66-alps.jpg" alt="Alps">
+              <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alps">
             </div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-up"></div>
             <div class="hq-hero__content hq-hero__content--center" data-speed="0.6">
@@ -350,9 +350,9 @@
         html: `
           <section class="hq-section hq-hero hq-hero--crossfade">
             <div class="hq-hero__crossfade">
-              <img src="/assets/images/chris-r66-alps.jpg" alt="Alps" class="active">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
-              <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+              <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alps" class="active">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
+              <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
             </div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-bottom"></div>
             <div class="hq-hero__content hq-hero__content--center">
@@ -371,7 +371,7 @@
         desc: '30+ years experience front and center.',
         html: `
           <section class="hq-section hq-hero hq-hero--trust">
-            <div class="hq-hero__bg"><img src="/assets/images/busy-hangar.jpg" alt="Hangar"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar"></div>
             <div class="hq-hero__overlay hq-hero__overlay--trust"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <div class="hq-hero__trust-badge">
@@ -384,8 +384,8 @@
                 <cite>— James H., R66 Owner</cite>
               </div>
               <div class="hq-hero__logos">
-                <img src="/assets/images/caa.jpg" alt="CAA">
-                <img src="/assets/images/bhalogo.jpg" alt="BHA">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
+                <img src="/assets/images/logos/partners/bhalogo.jpg" alt="BHA">
               </div>
               <a href="#contact" class="hq-btn hq-btn--primary">Speak With Our Team</a>
             </div>
@@ -419,7 +419,7 @@
         desc: 'Customer quotes with rotating carousel.',
         html: `
           <section class="hq-section hq-hero hq-hero--testimonials">
-            <div class="hq-hero__bg"><img src="/assets/images/british-helicopter-team.webp" alt="Team"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/team/british-helicopter-team.webp" alt="Team"></div>
             <div class="hq-hero__overlay hq-hero__overlay--dark"></div>
             <div class="hq-hero__content hq-hero__content--center">
               <span class="hq-overline">What Our Clients Say</span>
@@ -450,7 +450,7 @@
         desc: 'Embedded booking card. Reduce friction.',
         html: `
           <section class="hq-section hq-hero hq-hero--booking">
-            <div class="hq-hero__bg"><img src="/assets/images/british-helicopter-team.webp" alt="Training"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/team/british-helicopter-team.webp" alt="Training"></div>
             <div class="hq-hero__overlay hq-hero__overlay--booking"></div>
             <div class="hq-hero__split-content">
               <div class="hq-hero__content hq-hero__content--left">
@@ -484,7 +484,7 @@
         html: `
           <section class="hq-section hq-hero hq-hero--dual">
             <div class="hq-hero__dual-section hq-hero__dual-section--buy">
-              <div class="hq-hero__bg"><img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
+              <div class="hq-hero__bg"><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
               <div class="hq-hero__overlay hq-hero__overlay--subtle"></div>
               <div class="hq-hero__content">
                 <span class="hq-overline">Aircraft Sales</span>
@@ -494,7 +494,7 @@
               </div>
             </div>
             <div class="hq-hero__dual-section hq-hero__dual-section--learn">
-              <div class="hq-hero__bg"><img src="/assets/images/british-helicopter-team.webp" alt="Training"></div>
+              <div class="hq-hero__bg"><img src="/assets/images/team/british-helicopter-team.webp" alt="Training"></div>
               <div class="hq-hero__overlay hq-hero__overlay--subtle"></div>
               <div class="hq-hero__content">
                 <span class="hq-overline">Flight Training</span>
@@ -543,7 +543,7 @@
         desc: 'Contact form embedded in hero.',
         html: `
           <section class="hq-section hq-hero hq-hero--form">
-            <div class="hq-hero__bg"><img src="/assets/images/busy-hangar.jpg" alt="Hangar"></div>
+            <div class="hq-hero__bg"><img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar"></div>
             <div class="hq-hero__overlay hq-hero__overlay--gradient-right"></div>
             <div class="hq-hero__split-content">
               <div class="hq-hero__content hq-hero__content--left">
@@ -585,7 +585,7 @@
                 <span class="hq-magazine-tagline">The Art of Helicopter Excellence</span>
               </div>
               <div class="hq-magazine-feature">
-                <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Featured">
+                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Featured">
               </div>
               <div class="hq-magazine-sidebar">
                 <div class="hq-magazine-story">
@@ -618,7 +618,7 @@
               <p class="hq-story-line">Today, that mission has helped hundreds take to the skies.</p>
             </div>
             <div class="hq-hero__story-stage hq-hero__story-stage--3">
-              <div class="hq-hero__bg"><img src="/assets/images/chris-r66-alps.jpg" alt="Flying"></div>
+              <div class="hq-hero__bg"><img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Flying"></div>
               <div class="hq-hero__overlay hq-hero__overlay--subtle"></div>
               <div class="hq-hero__content hq-hero__content--center">
                 <h1 class="hq-hero__headline hq-text-hero">Your Story<br>Starts Here</h1>
@@ -665,7 +665,7 @@
               <div class="hq-aircraft__grid hq-aircraft__grid--3">
                 <a href="#r66" class="hq-aircraft-card">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                   </div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
@@ -675,7 +675,7 @@
                 </a>
                 <a href="#r44" class="hq-aircraft-card">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/r44-cutout.png" alt="R44">
+                    <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                   </div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
@@ -685,7 +685,7 @@
                 </a>
                 <a href="#r22" class="hq-aircraft-card">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/r22-cutout.png" alt="R22">
+                    <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22">
                   </div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
@@ -715,7 +715,7 @@
               <div class="hq-aircraft__featured-layout">
                 <a href="#r66" class="hq-aircraft-card hq-aircraft-card--large">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66">
                     <span class="hq-badge hq-badge--featured">Featured</span>
                   </div>
                   <div class="hq-aircraft-card__body">
@@ -728,7 +728,7 @@
                 <div class="hq-aircraft__side-cards">
                   <a href="#r44" class="hq-aircraft-card hq-aircraft-card--horizontal">
                     <div class="hq-aircraft-card__image">
-                      <img src="/assets/images/r44-cutout.png" alt="R44">
+                      <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                     </div>
                     <div class="hq-aircraft-card__body">
                       <span class="hq-aircraft-card__model">Robinson</span>
@@ -737,7 +737,7 @@
                   </a>
                   <a href="#r22" class="hq-aircraft-card hq-aircraft-card--horizontal">
                     <div class="hq-aircraft-card__image">
-                      <img src="/assets/images/r22-cutout.png" alt="R22">
+                      <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22">
                     </div>
                     <div class="hq-aircraft-card__body">
                       <span class="hq-aircraft-card__model">Robinson</span>
@@ -771,21 +771,21 @@
             <div class="hq-aircraft__carousel">
               <div class="hq-aircraft__carousel-track">
                 <a href="#r66" class="hq-aircraft-card">
-                  <div class="hq-aircraft-card__image"><img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
+                  <div class="hq-aircraft-card__image"><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66"></div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
                     <h3 class="hq-aircraft-card__name">R66 Turbine</h3>
                   </div>
                 </a>
                 <a href="#r44" class="hq-aircraft-card">
-                  <div class="hq-aircraft-card__image"><img src="/assets/images/r44-cutout.png" alt="R44"></div>
+                  <div class="hq-aircraft-card__image"><img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44"></div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
                     <h3 class="hq-aircraft-card__name">R44 Raven II</h3>
                   </div>
                 </a>
                 <a href="#r22" class="hq-aircraft-card">
-                  <div class="hq-aircraft-card__image"><img src="/assets/images/r22-cutout.png" alt="R22"></div>
+                  <div class="hq-aircraft-card__image"><img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22"></div>
                   <div class="hq-aircraft-card__body">
                     <span class="hq-aircraft-card__model">Robinson</span>
                     <h3 class="hq-aircraft-card__name">R22 Beta II</h3>
@@ -820,16 +820,16 @@
                 <div class="hq-comparison-table__header">
                   <div class="hq-comparison-table__cell"></div>
                   <div class="hq-comparison-table__cell">
-                    <img src="/assets/images/r22-cutout.png" alt="R22">
+                    <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22">
                     <h3>R22 Beta II</h3>
                   </div>
                   <div class="hq-comparison-table__cell">
-                    <img src="/assets/images/r44-cutout.png" alt="R44">
+                    <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                     <h3>R44 Raven II</h3>
                   </div>
                   <div class="hq-comparison-table__cell hq-comparison-table__cell--featured">
                     <span class="hq-badge">Popular</span>
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                     <h3>R66 Turbine</h3>
                   </div>
                 </div>
@@ -881,28 +881,28 @@
               </div>
               <div class="hq-aircraft__masonry">
                 <a href="#r66" class="hq-masonry-card hq-masonry-card--tall">
-                  <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66">
                   <div class="hq-masonry-card__overlay">
                     <h3>R66 Turbine</h3>
                     <span>5 Seats • Turbine</span>
                   </div>
                 </a>
                 <a href="#r44" class="hq-masonry-card">
-                  <img src="/assets/images/r44-cutout.png" alt="R44">
+                  <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                   <div class="hq-masonry-card__overlay">
                     <h3>R44 Raven II</h3>
                     <span>4 Seats • Piston</span>
                   </div>
                 </a>
                 <a href="#hangar" class="hq-masonry-card">
-                  <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+                  <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
                   <div class="hq-masonry-card__overlay">
                     <h3>Visit Our Hangar</h3>
                     <span>Denham Aerodrome</span>
                   </div>
                 </a>
                 <a href="#r22" class="hq-masonry-card hq-masonry-card--tall">
-                  <img src="/assets/images/r22-cutout.png" alt="R22">
+                  <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22">
                   <div class="hq-masonry-card__overlay">
                     <h3>R22 Beta II</h3>
                     <span>2 Seats • Training</span>
@@ -963,7 +963,7 @@
         html: `
           <section class="hq-section hq-services hq-services--split" id="services">
             <div class="hq-services__image">
-              <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+              <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
             </div>
             <div class="hq-services__content">
               <span class="hq-overline">Full Service</span>
@@ -1005,7 +1005,7 @@
               <div class="hq-services__grid hq-services__grid--2">
                 <a href="#sales" class="hq-hover-card">
                   <div class="hq-hover-card__bg">
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Sales">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Sales">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3 class="hq-hover-card__title">Aircraft Sales</h3>
@@ -1015,7 +1015,7 @@
                 </a>
                 <a href="#training" class="hq-hover-card">
                   <div class="hq-hover-card__bg">
-                    <img src="/assets/images/british-helicopter-team.webp" alt="Training">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="Training">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3 class="hq-hover-card__title">Flight Training</h3>
@@ -1025,7 +1025,7 @@
                 </a>
                 <a href="#maintenance" class="hq-hover-card">
                   <div class="hq-hover-card__bg">
-                    <img src="/assets/images/busy-hangar.jpg" alt="Maintenance">
+                    <img src="/assets/images/facility/busy-hangar.jpg" alt="Maintenance">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3 class="hq-hover-card__title">Maintenance</h3>
@@ -1035,7 +1035,7 @@
                 </a>
                 <a href="#expeditions" class="hq-hover-card">
                   <div class="hq-hover-card__bg">
-                    <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expeditions">
+                    <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expeditions">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3 class="hq-hover-card__title">Expeditions</h3>
@@ -1092,10 +1092,10 @@
             <div class="hq-container">
               <p class="hq-trust__label">Trusted & Certified By</p>
               <div class="hq-trust__logos">
-                <img src="/assets/images/caa.jpg" alt="CAA">
-                <img src="/assets/images/bhalogo.jpg" alt="British Helicopter Association">
-                <img src="/assets/images/robinson-logo.png" alt="Robinson">
-                <img src="/assets/images/easa-logo.png" alt="EASA">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
+                <img src="/assets/images/logos/partners/bhalogo.jpg" alt="British Helicopter Association">
+                <img src="/assets/images/logos/certifications/rhc.png" alt="Robinson">
+                <img src="/assets/images/logos/certifications/easa1.png" alt="EASA">
               </div>
             </div>
           </section>`
@@ -1113,7 +1113,7 @@
                   "From my first discovery flight to purchasing my own R66, HQ Aviation has been exceptional. Their expertise and service are second to none."
                 </blockquote>
                 <div class="hq-testimonial-featured__author">
-                  <img src="/assets/images/testimonial-avatar.jpg" alt="James H." class="hq-testimonial-featured__avatar">
+                  <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="James H." class="hq-testimonial-featured__avatar">
                   <div>
                     <cite class="hq-testimonial-featured__name">James Harrison</cite>
                     <span class="hq-testimonial-featured__title">R66 Owner</span>
@@ -1177,7 +1177,7 @@
               <div class="hq-team__grid">
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team-placeholder-1.jpg" alt="Quentin Smith">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Quentin Smith">
                     <div class="hq-team-card__overlay">
                       <p>Founder & Chief Pilot with 30+ years experience. Led expeditions to 50+ countries.</p>
                       <div class="hq-team-card__social">
@@ -1192,7 +1192,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team-placeholder-2.jpg" alt="Sarah Mitchell">
+                    <img src="/assets/images/team/mackie-alcantara-profile-picture.jpg" alt="Sarah Mitchell">
                     <div class="hq-team-card__overlay">
                       <p>Head of Training with 5,000+ flight instruction hours. Former RAF pilot.</p>
                     </div>
@@ -1204,7 +1204,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team-placeholder-3.jpg" alt="James Crawford">
+                    <img src="/assets/images/team/for-england-282-29.jpg" alt="James Crawford">
                     <div class="hq-team-card__overlay">
                       <p>Chief Engineer with factory training from Robinson and Rolls-Royce.</p>
                     </div>
@@ -1216,7 +1216,7 @@
                 </div>
                 <div class="hq-team-card">
                   <div class="hq-team-card__image">
-                    <img src="/assets/images/team-placeholder-4.jpg" alt="Emma Wilson">
+                    <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Emma Wilson">
                     <div class="hq-team-card__overlay">
                       <p>Sales Director specializing in aircraft acquisition and client relations.</p>
                     </div>
@@ -1239,7 +1239,7 @@
           <section class="hq-section hq-team hq-team--founder" id="team">
             <div class="hq-team__founder-split">
               <div class="hq-team__founder-image">
-                <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
+                <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
               </div>
               <div class="hq-team__founder-content">
                 <span class="hq-overline">Our Story</span>
@@ -1287,27 +1287,27 @@
               </div>
               <div class="hq-gallery__masonry">
                 <a href="#" class="hq-gallery-item hq-gallery-item--tall">
-                  <img src="/assets/images/chris-r66-alps.jpg" alt="Alps Flight">
+                  <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alps Flight">
                   <div class="hq-gallery-item__caption">Alpine Expedition 2024</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+                  <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
                   <div class="hq-gallery-item__caption">Our Facility</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
+                  <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
                   <div class="hq-gallery-item__caption">World Tour</div>
                 </a>
                 <a href="#" class="hq-gallery-item hq-gallery-item--wide">
-                  <img src="/assets/images/british-helicopter-team.webp" alt="Team">
+                  <img src="/assets/images/team/british-helicopter-team.webp" alt="Team">
                   <div class="hq-gallery-item__caption">Training Team</div>
                 </a>
                 <a href="#" class="hq-gallery-item">
-                  <img src="/assets/images/20251217_183027.jpg" alt="Sunset">
+                  <img src="/assets/images/legacy/dated/20251217_183027.jpg" alt="Sunset">
                   <div class="hq-gallery-item__caption">Golden Hour</div>
                 </a>
                 <a href="#" class="hq-gallery-item hq-gallery-item--tall">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                   <div class="hq-gallery-item__caption">R66 Showcase</div>
                 </a>
               </div>
@@ -1323,21 +1323,21 @@
           <section class="hq-section hq-gallery hq-gallery--fullscreen" id="gallery">
             <div class="hq-gallery__slider">
               <div class="hq-gallery__slide active">
-                <img src="/assets/images/chris-r66-alps.jpg" alt="Alps">
+                <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alps">
                 <div class="hq-gallery__slide-caption">
                   <h3>Alpine Crossing</h3>
                   <p>Mont Blanc expedition with our R66 fleet</p>
                 </div>
               </div>
               <div class="hq-gallery__slide">
-                <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
+                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
                 <div class="hq-gallery__slide-caption">
                   <h3>Around the World</h3>
                   <p>Record-breaking global circumnavigation</p>
                 </div>
               </div>
               <div class="hq-gallery__slide">
-                <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+                <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
                 <div class="hq-gallery__slide-caption">
                   <h3>Our Facility</h3>
                   <p>State-of-the-art hangar at Denham Aerodrome</p>
@@ -1525,7 +1525,7 @@
                   <a href="#aircraft" class="hq-btn hq-btn--outline">View Aircraft</a>
                 </div>
                 <div class="hq-feature-row__image">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Aircraft Sales">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Aircraft Sales">
                 </div>
               </div>
               <div class="hq-feature-row hq-feature-row--reverse">
@@ -1541,7 +1541,7 @@
                   <a href="#training" class="hq-btn hq-btn--outline">Start Training</a>
                 </div>
                 <div class="hq-feature-row__image">
-                  <img src="/assets/images/british-helicopter-team.webp" alt="Flight Training">
+                  <img src="/assets/images/team/british-helicopter-team.webp" alt="Flight Training">
                 </div>
               </div>
             </div>
@@ -1583,7 +1583,7 @@
           <section class="hq-section hq-newsletter hq-newsletter--featured">
             <div class="hq-newsletter__split">
               <div class="hq-newsletter__image">
-                <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Newsletter">
+                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Newsletter">
               </div>
               <div class="hq-newsletter__content-side">
                 <span class="hq-overline">Newsletter</span>
@@ -1628,7 +1628,7 @@
               <div class="hq-blog__layout">
                 <a href="#" class="hq-blog-card hq-blog-card--featured">
                   <div class="hq-blog-card__image">
-                    <img src="/assets/images/chris-r66-alps.jpg" alt="Alpine Expedition">
+                    <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Alpine Expedition">
                     <span class="hq-blog-card__category">Expeditions</span>
                   </div>
                   <div class="hq-blog-card__body">
@@ -1641,7 +1641,7 @@
                 <div class="hq-blog__side-posts">
                   <a href="#" class="hq-blog-card hq-blog-card--horizontal">
                     <div class="hq-blog-card__image">
-                      <img src="/assets/images/busy-hangar.jpg" alt="Maintenance">
+                      <img src="/assets/images/facility/busy-hangar.jpg" alt="Maintenance">
                     </div>
                     <div class="hq-blog-card__body">
                       <time class="hq-blog-card__date">December 10, 2024</time>
@@ -1650,7 +1650,7 @@
                   </a>
                   <a href="#" class="hq-blog-card hq-blog-card--horizontal">
                     <div class="hq-blog-card__image">
-                      <img src="/assets/images/british-helicopter-team.webp" alt="Training">
+                      <img src="/assets/images/team/british-helicopter-team.webp" alt="Training">
                     </div>
                     <div class="hq-blog-card__body">
                       <time class="hq-blog-card__date">December 5, 2024</time>
@@ -1659,7 +1659,7 @@
                   </a>
                   <a href="#" class="hq-blog-card hq-blog-card--horizontal">
                     <div class="hq-blog-card__image">
-                      <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                      <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                     </div>
                     <div class="hq-blog-card__body">
                       <time class="hq-blog-card__date">December 1, 2024</time>
@@ -1856,37 +1856,37 @@
               </div>
               <div class="hq-social__grid">
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/chris-r66-alps.jpg" alt="Instagram">
+                  <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 1.2k</span>
                   </div>
                 </a>
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/busy-hangar.jpg" alt="Instagram">
+                  <img src="/assets/images/facility/busy-hangar.jpg" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 892</span>
                   </div>
                 </a>
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Instagram">
+                  <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 2.1k</span>
                   </div>
                 </a>
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/british-helicopter-team.webp" alt="Instagram">
+                  <img src="/assets/images/team/british-helicopter-team.webp" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 756</span>
                   </div>
                 </a>
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/20251217_183027.jpg" alt="Instagram">
+                  <img src="/assets/images/legacy/dated/20251217_183027.jpg" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 1.8k</span>
                   </div>
                 </a>
                 <a href="#" class="hq-social-item">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Instagram">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Instagram">
                   <div class="hq-social-item__overlay">
                     <span>❤️ 943</span>
                   </div>
@@ -1960,7 +1960,7 @@
                 <div class="hq-fleet__display">
                   <div class="hq-fleet__aircraft active" data-aircraft="r66">
                     <div class="hq-fleet__image">
-                      <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                      <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                     </div>
                     <div class="hq-fleet__info">
                       <h3>Robinson R66 Turbine</h3>
@@ -2015,7 +2015,7 @@
               <div class="hq-pilots__grid">
                 <div class="hq-pilot-card">
                   <div class="hq-pilot-card__image">
-                    <img src="/assets/images/pilot-placeholder-1.jpg" alt="Michael S.">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Michael S.">
                     <div class="hq-pilot-card__badge">PPL(H) 2024</div>
                   </div>
                   <div class="hq-pilot-card__content">
@@ -2026,7 +2026,7 @@
                 </div>
                 <div class="hq-pilot-card">
                   <div class="hq-pilot-card__image">
-                    <img src="/assets/images/pilot-placeholder-2.jpg" alt="Sarah T.">
+                    <img src="/assets/images/team/mackie-alcantara-profile-picture.jpg" alt="Sarah T.">
                     <div class="hq-pilot-card__badge">CPL(H) 2024</div>
                   </div>
                   <div class="hq-pilot-card__content">
@@ -2037,7 +2037,7 @@
                 </div>
                 <div class="hq-pilot-card">
                   <div class="hq-pilot-card__image">
-                    <img src="/assets/images/pilot-placeholder-3.jpg" alt="James R.">
+                    <img src="/assets/images/team/quentin-smith-profile-picture-2.jpg" alt="James R.">
                     <div class="hq-pilot-card__badge">FI(H) 2023</div>
                   </div>
                   <div class="hq-pilot-card__content">
@@ -2199,7 +2199,7 @@
               </div>
               <div class="hq-video__player">
                 <div class="hq-video__thumbnail">
-                  <img src="/assets/images/chris-r66-alps.jpg" alt="Video Thumbnail">
+                  <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Video Thumbnail">
                   <button class="hq-video__play-btn">
                     <span class="hq-video__play-icon">▶</span>
                   </button>
@@ -2228,7 +2228,7 @@
               <div class="hq-video__grid">
                 <a href="#" class="hq-video-card">
                   <div class="hq-video-card__thumbnail">
-                    <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Video">
+                    <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Video">
                     <span class="hq-video-card__duration">5:22</span>
                     <div class="hq-video-card__play">▶</div>
                   </div>
@@ -2236,7 +2236,7 @@
                 </a>
                 <a href="#" class="hq-video-card">
                   <div class="hq-video-card__thumbnail">
-                    <img src="/assets/images/british-helicopter-team.webp" alt="Video">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="Video">
                     <span class="hq-video-card__duration">12:08</span>
                     <div class="hq-video-card__play">▶</div>
                   </div>
@@ -2244,7 +2244,7 @@
                 </a>
                 <a href="#" class="hq-video-card">
                   <div class="hq-video-card__thumbnail">
-                    <img src="/assets/images/busy-hangar.jpg" alt="Video">
+                    <img src="/assets/images/facility/busy-hangar.jpg" alt="Video">
                     <span class="hq-video-card__duration">8:45</span>
                     <div class="hq-video-card__play">▶</div>
                   </div>
@@ -2252,7 +2252,7 @@
                 </a>
                 <a href="#" class="hq-video-card">
                   <div class="hq-video-card__thumbnail">
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Video">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Video">
                     <span class="hq-video-card__duration">6:30</span>
                     <div class="hq-video-card__play">▶</div>
                   </div>
@@ -2276,7 +2276,7 @@
         html: `
           <section class="hq-section hq-expedition hq-expedition--showcase" id="expedition">
             <div class="hq-expedition__bg">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Expedition">
             </div>
             <div class="hq-expedition__overlay"></div>
             <div class="hq-container">
@@ -2409,16 +2409,16 @@
             </div>
             <div class="hq-partners__marquee">
               <div class="hq-partners__track">
-                <img src="/assets/images/caa.jpg" alt="CAA">
-                <img src="/assets/images/bhalogo.jpg" alt="BHA">
-                <img src="/assets/images/robinson-logo.png" alt="Robinson">
-                <img src="/assets/images/rolls-royce-logo.png" alt="Rolls-Royce">
-                <img src="/assets/images/easa-logo.png" alt="EASA">
-                <img src="/assets/images/caa.jpg" alt="CAA">
-                <img src="/assets/images/bhalogo.jpg" alt="BHA">
-                <img src="/assets/images/robinson-logo.png" alt="Robinson">
-                <img src="/assets/images/rolls-royce-logo.png" alt="Rolls-Royce">
-                <img src="/assets/images/easa-logo.png" alt="EASA">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
+                <img src="/assets/images/logos/partners/bhalogo.jpg" alt="BHA">
+                <img src="/assets/images/logos/certifications/rhc.png" alt="Robinson">
+                <img src="/assets/images/logos/partners/pooleys.png" alt="Rolls-Royce">
+                <img src="/assets/images/logos/certifications/easa1.png" alt="EASA">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
+                <img src="/assets/images/logos/partners/bhalogo.jpg" alt="BHA">
+                <img src="/assets/images/logos/certifications/rhc.png" alt="Robinson">
+                <img src="/assets/images/logos/partners/pooleys.png" alt="Rolls-Royce">
+                <img src="/assets/images/logos/certifications/easa1.png" alt="EASA">
               </div>
             </div>
           </section>`
@@ -2456,7 +2456,7 @@
           <section class="hq-section hq-quote hq-quote--with-image">
             <div class="hq-quote__split">
               <div class="hq-quote__image-side">
-                <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
+                <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Quentin Smith">
               </div>
               <div class="hq-quote__content-side">
                 <blockquote class="hq-quote__text">
@@ -2506,7 +2506,7 @@
         html: `
           <section class="hq-section hq-cta hq-cta--image">
             <div class="hq-cta__bg">
-              <img src="/assets/images/chris-r66-alps.jpg" alt="Flying">
+              <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Flying">
             </div>
             <div class="hq-cta__overlay"></div>
             <div class="hq-container">
@@ -2902,7 +2902,7 @@
                         <a href="#aircraft" class="hq-btn hq-btn--primary">View Aircraft</a>
                       </div>
                       <div class="hq-tabs__panel-image">
-                        <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66 Helicopter">
+                        <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 Helicopter">
                       </div>
                     </div>
                   </div>
@@ -2920,7 +2920,7 @@
                         <a href="#training" class="hq-btn hq-btn--primary">View Courses</a>
                       </div>
                       <div class="hq-tabs__panel-image">
-                        <img src="/assets/images/british-helicopter-team.webp" alt="Training">
+                        <img src="/assets/images/team/british-helicopter-team.webp" alt="Training">
                       </div>
                     </div>
                   </div>
@@ -3256,7 +3256,7 @@
                   </ul>
                 </div>
                 <div class="hq-split__image">
-                  <img src="/assets/images/busy-hangar.jpg" alt="Hangar">
+                  <img src="/assets/images/facility/busy-hangar.jpg" alt="Hangar">
                 </div>
               </div>
             </div>
@@ -3279,7 +3279,7 @@
               <div class="hq-cards__grid hq-cards__grid--3">
                 <a href="#sales" class="hq-hover-card">
                   <div class="hq-hover-card__image">
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Sales">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Sales">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3>Aircraft Sales</h3>
@@ -3289,7 +3289,7 @@
                 </a>
                 <a href="#training" class="hq-hover-card">
                   <div class="hq-hover-card__image">
-                    <img src="/assets/images/british-helicopter-team.webp" alt="Training">
+                    <img src="/assets/images/team/british-helicopter-team.webp" alt="Training">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3>Flight Training</h3>
@@ -3299,7 +3299,7 @@
                 </a>
                 <a href="#maintenance" class="hq-hover-card">
                   <div class="hq-hover-card__image">
-                    <img src="/assets/images/busy-hangar.jpg" alt="Maintenance">
+                    <img src="/assets/images/facility/busy-hangar.jpg" alt="Maintenance">
                   </div>
                   <div class="hq-hover-card__content">
                     <h3>Maintenance</h3>
@@ -3358,7 +3358,7 @@
             <div class="hq-container">
               <div class="hq-footer__minimal">
                 <div class="hq-footer__logo">
-                  <img src="/assets/images/hq-logo-white.svg" alt="HQ Aviation" class="hq-footer__logo-img">
+                  <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ Aviation" class="hq-footer__logo-img">
                 </div>
                 <nav class="hq-footer__links">
                   <a href="#aircraft">Aircraft</a>
@@ -3388,7 +3388,7 @@
             <div class="hq-container">
               <div class="hq-footer__main">
                 <div class="hq-footer__brand">
-                  <img src="/assets/images/hq-logo-white.svg" alt="HQ Aviation" class="hq-footer__logo-img">
+                  <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ Aviation" class="hq-footer__logo-img">
                   <p class="hq-footer__tagline">UK's Premier Robinson Helicopter Dealer</p>
                   <div class="hq-footer__contact-primary">
                     <a href="tel:+441753868976" class="hq-footer__phone">01753 868 976</a>
@@ -3507,7 +3507,7 @@
           <header class="hq-header hq-header--sticky">
             <div class="hq-container">
               <a href="/" class="hq-header__logo">
-                <img src="/assets/images/hq-logo.svg" alt="HQ Aviation">
+                <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ Aviation">
               </a>
               <nav class="hq-header__nav">
                 <a href="#aircraft">Aircraft</a>
@@ -3536,7 +3536,7 @@
         html: `
           <section class="hq-section hq-search-hero">
             <div class="hq-search-hero__bg">
-              <img src="/assets/images/busy-hangar.jpg" alt="Fleet">
+              <img src="/assets/images/facility/busy-hangar.jpg" alt="Fleet">
             </div>
             <div class="hq-search-hero__overlay"></div>
             <div class="hq-container">
@@ -3639,7 +3639,7 @@
               <div class="hq-testimonial__split">
                 <div class="hq-testimonial__video">
                   <div class="hq-video-placeholder">
-                    <img src="/assets/images/chris-r66-alps.jpg" alt="Video thumbnail">
+                    <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Video thumbnail">
                     <button class="hq-video-play" aria-label="Play video">▶</button>
                   </div>
                 </div>
@@ -3648,7 +3648,7 @@
                     "The team at HQ Aviation made buying my R66 an absolute pleasure. From the initial enquiry to delivery, every step was handled professionally. I've now completed over 200 hours and the ongoing support has been exceptional."
                   </blockquote>
                   <div class="hq-testimonial__author">
-                    <img src="/assets/images/avatar-placeholder.jpg" alt="James Mitchell" class="hq-testimonial__avatar">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="James Mitchell" class="hq-testimonial__avatar">
                     <div class="hq-testimonial__author-info">
                       <strong>James Mitchell</strong>
                       <span>R66 Owner since 2022</span>
@@ -3728,7 +3728,7 @@
             <div class="hq-container">
               <div class="hq-content__split">
                 <div class="hq-content__image">
-                  <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Training">
+                  <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Training">
                 </div>
                 <div class="hq-content__text">
                   <span class="hq-overline">About Our Training</span>
@@ -3752,7 +3752,7 @@
         html: `
           <section class="hq-section hq-content hq-content--quote" id="content-quote">
             <div class="hq-content__quote-bg">
-              <img src="/assets/images/chris-r66-alps.jpg" alt="Background">
+              <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Background">
             </div>
             <div class="hq-content__quote-overlay"></div>
             <div class="hq-container">
@@ -3995,7 +3995,7 @@
                 </div>
               </div>
               <div class="hq-error__image">
-                <img src="/assets/images/helicopter-silhouette.svg" alt="Helicopter">
+                <img src="/assets/images/new-aircraft/r66/r66-cutout.png" alt="Helicopter">
               </div>
             </div>
           </section>`
@@ -4037,7 +4037,7 @@
           <section class="hq-section hq-auth">
             <div class="hq-auth__card">
               <div class="hq-auth__header">
-                <img src="/assets/images/hq-logo.svg" alt="HQ Aviation" class="hq-auth__logo">
+                <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ Aviation" class="hq-auth__logo">
                 <h2>Welcome Back</h2>
                 <p>Sign in to access your account</p>
               </div>
@@ -4120,7 +4120,7 @@
             <div class="hq-container">
               <div class="hq-profile-card">
                 <div class="hq-profile-card__avatar">
-                  <img src="/assets/images/avatar-placeholder.jpg" alt="Profile">
+                  <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Profile">
                   <button class="hq-profile-card__edit-avatar">📷</button>
                 </div>
                 <div class="hq-profile-card__info">
@@ -6069,7 +6069,7 @@
               </div>
               <div class="hq-wheel">
                 <div class="hq-wheel__center">
-                  <img src="/assets/images/hq-logo-mark.svg" alt="HQ" class="hq-wheel__logo">
+                  <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ" class="hq-wheel__logo">
                   <span>Your Aircraft</span>
                 </div>
                 <div class="hq-wheel__segment hq-wheel__segment--1">
@@ -6127,7 +6127,7 @@
         html: `
           <section class="hq-section hq-model-spotlight">
             <div class="hq-model-spotlight__bg">
-              <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="Robinson R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="Robinson R66">
             </div>
             <div class="hq-container">
               <div class="hq-model-spotlight__content">
@@ -6180,7 +6180,7 @@
               <div class="hq-fleet-compare__grid">
                 <div class="hq-fleet-compare__card">
                   <div class="hq-fleet-compare__image">
-                    <img src="/assets/images/r22-beta-ii.png" alt="R22">
+                    <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22">
                     <span class="hq-badge hq-badge--primary">Training Favourite</span>
                   </div>
                   <h3 class="hq-fleet-compare__name">R22 Beta II</h3>
@@ -6196,7 +6196,7 @@
                 </div>
                 <div class="hq-fleet-compare__card hq-fleet-compare__card--featured">
                   <div class="hq-fleet-compare__image">
-                    <img src="/assets/images/r44-raven-ii.png" alt="R44">
+                    <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44">
                     <span class="hq-badge hq-badge--accent">Most Popular</span>
                   </div>
                   <h3 class="hq-fleet-compare__name">R44 Raven II</h3>
@@ -6212,7 +6212,7 @@
                 </div>
                 <div class="hq-fleet-compare__card">
                   <div class="hq-fleet-compare__image">
-                    <img src="/assets/images/r66-turbine.png" alt="R66">
+                    <img src="/assets/images/new-aircraft/r66/r66-turbine.png" alt="R66">
                     <span class="hq-badge hq-badge--success">Turbine Power</span>
                   </div>
                   <h3 class="hq-fleet-compare__name">R66 Turbine</h3>
@@ -6254,7 +6254,7 @@
               <div class="hq-inventory__grid">
                 <article class="hq-aircraft-card">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/inventory/r66-g-hqav.jpg" alt="R66">
+                    <img src="/assets/images/used-aircraft/r66/ghver.jpg" alt="R66">
                     <span class="hq-aircraft-card__status hq-aircraft-card__status--available">Available</span>
                   </div>
                   <div class="hq-aircraft-card__content">
@@ -6276,7 +6276,7 @@
                 </article>
                 <article class="hq-aircraft-card">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/inventory/r44-g-pixl.jpg" alt="R44">
+                    <img src="/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg" alt="R44">
                     <span class="hq-aircraft-card__status hq-aircraft-card__status--reserved">Reserved</span>
                   </div>
                   <div class="hq-aircraft-card__content">
@@ -6298,7 +6298,7 @@
                 </article>
                 <article class="hq-aircraft-card hq-aircraft-card--new">
                   <div class="hq-aircraft-card__image">
-                    <img src="/assets/images/inventory/r66-factory.jpg" alt="R66 Factory New">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 Factory New">
                     <span class="hq-aircraft-card__status hq-aircraft-card__status--new">Factory New</span>
                   </div>
                   <div class="hq-aircraft-card__content">
@@ -6342,7 +6342,7 @@
             <div class="hq-container">
               <div class="hq-instructor__layout">
                 <div class="hq-instructor__image">
-                  <img src="/assets/images/team/chris-smith.jpg" alt="Chris Smith">
+                  <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Chris Smith">
                   <div class="hq-instructor__credentials">
                     <span class="hq-badge">CAA Approved</span>
                     <span class="hq-badge">FI(H)</span>
@@ -6394,12 +6394,12 @@
               </div>
               <div class="hq-student-story__content">
                 <div class="hq-student-story__hero">
-                  <img src="/assets/images/students/sarah-first-solo.jpg" alt="Sarah's first solo">
+                  <img src="/assets/images/team/mackie-alcantara-profile-picture.jpg" alt="Sarah's first solo">
                   <div class="hq-student-story__badge">First Solo: Day 47</div>
                 </div>
                 <div class="hq-student-story__narrative">
                   <div class="hq-student-story__author">
-                    <img src="/assets/images/students/sarah-portrait.jpg" alt="Sarah">
+                    <img src="/assets/images/team/mackie-alcantara-profile-picture.jpg" alt="Sarah">
                     <div>
                       <strong>Sarah Mitchell</strong>
                       <span>Marketing Director → Private Pilot</span>
@@ -6578,9 +6578,9 @@
                 </div>
               </div>
               <div class="hq-maintenance-services__certifications">
-                <img src="/assets/images/logos/easa-part145.svg" alt="EASA Part-145">
-                <img src="/assets/images/logos/caa.svg" alt="CAA Approved">
-                <img src="/assets/images/logos/robinson-authorized.svg" alt="Robinson Authorized">
+                <img src="/assets/images/logos/certifications/easa1.png" alt="EASA Part-145">
+                <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA Approved">
+                <img src="/assets/images/logos/certifications/logo_robinson_authorized_repair_center1.jpg" alt="Robinson Authorized">
               </div>
             </div>
           </section>`
@@ -6593,7 +6593,7 @@
         html: `
           <section class="hq-section hq-hangar-tour">
             <div class="hq-hangar-tour__hero">
-              <img src="/assets/images/facilities/hangar-wide.jpg" alt="HQ Aviation Hangar">
+              <img src="/assets/images/facility/hq-0007.jpg" alt="HQ Aviation Hangar">
               <div class="hq-hangar-tour__overlay">
                 <div class="hq-container">
                   <span class="hq-overline hq-overline--light">Our Facilities</span>
@@ -6606,7 +6606,7 @@
               <div class="hq-hangar-tour__features">
                 <div class="hq-hangar-tour__feature">
                   <div class="hq-hangar-tour__feature-image">
-                    <img src="/assets/images/facilities/workshop.jpg" alt="Workshop">
+                    <img src="/assets/images/facility/hq-0391.jpg" alt="Workshop">
                   </div>
                   <div class="hq-hangar-tour__feature-content">
                     <h3>Modern Workshop</h3>
@@ -6615,7 +6615,7 @@
                 </div>
                 <div class="hq-hangar-tour__feature">
                   <div class="hq-hangar-tour__feature-image">
-                    <img src="/assets/images/facilities/parts-store.jpg" alt="Parts Store">
+                    <img src="/assets/images/facility/hq-0502.jpg" alt="Parts Store">
                   </div>
                   <div class="hq-hangar-tour__feature-content">
                     <h3>Comprehensive Parts Store</h3>
@@ -6624,7 +6624,7 @@
                 </div>
                 <div class="hq-hangar-tour__feature">
                   <div class="hq-hangar-tour__feature-image">
-                    <img src="/assets/images/facilities/hangarage.jpg" alt="Hangarage">
+                    <img src="/assets/images/facility/hangar.png" alt="Hangarage">
                   </div>
                   <div class="hq-hangar-tour__feature-content">
                     <h3>Secure Hangarage</h3>
@@ -6746,7 +6746,7 @@
               <div class="hq-leadership__grid">
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/quentin-smith.jpg" alt="Quentin Smith">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Quentin Smith">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Quentin Smith</h3>
@@ -6759,7 +6759,7 @@
                 </div>
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/chris-smith.jpg" alt="Chris Smith">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Chris Smith">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Chris Smith</h3>
@@ -6772,7 +6772,7 @@
                 </div>
                 <div class="hq-leader-card">
                   <div class="hq-leader-card__image">
-                    <img src="/assets/images/team/mark-engineer.jpg" alt="Mark Thompson">
+                    <img src="/assets/images/team/for-england-282-29.jpg" alt="Mark Thompson">
                   </div>
                   <div class="hq-leader-card__content">
                     <h3>Mark Thompson</h3>
@@ -6878,22 +6878,22 @@
               </div>
               <div class="hq-trust-signals__certifications">
                 <div class="hq-cert-card">
-                  <img src="/assets/images/logos/robinson-authorized.svg" alt="Robinson">
+                  <img src="/assets/images/logos/certifications/logo_robinson_authorized_repair_center1.jpg" alt="Robinson">
                   <h3>Robinson Authorized</h3>
                   <p>Official UK dealer since 1995</p>
                 </div>
                 <div class="hq-cert-card">
-                  <img src="/assets/images/logos/easa-part145.svg" alt="EASA">
+                  <img src="/assets/images/logos/certifications/easa1.png" alt="EASA">
                   <h3>EASA Part-145</h3>
                   <p>Approved Maintenance Organisation</p>
                 </div>
                 <div class="hq-cert-card">
-                  <img src="/assets/images/logos/caa.svg" alt="CAA">
+                  <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA">
                   <h3>CAA Approved</h3>
                   <p>Approved Training Organisation</p>
                 </div>
                 <div class="hq-cert-card">
-                  <img src="/assets/images/logos/bhpa.svg" alt="BHPA">
+                  <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="BHPA">
                   <h3>BHPA Member</h3>
                   <p>British Helicopter Association</p>
                 </div>
@@ -6904,7 +6904,7 @@
                     "I've bought three aircraft from HQ over 15 years. The relationship doesn't end at the sale—they're partners in every sense. Maintenance, training, advice, they're always there."
                   </blockquote>
                   <div class="hq-testimonial-featured__author">
-                    <img src="/assets/images/testimonials/james-carter.jpg" alt="James Carter">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="James Carter">
                     <div>
                       <strong>James Carter</strong>
                       <span>R66 Owner, Surrey</span>
@@ -6940,35 +6940,35 @@
               </div>
               <div class="hq-destinations__grid">
                 <div class="hq-destination hq-destination--large">
-                  <img src="/assets/images/destinations/scottish-highlands.jpg" alt="Scottish Highlands">
+                  <img src="/assets/images/gallery/flying/flying--1.jpg" alt="Scottish Highlands">
                   <div class="hq-destination__overlay">
                     <h3>Scottish Highlands</h3>
                     <span>2hr 45min from London</span>
                   </div>
                 </div>
                 <div class="hq-destination">
-                  <img src="/assets/images/destinations/french-riviera.jpg" alt="French Riviera">
+                  <img src="/assets/images/expeditions/antartica.jpg" alt="French Riviera">
                   <div class="hq-destination__overlay">
                     <h3>French Riviera</h3>
                     <span>Direct to your yacht</span>
                   </div>
                 </div>
                 <div class="hq-destination">
-                  <img src="/assets/images/destinations/cotswolds.jpg" alt="Cotswolds">
+                  <img src="/assets/images/gallery/flying/flying-.jpg" alt="Cotswolds">
                   <div class="hq-destination__overlay">
                     <h3>The Cotswolds</h3>
                     <span>45min lunch trips</span>
                   </div>
                 </div>
                 <div class="hq-destination">
-                  <img src="/assets/images/destinations/cornwall.jpg" alt="Cornwall">
+                  <img src="/assets/images/expeditions/channel.jpg" alt="Cornwall">
                   <div class="hq-destination__overlay">
                     <h3>Cornwall Coast</h3>
                     <span>Weekend escapes</span>
                   </div>
                 </div>
                 <div class="hq-destination">
-                  <img src="/assets/images/destinations/alps.jpg" alt="Swiss Alps">
+                  <img src="/assets/images/expeditions/antartica.jpg" alt="Swiss Alps">
                   <div class="hq-destination__overlay">
                     <h3>Swiss Alps</h3>
                     <span>Ski resort transfers</span>
@@ -7032,7 +7032,7 @@
                   <a href="#ownership" class="hq-btn hq-btn--primary">Explore Ownership Options</a>
                 </div>
                 <div class="hq-ownership-benefits__image">
-                  <img src="/assets/images/lifestyle/owner-with-r66.jpg" alt="Happy owner with R66">
+                  <img src="/assets/images/used-aircraft/r66/ghver.jpg" alt="Happy owner with R66">
                 </div>
               </div>
             </div>
@@ -7093,7 +7093,7 @@
                 <div class="hq-day-life__chapter">
                   <span class="hq-day-life__time">7:30 AM</span>
                   <div class="hq-day-life__image">
-                    <img src="/assets/images/lifestyle/morning-hangar.jpg" alt="Morning at hangar">
+                    <img src="/assets/images/facility/hq-0035.jpg" alt="Morning at hangar">
                   </div>
                   <div class="hq-day-life__text">
                     <h3>Quick Pre-Flight</h3>
@@ -7103,7 +7103,7 @@
                 <div class="hq-day-life__chapter">
                   <span class="hq-day-life__time">8:15 AM</span>
                   <div class="hq-day-life__image">
-                    <img src="/assets/images/lifestyle/over-london.jpg" alt="Flying over London">
+                    <img src="/assets/images/gallery/flying/flying-.jpg" alt="Flying over London">
                   </div>
                   <div class="hq-day-life__text">
                     <h3>Above the M25</h3>
@@ -7113,7 +7113,7 @@
                 <div class="hq-day-life__chapter">
                   <span class="hq-day-life__time">12:30 PM</span>
                   <div class="hq-day-life__image">
-                    <img src="/assets/images/lifestyle/lunch-cotswolds.jpg" alt="Lunch in Cotswolds">
+                    <img src="/assets/images/expeditions/channel.jpg" alt="Lunch in Cotswolds">
                   </div>
                   <div class="hq-day-life__text">
                     <h3>Lunch Detour</h3>
@@ -7123,7 +7123,7 @@
                 <div class="hq-day-life__chapter">
                   <span class="hq-day-life__time">5:00 PM</span>
                   <div class="hq-day-life__image">
-                    <img src="/assets/images/lifestyle/family-flight.jpg" alt="Family flight">
+                    <img src="/assets/images/facility/hq-0153.jpg" alt="Family flight">
                   </div>
                   <div class="hq-day-life__text">
                     <h3>School Pickup (Different)</h3>
@@ -7216,7 +7216,7 @@
         html: `
           <section class="hq-section hq-aircraft-deep">
             <div class="hq-aircraft-deep__hero">
-              <img src="/assets/images/r66-aerial-shot.jpg" alt="R66 in flight">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 in flight">
               <div class="hq-aircraft-deep__hero-overlay">
                 <div class="hq-container">
                   <span class="hq-badge hq-badge--accent">Turbine Powered</span>
@@ -7250,17 +7250,17 @@
               </div>
               <div class="hq-aircraft-deep__features">
                 <div class="hq-aircraft-feature">
-                  <img src="/assets/images/r66-cockpit.jpg" alt="R66 Cockpit">
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-pv-glass-instrument-panel-13712.jpg" alt="R66 Cockpit">
                   <h3>Glass Cockpit Ready</h3>
                   <p>Available with Garmin G500H TXi integrated flight display. Modern avionics, intuitive interface.</p>
                 </div>
                 <div class="hq-aircraft-feature">
-                  <img src="/assets/images/r66-cabin.jpg" alt="R66 Cabin">
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-pv-aft-cabin-seats-13653.jpg" alt="R66 Cabin">
                   <h3>Spacious Cabin</h3>
                   <p>Room for 4 passengers plus pilot. Comfortable leather seating. Climate controlled.</p>
                 </div>
                 <div class="hq-aircraft-feature">
-                  <img src="/assets/images/r66-engine.jpg" alt="R66 Engine">
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-pv-engine-cowling-logo-13765.jpg" alt="R66 Engine">
                   <h3>Rolls-Royce Power</h3>
                   <p>The RR300 turbine delivers 270 shp with exceptional reliability and hot-and-high performance.</p>
                 </div>
@@ -7324,7 +7324,7 @@
                   </div>
                 </div>
                 <div class="hq-training-philosophy__image">
-                  <img src="/assets/images/instructor-student-briefing.jpg" alt="Instructor briefing">
+                  <img src="/assets/images/facility/hq-0153.jpg" alt="Instructor briefing">
                   <div class="hq-training-philosophy__quote">
                     <blockquote>"A great instructor doesn't just teach you to fly. They teach you to think like a pilot."</blockquote>
                     <cite>— Chris Smith, Chief Flying Instructor</cite>
@@ -7351,7 +7351,7 @@
                 <div class="hq-trial-step">
                   <div class="hq-trial-step__time">Arrival</div>
                   <div class="hq-trial-step__content">
-                    <img src="/assets/images/trial/arrival.jpg" alt="Arrival at HQ">
+                    <img src="/assets/images/facility/hq-0035.jpg" alt="Arrival at HQ">
                     <h3>Welcome to HQ</h3>
                     <p>Park up, grab a coffee, and meet your instructor. We'll have a chat about what to expect and answer any questions. No rush.</p>
                   </div>
@@ -7359,7 +7359,7 @@
                 <div class="hq-trial-step">
                   <div class="hq-trial-step__time">Briefing</div>
                   <div class="hq-trial-step__content">
-                    <img src="/assets/images/trial/briefing.jpg" alt="Pre-flight briefing">
+                    <img src="/assets/images/facility/hq-0153.jpg" alt="Pre-flight briefing">
                     <h3>Pre-Flight Briefing</h3>
                     <p>15 minutes understanding the basics: how a helicopter flies, the controls, and what you'll be doing. Simple, clear, jargon-free.</p>
                   </div>
@@ -7367,7 +7367,7 @@
                 <div class="hq-trial-step">
                   <div class="hq-trial-step__time">Flight</div>
                   <div class="hq-trial-step__content">
-                    <img src="/assets/images/trial/flying.jpg" alt="In flight">
+                    <img src="/assets/images/gallery/flying/flying-.jpg" alt="In flight">
                     <h3>You're Flying</h3>
                     <p>30 minutes airborne. You'll take the controls, feel how the helicopter responds, and experience flight from the pilot's seat. The views are a bonus.</p>
                   </div>
@@ -7375,7 +7375,7 @@
                 <div class="hq-trial-step">
                   <div class="hq-trial-step__time">Debrief</div>
                   <div class="hq-trial-step__content">
-                    <img src="/assets/images/trial/debrief.jpg" alt="Post-flight">
+                    <img src="/assets/images/facility/hq-0167.jpg" alt="Post-flight">
                     <h3>Post-Flight Chat</h3>
                     <p>Back on the ground, we'll talk through the experience. Questions about training, costs, next steps—ask anything. No sales pitch.</p>
                   </div>
@@ -7450,7 +7450,7 @@
                   </div>
                 </div>
                 <div class="hq-maintenance-promise__image">
-                  <img src="/assets/images/engineer-at-work.jpg" alt="HQ Engineer">
+                  <img src="/assets/images/facility/hq-0391.jpg" alt="HQ Engineer">
                   <div class="hq-maintenance-promise__badge">
                     <span>EASA Part-145</span>
                     <span>Approved Organisation</span>
@@ -7719,7 +7719,7 @@
                   <a href="#ppi" class="hq-btn hq-btn--primary">Book Inspection</a>
                 </div>
                 <div class="hq-pre-purchase__image">
-                  <img src="/assets/images/pre-purchase-inspection.jpg" alt="Pre-purchase inspection">
+                  <img src="/assets/images/facility/hq-0477.jpg" alt="Pre-purchase inspection">
                 </div>
               </div>
             </div>
@@ -7794,7 +7794,7 @@
                 <div class="hq-transformation__before">
                   <h3>Before</h3>
                   <div class="hq-transformation__scenario">
-                    <img src="/assets/images/stories/james-before.jpg" alt="James before">
+                    <img src="/assets/images/team/quentin-smith-profile-picture-2.jpg" alt="James before">
                     <div class="hq-transformation__details">
                       <p class="hq-transformation__quote">"I was spending 4 hours driving to our Scottish estate. Leaving at 5am, arriving exhausted. Weekends felt like work."</p>
                       <ul>
@@ -7809,7 +7809,7 @@
                 <div class="hq-transformation__after">
                   <h3>After</h3>
                   <div class="hq-transformation__scenario">
-                    <img src="/assets/images/stories/james-after.jpg" alt="James now">
+                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="James now">
                     <div class="hq-transformation__details">
                       <p class="hq-transformation__quote">"Now I leave at 9am, arrive for coffee at 10:30. We go every weekend. The kids have learned to fly fish. Everything changed."</p>
                       <ul>
@@ -7824,7 +7824,7 @@
               </div>
               <div class="hq-transformation__footer">
                 <div class="hq-transformation__owner">
-                  <img src="/assets/images/stories/james-portrait.jpg" alt="James Richardson">
+                  <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="James Richardson">
                   <div>
                     <strong>James Richardson</strong>
                     <span>R66 Owner since 2021</span>
@@ -7957,22 +7957,22 @@
               </div>
               <div class="hq-community__features">
                 <div class="hq-community-feature">
-                  <img src="/assets/images/community/fly-in.jpg" alt="HQ Fly-in">
+                  <img src="/assets/images/facility/hq-0167.jpg" alt="HQ Fly-in">
                   <h3>Annual Fly-In</h3>
                   <p>Every summer, HQ pilots gather for our legendary fly-in. Food, friends, and flying. Friendships formed, stories shared.</p>
                 </div>
                 <div class="hq-community-feature">
-                  <img src="/assets/images/community/group-trip.jpg" alt="Group trip">
+                  <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Group trip">
                   <h3>Group Adventures</h3>
                   <p>France for lunch. Scottish castles. Channel Islands. Organized group flights with like-minded pilots.</p>
                 </div>
                 <div class="hq-community-feature">
-                  <img src="/assets/images/community/safety-seminar.jpg" alt="Safety seminar">
+                  <img src="/assets/images/facility/hq-0209.jpg" alt="Safety seminar">
                   <h3>Safety Seminars</h3>
                   <p>Free quarterly seminars for HQ customers. Guest speakers, refresher training, and the latest in aviation safety.</p>
                 </div>
                 <div class="hq-community-feature">
-                  <img src="/assets/images/community/hangar-social.jpg" alt="Hangar social">
+                  <img src="/assets/images/facility/hq-0254.jpg" alt="Hangar social">
                   <h3>Hangar Socials</h3>
                   <p>Informal gatherings at Denham. Coffee, conversation, and camaraderie. Aviation geeks welcome.</p>
                 </div>
@@ -8000,7 +8000,7 @@
               <div class="hq-training-fleet__grid">
                 <div class="hq-training-aircraft">
                   <div class="hq-training-aircraft__image">
-                    <img src="/assets/images/fleet/g-hqav-r22.jpg" alt="G-HQAV R22">
+                    <img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="G-HQAV R22">
                     <span class="hq-training-aircraft__reg">G-HQAV</span>
                   </div>
                   <div class="hq-training-aircraft__content">
@@ -8019,7 +8019,7 @@
                 </div>
                 <div class="hq-training-aircraft">
                   <div class="hq-training-aircraft__image">
-                    <img src="/assets/images/fleet/g-hqtr-r44.jpg" alt="G-HQTR R44">
+                    <img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="G-HQTR R44">
                     <span class="hq-training-aircraft__reg">G-HQTR</span>
                   </div>
                   <div class="hq-training-aircraft__content">
@@ -8038,7 +8038,7 @@
                 </div>
                 <div class="hq-training-aircraft">
                   <div class="hq-training-aircraft__image">
-                    <img src="/assets/images/fleet/g-hqtb-r66.jpg" alt="G-HQTB R66">
+                    <img src="/assets/images/new-aircraft/r66/r66-cutout.png" alt="G-HQTB R66">
                     <span class="hq-training-aircraft__reg">G-HQTB</span>
                   </div>
                   <div class="hq-training-aircraft__content">
@@ -8202,7 +8202,7 @@
                 </div>
               </div>
               <div class="hq-hq-difference__founder">
-                <img src="/assets/images/team/quentin-smith.jpg" alt="Quentin Smith">
+                <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Quentin Smith">
                 <blockquote>"I built HQ on a simple principle: treat every customer the way I'd want to be treated. That hasn't changed in 30 years."</blockquote>
                 <cite>— Quentin Smith, Founder</cite>
               </div>
@@ -8750,7 +8750,7 @@
                 </div>
                 <div class="hq-showcase__visual">
                   <div class="hq-showcase__image-stack">
-                    <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66 Turbine" class="hq-showcase__img-main">
+                    <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 Turbine" class="hq-showcase__img-main">
                     <div class="hq-showcase__img-badge">
                       <span>UK's Premier</span>
                       <strong>Robinson Dealer</strong>
@@ -8902,7 +8902,7 @@
               <div class="hq-showcase__features-grid">
                 <div class="hq-showcase__feature-card hq-showcase__feature-card--large">
                   <div class="hq-showcase__feature-img">
-                    <img src="/assets/images/r22-training.jpg" alt="R22 Training">
+                    <img src="/assets/images/training/home-2312.jpg" alt="R22 Training">
                   </div>
                   <div class="hq-showcase__feature-content">
                     <h3>1-to-1 Instruction</h3>
@@ -9312,7 +9312,7 @@
         html: `
           <section class="hq-showcase hq-showcase--lifestyle">
             <div class="hq-showcase__lifestyle-hero">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Helicopter lifestyle">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Helicopter lifestyle">
               <div class="hq-showcase__lifestyle-overlay"></div>
               <div class="hq-container">
                 <div class="hq-showcase__lifestyle-content">
@@ -9869,7 +9869,7 @@
                 <span class="hq-creative__editorial-tagline">The Art of Helicopter Ownership</span>
               </div>
               <div class="hq-creative__editorial-hero-img">
-                <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
               </div>
               <div class="hq-creative__editorial-feature">
                 <span class="hq-creative__editorial-kicker">Cover Story</span>
@@ -10394,7 +10394,7 @@
         html: `
           <section class="hq-creative hq-creative--glass">
             <div class="hq-creative__glass-bg">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Helicopter flight">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Helicopter flight">
             </div>
             <div class="hq-container">
               <div class="hq-creative__glass-header">
@@ -10752,7 +10752,7 @@
                   <span class="hq-aww__bento-stat-label">Aircraft Sold</span>
                 </div>
                 <div class="hq-aww__bento-card hq-aww__bento-card--image">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                 </div>
                 <div class="hq-aww__bento-card hq-aww__bento-card--cta hq-aww__bento-card--overlap-2">
                   <span>Trial Flight</span>
@@ -10889,7 +10889,7 @@
               </div>
               <div class="hq-aww__luxury-right">
                 <div class="hq-aww__luxury-image-frame">
-                  <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66 Turbine">
                   <div class="hq-aww__luxury-image-overlay"></div>
                 </div>
                 <div class="hq-aww__luxury-detail hq-aww__luxury-detail--top">
@@ -11180,7 +11180,7 @@
                 <a href="#explore" class="hq-aww__diag-btn">Explore →</a>
               </div>
               <div class="hq-aww__diag-image">
-                <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
               </div>
               <div class="hq-aww__diag-stats">
                 <div class="hq-aww__diag-stat">
@@ -11323,7 +11323,7 @@
             <div class="hq-aww__ed-layout">
               <div class="hq-aww__ed-image-wrap">
                 <div class="hq-aww__ed-image">
-                  <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                  <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
                 </div>
                 <div class="hq-aww__ed-image-caption">
                   <span>R66 Turbine</span>
@@ -11406,7 +11406,7 @@
               <span>Pilots</span>
             </div>
             <div class="hq-aww__float-element hq-aww__float-element--image">
-              <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
             </div>
             <div class="hq-aww__float-element hq-aww__float-element--cta">
               <a href="#explore">Explore →</a>
@@ -11511,7 +11511,7 @@
         html: `
           <section class="hq-aww hq-aww--glassfloat">
             <div class="hq-aww__gf-bg">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Flight">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Flight">
             </div>
             <div class="hq-aww__gf-overlay"></div>
             <div class="hq-aww__gf-panels">
@@ -11751,7 +11751,7 @@
                 <span>Since 1990</span>
               </div>
               <div class="hq-aww__dg-cell hq-aww__dg-cell--image">
-                <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+                <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
               </div>
               <div class="hq-aww__dg-cell hq-aww__dg-cell--stat1">
                 <span class="hq-aww__dg-num">500+</span>
@@ -11840,7 +11840,7 @@
               <h1>HQ Aviation</h1>
             </div>
             <div class="hq-aww__col-item hq-aww__col-item--image1">
-              <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66">
             </div>
             <div class="hq-aww__col-item hq-aww__col-item--tag">
               <span>Robinson Specialists</span>

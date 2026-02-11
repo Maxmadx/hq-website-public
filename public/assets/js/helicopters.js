@@ -115,7 +115,7 @@ function renderImageCarousel(helicopter) {
       <div class="helicopter-carousel">
         <div class="carousel-slides">
           <div class="carousel-slide active">
-            <img src="/assets/images/placeholder-helicopter.jpg" alt="${helicopter.model}" loading="lazy">
+            <img src="/assets/images/used-aircraft/r44/r44-raven-ii-grrob.jpg" alt="${helicopter.model}" loading="lazy">
           </div>
         </div>
       </div>

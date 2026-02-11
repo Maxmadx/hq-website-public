@@ -28,7 +28,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-minimal-centered">
           <div class="hero-bg">
-            <img src="/assets/images/chris-r66-alps.jpg" alt="R66 over Alps">
+            <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="R66 over Alps">
           </div>
           <div class="hero-overlay hero-overlay--subtle"></div>
           <div class="hero-content">
@@ -51,7 +51,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-minimal-left">
           <div class="hero-bg">
-            <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Helicopter expedition">
+            <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Helicopter expedition">
           </div>
           <div class="hero-overlay hero-overlay--gradient-right"></div>
           <div class="hero-content">
@@ -74,7 +74,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-minimal-statement">
           <div class="hero-bg">
-            <img src="/assets/images/busy-hangar.jpg" alt="HQ Aviation hangar">
+            <img src="/assets/images/facility/busy-hangar.jpg" alt="HQ Aviation hangar">
           </div>
           <div class="hero-overlay hero-overlay--dark"></div>
           <div class="hero-content">
@@ -110,7 +110,7 @@
             </div>
           </div>
           <div class="hero-split-image">
-            <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="Robinson R66">
+            <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="Robinson R66">
           </div>
         </div>
       `
@@ -123,7 +123,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-split-reverse">
           <div class="hero-split-image">
-            <img src="/assets/images/helicopter-genius-quentin-smith-great-britain.webp" alt="Cockpit view">
+            <img src="/assets/images/team/helicopter-genius-quentin-smith-great-britain.webp" alt="Cockpit view">
           </div>
           <div class="hero-split-content hero-split-content--cream">
             <div class="hero-content">
@@ -147,7 +147,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-split-asymmetric">
           <div class="hero-bg-section">
-            <img src="/assets/images/british-helicopter-team.webp" alt="British Helicopter Team">
+            <img src="/assets/images/team/british-helicopter-team.webp" alt="British Helicopter Team">
           </div>
           <div class="hero-content-card">
             <span class="hero-badge">Robinson Authorized Dealer</span>
@@ -155,8 +155,8 @@
             <p class="hero-tagline hero-tagline--dark">EASA Part-145 certified maintenance. Factory-trained engineers. Genuine Robinson parts.</p>
             <a href="#maintenance" class="hero-cta hero-cta--dark">Our Services</a>
             <div class="hero-certifications">
-              <img src="/assets/images/caa.jpg" alt="CAA" class="hero-cert-logo">
-              <img src="/assets/images/robinson-logo.png" alt="Robinson" class="hero-cert-logo" onerror="this.style.display='none'">
+              <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA" class="hero-cert-logo">
+              <img src="/assets/images/logos/certifications/rhc.png" alt="Robinson" class="hero-cert-logo" onerror="this.style.display='none'">
             </div>
           </div>
         </div>
@@ -175,7 +175,7 @@
         <div class="hq-hero-v hq-hero-product">
           <div class="hero-bg hero-bg--gradient"></div>
           <div class="hero-product-image">
-            <img src="/assets/images/blue-r66-palo-verde-left-v4.png" alt="Robinson R66 Turbine">
+            <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="Robinson R66 Turbine">
           </div>
           <div class="hero-product-content">
             <span class="hero-overline">New Aircraft</span>
@@ -209,18 +209,18 @@
           </div>
           <div class="hero-lineup-grid">
             <a href="/pages/r22" class="hero-lineup-item">
-              <div class="lineup-image"><img src="/assets/images/r22-cutout.png" alt="R22" onerror="this.parentElement.innerHTML='<div class=lineup-placeholder>R22</div>'"></div>
+              <div class="lineup-image"><img src="/assets/images/new-aircraft/r22/r22-cutout.png" alt="R22" onerror="this.parentElement.innerHTML='<div class=lineup-placeholder>R22</div>'"></div>
               <h3 class="lineup-name">R22</h3>
               <p class="lineup-desc">Training & Personal</p>
             </a>
             <a href="/pages/r44" class="hero-lineup-item">
-              <div class="lineup-image"><img src="/assets/images/r44-cutout.png" alt="R44" onerror="this.parentElement.innerHTML='<div class=lineup-placeholder>R44</div>'"></div>
+              <div class="lineup-image"><img src="/assets/images/new-aircraft/r44/r44-cutout.png" alt="R44" onerror="this.parentElement.innerHTML='<div class=lineup-placeholder>R44</div>'"></div>
               <h3 class="lineup-name">R44</h3>
               <p class="lineup-desc">Versatile 4-Seat</p>
             </a>
             <a href="/pages/r66" class="hero-lineup-item hero-lineup-item--featured">
               <div class="lineup-badge">Most Popular</div>
-              <div class="lineup-image"><img src="/assets/images/blue-r66-palo-verde-front-v4-1.png" alt="R66"></div>
+              <div class="lineup-image"><img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4-1.png" alt="R66"></div>
               <h3 class="lineup-name">R66 Turbine</h3>
               <p class="lineup-desc">Power & Luxury</p>
             </a>
@@ -241,7 +241,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-cinematic">
           <div class="hero-bg">
-            <img src="/assets/images/20251217_183027.jpg" alt="Helicopter at dusk" onerror="this.src='/assets/images/busy-hangar.jpg'">
+            <img src="/assets/images/legacy/dated/20251217_183027.jpg" alt="Helicopter at dusk" onerror="this.src='/assets/images/facility/busy-hangar.jpg'">
           </div>
           <div class="hero-overlay hero-overlay--cinematic"></div>
           <div class="hero-content">
@@ -264,10 +264,10 @@
       render: () => `
         <div class="hq-hero-v hq-hero-video">
           <div class="hero-video-container">
-            <video autoplay muted loop playsinline poster="/assets/images/helicopter-expeditions-quentin-smith.webp">
+            <video autoplay muted loop playsinline poster="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp">
               <source src="/assets/video/hero-loop.mp4" type="video/mp4">
             </video>
-            <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Helicopter flight" class="hero-video-fallback">
+            <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Helicopter flight" class="hero-video-fallback">
           </div>
           <div class="hero-overlay hero-overlay--video"></div>
           <div class="hero-content">
@@ -290,7 +290,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-parallax">
           <div class="hero-parallax-bg" data-speed="0.3">
-            <img src="/assets/images/antartica.jpg" alt="Antarctic expedition" onerror="this.src='/assets/images/chris-r66-alps.jpg'">
+            <img src="/assets/images/expeditions/antartica.jpg" alt="Antarctic expedition" onerror="this.src='/assets/images/used-aircraft/r66/chris-r66-alps.jpg'">
           </div>
           <div class="hero-overlay hero-overlay--gradient-up"></div>
           <div class="hero-parallax-content" data-speed="0.6">
@@ -315,7 +315,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-trust">
           <div class="hero-bg">
-            <img src="/assets/images/busy-hangar.jpg" alt="HQ Aviation hangar">
+            <img src="/assets/images/facility/busy-hangar.jpg" alt="HQ Aviation hangar">
           </div>
           <div class="hero-overlay hero-overlay--trust"></div>
           <div class="hero-content">
@@ -329,8 +329,8 @@
               <cite>— James H., R66 Owner</cite>
             </div>
             <div class="hero-trust-logos">
-              <img src="/assets/images/caa.jpg" alt="CAA Approved">
-              <img src="/assets/images/bhalogo.jpg" alt="British Helicopter Association">
+              <img src="/assets/images/logos/certifications/caa.jpg" alt="CAA Approved">
+              <img src="/assets/images/logos/partners/bhalogo.jpg" alt="British Helicopter Association">
             </div>
             <a href="#contact" class="hero-cta hero-cta--primary">Speak With Our Team</a>
           </div>
@@ -383,7 +383,7 @@
       render: () => `
         <div class="hq-hero-v hq-hero-booking">
           <div class="hero-bg">
-            <img src="/assets/images/british-helicopter-team.webp" alt="Training flight">
+            <img src="/assets/images/team/british-helicopter-team.webp" alt="Training flight">
           </div>
           <div class="hero-overlay hero-overlay--booking"></div>
           <div class="hero-split-content">
@@ -420,7 +420,7 @@
         <div class="hq-hero-v hq-hero-dual">
           <div class="hero-dual-section hero-dual-section--buy">
             <div class="hero-bg">
-              <img src="/assets/images/blue-r66-palo-verde-front-v4.png" alt="R66 for sale">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66 for sale">
             </div>
             <div class="hero-overlay hero-overlay--subtle"></div>
             <div class="hero-content">
@@ -432,7 +432,7 @@
           </div>
           <div class="hero-dual-section hero-dual-section--learn">
             <div class="hero-bg">
-              <img src="/assets/images/british-helicopter-team.webp" alt="Flight training">
+              <img src="/assets/images/team/british-helicopter-team.webp" alt="Flight training">
             </div>
             <div class="hero-overlay hero-overlay--subtle"></div>
             <div class="hero-content">
@@ -466,7 +466,7 @@
               <span class="magazine-tagline">The Art of Helicopter Excellence</span>
             </div>
             <div class="magazine-feature">
-              <img src="/assets/images/helicopter-expeditions-quentin-smith.webp" alt="Featured">
+              <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Featured">
             </div>
             <div class="magazine-sidebar">
               <div class="magazine-story">
@@ -505,7 +505,7 @@
           </div>
           <div class="hero-story-stage hero-story-stage--3">
             <div class="hero-bg">
-              <img src="/assets/images/chris-r66-alps.jpg" alt="Flying free">
+              <img src="/assets/images/used-aircraft/r66/chris-r66-alps.jpg" alt="Flying free">
             </div>
             <div class="hero-overlay hero-overlay--subtle"></div>
             <div class="story-text story-text--final">
