@@ -278,6 +278,115 @@ const styles = `
 .maint-divider--white {
   background: #faf9f6;
 }
+
+/* ========== SECTION 1: HERO ========== */
+.maint-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.maint-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.maint-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.maint-hero__overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0.3) 0%,
+    rgba(0,0,0,0.5) 50%,
+    rgba(0,0,0,0.7) 100%
+  );
+  z-index: 1;
+}
+
+.maint-hero__grid {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.maint-hero__grid-line {
+  position: absolute;
+  background: rgba(255,255,255,0.1);
+}
+
+.maint-hero__grid-line--v {
+  width: 1px;
+  height: 100%;
+  top: 0;
+}
+
+.maint-hero__grid-line--h {
+  height: 1px;
+  width: 100%;
+  left: 0;
+}
+
+.maint-hero__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #faf9f6;
+  padding: 2rem;
+}
+
+.maint-hero__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(250,249,246,0.7);
+  margin-bottom: 2rem;
+  display: block;
+}
+
+.maint-hero__headline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.maint-hero__word {
+  font-size: clamp(3rem, 10vw, 7rem);
+  font-weight: 600;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.maint-hero__word--1 { color: #faf9f6; }
+.maint-hero__word--2 { color: rgba(250,249,246,0.7); }
+.maint-hero__word--3 { color: rgba(250,249,246,0.5); }
+
+.maint-hero__divider {
+  width: 80px;
+  height: 1px;
+  background: #faf9f6;
+  margin: 2rem auto;
+  transform-origin: center;
+}
+
+.maint-hero__coords {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  color: rgba(250,249,246,0.6);
+}
 `;
 
 function FinalMaintenance() {
@@ -289,9 +398,98 @@ function FinalMaintenance() {
     <div className="maint">
       <style>{styles}</style>
       <MaintenanceHeader />
-      <div style={{ height: '200vh', padding: '100px 2rem' }}>
-        <h1>Scroll to test header</h1>
-      </div>
+
+      {/* ========== SECTION 1: HERO ========== */}
+      <section className="maint-hero">
+        <motion.div
+          className="maint-hero__bg"
+          initial={{ scale: 1.1, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 1.5 }}
+        >
+          <img src="/assets/images/facility/maintenance-hangar.jpg" alt="" />
+        </motion.div>
+        <div className="maint-hero__overlay" />
+
+        {/* Animated grid lines */}
+        <div className="maint-hero__grid">
+          {[20, 40, 60, 80].map((pos, i) => (
+            <motion.div
+              key={`v-${i}`}
+              className="maint-hero__grid-line maint-hero__grid-line--v"
+              style={{ left: `${pos}%` }}
+              initial={{ scaleY: 0 }}
+              animate={{ scaleY: 1 }}
+              transition={{ duration: 1, delay: 0.1 * i, ease: [0.16, 1, 0.3, 1] }}
+            />
+          ))}
+          {[33, 66].map((pos, i) => (
+            <motion.div
+              key={`h-${i}`}
+              className="maint-hero__grid-line maint-hero__grid-line--h"
+              style={{ top: `${pos}%` }}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 1, delay: 0.4 + 0.1 * i, ease: [0.16, 1, 0.3, 1] }}
+            />
+          ))}
+        </div>
+
+        <div className="maint-hero__content">
+          <motion.span
+            className="maint-hero__label"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            EASA PART 145 APPROVED
+          </motion.span>
+
+          <div className="maint-hero__headline">
+            <motion.span
+              className="maint-hero__word maint-hero__word--1"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            >
+              PRECISION
+            </motion.span>
+            <motion.span
+              className="maint-hero__word maint-hero__word--2"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            >
+              ENGINEERING
+            </motion.span>
+            <motion.span
+              className="maint-hero__word maint-hero__word--3"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              EXCELLENCE
+            </motion.span>
+          </div>
+
+          <motion.div
+            className="maint-hero__divider"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 1, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          <motion.span
+            className="maint-hero__coords"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+          >
+            51.5751°N • 0.5059°W
+          </motion.span>
+        </div>
+      </section>
+
       <FooterMinimal />
     </div>
   );
