@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { getBreadcrumbs } from '../config/routes';
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -161,6 +162,38 @@ function Header() {
       >
         <div className="Header-inner Header-inner--top" data-nc-group="top">
           <div data-nc-container="top-left">
+            {/* Breadcrumb - aligned left */}
+            {!isHomePage && (
+              <nav className="Header-breadcrumb" aria-label="Breadcrumb">
+                <ol className="Header-breadcrumb__list">
+                  {getBreadcrumbs(location.pathname).map((crumb, index, arr) => {
+                    const isLast = index === arr.length - 1;
+                    return (
+                      <li key={crumb.path} className="Header-breadcrumb__item">
+                        {!isLast ? (
+                          <>
+                            <Link to={crumb.path} className="Header-breadcrumb__link">
+                              {index === 0 ? (
+                                <i className="fas fa-home" aria-hidden="true"></i>
+                              ) : (
+                                crumb.title
+                              )}
+                            </Link>
+                            <span className="Header-breadcrumb__separator" aria-hidden="true">
+                              <i className="fas fa-chevron-right"></i>
+                            </span>
+                          </>
+                        ) : (
+                          <span className="Header-breadcrumb__current" aria-current="page">
+                            {crumb.title}
+                          </span>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ol>
+              </nav>
+            )}
           </div>
           <div data-nc-container="top-center">
             <Link to="/" className="Header-branding" data-nc-element="branding" data-content-field="site-title">

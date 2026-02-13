@@ -15,6 +15,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 
 // Import all styles - Header/Navigation styles included via main.css
 import '../assets/css/main.css';
@@ -23,9 +24,166 @@ import '../assets/css/components.css';
 // Scroll path animation component
 import ScrollPathAnimation from '../components/ScrollPathAnimation';
 
+// Union Jack component - black and white version
+const UnionJack = ({ size = 20, className = '', id = '' }) => (
+  <img
+    src="/assets/images/icons/Union Jack.svg"
+    alt="UK"
+    className={`union-jack union-jack--${id} ${className}`}
+    style={{
+      width: size,
+      height: 'auto',
+      filter: 'grayscale(100%) contrast(1.2)',
+      opacity: 0.7,
+    }}
+  />
+);
+
 // Awesome Components
 import PrecisionEngineering from '../components/AwesomeComponents/PrecisionEngineering';
 import EditorialGrid from '../components/AwesomeComponents/EditorialGrid';
+import { ScrollingStrips } from '../components';
+
+// Parallax Section Component
+function ParallaxSection({ image, alt, children, className = '', waves = false }) {
+  const sectionRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"]
+  });
+
+  // Parallax effect - image moves slower than scroll
+  const y = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
+
+  return (
+    <section className={`parallax-section ${className}`} ref={sectionRef}>
+      <div className="parallax-section__image-container">
+        <motion.img
+          src={image}
+          alt={alt}
+          className="parallax-section__image"
+          style={{ y }}
+        />
+      </div>
+      <div className="parallax-section__overlay"></div>
+      <div className="parallax-section__content">
+        {children}
+      </div>
+      {waves && (
+        <>
+          {/* Top waves - subtle */}
+          <svg className="parallax-section__wave parallax-section__wave--top" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path d="M0,0 L1440,0 L1440,20 Q1080,30 720,20 Q360,10 0,25 L0,0 Z" fill="rgba(255,255,255,0.1)"/>
+          </svg>
+          <svg className="parallax-section__wave parallax-section__wave--top" viewBox="0 0 1440 60" preserveAspectRatio="none">
+            <path d="M0,0 L1440,0 L1440,12 Q1080,18 720,12 Q360,6 0,15 L0,0 Z" fill="rgba(255,255,255,0.18)"/>
+          </svg>
+          {/* Bottom waves */}
+          <svg className="parallax-section__wave parallax-section__wave--bottom" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,120 L1440,120 L1440,70 Q1080,55 720,70 Q360,85 0,60 L0,120 Z" fill="rgba(255,255,255,0.08)"/>
+          </svg>
+          <svg className="parallax-section__wave parallax-section__wave--bottom" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,120 L1440,120 L1440,85 Q1080,75 720,85 Q360,95 0,80 L0,120 Z" fill="rgba(255,255,255,0.18)"/>
+          </svg>
+          <svg className="parallax-section__wave parallax-section__wave--bottom" viewBox="0 0 1440 120" preserveAspectRatio="none">
+            <path d="M0,120 L1440,120 L1440,100 Q1080,95 720,100 Q360,105 0,98 L0,120 Z" fill="rgba(255,255,255,0.3)"/>
+          </svg>
+        </>
+      )}
+    </section>
+  );
+}
+
+// Hero scroll path - Triple Wave (path-19) - centered
+const HERO_PATHS_BOTTOM = [
+  { d: 'M -50 100 L 2050 100', stroke: '#a0a0a0', width: 2, offset: 0 },
+  { d: 'M -50 250 L 2050 250', stroke: '#b0b0b0', width: 1.5, offset: 0.03 },
+  { d: 'M -50 400 L 2050 400', stroke: '#c0c0c0', width: 1, offset: 0.06 }
+];
+
+const HERO_PATHS_TOP = [
+  { d: 'M -50 100 L 2050 100', stroke: '#c0c0c0', width: 1, offset: 0 },
+  { d: 'M -50 250 L 2050 250', stroke: '#b0b0b0', width: 1.5, offset: 0.03 },
+  { d: 'M -50 400 L 2050 400', stroke: '#a0a0a0', width: 2, offset: 0.06 }
+];
+
+function HeroScrollPath({ containerRef, hidden }) {
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  // Transform scroll progress: start at 25%, end at 100%
+  const pathProgress = useTransform(scrollYProgress, [0, 1], [0.20, 1]);
+
+  return (
+    <>
+      {/* Top SVG */}
+      <svg
+        className={`fd-hero__path-svg fd-hero__path-svg--top ${hidden ? 'fd-hero__path-svg--hidden' : ''}`}
+        viewBox="0 0 2000 500"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        {HERO_PATHS_TOP.map((path, idx) => (
+          <g key={idx}>
+            <path
+              d={path.d}
+              stroke="rgba(180, 180, 180, 0.15)"
+              strokeWidth={path.width}
+              strokeLinecap="round"
+              strokeDasharray="6 10"
+              fill="none"
+            />
+            <motion.path
+              d={path.d}
+              stroke={path.stroke}
+              strokeWidth={path.width}
+              strokeLinecap="round"
+              fill="none"
+              style={{
+                opacity: 0.5,
+                pathLength: useTransform(pathProgress, v => Math.min(1, v + path.offset))
+              }}
+            />
+          </g>
+        ))}
+      </svg>
+
+      {/* Bottom SVG */}
+      <svg
+        className={`fd-hero__path-svg fd-hero__path-svg--bottom ${hidden ? 'fd-hero__path-svg--hidden' : ''}`}
+        viewBox="0 0 2000 500"
+        preserveAspectRatio="none"
+        fill="none"
+      >
+        {HERO_PATHS_BOTTOM.map((path, idx) => (
+          <g key={idx}>
+            <path
+              d={path.d}
+              stroke="rgba(180, 180, 180, 0.15)"
+              strokeWidth={path.width}
+              strokeLinecap="round"
+              strokeDasharray="6 10"
+              fill="none"
+            />
+            <motion.path
+              d={path.d}
+              stroke={path.stroke}
+              strokeWidth={path.width}
+              strokeLinecap="round"
+              fill="none"
+              style={{
+                opacity: 0.5,
+                pathLength: useTransform(pathProgress, v => Math.min(1, v + path.offset))
+              }}
+            />
+          </g>
+        ))}
+      </svg>
+    </>
+  );
+}
 
 /**
  * CUSTOM HEADER COMPONENT FOR FINAL DRAFT
@@ -218,10 +376,16 @@ function FinalDraft() {
   const [activeNavSection, setActiveNavSection] = useState(null);
   const [navCompact, setNavCompact] = useState(false);
   const [scrollPromptHidden, setScrollPromptHidden] = useState(false);
+  const [heroCollapsed, setHeroCollapsed] = useState(false);
+  const [aboutLabelStatic, setAboutLabelStatic] = useState(false);
   const [trainingSlide, setTrainingSlide] = useState(2); // Start on Commercial
   const containerRef = useRef(null);
+  const heroRef = useRef(null);
   const navRef = useRef(null);
   const aboutBtnRef = useRef(null);
+  const aboutLabelRef = useRef(null);
+  const videoLinesRef = useRef(null);
+  const videoLinesInView = useInView(videoLinesRef, { once: true, amount: 0.8, margin: "-100px 0px -100px 0px" });
 
   // Training carousel slides
   const trainingSlides = [
@@ -229,42 +393,42 @@ function FinalDraft() {
       title: 'Discovery Flight',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Flying is the ultimate dream pursued by mankind. Should you want to live it for real, the discovery flight will certainly fulfil your expectations: After a pre-flight briefing, you will enjoy a full hands-on flying experience with one of our instructors.',
-      cta: 'Learn More About DISCOVERY FLIGHT',
+      cta: 'Learn More',
       link: '/training/trial-lessons'
     },
     {
       title: 'Private Pilot Licence',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Let aside the ground exams that most students self study before taking the tests on site, the obtention of a PPL(H) requires a minimum of 45 hrs of flight training, including 10 hrs of solo. The duration varies depending on commitment.',
-      cta: 'Learn More About PRIVATE PILOT LICENCE',
+      cta: 'Learn More',
       link: '/training/ppl'
     },
     {
       title: 'Commercial Pilot Licence',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Holding a Commercial Pilot Licence, CPL(H) gives you the status of professional helicopter pilot. To achieve this, 155 hrs of flying time post licence is required, of which 50 hrs must be Pilot In Command (PIC).',
-      cta: 'Learn More About COMMERCIAL PILOT LICENCE',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Type Rating',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Having achieved your PPL(H), you may wish to fly different types of helicopter. A type specific ground training course followed by a minimum of 5 Hrs of flight training will suffice to put you to the Type Rating test.',
-      cta: 'Learn More About TYPE RATING',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Night Rating',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Holding a night rating gives you the most flexibility, as sunset will no longer prevent you from flying. To achieve this, 100 hrs of flying post licence is required, of which 60 Hrs must be Pilot In Command.',
-      cta: 'Learn More About NIGHT RATING',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Self-Fly Hire',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'With an impressive fleet of over 30 helicopters, HQ will certainly be able to facilitate your flying requirements, either on a short term hiring or on a long term leasing basis.',
-      cta: 'Learn More About SELF-FLY HIRE',
+      cta: 'Learn More',
       link: '/services'
     }
   ];
@@ -312,7 +476,7 @@ function FinalDraft() {
 
   // Navigation items for accordion
   const navItems = [
-    { id: 'training', label: 'Training', icon: '01' },
+    { id: 'training', label: 'Flying', icon: '01' },
     { id: 'fleet', label: 'Fleet', icon: '02' },
     { id: 'expeditions', label: 'Expeditions', icon: '03' },
     { id: 'sales', label: 'Sales', icon: '04' },
@@ -326,6 +490,7 @@ function FinalDraft() {
     return () => clearTimeout(timer);
   }, []);
 
+  
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -349,6 +514,59 @@ function FinalDraft() {
       const shouldHide = scrollTop > heroHeight * 0.85;
       setImagesExpanded(shouldHide);
 
+      // Trigger hero collapse when overlay disappears, reset when scrolling back up
+      setHeroCollapsed(shouldHide);
+
+      
+      // Track about label sticky state - stops at the headline
+      const aboutHeadline = document.querySelector('.fd-about__headline');
+      const heroThreshold = heroHeight * 0.85;
+
+      // Track when hero collapse first happens to add buffer
+      if (shouldHide && !window._heroCollapseScrollPos) {
+        window._heroCollapseScrollPos = scrollTop;
+        console.log('=== HERO COLLAPSED - Label should appear ===');
+        console.log('Collapse scroll position:', scrollTop);
+
+        // Check actual element state after React re-renders
+        setTimeout(() => {
+          const labelEl = document.querySelector('.fd-about__label');
+          if (labelEl) {
+            console.log('AFTER RENDER - Label classes:', labelEl.className);
+            console.log('AFTER RENDER - Opacity:', window.getComputedStyle(labelEl).opacity);
+          }
+        }, 100);
+      } else if (!shouldHide) {
+        window._heroCollapseScrollPos = null;
+      }
+
+      if (aboutHeadline && shouldHide) {
+        const headlineRect = aboutHeadline.getBoundingClientRect();
+        const stickyTop = 90;
+
+        // Require 100px of scroll after hero collapses before label can become static
+        const scrollSinceCollapse = scrollTop - (window._heroCollapseScrollPos || scrollTop);
+        const canBecomeStatic = scrollSinceCollapse > 100;
+        const newStaticState = canBecomeStatic && headlineRect.top <= stickyTop;
+
+        if (newStaticState !== window._lastStaticState) {
+          console.log('--- STATIC STATE CHANGE ---');
+          console.log('scrollSinceCollapse:', scrollSinceCollapse);
+          console.log('canBecomeStatic (need >100):', canBecomeStatic);
+          console.log('headlineRect.top:', headlineRect.top);
+          console.log('aboutLabelStatic changing to:', newStaticState);
+          window._lastStaticState = newStaticState;
+        }
+
+        setAboutLabelStatic(newStaticState);
+      } else if (!shouldHide) {
+        if (window._lastStaticState !== false) {
+          console.log('--- RESET: scrolled back up past hero ---');
+          window._lastStaticState = false;
+        }
+        setAboutLabelStatic(false);
+      }
+
       // Detect which content section is in view for nav highlighting
       const navSectionIds = ['training', 'fleet', 'expeditions', 'sales', 'maintenance', 'contact'];
       let currentNavSection = null;
@@ -371,6 +589,49 @@ function FinalDraft() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Kill scroll momentum at 0.85 of hero height for 1 second
+  useEffect(() => {
+    let dampingActive = false;
+    let dampingTimeout = null;
+
+    const handleWheel = (e) => {
+      const scrollY = window.scrollY;
+      const windowHeight = window.innerHeight;
+      const heroHeight = windowHeight * 4;
+      const threshold = heroHeight * 0.85;
+
+      // Entering the damping zone - start 1s timer
+      if (scrollY >= threshold && !dampingActive && dampingTimeout === null) {
+        dampingActive = true;
+        dampingTimeout = setTimeout(() => {
+          dampingActive = false;
+        }, 500);
+      }
+
+      // Reset if scrolled back above threshold
+      if (scrollY < threshold) {
+        dampingActive = false;
+        if (dampingTimeout) {
+          clearTimeout(dampingTimeout);
+          dampingTimeout = null;
+        }
+      }
+
+      // Apply damping while active
+      if (dampingActive) {
+        e.preventDefault();
+        const scrollAmount = Math.sign(e.deltaY) * 10;
+        window.scrollBy(0, scrollAmount);
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      window.removeEventListener('wheel', handleWheel);
+      if (dampingTimeout) clearTimeout(dampingTimeout);
+    };
+  }, []);
+
   // Intersection Observer to switch nav to compact mode
   // Triggers when about button scrolls 500px OFF the top of the viewport
   useEffect(() => {
@@ -378,7 +639,6 @@ function FinalDraft() {
       console.log('ERROR: About button ref not found');
       return;
     }
-
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -394,6 +654,27 @@ function FinalDraft() {
     return () => observer.disconnect();
   }, []);
 
+  // Scroll reveal effect - elements fade in when scrolling into view, reset when leaving
+  useEffect(() => {
+    const reveals = document.querySelectorAll('.reveal-element');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          } else {
+            // Reset when element leaves viewport - animation will replay on re-entry
+            entry.target.classList.remove('visible');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    reveals.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+
+  
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -407,15 +688,18 @@ function FinalDraft() {
       <FinalDraftHeader />
 
       {/* ===== HERO SECTION ===== */}
-      <section className="fd-hero">
+      <section className={`fd-hero ${heroCollapsed ? 'fd-hero--collapsed' : ''}`} ref={heroRef}>
+        {/* SVG Path that draws on scroll */}
+        <HeroScrollPath containerRef={heroRef} hidden={imagesExpanded} />
+
         {/* Animated Grid Lines - hides after hero section */}
         <div className={`fd-hero__grid ${linesVisible ? 'fd-hero__grid--visible' : ''} ${imagesExpanded ? 'fd-hero__grid--hidden' : ''}`}>
           <div className="fd-hero__line fd-hero__line--v1"></div>
           <div className="fd-hero__line fd-hero__line--v2"></div>
           <div className="fd-hero__line fd-hero__line--v3"></div>
           <div className="fd-hero__line fd-hero__line--v4"></div>
-          <div className="fd-hero__line fd-hero__line--h1"></div>
-          <div className="fd-hero__line fd-hero__line--h2"></div>
+          <div className={`fd-hero__line fd-hero__line--h1 ${scrollPromptHidden ? 'fd-hero__line--hidden' : ''}`}></div>
+          <div className={`fd-hero__line fd-hero__line--h2 ${scrollPromptHidden ? 'fd-hero__line--hidden' : ''}`}></div>
         </div>
 
         {/* Fixed Left Image - Cycles on scroll */}
@@ -463,14 +747,10 @@ function FinalDraft() {
             >
               {/* Text Content */}
               <div className="fd-hero__section-text">
-                {/* Vertical Divider Top */}
-                <div className="fd-hero__divider fd-hero__divider--top">
-                  <span></span>
-                </div>
-
                 {/* Coordinates */}
                 <div className="fd-hero__coords">
                   <span>51.5751°N</span>
+                  <UnionJack size={14} id="coords" />
                   <span>0.5059°W</span>
                 </div>
 
@@ -492,11 +772,6 @@ function FinalDraft() {
 
                 {/* Description */}
                 <p className="fd-hero__desc">{section.description}</p>
-
-                {/* Vertical Divider Bottom */}
-                <div className="fd-hero__divider fd-hero__divider--bottom">
-                  <span></span>
-                </div>
               </div>
 
               {/* Section Image (if exists) */}
@@ -530,15 +805,24 @@ function FinalDraft() {
 
       {/* ===== ABOUT US VIDEO SECTION ===== */}
       <section className="fd-about" id="about">
+        <div className={`fd-about__video-lines ${videoLinesInView ? 'visible' : ''}`}>
+          <span className="fd-about__line fd-about__line--1"></span>
+          <span className="fd-about__line fd-about__line--2"></span>
+          <span className="fd-about__line fd-about__line--3"></span>
+        </div>
         <div className="fd-about__content">
-          <span className="fd-about__label">About Us</span>
+          <div ref={aboutLabelRef} className={`fd-about__label ${heroCollapsed ? 'fd-about__label--visible' : ''} ${aboutLabelStatic ? 'fd-about__label--static' : ''}`}>
+            <span className="fd-about__label-line"></span>
+            <span>About Us</span>
+            <span className="fd-about__label-line"></span>
+          </div>
           <h2 className="fd-about__headline">
             <span>The Story</span>
             <span>Behind the</span>
             <span>Journey</span>
           </h2>
 
-          <div className="fd-about__video">
+          <div className="fd-about__video" ref={videoLinesRef}>
             <div className="fd-about__video-placeholder">
               <img src={aboutImage} alt="" />
               <div className="fd-about__video-overlay">
@@ -586,29 +870,128 @@ function FinalDraft() {
         </div>
       </nav>
 
-      {/* ===== SCROLL PATH ANIMATION ===== */}
-      <ScrollPathAnimation
-        iconSrc="/assets/images/icons/r66-icon-transparent going right.svg"
-        iconSize={60}
-        colorStart="#FFFFFF"
-        colorMid="#5B9BD5"
-        colorEnd="#1E3A5F"
-      />
+      {/* ===== PARALLAX: TRAINING ===== */}
+      <ParallaxSection
+        image="/assets/images/gallery/flying/flying-.jpg"
+        alt="Training"
+        className="reveal-element"
+        waves={true}
+      >
+        <div className="parallax-section__number-row">
+          <span className="parallax-section__line"></span>
+          <span className="parallax-section__number">01</span>
+          <span className="parallax-section__line"></span>
+        </div>
+        <span className="parallax-section__label">Learn to Fly</span>
+        <h2 className="parallax-section__title">flying</h2>
+      </ParallaxSection>
 
       {/* ===== CONTENT SECTIONS ===== */}
-      <section className="fd-section" id="training">
-        <div className="fd-section__inner">
-          <span className="fd-section__number">01</span>
-          <h2 className="fd-section__title">Training</h2>
-          <p className="fd-section__text">
-            From your first discovery flight to advanced commercial ratings,
-            our experienced instructors guide you every step of the way.
-          </p>
-          <Link to="/training" className="fd-section__link">Explore Training →</Link>
-        </div>
-      </section>
+      <div className="fd-training-wrapper">
+        <section className="fd-section fd-section--with-carousel reveal-element" id="training">
+          {/* ===== TRAINING CAROUSEL ===== */}
+          <div className="fd-carousel-section">
+          <div className="fd-carousel-section__header">
+            <div className="fd-carousel-section__divider"></div>
+            <h2 className="fd-carousel-section__title">Explore Our Courses</h2>
+            <p className="fd-section__text">
+              From your first discovery flight to advanced commercial ratings,
+              our experienced instructors guide you every step of the way.
+            </p>
+          </div>
 
-      <section className="fd-section fd-section--alt" id="fleet">
+          {/* ===== SCROLL PATH ANIMATION ===== */}
+          <ScrollPathAnimation
+            iconSrc="/assets/images/icons/r66-icon-transparent going right.svg"
+            iconSize={60}
+            colorStart="#FFFFFF"
+            colorMid="#5B9BD5"
+            colorEnd="#1E3A5F"
+          />
+
+          <div className="carousel carousel--97">
+            <div className="carousel__tabs-wrapper">
+              <div className="carousel__tabs">
+                {trainingSlides.map((slide, index) => (
+                  <button
+                    key={index}
+                    className={`carousel__tab ${index === trainingSlide ? 'active' : ''}`}
+                    onClick={() => setTrainingSlide(index)}
+                  >
+                    <span className="carousel__tab-num">{String(index + 1).padStart(2, '0')}</span>
+                    <span className="carousel__tab-title">{slide.title}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="carousel__body">
+              <button className="carousel__arrow" onClick={prevTrainingSlide}>
+                <svg width="48" height="20" viewBox="0 0 48 20">
+                  <line x1="48" y1="10" x2="6" y2="10" stroke="currentColor" strokeWidth="2"/>
+                  <polyline points="14 3 6 10 14 17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+              <div className="carousel__main">
+                <div className="carousel__content">
+                  <div className="carousel__text-content">
+                    {trainingSlides.map((slide, index) => (
+                      <div key={index} className={`carousel__slide-content ${index === trainingSlide ? 'active' : ''}`}>
+                        <div className="carousel__title-row">
+                          <div className="carousel__number-wrapper">
+                            <span className="carousel__inline-number">{String(index + 1).padStart(2, '0')}</span>
+                          </div>
+                          <h3>{slide.title}</h3>
+                        </div>
+                        <p>{slide.description}</p>
+                        <Link to={slide.link} className="carousel__btn">
+                          <span>{slide.cta}</span>
+                          <svg className="carousel__btn-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </Link>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="carousel__divider"></div>
+                <div className="carousel__image">
+                  {trainingSlides.map((slide, index) => (
+                    <img key={index} src={slide.image} alt={slide.title} className={index === trainingSlide ? 'active' : ''} />
+                  ))}
+                </div>
+              </div>
+              <button className="carousel__arrow" onClick={nextTrainingSlide}>
+                <svg width="48" height="20" viewBox="0 0 48 20">
+                  <line x1="0" y1="10" x2="42" y2="10" stroke="currentColor" strokeWidth="2"/>
+                  <polyline points="34 3 42 10 34 17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+            <div className="carousel__progress">
+              <div className="carousel__progress-bar" style={{ width: `${((trainingSlide + 1) / trainingSlides.length) * 100}%` }}></div>
+            </div>
+          </div>
+          </div>
+        </section>
+      </div>
+
+      {/* ===== PARALLAX: FLEET ===== */}
+      <ParallaxSection
+        image="/assets/images/facility/hq-aviation-robinsons.jpg"
+        alt="Our Fleet"
+        className="reveal-element"
+        waves={true}
+      >
+        <div className="parallax-section__number-row">
+          <span className="parallax-section__line"></span>
+          <span className="parallax-section__number">02</span>
+          <span className="parallax-section__line"></span>
+        </div>
+        <span className="parallax-section__label">An Extensive</span>
+        <h2 className="parallax-section__title">Fleet</h2>
+      </ParallaxSection>
+
+      <section className="fd-section fd-section--alt reveal-element" id="fleet">
         <div className="fd-section__inner">
           <span className="fd-section__number">02</span>
           <h2 className="fd-section__title">Fleet</h2>
@@ -620,7 +1003,29 @@ function FinalDraft() {
         </div>
       </section>
 
-      <section className="fd-section" id="expeditions">
+      {/* ===== SCROLLING STRIPS - DESTINATIONS ===== */}
+      <div className="scrolling-strips-wrapper">
+        <ScrollingStrips />
+        <div className="scrolling-strips-spacer"></div>
+      </div>
+
+      {/* ===== PARALLAX: EXPEDITIONS ===== */}
+      <ParallaxSection
+        image="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp"
+        alt="Global Expeditions"
+        className="reveal-element"
+        waves={true}
+      >
+        <div className="parallax-section__number-row">
+          <span className="parallax-section__line"></span>
+          <span className="parallax-section__number">03</span>
+          <span className="parallax-section__line"></span>
+        </div>
+        <span className="parallax-section__label">Beyond Horizons</span>
+        <h2 className="parallax-section__title">Expeditions</h2>
+      </ParallaxSection>
+
+      <section className="fd-section reveal-element" id="expeditions">
         <div className="fd-section__inner">
           <span className="fd-section__number">03</span>
           <h2 className="fd-section__title">Expeditions</h2>
@@ -632,7 +1037,7 @@ function FinalDraft() {
         </div>
       </section>
 
-      <section className="fd-section fd-section--alt" id="sales">
+      <section className="fd-section fd-section--alt reveal-element" id="sales">
         <div className="fd-section__inner">
           <span className="fd-section__number">04</span>
           <h2 className="fd-section__title">Aircraft Sales</h2>
@@ -644,7 +1049,21 @@ function FinalDraft() {
         </div>
       </section>
 
-      <section className="fd-section" id="maintenance">
+      {/* ===== PARALLAX: SALES ===== */}
+      <ParallaxSection
+        image="/assets/images/facility/main-sales-pic.jpg"
+        alt="Aircraft Sales"
+        className="reveal-element"
+        waves={true}
+      >
+        <span className="parallax-section__label">Premium</span>
+        <h2 className="parallax-section__title">Sales</h2>
+        <p className="parallax-section__text">
+          Your perfect aircraft awaits
+        </p>
+      </ParallaxSection>
+
+      <section className="fd-section reveal-element" id="maintenance">
         <div className="fd-section__inner">
           <span className="fd-section__number">05</span>
           <h2 className="fd-section__title">Maintenance</h2>
@@ -656,7 +1075,21 @@ function FinalDraft() {
         </div>
       </section>
 
-      <section className="fd-section fd-section--alt" id="contact">
+      {/* ===== PARALLAX: MAINTENANCE ===== */}
+      <ParallaxSection
+        image="/assets/images/facility/maintenance-.jpg"
+        alt="Maintenance"
+        className="reveal-element"
+        waves={true}
+      >
+        <span className="parallax-section__label">Excellence</span>
+        <h2 className="parallax-section__title">Maintenance</h2>
+        <p className="parallax-section__text">
+          Factory-trained precision
+        </p>
+      </ParallaxSection>
+
+      <section className="fd-section fd-section--alt reveal-element" id="contact">
         <div className="fd-section__inner">
           <span className="fd-section__number">06</span>
           <h2 className="fd-section__title">Contact</h2>
@@ -669,76 +1102,20 @@ function FinalDraft() {
       </section>
 
       {/* ===== PRECISION ENGINEERING (Hero 92) ===== */}
-      <PrecisionEngineering />
+      <div className="reveal-element">
+        <PrecisionEngineering />
+      </div>
 
       {/* ===== EDITORIAL GRID (Hero 90) ===== */}
-      <EditorialGrid />
-
-      {/* ===== TRAINING CAROUSEL ===== */}
-      <section className="fd-carousel-section">
-        <div className="fd-carousel-section__header">
-          <span className="fd-carousel-section__label">Training</span>
-          <h2 className="fd-carousel-section__title">Explore Our Courses</h2>
-        </div>
-
-        <div className="hq-service-carousel">
-          <div className="hq-tabs-container">
-            {trainingSlides.map((slide, index) => (
-              <button
-                key={index}
-                className={`hq-tab ${index === trainingSlide ? 'active' : ''}`}
-                onClick={() => setTrainingSlide(index)}
-              >
-                {slide.title}
-              </button>
-            ))}
-          </div>
-
-          <div className="hq-carousel-body">
-            <button
-              className="hq-arrow hq-prev"
-              onClick={prevTrainingSlide}
-            >
-              &#10094;
-            </button>
-
-            <div className="hq-slides-wrapper">
-              {trainingSlides.map((slide, index) => {
-                const isPrev = index === (trainingSlide - 1 + trainingSlides.length) % trainingSlides.length;
-                const isNext = index === (trainingSlide + 1) % trainingSlides.length;
-                return (
-                  <div
-                    key={index}
-                    className={`hq-slide ${index === trainingSlide ? 'active' : ''} ${isNext ? 'next' : ''} ${isPrev ? 'prev' : ''}`}
-                    onClick={() => {
-                      if (isPrev) prevTrainingSlide();
-                      else if (isNext) nextTrainingSlide();
-                    }}
-                  >
-                    <h3>{slide.title}</h3>
-                  <img src={slide.image} alt={slide.title} className="hq-slide-img" />
-                  <p>{slide.description}</p>
-                  <Link to={slide.link} className="hq-btn">{slide.cta}</Link>
-                </div>
-                );
-              })}
-            </div>
-
-            <button
-              className="hq-arrow hq-next"
-              onClick={nextTrainingSlide}
-            >
-              &#10095;
-            </button>
-          </div>
-        </div>
-      </section>
+      <div className="reveal-element">
+        <EditorialGrid />
+      </div>
 
       {/* ===== FOOTER ===== */}
-      <footer className="fd-footer">
+      <footer className="fd-footer reveal-element">
         <div className="fd-footer__coords">
           <span>51.5751°N</span>
-          <span className="fd-footer__divider"></span>
+          <UnionJack size={14} id="footer" />
           <span>0.5059°W</span>
         </div>
         <div className="fd-footer__brand">
@@ -750,6 +1127,10 @@ function FinalDraft() {
 
       <style>{`
         /* ===== BASE STYLES ===== */
+        body {
+          overflow-x: clip;
+        }
+
         .final-draft {
           font-family: 'Space Grotesk', -apple-system, sans-serif;
           background: #faf9f6;
@@ -761,6 +1142,38 @@ function FinalDraft() {
           position: relative;
           height: calc(400vh + 250px); /* 4 sections worth of scroll + 250px */
           overflow: hidden;
+          background-color: var(--hq-background, #faf9f6);
+          transition: none; /* No transition when expanding back */
+        }
+
+        .fd-hero--collapsed {
+          height: calc(400vh + 250px - 80vh);
+          background-color: #ffffff;
+          transition: height 1.5s cubic-bezier(0.16, 1, 0.3, 1), background-color 1.5s ease;
+        }
+
+        /* Hero Scroll Path */
+        .fd-hero__path-svg {
+          position: fixed;
+          left: 0;
+          width: 100%;
+          height: 30vh;
+          z-index: 0;
+          pointer-events: none;
+          opacity: 0.6;
+          transition: opacity 0.5s ease;
+        }
+
+        .fd-hero__path-svg--top {
+          top: 0;
+        }
+
+        .fd-hero__path-svg--bottom {
+          bottom: 0;
+        }
+
+        .fd-hero__path-svg--hidden {
+          opacity: 0;
         }
 
         /* Animated Grid Lines */
@@ -804,6 +1217,11 @@ function FinalDraft() {
 
         .fd-hero__line--h1 { top: 15%; left: 0; right: 0; height: 1px; transition-delay: 0.5s; }
         .fd-hero__line--h2 { bottom: 15%; left: 0; right: 0; height: 1px; transition-delay: 0.6s; }
+
+        .fd-hero__line--hidden {
+          opacity: 0 !important;
+          transition: opacity 0.5s ease !important;
+        }
 
         /* Fixed Side Images */
         .fd-hero__image {
@@ -865,8 +1283,10 @@ function FinalDraft() {
           align-items: center;
           z-index: 10;
           padding: 2rem;
+          box-shadow: -15px 0 30px -10px rgba(0, 0, 0, 0.3), 15px 0 30px -10px rgba(0, 0, 0, 0.3);
         }
 
+        
         .fd-hero__section {
           position: absolute;
           display: flex;
@@ -891,8 +1311,12 @@ function FinalDraft() {
         .fd-hero__progress--hidden,
         .fd-hero__grid--hidden {
           opacity: 0;
-          pointer-events: none;
+          pointer-events: none !important;
           transition: opacity 0.5s ease;
+        }
+
+        .fd-hero__scroll-container--hidden .fd-hero__section--active {
+          pointer-events: none;
         }
 
         /* Section with image - side by side layout */
@@ -909,6 +1333,7 @@ function FinalDraft() {
           text-align: center;
         }
 
+        
         .fd-hero__section--with-image .fd-hero__section-text {
           align-items: flex-start;
           text-align: left;
@@ -956,6 +1381,11 @@ function FinalDraft() {
           margin-top: 2rem;
         }
 
+        .fd-hero__divider--hidden {
+          opacity: 0;
+          transition: opacity 0.5s ease;
+        }
+
         /* Coordinates */
         .fd-hero__coords {
           display: flex;
@@ -996,6 +1426,23 @@ function FinalDraft() {
           transform: translateY(20px);
           animation: wordFadeIn 0.8s ease forwards;
           animation-delay: var(--delay, 0s);
+          text-shadow:
+            -8px -8px 0 #faf9f6,
+            8px -8px 0 #faf9f6,
+            -8px 8px 0 #faf9f6,
+            8px 8px 0 #faf9f6,
+            0 -8px 0 #faf9f6,
+            0 8px 0 #faf9f6,
+            -8px 0 0 #faf9f6,
+            8px 0 0 #faf9f6,
+            -6px -6px 0 #faf9f6,
+            6px -6px 0 #faf9f6,
+            -6px 6px 0 #faf9f6,
+            6px 6px 0 #faf9f6,
+            -4px -4px 0 #faf9f6,
+            4px -4px 0 #faf9f6,
+            -4px 4px 0 #faf9f6,
+            4px 4px 0 #faf9f6;
         }
 
         /* Varying colors for luxury feel */
@@ -1024,12 +1471,21 @@ function FinalDraft() {
           color: #666;
           max-width: 300px;
           line-height: 1.6;
+          text-shadow:
+            -4px -4px 0 #faf9f6,
+            4px -4px 0 #faf9f6,
+            -4px 4px 0 #faf9f6,
+            4px 4px 0 #faf9f6,
+            0 -4px 0 #faf9f6,
+            0 4px 0 #faf9f6,
+            -4px 0 0 #faf9f6,
+            4px 0 0 #faf9f6;
         }
 
         /* Scroll Prompt */
         .fd-hero__scroll-prompt {
           position: fixed;
-          bottom: 1.5rem;
+          bottom: 0.5rem;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
@@ -1100,8 +1556,10 @@ function FinalDraft() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 6rem 2rem;
+          padding: 0 2rem 6rem 2rem;
           background: #fff;
+          position: relative;
+          overflow: visible;
         }
 
         .fd-about__content {
@@ -1110,12 +1568,38 @@ function FinalDraft() {
         }
 
         .fd-about__label {
-          display: inline-block;
+          position: sticky;
+          top: 2.5rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
           font-size: 0.7rem;
           text-transform: uppercase;
           letter-spacing: 0.2em;
           color: #999;
-          margin-bottom: 2rem;
+          margin-top: 20px;
+          margin-bottom: 100px;
+          padding: 1rem 0;
+          background: transparent;
+          z-index: 50;
+          opacity: 0;
+          transition: opacity 0.3s ease, top 0.3s ease;
+        }
+
+        .fd-about__label--visible {
+          opacity: 1;
+        }
+
+        .fd-about__label--static {
+          top: -50px;
+          opacity: 0;
+        }
+
+        .fd-about__label-line {
+          width: 60px;
+          height: 1px;
+          background: var(--hq-border, #e8e6e2);
         }
 
         .fd-about__headline {
@@ -1139,13 +1623,55 @@ function FinalDraft() {
 
         .fd-about__video {
           margin-bottom: 3rem;
+          position: relative;
+          z-index: 1;
         }
 
+        .fd-about__video-lines {
+          position: absolute;
+          top: 55%;
+          left: 0;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 30px;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .fd-about__line {
+          height: 1px;
+          width: 100%;
+          background: #ccc;
+          transform: scaleX(0);
+          transform-origin: center;
+          transition: transform 1.2s ease-out;
+        }
+
+        .fd-about__video-lines.visible .fd-about__line {
+          transform: scaleX(1);
+        }
+
+        .fd-about__video-lines.visible .fd-about__line--1 {
+          transition-delay: 0.15s;
+        }
+
+        .fd-about__video-lines.visible .fd-about__line--2 {
+          transition-delay: 0s;
+        }
+
+        .fd-about__video-lines.visible .fd-about__line--3 {
+          transition-delay: 0.15s;
+        }
+
+        
         .fd-about__video-placeholder {
           position: relative;
           aspect-ratio: 16/9;
           background: #f0f0f0;
           overflow: hidden;
+          z-index: 1;
+          box-shadow: -20px 0 40px -10px rgba(0, 0, 0, 0.15), 20px 0 40px -10px rgba(0, 0, 0, 0.15);
         }
 
         .fd-about__video-placeholder img {
@@ -1165,6 +1691,7 @@ function FinalDraft() {
           gap: 1rem;
         }
 
+        
         .fd-about__play-btn {
           width: 80px;
           height: 80px;
@@ -1334,6 +1861,12 @@ function FinalDraft() {
           background: #fff;
         }
 
+        .fd-section--with-carousel {
+          flex-direction: column;
+          gap: 4rem;
+          padding-top: 0;
+        }
+
         .fd-section__inner {
           max-width: 600px;
           text-align: center;
@@ -1380,8 +1913,9 @@ function FinalDraft() {
 
         /* ===== CAROUSEL SECTION ===== */
         .fd-carousel-section {
-          padding: 6rem 2rem;
+          padding: 3rem 2rem 6rem;
           background: #fff;
+          box-shadow: -15px 0 30px -10px rgba(0, 0, 0, 0.1), 15px 0 30px -10px rgba(0, 0, 0, 0.1);
         }
 
         .fd-carousel-section__header {
@@ -1398,6 +1932,13 @@ function FinalDraft() {
           margin-bottom: 1rem;
         }
 
+        .fd-carousel-section__divider {
+          width: 60px;
+          height: 1px;
+          background: #e8e6e2;
+          margin: 0 auto 3rem;
+        }
+
         .fd-carousel-section__title {
           font-family: 'Space Grotesk', sans-serif;
           font-size: clamp(1.5rem, 4vw, 2.5rem);
@@ -1407,227 +1948,174 @@ function FinalDraft() {
           color: #1a1a1a;
         }
 
-        /* ===== HQ SERVICE CAROUSEL (from original site) ===== */
-        .hq-service-carousel {
-          font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          max-width: 1200px;
-          margin: 0 auto;
-          text-align: center;
+        /* ===== V97 CAROUSEL - MINIMAL WHITE + OUTLINE ===== */
+        .carousel--97 { max-width: 1000px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid #e5e7eb; }
+        .carousel--97 .carousel__tabs-wrapper { position: relative; margin-bottom: 2rem; }
+        .carousel--97 .carousel__tabs-wrapper::before, .carousel--97 .carousel__tabs-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; z-index: 1; }
+        .carousel--97 .carousel__tabs-wrapper::before { left: 0; background: linear-gradient(to right, #fff, transparent); }
+        .carousel--97 .carousel__tabs-wrapper::after { right: 0; background: linear-gradient(to left, #fff, transparent); }
+        .carousel--97 .carousel__tabs { display: flex; gap: 0.5rem; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.75rem; overflow-x: auto; scrollbar-width: none; }
+        .carousel--97 .carousel__tabs::-webkit-scrollbar { display: none; }
+        .carousel--97 .carousel__tab { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 0.75rem; background: none; border: none; cursor: pointer; }
+        .carousel--97 .carousel__tab-num { font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; font-weight: 600; color: #d1d5db; }
+        .carousel--97 .carousel__tab-title { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #9ca3af; white-space: nowrap; }
+        .carousel--97 .carousel__tab.active { border-bottom: 1px solid #111827; margin-bottom: -0.75rem; padding-bottom: calc(0.5rem + 0.75rem - 1px); }
+        .carousel--97 .carousel__tab.active .carousel__tab-title { color: #111827; }
+        .carousel--97 .carousel__body { display: flex; align-items: center; gap: 1.5rem; }
+        .carousel--97 .carousel__arrow { padding: 0.75rem 1rem; border: none; background: transparent; cursor: pointer; color: #d1d5db; transition: all 0.3s ease; }
+        .carousel--97 .carousel__arrow:hover { color: #111827; }
+        .carousel--97 .carousel__main { flex: 1; display: grid; grid-template-columns: 1fr auto 1fr; gap: 2rem; align-items: stretch; }
+        .carousel--97 .carousel__image { position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb; min-height: 280px; }
+        .carousel--97 .carousel__image img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.5s ease; }
+        .carousel--97 .carousel__image img.active { opacity: 1; }
+        .carousel--97 .carousel__divider { width: 1px; height: 120px; background: #e5e7eb; align-self: center; }
+        .carousel--97 .carousel__content { display: flex; align-items: center; }
+        .carousel--97 .carousel__title-row { display: flex; flex-direction: column; align-items: center; margin-bottom: 0.75rem; }
+        .carousel--97 .carousel__number-wrapper { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.5rem; }
+        .carousel--97 .carousel__number-wrapper::before, .carousel--97 .carousel__number-wrapper::after { content: ''; width: 30px; height: 1px; background: #e5e7eb; }
+        .carousel--97 .carousel__inline-number { font-family: 'Share Tech Mono', monospace; font-size: 2.5rem; font-weight: 300; color: #d1d5db; line-height: 1; }
+        .carousel--97 .carousel__text-content { position: relative; display: grid; background: transparent; border-radius: 12px; padding: 1.5rem; border: 1px solid #e5e7eb; }
+        .carousel--97 .carousel__slide-content { grid-area: 1 / 1; opacity: 0; pointer-events: none; display: flex; flex-direction: column; height: 100%; }
+        .carousel--97 .carousel__slide-content.active { opacity: 1; pointer-events: auto; }
+        .carousel--97 .carousel__slide-content .carousel__btn { margin-top: auto; }
+        .carousel--97 .carousel__content h3 { font-size: 1.25rem; font-weight: 500; margin: 0; text-transform: uppercase; text-align: center; color: #111827; letter-spacing: 0.1em; }
+        .carousel--97 .carousel__content p { color: #6b7280; line-height: 1.7; margin: 0; padding: 10px 0 20px; font-size: 0.95rem; text-align: center; }
+        .carousel--97 .carousel__btn { position: relative; display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 0.75rem 1.5rem; background: transparent; color: #111827; text-decoration: none; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.1em; overflow: hidden; transition: all 0.4s ease; border: 1px solid #111827; border-radius: 8px; }
+        .carousel--97 .carousel__btn::before { content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%; background: #111827; transition: width 0.4s ease; z-index: 0; border-radius: 8px; }
+        .carousel--97 .carousel__btn:hover::before { width: 100%; }
+        .carousel--97 .carousel__btn:hover { color: #fff; }
+        .carousel--97 .carousel__btn span, .carousel--97 .carousel__btn-chevron { position: relative; z-index: 1; }
+        .carousel--97 .carousel__progress { height: 1px; background: #e5e7eb; margin-top: 2rem; overflow: hidden; }
+        .carousel--97 .carousel__progress-bar { height: 100%; background: #111827; transition: width 0.4s ease; }
+
+        /* V97 Carousel Responsive */
+        @media (max-width: 768px) {
+          .carousel--97 .carousel__main { grid-template-columns: 1fr; gap: 1.5rem; }
+          .carousel--97 .carousel__divider { display: none; }
+          .carousel--97 .carousel__image { min-height: 200px; }
+          .carousel--97 .carousel__body { flex-direction: column; gap: 1rem; }
+          .carousel--97 .carousel__arrow { display: none; }
+        }
+
+        /* ===== PARALLAX SECTIONS ===== */
+        .parallax-section {
+          position: relative;
+          height: 400px;
           overflow: hidden;
-        }
-
-        .hq-tabs-container {
           display: flex;
+          align-items: center;
           justify-content: center;
-          flex-wrap: wrap;
-          gap: 15px;
-          margin-bottom: 20px;
-          border-bottom: 1px solid #ddd;
-          padding-bottom: 15px;
-          position: relative;
-          z-index: 20;
-          width: 100%;
+          max-width: 100vw;
+          clip-path: inset(0);
         }
 
-        .hq-tab {
-          background: none;
-          border: none;
-          font-size: 13px;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          cursor: pointer;
-          padding: 10px 5px;
-          color: #888;
-          transition: all 0.3s ease;
-          font-weight: 600;
-          text-align: center;
+        .parallax-section__image-container {
+          position: absolute;
+          inset: -15%;
+          z-index: 0;
         }
 
-        .hq-tab:hover {
-          color: #000;
-        }
-
-        .hq-tab.active {
-          color: #000;
-          border-bottom: 2px solid #000;
-        }
-
-        .hq-carousel-body {
-          position: relative;
-          display: flex;
-          align-items: flex-start;
-          justify-content: center;
-          min-height: 600px;
-          width: 100%;
-          padding-top: 40px;
-          transition: height 0.4s ease-in-out;
-        }
-
-        .hq-slides-wrapper {
+        .parallax-section__image {
           width: 100%;
           height: 100%;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .hq-slide {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          width: 50%;
-          opacity: 0;
-          transform: translateX(-50%) scale(0.8);
-          transition: all 0.5s ease-in-out;
-          pointer-events: none;
-          z-index: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding: 0 15px;
-          box-sizing: border-box;
-        }
-
-        .hq-slide.active {
-          opacity: 1;
-          transform: translateX(-50%) scale(1);
-          z-index: 10;
-          pointer-events: auto;
-        }
-
-        .hq-slide.prev {
-          opacity: 0.4;
-          transform: translateX(-150%) scale(0.9);
-          z-index: 5;
-          pointer-events: auto;
-          cursor: pointer;
-        }
-
-        .hq-slide.next {
-          opacity: 0.4;
-          transform: translateX(50%) scale(0.9);
-          z-index: 5;
-          pointer-events: auto;
-          cursor: pointer;
-        }
-
-        .hq-slide h3 {
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          margin-bottom: 20px;
-          font-size: 18px;
-        }
-
-        .hq-slide-img {
-          width: 100%;
-          height: 300px;
           object-fit: cover;
-          margin-bottom: 25px;
-          border-radius: 4px;
-          box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .hq-slide p {
-          font-size: 15px;
-          line-height: 1.6;
-          color: #555;
-          margin-bottom: 30px;
-        }
-
-        .hq-btn {
-          font-family: din-condensed-web, 'Helvetica Neue', Arial, sans-serif;
-          padding: 21px 34px;
-          font-size: 15px;
-          font-weight: 400;
-          text-transform: uppercase;
-          letter-spacing: 0.8px;
-          background-color: transparent;
-          color: #222;
-          border: 2px solid #222;
-          transition: 0.1s background-color linear, 0.1s color linear;
-          display: inline-block;
-          text-decoration: none;
-          cursor: pointer;
-          line-height: normal;
-          white-space: nowrap;
-          margin-bottom: 20px;
-        }
-
-        .hq-btn:hover {
-          background-color: #222;
+        .parallax-section__content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
           color: #fff;
+          padding: 2rem;
         }
 
-        .hq-slide .hq-btn {
-          opacity: 0;
-          visibility: hidden;
-          transform: translateY(10px);
-          transition: all 0.3s ease;
+        .parallax-section__number-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          margin-bottom: 0.75rem;
+        }
+
+        .parallax-section__number {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.75rem;
+          letter-spacing: 0.1em;
+          opacity: 0.7;
+        }
+
+        .parallax-section__line {
+          width: 40px;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.5);
+        }
+
+        .parallax-section__label {
+          display: block;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          margin-bottom: 1rem;
+          opacity: 0.8;
+        }
+
+        .parallax-section__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(4rem, 12vw, 9rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          margin: 0 0 1rem;
+          letter-spacing: -0.02em;
+          text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+          color: #fff;
+          opacity: 0.7;
+          -webkit-text-stroke: 2px #888;
+          paint-order: stroke fill;
+        }
+
+        .parallax-section__text {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          max-width: 400px;
+          margin: 0 auto;
+        }
+
+        /* Dark overlay for image */
+        .parallax-section__overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.5);
+          z-index: 1;
+        }
+
+        /* Layered wave effects */
+        .parallax-section__wave {
+          position: absolute;
+          left: 0;
+          width: 100%;
+          z-index: 2;
           pointer-events: none;
         }
 
-        .hq-slide.active .hq-btn {
-          opacity: 1;
-          visibility: visible;
-          transform: translateY(0);
-          pointer-events: auto;
-          transition: opacity 0.3s ease 0.4s, transform 0.3s ease 0.4s, background-color 0.1s linear 0s, color 0.1s linear 0s !important;
+        .parallax-section__wave--top {
+          top: 0;
+          height: 60px;
         }
 
-        .hq-arrow {
-          background: none;
-          border: none;
-          font-size: 40px;
-          font-weight: 100;
-          color: #000;
-          cursor: pointer;
-          padding: 0 10px;
-          position: absolute;
-          top: 300px;
-          transform: translateY(-50%);
-          z-index: 20;
-          opacity: 0.4;
-          transition: all 0.3s ease;
+        .parallax-section__wave--bottom {
+          bottom: 0;
+          height: 120px;
         }
 
-        .hq-arrow:hover {
-          opacity: 1;
-          color: #333;
+        /* ===== SCROLLING STRIPS WRAPPER ===== */
+        .scrolling-strips-wrapper {
+          position: relative;
+          overflow: visible;
         }
 
-        .hq-prev {
-          left: 10px;
-        }
-
-        .hq-next {
-          right: 10px;
-        }
-
-        @media (max-width: 768px) {
-          .hq-tabs-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            justify-items: center;
-            gap: 10px 0;
-          }
-
-          .hq-slide {
-            width: 90%;
-          }
-
-          .hq-slide.prev {
-            transform: translateX(-200%) scale(0.8);
-            opacity: 0;
-          }
-
-          .hq-slide.next {
-            transform: translateX(100%) scale(0.8);
-            opacity: 0;
-          }
-
-          .hq-btn {
-            white-space: normal;
-            width: 100%;
-          }
+        .scrolling-strips-spacer {
+          height: 100px;
+          pointer-events: none;
         }
 
         /* ===== FOOTER ===== */
@@ -1676,6 +2164,34 @@ function FinalDraft() {
           font-family: 'Share Tech Mono', monospace;
           font-size: 0.7rem;
           color: rgba(255,255,255,0.5);
+        }
+
+        /* ===== SCROLL REVEAL ANIMATION ===== */
+        .reveal-element {
+          opacity: 0;
+          transform: translateY(80px) scale(0.95);
+          transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-element.visible {
+          opacity: 1;
+          transform: translateY(0) scale(1);
+        }
+
+        /* ===== UNION JACK PLACEMENTS ===== */
+        .union-jack {
+          display: inline-block;
+          vertical-align: middle;
+        }
+
+        /* Hero coordinates - between N and W */
+        .union-jack--coords {
+          margin: 0 0.5rem;
+        }
+
+        /* Footer coordinates - between N and W */
+        .union-jack--footer {
+          margin: 0 0.5rem;
         }
 
         /* ===== RESPONSIVE ===== */

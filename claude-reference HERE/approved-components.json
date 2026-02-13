@@ -342,13 +342,169 @@
       "feedback": "I like it but not sure where we would put it. Don't make any omissions from the provided list",
       "status": "approved",
       "note": "placement TBD - do not omit"
+    },
+    {
+      "id": "adv-016",
+      "name": "Topographic Background",
+      "category": "adventure-texture",
+      "feedback": "These waves for our mountain training section is a really cool element",
+      "status": "approved",
+      "targetPage": "training/mountain-flying"
+    },
+    {
+      "id": "adv-017",
+      "name": "Polaroid Photo Frame",
+      "category": "adventure-component",
+      "feedback": "The polaroid frames with a little helicopter icon SVG trail that goes through them with pictures of helicopters from all destinations would be a really cool addition to our expeditions page. Have the helicopter fly down the page and it goes from one adventure to another",
+      "status": "needs-work",
+      "targetPage": "expeditions",
+      "enhancements": {
+        "addHelicopterTrail": true,
+        "animatedPath": "helicopter SVG flies between frames as you scroll",
+        "content": "destination photos from expeditions"
+      }
+    },
+    {
+      "id": "adv-001",
+      "name": "Expedition Flight Path",
+      "category": "adventure-component",
+      "feedback": "I like the grid component in the back",
+      "status": "approved",
+      "note": "Use the background grid pattern as a decorative element"
+    },
+    {
+      "id": "adv-004",
+      "name": "Compass Navigation Element",
+      "category": "adventure-component",
+      "feedback": "Have Denham stay stationary but a transition of the destination text and coordinates that cycle fast through the list of places we've taken helicopters to until the final one says 'Anywhere you can Dream Of'",
+      "status": "needs-work",
+      "enhancements": {
+        "originFixed": "Denham",
+        "destinationAnimation": "fast cycle through expedition destinations",
+        "finalDestination": "Anywhere you can Dream Of"
+      }
+    },
+    {
+      "id": "adv-012",
+      "name": "Pilot Briefing Card",
+      "category": "adventure-component",
+      "feedback": "We need a little component for taking registered interest in a trip",
+      "status": "needs-work",
+      "targetPage": "expeditions",
+      "enhancements": {
+        "addRegistrationForm": true,
+        "purpose": "register interest in trips"
+      }
+    },
+    {
+      "id": "adv-013",
+      "name": "Aviation Dividers",
+      "category": "adventure-component",
+      "feedback": "I like the runway style divider",
+      "status": "approved",
+      "variant": "runway-style"
+    },
+    {
+      "id": "adv-033",
+      "name": "Speed Tape",
+      "category": "adventure-component",
+      "feedback": "Cool idea to have a speed tape as you scroll, fun, but idk where we would use it so maybe not",
+      "status": "conditional",
+      "condition": "placement TBD - interesting concept but needs right context"
+    },
+    {
+      "id": "adv-041",
+      "name": "Passport Stamp",
+      "category": "adventure-component",
+      "feedback": "Passport stamps for the expeditions page is quite cool",
+      "status": "approved",
+      "targetPage": "expeditions"
+    },
+    {
+      "id": "adv-047",
+      "name": "Countdown Blocks",
+      "category": "adventure-component",
+      "feedback": "That's quite cool",
+      "status": "approved"
+    },
+    {
+      "id": "bg-001",
+      "name": "Floating Particles",
+      "category": "adventure-background",
+      "feedback": "Add more particles and make them look a little more like stars for the night flying rating",
+      "status": "needs-work",
+      "targetPage": "training/night-rating",
+      "enhancements": {
+        "increaseParticleCount": true,
+        "styleAsStars": true
+      }
+    },
+    {
+      "id": "bg-002",
+      "name": "Parallax Cloud Layers",
+      "category": "adventure-background",
+      "feedback": "Yes I like this component. As you start to scroll the clouds should quickly start to move to the left and to the right clearing the screen",
+      "status": "needs-work",
+      "enhancements": {
+        "scrollTrigger": true,
+        "animation": "clouds part left/right on scroll to reveal content"
+      }
+    },
+    {
+      "id": "dec-001",
+      "name": "Compass Rose Decorations",
+      "category": "adventure-decorative",
+      "feedback": "Incorporate a compass motif into the footer",
+      "status": "needs-work",
+      "targetPage": "footer",
+      "placement": "footer decoration"
+    },
+    {
+      "id": "dec-003",
+      "name": "Coordinate Grid Overlay",
+      "category": "adventure-decorative",
+      "feedback": "This is very cool for the 'where to find us' component",
+      "status": "approved",
+      "targetPage": "contact",
+      "placement": "location/find us section"
+    },
+    {
+      "id": "anim-006",
+      "name": "Typing / Typewriter Effect",
+      "category": "adventure-animation",
+      "feedback": "This would be really cool when enquiring about a discovery flight, when the inquiry is sent",
+      "status": "approved",
+      "targetPage": "training/trial-lessons",
+      "usage": "confirmation message after enquiry submission"
+    },
+    {
+      "id": "anim-010",
+      "name": "Staggered Animation Timing",
+      "category": "adventure-animation",
+      "feedback": "This I want as a reveal for card elements like the Our Team",
+      "status": "approved",
+      "usage": "scroll reveal animation for team cards and similar grid layouts",
+      "targetPage": "about-us/team"
     }
   ],
-  "summary": {
-    "totalApproved": 49,
-    "needsWork": 26,
-    "approved": 21,
+  "adventureComponentsSummary": {
+    "totalAdventureComponents": 15,
+    "approved": 8,
+    "needsWork": 6,
     "conditional": 1,
+    "categories": {
+      "textures": ["adv-016"],
+      "components": ["adv-001", "adv-004", "adv-012", "adv-013", "adv-017", "adv-033", "adv-041", "adv-047"],
+      "backgrounds": ["bg-001", "bg-002"],
+      "decorative": ["dec-001", "dec-003"],
+      "animations": ["anim-006", "anim-010"]
+    }
+  },
+  "summary": {
+    "totalApproved": 64,
+    "needsWork": 32,
+    "approved": 29,
+    "conditional": 2,
     "highPriority": ["comp-007", "comp-021", "footer-mega", "fleet-model-spotlight"],
     "needsRedesign": ["comp-067", "comp-081"]
   }

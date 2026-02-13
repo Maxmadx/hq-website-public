@@ -1,104 +1,56 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback }) => {
-  if (!feedback) return null;
+/**
+ * Regulatory Compliance Display - comp-086
+ * EXACT conversion from inspiration-2.html lines 4136-4169
+ * Status: approved
+ */
 
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-086
       </div>
-      <p className="component-note__text">{feedback}</p>
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const RegulatoryCompliance = ({ showNote = true }) => {
-  const certifications = [
-    {
-      logo: 'CAA',
-      title: 'CAA Approved Training Organisation',
-      number: 'ATO 123/456',
-      description: 'Approved to deliver PPL(H), CPL(H), and instructor ratings'
-    },
-    {
-      logo: 'EASA',
-      title: 'EASA Part-145 Maintenance',
-      number: 'UK.145.01234',
-      description: 'Authorised for Robinson helicopter maintenance and overhauls'
-    },
-    {
-      logo: 'RHC',
-      title: 'Robinson Authorised Dealer',
-      number: 'Since 1990',
-      description: 'Official UK dealer for new Robinson helicopters'
-    },
-    {
-      logo: 'FAA',
-      title: 'FAA Approved',
-      number: 'Repair Station',
-      description: 'US-registered aircraft maintenance capability'
-    }
-  ];
-
   return (
     <>
-      <section style={{ padding: '4rem 2rem', background: 'var(--hq-primary)', color: '#fff' }}>
+      <section style={{ padding: '4rem 2rem', background: 'var(--hq-background)' }}>
         <div className="hq-container">
-          <div className="hq-section-header">
-            <span style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.65rem',
-              letterSpacing: '0.2em',
-              color: 'var(--hq-accent)'
-            }}>Certifications</span>
-            <h2 className="hq-section-title" style={{ color: '#fff' }}>Fully Approved & Certified</h2>
+          <div className="hq-section-header" style={{ marginBottom: '2.5rem' }}>
+            <span className="hq-overline hq-overline--accent">Credentials</span>
+            <h2 className="hq-section-title">Fully Certified</h2>
           </div>
-
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(4, 1fr)',
-            gap: '1.5rem'
-          }}>
-            {certifications.map((cert, index) => (
-              <div key={index} style={{
-                background: 'rgba(255,255,255,0.05)',
-                padding: '2rem',
-                borderRadius: 'var(--radius-lg)',
-                textAlign: 'center',
-                border: '1px solid rgba(255,255,255,0.1)'
-              }}>
-                <div style={{
-                  width: '60px',
-                  height: '60px',
-                  background: 'rgba(255,255,255,0.1)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  margin: '0 auto 1rem',
-                  fontWeight: 700,
-                  fontSize: '0.9rem'
-                }}>{cert.logo}</div>
-                <h3 style={{
-                  fontSize: '0.95rem',
-                  fontWeight: 700,
-                  marginBottom: '0.5rem'
-                }}>{cert.title}</h3>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.7rem',
-                  color: 'var(--hq-accent)',
-                  display: 'block',
-                  marginBottom: '0.75rem'
-                }}>{cert.number}</span>
-                <p style={{
-                  fontSize: '0.8rem',
-                  opacity: 0.7,
-                  margin: 0
-                }}>{cert.description}</p>
-              </div>
-            ))}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--hq-primary)', marginBottom: '0.5rem' }}>CAA</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem' }}>UK Civil Aviation Authority</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)', margin: 0 }}>Approved Training Organisation</p>
+              <a href="#" style={{ fontSize: '0.75rem', color: 'var(--hq-accent)', display: 'inline-block', marginTop: '0.5rem' }}>Verify →</a>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 700, color: '#1e40af', marginBottom: '0.5rem' }}>EASA</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem' }}>European Aviation Safety</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)', margin: 0 }}>Part-145 Maintenance</p>
+              <a href="#" style={{ fontSize: '0.75rem', color: 'var(--hq-accent)', display: 'inline-block', marginTop: '0.5rem' }}>Verify →</a>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 700, color: '#dc2626', marginBottom: '0.5rem' }}>RHC</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem' }}>Robinson Helicopter</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)', margin: 0 }}>Authorized Dealer &amp; Service</p>
+              <a href="#" style={{ fontSize: '0.75rem', color: 'var(--hq-accent)', display: 'inline-block', marginTop: '0.5rem' }}>Verify →</a>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2.5rem', fontWeight: 700, color: 'var(--hq-primary)', marginBottom: '0.5rem' }}>FAA</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.5rem' }}>US Federal Aviation</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)', margin: 0 }}>License Conversions</p>
+              <a href="#" style={{ fontSize: '0.75rem', color: 'var(--hq-accent)', display: 'inline-block', marginTop: '0.5rem' }}>Learn more →</a>
+            </div>
           </div>
         </div>
       </section>

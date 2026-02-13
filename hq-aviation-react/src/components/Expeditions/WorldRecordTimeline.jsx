@@ -1,103 +1,57 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback }) => {
-  if (!feedback) return null;
+/**
+ * World Record Timeline - comp-032
+ * EXACT conversion from inspiration-2.html lines 1811-1853
+ * Status: approved
+ * Feedback: "This timeline will be great to have"
+ */
 
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-032
       </div>
-      <p className="component-note__text">{feedback}</p>
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const WorldRecordTimeline = ({ showNote = true }) => {
-  const records = [
-    { year: '1998', title: 'Around the World', description: 'First solo helicopter circumnavigation via both poles' },
-    { year: '2003', title: 'Polar Record', description: 'Fastest helicopter flight to the South Pole' },
-    { year: '2007', title: 'Aerobatic Champion', description: 'World Helicopter Aerobatic Championship winner' },
-    { year: '2012', title: 'Atlantic Crossing', description: 'Solo transatlantic helicopter flight in R66' },
-    { year: '2016', title: 'Arctic Expedition', description: 'First R66 to land at the North Pole' },
-    { year: '2019', title: 'Speed Record', description: 'London to Monaco in record time' },
-    { year: '2023', title: 'Education Award', description: 'Lifetime achievement in helicopter training' }
-  ];
-
   return (
     <>
-      <section style={{ padding: '4rem 2rem', background: 'var(--hq-primary)', color: '#fff' }}>
+      <section style={{ padding: '4rem 2rem', background: 'var(--hq-primary)' }}>
         <div className="hq-container">
-          <div className="hq-section-header">
-            <span style={{
-              fontFamily: 'var(--font-mono)',
-              fontSize: '0.65rem',
-              letterSpacing: '0.2em',
-              color: 'var(--hq-accent)'
-            }}>Captain Q's Journey</span>
-            <h2 className="hq-section-title" style={{ color: '#fff' }}>World Records & Achievements</h2>
+          <div className="hq-section-header" style={{ marginBottom: '3rem' }}>
+            <span className="hq-overline" style={{ color: 'var(--hq-accent)' }}>Captain Q's Legacy</span>
+            <h2 className="hq-section-title" style={{ color: '#fff' }}>Historic Achievements</h2>
           </div>
-
-          <div style={{ position: 'relative', maxWidth: '800px', margin: '0 auto' }}>
-            {/* Timeline line */}
-            <div style={{
-              position: 'absolute',
-              left: '50%',
-              top: 0,
-              bottom: 0,
-              width: '2px',
-              background: 'rgba(255,255,255,0.2)',
-              transform: 'translateX(-50%)'
-            }}></div>
-
-            {records.map((record, index) => (
-              <div key={index} style={{
-                display: 'flex',
-                justifyContent: index % 2 === 0 ? 'flex-start' : 'flex-end',
-                position: 'relative',
-                marginBottom: '2rem'
-              }}>
-                {/* Dot */}
-                <div style={{
-                  position: 'absolute',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  width: '16px',
-                  height: '16px',
-                  background: 'var(--hq-accent)',
-                  borderRadius: '50%',
-                  border: '3px solid #fff',
-                  zIndex: 1
-                }}></div>
-
-                {/* Content */}
-                <div style={{
-                  width: 'calc(50% - 40px)',
-                  background: 'rgba(255,255,255,0.05)',
-                  padding: '1.5rem',
-                  borderRadius: 'var(--radius-md)',
-                  textAlign: index % 2 === 0 ? 'right' : 'left'
-                }}>
-                  <span style={{
-                    fontFamily: 'var(--font-mono)',
-                    fontSize: '0.75rem',
-                    color: 'var(--hq-accent)',
-                    display: 'block',
-                    marginBottom: '0.5rem'
-                  }}>{record.year}</span>
-                  <h3 style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 700,
-                    marginBottom: '0.5rem'
-                  }}>{record.title}</h3>
-                  <p style={{
-                    fontSize: '0.9rem',
-                    opacity: 0.7,
-                    margin: 0
-                  }}>{record.description}</p>
-                </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+            <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--hq-accent)', minWidth: '60px' }}>1998</div>
+              <div style={{ flex: 1, paddingBottom: '2rem', borderLeft: '2px solid rgba(255,255,255,0.2)', paddingLeft: '2rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-8px', top: 0, width: '14px', height: '14px', borderRadius: '50%', background: 'var(--hq-accent)' }}></div>
+                <h4 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '0.5rem' }}>Around the World by Helicopter</h4>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: 1.6 }}>First circumnavigation of the globe in a Robinson R44, covering 35,000 miles across 26 countries.</p>
               </div>
-            ))}
+            </div>
+            <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--hq-accent)', minWidth: '60px' }}>2005</div>
+              <div style={{ flex: 1, paddingBottom: '2rem', borderLeft: '2px solid rgba(255,255,255,0.2)', paddingLeft: '2rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-8px', top: 0, width: '14px', height: '14px', borderRadius: '50%', background: 'var(--hq-accent)' }}></div>
+                <h4 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '0.5rem' }}>North Pole Landing</h4>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: 1.6 }}>Historic first helicopter landing at the Geographic North Pole in a Robinson R44.</p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.9rem', color: 'var(--hq-accent)', minWidth: '60px' }}>2013</div>
+              <div style={{ flex: 1, paddingBottom: 0, paddingLeft: '2rem', position: 'relative' }}>
+                <div style={{ position: 'absolute', left: '-8px', top: 0, width: '14px', height: '14px', borderRadius: '50%', background: 'var(--hq-accent)' }}></div>
+                <h4 style={{ color: '#fff', fontSize: '1.1rem', marginBottom: '0.5rem' }}>South Pole Expedition</h4>
+                <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem', lineHeight: 1.6 }}>Completed journey to the Geographic South Pole, becoming first to reach both poles by helicopter.</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

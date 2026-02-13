@@ -6,6 +6,9 @@
 /* Import HQ Redesign CSS System */
 @import url('./hq-redesign/main.css');
 
+/* Import Approved Components Styles */
+@import url('./approved-components.css');
+
 /* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
 
@@ -13,27 +16,42 @@
    CSS Custom Properties (Design Tokens)
    ---------------------------------------- */
 :root {
-    /* Colors */
-    --color-primary: #000000;
-    --color-primary-light: #333333;
-    --color-secondary: #ffffff;
-    --color-accent: #ff0000;
-    --color-accent-dark: #cc0000;
+    /* HQ Brand Colors */
+    --hq-primary: #1a1a1a;
+    --hq-background: #faf9f6;
+    --hq-background-alt: #ffffff;
+    --hq-heading-1: #1a1a1a;
+    --hq-heading-2: #4a4a4a;
+    --hq-heading-3: #7a7a7a;
+    --hq-body: #666666;
+    --hq-muted: #888888;
+    --hq-subtle: #999999;
+    --hq-border: #e8e6e2;
+    --hq-hover-bg: #f5f5f2;
+    --hq-dark-bg: #1a1a1a;
+    --hq-accent: #E04A2F;
+    --hq-accent-hover: #C93E25;
 
-    --color-text: #1a1a1a;
-    --color-text-light: #555555;
-    --color-text-muted: #888888;
-
-    --color-background: #ffffff;
-    --color-background-alt: #f9f9f9;
-    --color-background-dark: #1a1a1a;
-
-    --color-border: #eeeeee;
+    /* Legacy color aliases (for backward compatibility) */
+    --color-primary: var(--hq-primary);
+    --color-primary-light: var(--hq-heading-2);
+    --color-secondary: var(--hq-background-alt);
+    --color-accent: var(--hq-accent);
+    --color-accent-dark: var(--hq-accent-hover);
+    --color-text: var(--hq-heading-1);
+    --color-text-light: var(--hq-body);
+    --color-text-muted: var(--hq-muted);
+    --color-background: var(--hq-background);
+    --color-background-alt: var(--hq-background-alt);
+    --color-background-dark: var(--hq-dark-bg);
+    --color-border: var(--hq-border);
     --color-border-dark: #dddddd;
 
     /* Typography */
-    --font-family-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-    --font-family-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    --font-primary: 'Space Grotesk', -apple-system, sans-serif;
+    --font-mono: 'Share Tech Mono', monospace;
+    --font-family-primary: var(--font-primary);
+    --font-family-heading: var(--font-primary);
 
     --font-size-xs: 0.75rem;    /* 12px */
     --font-size-sm: 0.875rem;   /* 14px */
@@ -60,6 +78,7 @@
     --line-height-loose: 2;
 
     /* Spacing */
+    --section-padding: 4rem;
     --space-1: 0.25rem;   /* 4px */
     --space-2: 0.5rem;    /* 8px */
     --space-3: 0.75rem;   /* 12px */
@@ -74,24 +93,29 @@
     --space-24: 6rem;     /* 96px */
 
     /* Layout */
-    --container-max: 1400px;
+    --container-max: 1200px;
     --container-narrow: 800px;
     --container-wide: 1600px;
     --header-height: 80px;
     --header-height-mobile: 60px;
 
     /* Borders */
-    --border-radius-sm: 4px;
-    --border-radius-md: 8px;
-    --border-radius-lg: 12px;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --border-radius-sm: var(--radius-sm);
+    --border-radius-md: var(--radius-md);
+    --border-radius-lg: var(--radius-lg);
     --border-radius-xl: 16px;
     --border-radius-full: 9999px;
 
     /* Shadows */
+    --shadow-light: 0 5px 15px rgba(0, 0, 0, 0.1);
+    --shadow-card: 0 10px 40px rgba(0, 0, 0, 0.12);
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    --shadow-lg: var(--shadow-light);
+    --shadow-xl: var(--shadow-card);
     --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 
     /* Transitions */
@@ -126,7 +150,7 @@ html {
 }
 
 body {
-    font-family: var(--font-family-primary);
+    font-family: var(--font-primary);
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-normal);
     line-height: var(--line-height-normal);
@@ -154,7 +178,7 @@ body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-family-heading);
+    font-family: var(--font-primary);
     font-weight: var(--font-weight-bold);
     line-height: var(--line-height-tight);
     color: var(--color-primary);
@@ -167,6 +191,11 @@ h3 { font-size: var(--font-size-3xl); }
 h4 { font-size: var(--font-size-2xl); }
 h5 { font-size: var(--font-size-xl); }
 h6 { font-size: var(--font-size-lg); }
+
+/* Ensure all elements use brand font */
+div, span, p, a, button, input, textarea, select, label {
+    font-family: var(--font-primary);
+}
 
 p {
     margin-bottom: var(--space-4);

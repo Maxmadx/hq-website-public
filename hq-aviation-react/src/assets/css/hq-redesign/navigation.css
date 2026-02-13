@@ -1437,3 +1437,48 @@
 .Header-nav-folder-item:hover {
   color: rgba(255, 255, 255, 0.4);
 }
+
+/* ============================================
+   Header Breadcrumb (inside top-left container)
+   ============================================ */
+.Header-breadcrumb {
+  display: flex;
+  align-items: center;
+}
+
+.Header-breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+.Header-breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.Header-breadcrumb__link {
+  color: rgba(0, 0, 0, 0.5);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.Header-breadcrumb__link:hover {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.Header-breadcrumb__separator {
+  color: rgba(0, 0, 0, 0.3);
+  font-size: 8px;
+}
+
+.Header-breadcrumb__current {
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: 500;
+}

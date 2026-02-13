@@ -10,27 +10,23 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
-// Custom curved SVG path - a sweeping flight path
+// Custom curved SVG path - a compact horizontal flight path
 const FLIGHT_PATH = `
-  M 50 850
-  C 100 750, 200 700, 300 650
-  S 450 550, 500 500
-  C 550 450, 650 400, 750 380
-  S 900 320, 950 250
-  C 1000 180, 1050 120, 1150 100
-  S 1300 50, 1400 80
-  C 1500 110, 1550 150, 1600 200
-  S 1700 280, 1750 350
+  M 50 320
+  C 150 280, 300 200, 450 180
+  S 700 160, 900 200
+  C 1100 240, 1300 180, 1500 140
+  S 1650 120, 1750 160
 `;
 
 // Viewbox dimensions matching the path
-const VIEWBOX = { width: 1800, height: 900 };
+const VIEWBOX = { width: 1800, height: 400 };
 
 function ScrollPathAnimation({
   className = '',
   pathWidth = 3,
   iconSrc = '/assets/images/icons/r66-icon-transparent going right.svg',
-  iconSize = 60,
+  iconSize = 200,
   // Gradient colors: white → light blue → dark blue
   colorStart = '#FFFFFF',
   colorMid = '#5B9BD5',
@@ -39,7 +35,7 @@ function ScrollPathAnimation({
   const containerRef = useRef(null);
   const pathRef = useRef(null);
   const [pathLength, setPathLength] = useState(0);
-  const [iconPosition, setIconPosition] = useState({ x: 50, y: 850, angle: -45 });
+  const [iconPosition, setIconPosition] = useState({ x: 50, y: 320, angle: -20 });
 
   // Get scroll progress within the container
   const { scrollYProgress } = useScroll({
@@ -55,7 +51,12 @@ function ScrollPathAnimation({
   });
 
   // Transform scroll progress to path length (0 to 1)
-  const pathDrawLength = useTransform(smoothProgress, [0.1, 0.9], [0, 1]);
+  // Slow start, speed up, slow in middle, gradual re-acceleration, complete at 85%
+  const pathDrawLength = useTransform(
+    smoothProgress,
+    [0, 0.15, 0.3, 0.45, 0.55, 0.62, 0.7, 0.78, 0.85],
+    [0, 0.05, 0.25, 0.45, 0.55, 0.65, 0.78, 0.92, 1]
+  );
 
   // Get total path length on mount
   useEffect(() => {
@@ -110,32 +111,6 @@ function ScrollPathAnimation({
           <p className="scroll-path-description">
             From training to expeditions, every journey begins with a single flight.
           </p>
-        </div>
-
-        {/* Middle Column - Additional Text */}
-        <div className="scroll-path-col scroll-path-col--middle">
-          <div className="scroll-path-coords">
-            <span>51.5751°N</span>
-            <span>0.5059°W</span>
-          </div>
-          <span className="scroll-path-pre">Beyond horizons</span>
-          <h3 className="scroll-path-subheadline">
-            <span>Global</span>
-            <span>Expeditions</span>
-          </h3>
-          <p className="scroll-path-subtext">
-            Adventure awaits at every altitude
-          </p>
-        </div>
-
-        {/* Right Column - Image */}
-        <div className="scroll-path-col scroll-path-col--right">
-          <div className="scroll-path-image">
-            <img
-              src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp"
-              alt="Helicopter Expedition"
-            />
-          </div>
         </div>
       </div>
 
@@ -209,57 +184,17 @@ function ScrollPathAnimation({
           }}
         />
 
-        {/* Animated dots along the path */}
-        {[0.2, 0.4, 0.6, 0.8].map((offset, i) => (
-          <motion.circle
-            key={i}
-            r={4}
-            fill={colorMid}
-            style={{
-              offsetPath: `path("${FLIGHT_PATH}")`,
-              offsetDistance: useTransform(
-                pathDrawLength,
-                [0, 1],
-                [`${offset * 100}%`, `${offset * 100}%`]
-              ),
-              opacity: useTransform(
-                pathDrawLength,
-                [offset - 0.05, offset, offset + 0.05],
-                [0, 1, 0.5]
-              ),
-            }}
-          />
-        ))}
-      </svg>
-
-      {/* Helicopter icon that follows the path */}
-      <motion.div
-        className="scroll-path-icon"
-        style={{
-          left: `${(iconPosition.x / VIEWBOX.width) * 100}%`,
-          top: `${(iconPosition.y / VIEWBOX.height) * 100}%`,
-          rotate: iconPosition.angle,
-        }}
-      >
-        <img
-          src={iconSrc}
-          alt="Helicopter"
-          width={iconSize}
-          height={iconSize}
+        {/* Helicopter icon inside SVG */}
+        <image
+          href={iconSrc}
+          width="150"
+          height="150"
+          x={iconPosition.x - 75}
+          y={iconPosition.y - 75}
+          transform={`rotate(${iconPosition.angle} ${iconPosition.x} ${iconPosition.y})`}
+          style={{ width: '150px', height: '150px' }}
         />
-
-        {/* Trailing particles */}
-        <motion.div
-          className="scroll-path-trail"
-          style={{
-            opacity: useTransform(smoothProgress, [0.1, 0.2, 0.8, 0.9], [0, 1, 1, 0]),
-          }}
-        >
-          <span></span>
-          <span></span>
-          <span></span>
-        </motion.div>
-      </motion.div>
+      </svg>
 
       {/* Waypoint markers */}
       <div className="scroll-path-waypoints">
@@ -267,25 +202,19 @@ function ScrollPathAnimation({
           progress={smoothProgress}
           threshold={0.15}
           label="Training"
-          position={{ x: 15, y: 85 }}
+          position={{ x: 32, y: 35 }}
         />
         <Waypoint
           progress={smoothProgress}
           threshold={0.35}
           label="Certification"
-          position={{ x: 35, y: 55 }}
+          position={{ x: 52, y: 55 }}
         />
         <Waypoint
           progress={smoothProgress}
           threshold={0.55}
-          label="Experience"
-          position={{ x: 55, y: 40 }}
-        />
-        <Waypoint
-          progress={smoothProgress}
-          threshold={0.75}
-          label="Expeditions"
-          position={{ x: 80, y: 25 }}
+          label="Freedom"
+          position={{ x: 72, y: 40 }}
         />
         <Waypoint
           progress={smoothProgress}
@@ -298,23 +227,27 @@ function ScrollPathAnimation({
       <style>{`
         .scroll-path-section {
           position: relative;
-          min-height: 150vh;
-          background: linear-gradient(180deg, #faf9f6 0%, #f0efe9 50%, #faf9f6 100%);
+          min-height: 35vh;
+          background: var(--hq-background, #faf9f6);
           overflow: hidden;
+          /* Full width background */
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+          margin-right: calc(-50vw + 50%);
         }
 
         .scroll-path-content {
-          position: sticky;
+          position: relative;
           top: 0;
-          height: 100vh;
+          height: 35vh;
           display: flex;
           flex-direction: row;
           justify-content: space-between;
           align-items: center;
-          padding: 4rem;
+          padding: 1.5rem;
           z-index: 10;
           pointer-events: none;
-          gap: 2rem;
+          gap: 1rem;
         }
 
         /* Three Column Layout */
@@ -360,6 +293,7 @@ function ScrollPathAnimation({
           font-weight: 700;
           line-height: 1.1;
           text-transform: uppercase;
+          text-shadow: -4px -4px 4px var(--hq-background), 4px -4px 4px var(--hq-background), -4px 4px 4px var(--hq-background), 4px 4px 4px var(--hq-background), 0 -4px 4px var(--hq-background), 0 4px 4px var(--hq-background), -4px 0 4px var(--hq-background), 4px 0 4px var(--hq-background), -2px -2px 2px var(--hq-background), 2px -2px 2px var(--hq-background), -2px 2px 2px var(--hq-background), 2px 2px 2px var(--hq-background), -1px -1px 1px var(--hq-background), 1px -1px 1px var(--hq-background), -1px 1px 1px var(--hq-background), 1px 1px 1px var(--hq-background);
         }
 
         .scroll-path-headline span:nth-child(1) {
@@ -450,58 +384,8 @@ function ScrollPathAnimation({
           z-index: 1;
         }
 
-        .scroll-path-icon {
-          position: absolute;
-          z-index: 20;
-          transform-origin: center center;
-          pointer-events: none;
+        .scroll-path-svg image {
           filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
-          transition: filter 0.3s ease;
-        }
-
-        .scroll-path-icon img {
-          display: block;
-          width: 60px;
-          height: auto;
-          transform: translate(-50%, -50%);
-        }
-
-        .scroll-path-trail {
-          position: absolute;
-          top: 50%;
-          right: 100%;
-          display: flex;
-          gap: 6px;
-          transform: translateY(-50%);
-        }
-
-        .scroll-path-trail span {
-          width: 8px;
-          height: 8px;
-          background: ${colorEnd};
-          border-radius: 50%;
-          opacity: 0.5;
-          animation: trailPulse 1s ease-in-out infinite;
-        }
-
-        .scroll-path-trail span:nth-child(1) {
-          animation-delay: 0s;
-          opacity: 0.3;
-        }
-
-        .scroll-path-trail span:nth-child(2) {
-          animation-delay: 0.15s;
-          opacity: 0.5;
-        }
-
-        .scroll-path-trail span:nth-child(3) {
-          animation-delay: 0.3s;
-          opacity: 0.7;
-        }
-
-        @keyframes trailPulse {
-          0%, 100% { transform: scale(1); opacity: 0.5; }
-          50% { transform: scale(0.6); opacity: 0.3; }
         }
 
         .scroll-path-waypoints {

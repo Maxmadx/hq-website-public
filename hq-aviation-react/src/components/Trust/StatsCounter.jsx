@@ -1,5 +1,11 @@
 import React from 'react';
 
+/**
+ * Stats Counter - comp-008
+ * EXACT conversion from inspiration-2.html lines 310-338
+ * Status: approved
+ */
+
 const ComponentNote = ({ status, feedback }) => {
   if (!feedback) return null;
 
@@ -14,41 +20,26 @@ const ComponentNote = ({ status, feedback }) => {
 };
 
 const StatsCounter = ({ showNote = true }) => {
-  const stats = [
-    { value: '34', label: 'YEARS IN BUSINESS' },
-    { value: '500+', label: 'AIRCRAFT SOLD' },
-    { value: '1,200+', label: 'PILOTS TRAINED' },
-    { value: '50+', label: 'COUNTRIES VISITED' }
-  ];
-
   return (
     <>
       <section style={{ padding: '4rem 2rem', background: 'var(--hq-dark-bg)' }}>
-        <div style={{
-          maxWidth: '1000px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(4, 1fr)',
-          gap: '2rem',
-          textAlign: 'center'
-        }}>
-          {stats.map((stat, index) => (
-            <div key={index}>
-              <span style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-                fontWeight: 700,
-                color: '#fff',
-                display: 'block'
-              }}>{stat.value}</span>
-              <span style={{
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.65rem',
-                letterSpacing: '0.15em',
-                color: 'rgba(255,255,255,0.5)'
-              }}>{stat.label}</span>
-            </div>
-          ))}
+        <div style={{ maxWidth: '1000px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '2rem', textAlign: 'center' }}>
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, color: '#fff', display: 'block' }}>34</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.5)' }}>YEARS IN BUSINESS</span>
+          </div>
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, color: '#fff', display: 'block' }}>500+</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.5)' }}>AIRCRAFT SOLD</span>
+          </div>
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, color: '#fff', display: 'block' }}>1,200+</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.5)' }}>PILOTS TRAINED</span>
+          </div>
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, color: '#fff', display: 'block' }}>50+</span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.15em', color: 'rgba(255,255,255,0.5)' }}>COUNTRIES VISITED</span>
+          </div>
         </div>
       </section>
       {showNote && (

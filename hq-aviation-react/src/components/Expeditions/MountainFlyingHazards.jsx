@@ -1,108 +1,57 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback, details }) => {
+/**
+ * Mountain Flying Hazards - comp-084
+ * EXACT conversion from inspiration-2.html lines 4043-4085
+ * Status: approved
+ * Feedback: "Nice. So a 5 day course in Scotland"
+ */
+
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-084
       </div>
-      <p className="component-note__text">{feedback}</p>
-      {details && (
-        <p className="component-note__text" style={{ marginTop: '0.5rem' }}>
-          Details: {details}
-        </p>
-      )}
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const MountainFlyingHazards = ({ showNote = true }) => {
-  const hazards = [
-    { icon: 'fa-wind', title: 'Wind Shear', description: 'Understanding rotor dynamics in turbulent conditions' },
-    { icon: 'fa-mountain', title: 'Downdrafts', description: 'Recognizing and escaping mountain wave effects' },
-    { icon: 'fa-cloud', title: 'Weather Changes', description: 'Rapid weather deterioration and escape routes' },
-    { icon: 'fa-compress-arrows-alt', title: 'Density Altitude', description: 'Performance calculations for high elevation' },
-    { icon: 'fa-map-marked-alt', title: 'Navigation', description: 'GPS, map reading, and terrain awareness' },
-    { icon: 'fa-helicopter', title: 'Landing Techniques', description: 'Pinnacle, confined area, and slope operations' }
-  ];
-
   return (
     <>
-      <section style={{ padding: '4rem 2rem', background: 'var(--hq-background)' }}>
-        <div className="hq-container">
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr',
-            gap: '4rem',
-            alignItems: 'center'
-          }}>
-            <div>
-              <span className="hq-overline hq-overline--accent">Mountain Flying Course</span>
-              <h2 style={{
-                fontSize: '2rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                marginBottom: '1.5rem'
-              }}>Master Mountain Flying</h2>
-              <p style={{
-                color: 'var(--hq-body)',
-                lineHeight: 1.8,
-                marginBottom: '1rem'
-              }}>Our 5-day intensive course in the Scottish Highlands teaches you to handle the unique challenges of mountain and high-altitude operations.</p>
-
-              <div style={{
-                background: 'rgba(224,74,47,0.1)',
-                padding: '1rem',
-                borderRadius: 'var(--radius-md)',
-                marginBottom: '2rem',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '1rem'
-              }}>
-                <i className="fas fa-calendar-alt" style={{ color: 'var(--hq-accent)', fontSize: '1.25rem' }}></i>
-                <div>
-                  <strong>5 Days in Scotland</strong>
-                  <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--hq-body)' }}>Including ground school and practical flying</p>
-                </div>
-              </div>
-
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: '1rem'
-              }}>
-                {hazards.map((hazard, index) => (
-                  <div key={index} style={{
-                    display: 'flex',
-                    gap: '0.75rem',
-                    alignItems: 'flex-start'
-                  }}>
-                    <i className={`fas ${hazard.icon}`} style={{
-                      color: 'var(--hq-accent)',
-                      marginTop: '0.25rem',
-                      width: '20px'
-                    }}></i>
-                    <div>
-                      <h4 style={{ fontSize: '0.9rem', margin: '0 0 0.25rem' }}>{hazard.title}</h4>
-                      <p style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--hq-body)',
-                        margin: 0
-                      }}>{hazard.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <a href="#" className="hq-btn hq-btn--primary" style={{ marginTop: '2rem' }}>
-                Book Mountain Course
-              </a>
+      <section style={{ padding: '4rem 2rem', background: '#fff' }}>
+        <div className="hq-container" style={{ maxWidth: '900px' }}>
+          <div className="hq-section-header" style={{ marginBottom: '2.5rem' }}>
+            <span className="hq-overline hq-overline--accent">Advanced Training</span>
+            <h2 className="hq-section-title">Mountain Flying</h2>
+          </div>
+          <p style={{ fontSize: '1.1rem', color: 'var(--hq-body)', textAlign: 'center', maxWidth: '700px', margin: '0 auto 2.5rem' }}>Master the unique challenges of high-altitude operations with our specialized mountain flying course, taught by polar expedition pilots.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.5rem' }}>
+            <div style={{ background: 'var(--hq-background)', borderRadius: '12px', padding: '1.5rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🌬️</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.25rem' }}>Wind Effects</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>Rotors, turbulence, downdrafts</p>
             </div>
-            <div style={{
-              background: "url('/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp') center/cover",
-              borderRadius: 'var(--radius-lg)',
-              minHeight: '450px'
-            }}></div>
+            <div style={{ background: 'var(--hq-background)', borderRadius: '12px', padding: '1.5rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>📉</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.25rem' }}>Density Altitude</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>Performance calculations</p>
+            </div>
+            <div style={{ background: 'var(--hq-background)', borderRadius: '12px', padding: '1.5rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>🏔️</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.25rem' }}>Confined Areas</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>Pinnacle & ridge landings</p>
+            </div>
+            <div style={{ background: 'var(--hq-background)', borderRadius: '12px', padding: '1.5rem', textAlign: 'center' }}>
+              <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>❄️</div>
+              <h4 style={{ fontSize: '0.9rem', fontWeight: 600, marginBottom: '0.25rem' }}>Cold Weather</h4>
+              <p style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>Icing & white-out</p>
+            </div>
+          </div>
+          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+            <a href="#" className="hq-btn hq-btn--outline">Learn More</a>
           </div>
         </div>
       </section>
@@ -110,7 +59,6 @@ const MountainFlyingHazards = ({ showNote = true }) => {
         <ComponentNote
           status="approved"
           feedback="Nice. So a 5 day course in Scotland"
-          details="5 day course in Scotland"
         />
       )}
     </>

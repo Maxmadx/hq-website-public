@@ -1,84 +1,63 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback, aircraftTypes }) => {
+/**
+ * Type Rating Cards - comp-051
+ * EXACT conversion from inspiration-2.html lines 2739-2787
+ * Status: needs-work
+ * Feedback: "Have a type rating component for R44, R66, H500, AS350, Bell 407"
+ */
+
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-051
       </div>
-      <p className="component-note__text">{feedback}</p>
-      {aircraftTypes && (
-        <p className="component-note__text" style={{ marginTop: '0.5rem' }}>
-          Aircraft types: {aircraftTypes.join(', ')}
-        </p>
-      )}
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const TypeRatingCards = ({ showNote = true }) => {
-  const typeRatings = [
-    { name: 'R44', category: 'Piston', duration: '3-5 hours', price: 'From £2,500' },
-    { name: 'R66', category: 'Turbine', duration: '5-7 hours', price: 'From £4,500' },
-    { name: 'H500', category: 'Turbine', duration: '6-8 hours', price: 'From £5,500' },
-    { name: 'AS350', category: 'Turbine', duration: '8-10 hours', price: 'From £7,500' },
-    { name: 'Bell 407', category: 'Turbine', duration: '8-10 hours', price: 'From £8,000' }
-  ];
-
   return (
     <>
-      <section style={{ padding: '4rem 2rem', background: 'var(--hq-hover-bg)' }}>
+      <section style={{ padding: '4rem 2rem', background: 'var(--hq-background)' }}>
         <div className="hq-container">
-          <div className="hq-section-header">
-            <span className="hq-overline">Advanced Training</span>
-            <h2 className="hq-section-title">Type Ratings</h2>
-            <p className="hq-section-subtitle">Expand your flying privileges with additional aircraft types</p>
+          <div className="hq-section-header" style={{ marginBottom: '2.5rem' }}>
+            <span className="hq-overline hq-overline--accent">Type Ratings</span>
+            <h2 className="hq-section-title">Add to Your License</h2>
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '1rem'
-          }}>
-            {typeRatings.map((rating, index) => (
-              <div key={index} style={{
-                background: '#fff',
-                padding: '1.5rem',
-                borderRadius: 'var(--radius-lg)',
-                textAlign: 'center',
-                boxShadow: 'var(--shadow-light)'
-              }}>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.1em',
-                  color: 'var(--hq-accent)',
-                  display: 'block',
-                  marginBottom: '0.5rem'
-                }}>{rating.category}</span>
-                <h3 style={{
-                  fontSize: '1.5rem',
-                  fontWeight: 700,
-                  marginBottom: '1rem'
-                }}>{rating.name}</h3>
-                <div style={{
-                  fontSize: '0.85rem',
-                  color: 'var(--hq-body)',
-                  marginBottom: '0.5rem'
-                }}>
-                  <i className="fas fa-clock" style={{ marginRight: '0.5rem' }}></i>
-                  {rating.duration}
-                </div>
-                <div style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  color: 'var(--hq-primary)'
-                }}>{rating.price}</div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '2rem', maxWidth: '900px', margin: '0 auto' }}>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center', borderTop: '4px solid var(--hq-accent)' }}>
+              <h4 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>R22</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--hq-muted)', marginBottom: '1.5rem' }}>Piston Single</p>
+              <div style={{ fontSize: '0.85rem', color: 'var(--hq-body)', marginBottom: '1rem' }}>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Min 5 hours training</div>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Skills test included</div>
+                <div style={{ padding: '0.5rem 0' }}>RHC Safety Course req.</div>
               </div>
-            ))}
-          </div>
-          <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-            <a href="#" className="hq-btn hq-btn--primary">Enquire About Type Ratings</a>
+              <div style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>From <strong style={{ fontSize: '1.25rem', color: 'var(--hq-primary)' }}>£2,400</strong></div>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center', borderTop: '4px solid var(--hq-primary)' }}>
+              <h4 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>R44</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--hq-muted)', marginBottom: '1.5rem' }}>Piston Single</p>
+              <div style={{ fontSize: '0.85rem', color: 'var(--hq-body)', marginBottom: '1rem' }}>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Min 5 hours training</div>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Skills test included</div>
+                <div style={{ padding: '0.5rem 0' }}>RHC Safety Course req.</div>
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>From <strong style={{ fontSize: '1.25rem', color: 'var(--hq-primary)' }}>£3,200</strong></div>
+            </div>
+            <div style={{ background: '#fff', borderRadius: '12px', padding: '2rem', textAlign: 'center', borderTop: '4px solid #6366f1' }}>
+              <h4 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>R66</h4>
+              <p style={{ fontSize: '0.85rem', color: 'var(--hq-muted)', marginBottom: '1.5rem' }}>Turbine Single</p>
+              <div style={{ fontSize: '0.85rem', color: 'var(--hq-body)', marginBottom: '1rem' }}>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Min 10 hours training</div>
+                <div style={{ padding: '0.5rem 0', borderBottom: '1px solid var(--hq-border)' }}>Skills test included</div>
+                <div style={{ padding: '0.5rem 0' }}>Turbine differences</div>
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--hq-muted)' }}>From <strong style={{ fontSize: '1.25rem', color: 'var(--hq-primary)' }}>£9,500</strong></div>
+            </div>
           </div>
         </div>
       </section>
@@ -86,7 +65,6 @@ const TypeRatingCards = ({ showNote = true }) => {
         <ComponentNote
           status="needs-work"
           feedback="Have a type rating component for R44, R66, H500, AS350, Bell 407"
-          aircraftTypes={['R44', 'R66', 'H500', 'AS350', 'Bell 407']}
         />
       )}
     </>

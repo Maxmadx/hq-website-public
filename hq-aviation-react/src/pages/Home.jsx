@@ -34,42 +34,42 @@ function Home() {
       title: 'Discovery Flight',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Flying is the ultimate dream pursued by mankind. Should you want to live it for real, the discovery flight will certainly fulfil your expectations: After a pre-flight briefing, you will enjoy a full hands-on flying experience with one of our instructors.',
-      cta: 'Learn More About DISCOVERY FLIGHT',
+      cta: 'Learn More',
       link: '/training/trial-lessons'
     },
     {
       title: 'Private Pilot Licence',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Let aside the ground exams that most students self study before taking the tests on site, the obtention of a PPL(H) requires a minimum of 45 hrs of flight training, including 10 hrs of solo. The duration varies depending on commitment.',
-      cta: 'Learn More About PRIVATE PILOT LICENCE',
+      cta: 'Learn More',
       link: '/training/ppl'
     },
     {
       title: 'Commercial Pilot Licence',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Holding a Commercial Pilot Licence, CPL(H) gives you the status of professional helicopter pilot. To achieve this, 155 hrs of flying time post licence is required, of which 50 hrs must be Pilot In Command (PIC).',
-      cta: 'Learn More About COMMERCIAL PILOT LICENCE',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Type Rating',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Having achieved your PPL(H), you may wish to fly different types of helicopter. A type specific ground training course followed by a minimum of 5 Hrs of flight training will suffice to put you to the Type Rating test.',
-      cta: 'Learn More About TYPE RATING',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Night Rating',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Holding a night rating gives you the most flexibility, as sunset will no longer prevent you from flying. To achieve this, 100 hrs of flying post licence is required, of which 60 Hrs must be Pilot In Command.',
-      cta: 'Learn More About NIGHT RATING',
+      cta: 'Learn More',
       link: '/training'
     },
     {
       title: 'Self-Fly Hire',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'With an impressive fleet of over 30 helicopters, HQ will certainly be able to facilitate your flying requirements, either on a short term hiring or on a long term leasing basis.',
-      cta: 'Learn More About SELF-FLY HIRE',
+      cta: 'Learn More',
       link: '/services'
     }
   ];
@@ -80,35 +80,35 @@ function Home() {
       title: 'Rebuilds',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'At HQ, our experienced and dedicated engineers carry out the highest quality rebuilds on calendar or time expired machines. The 12 years inspection or 2200 Hr overhaul will be tailored to your specific needs.',
-      cta: 'Learn More About REBUILDS',
+      cta: 'Learn More',
       link: '/services/maintenance'
     },
     {
       title: 'Maintenance',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Being an authorised Part 145 Maintenance Facility, HQ can carry out all types of work on your Robinson or Cabri Helicopter. From small scheduled inspections to unforeseen defects, our engineers will look after your machine.',
-      cta: 'Learn More About MAINTENANCE',
+      cta: 'Learn More',
       link: '/services/maintenance'
     },
     {
       title: 'Part Sales',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'With an impressive stock of Robinson and Cabri spares, HQ can offer an AOG service to get the parts you need without delay. Our Stores Team are always on hand to give you some assistance.',
-      cta: 'Learn More About PART SALES',
+      cta: 'Learn More',
       link: '/contact'
     },
     {
       title: 'Hangarage',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Please enquire if you would like to base your aircraft temporarily or permanently at Denham. Our Operations team are on site 7 days a week, to provide moving in-and-out service and refueling assistance.',
-      cta: 'Learn More About HANGARAGE',
+      cta: 'Learn More',
       link: '/contact'
     },
     {
       title: 'Avionics',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'From upgrading your existing radio, to installing USB ports to the instrument console: HQ works with experienced Avionics engineers to ensure the best outcome for the owner and improve the whole flying experience.',
-      cta: 'Learn More About AVIONICS',
+      cta: 'Learn More',
       link: '/contact'
     }
   ];
@@ -119,21 +119,21 @@ function Home() {
       title: 'NEW HELICOPTERS',
       image: '/assets/images/legacy/squarespace/image-asset.jpeg',
       description: 'Global Rotors, a division of HQ Aviation Ltd, are an official approved Robinson Factory distributor. GR will give you the necessary guidance to design your brand new "Robbie". With a great range of optional equipment, your R22, R44 or R66 will be tailored to your needs. Contact us to book a demo at our London showroom.',
-      cta: 'Learn More About NEW HELICOPTERS',
+      cta: 'Learn More',
       link: '/aircraft-sales'
     },
     {
       title: 'USED HELICOPTERS',
       image: '/assets/images/legacy/squarespace/image-asset-1.jpeg',
       description: 'If you are considering selling your machine, please contact our sales team. HQ will do the necessary arrangements to facilitate the transaction. If on the other hand, we are willing to buy a used aircraft, please let us know your criteria and HQ will look for a suitable machine for you.',
-      cta: 'Learn More About USED HELICOPTERS',
+      cta: 'Learn More',
       link: '/aircraft-sales'
     },
     {
       title: 'REBUILT HELICOPTERS',
       image: '/assets/images/facility/sales-rebuild.jpg',
       description: 'Having rebuilt over 40 Robinsons in his career, our expert Chief Engineer has gained the experience to deliver a "like new" product. Attention to details is paramount, fine tuning is a must, and there is no limit to the choice of colours and materials that can be selected to personalise your beloved machine.',
-      cta: 'Learn More About REBUILT HELICOPTERS',
+      cta: 'Learn More',
       link: '/services/maintenance'
     }
   ];

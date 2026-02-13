@@ -1,110 +1,81 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback }) => {
-  if (!feedback) return null;
+/**
+ * Pilot Hour Breakdown - comp-087
+ * EXACT conversion from inspiration-2.html lines 4180-4228
+ * Status: approved
+ */
 
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-087
       </div>
-      <p className="component-note__text">{feedback}</p>
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const PilotHourBreakdown = ({ showNote = true }) => {
-  const breakdown = [
-    { label: 'Dual Instruction', hours: 35, color: 'var(--hq-accent)' },
-    { label: 'Solo Flight', hours: 10, color: '#3B82F6' },
-    { label: 'Cross-Country', hours: 5, color: '#22C55E' },
-    { label: 'Solo Cross-Country', hours: 5, color: '#8B5CF6' }
-  ];
-
-  const totalHours = breakdown.reduce((sum, item) => sum + item.hours, 0);
-
   return (
     <>
       <section style={{ padding: '4rem 2rem', background: '#fff' }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <div className="hq-section-header">
+        <div className="hq-container" style={{ maxWidth: '700px' }}>
+          <div className="hq-section-header" style={{ marginBottom: '2.5rem' }}>
             <span className="hq-overline hq-overline--accent">PPL(H) Requirements</span>
-            <h2 className="hq-section-title">Minimum {totalHours} Flight Hours</h2>
+            <h2 className="hq-section-title">Hour Breakdown</h2>
           </div>
-
-          {/* Visual Bar */}
-          <div style={{
-            display: 'flex',
-            height: '40px',
-            borderRadius: 'var(--radius-md)',
-            overflow: 'hidden',
-            marginBottom: '2rem'
-          }}>
-            {breakdown.map((item, index) => (
-              <div key={index} style={{
-                width: `${(item.hours / totalHours) * 100}%`,
-                background: item.color,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                fontWeight: 600
-              }}>
-                {item.hours}h
-              </div>
-            ))}
-          </div>
-
-          {/* Legend */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gap: '1rem'
-          }}>
-            {breakdown.map((item, index) => (
-              <div key={index} style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.75rem',
-                padding: '1rem',
-                background: 'var(--hq-hover-bg)',
-                borderRadius: 'var(--radius-md)'
-              }}>
-                <div style={{
-                  width: '16px',
-                  height: '16px',
-                  background: item.color,
-                  borderRadius: '4px',
-                  flexShrink: 0
-                }}></div>
-                <div style={{ flex: 1 }}>
-                  <span style={{ fontWeight: 600 }}>{item.label}</span>
+          <div style={{ background: 'var(--hq-background)', borderRadius: '12px', padding: '2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Dual Instruction</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>25 hours minimum</span>
                 </div>
-                <span style={{
-                  fontFamily: 'var(--font-mono)',
-                  fontSize: '1rem',
-                  fontWeight: 700
-                }}>{item.hours}h</span>
+                <div style={{ height: '8px', background: 'var(--hq-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '55%', background: 'var(--hq-accent)', borderRadius: '4px' }}></div>
+                </div>
               </div>
-            ))}
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Solo Flight</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>10 hours minimum</span>
+                </div>
+                <div style={{ height: '8px', background: 'var(--hq-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '22%', background: 'var(--hq-primary)', borderRadius: '4px' }}></div>
+                </div>
+              </div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Cross-Country</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>5 hours minimum</span>
+                </div>
+                <div style={{ height: '8px', background: 'var(--hq-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '11%', background: '#22c55e', borderRadius: '4px' }}></div>
+                </div>
+              </div>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 500 }}>Solo Cross-Country</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 700 }}>5 hours minimum</span>
+                </div>
+                <div style={{ height: '8px', background: 'var(--hq-border)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '11%', background: '#6366f1', borderRadius: '4px' }}></div>
+                </div>
+              </div>
+            </div>
+            <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--hq-border)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <span style={{ fontSize: '1rem', fontWeight: 600 }}>Total Minimum</span>
+              <span style={{ fontSize: '1.5rem', fontWeight: 700, color: 'var(--hq-primary)' }}>45 hours</span>
+            </div>
           </div>
-
-          <p style={{
-            textAlign: 'center',
-            color: 'var(--hq-muted)',
-            fontSize: '0.85rem',
-            marginTop: '1.5rem'
-          }}>
-            Most students complete training in 50-60 hours on average
-          </p>
         </div>
       </section>
       {showNote && (
         <ComponentNote
           status="approved"
-          feedback="Good graphic for the PPL explanation"
+          feedback={null}
         />
       )}
     </>

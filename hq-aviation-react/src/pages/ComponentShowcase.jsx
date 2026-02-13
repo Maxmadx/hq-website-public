@@ -15,6 +15,7 @@ import {
   ProcessSteps,
   LifestyleImagery,
   TopGearMoment,
+  ScrollingStrips,
   FleetShowcaseCarousel,
   ModelSpotlight,
   InteractiveFleetExplorer,
@@ -41,7 +42,24 @@ import {
   PolarAchievement,
   MountainFlyingHazards,
   OwnershipBenefits,
-  MegaFooter
+  WhyFlyHelicopterMini,
+  WhyFlyHelicopterCard,
+  WhyFlyHelicopterCompact,
+  MegaFooter,
+  // Adventure & Expedition Components
+  TopographicBackground,
+  PolaroidPhotoTrail,
+  CompassNavigation,
+  TripRegistrationCard,
+  AviationDividers,
+  PassportStamps,
+  CountdownBlocks,
+  FloatingStars,
+  ParallaxCloudLayers,
+  CompassRoseFooter,
+  CoordinateGridOverlay,
+  TypewriterEffect,
+  StaggeredReveal,
 } from '../components';
 
 const SectionTitle = ({ children }) => (
@@ -91,6 +109,7 @@ const ComponentShowcase = () => {
       <TeamPreview />
       <ProcessSteps />
       <TopGearMoment />
+      <ScrollingStrips sticky={false} />
 
       {/* Fleet & Aircraft */}
       <SectionTitle>Fleet & Aircraft</SectionTitle>
@@ -130,6 +149,9 @@ const ComponentShowcase = () => {
       {/* Lifestyle */}
       <SectionTitle>Lifestyle</SectionTitle>
       <OwnershipBenefits />
+      <WhyFlyHelicopterMini />
+      <WhyFlyHelicopterCard />
+      <WhyFlyHelicopterCompact />
 
       {/* Information */}
       <SectionTitle>Information</SectionTitle>
@@ -139,9 +161,31 @@ const ComponentShowcase = () => {
       <FAQAccordion />
       <HelicopterVsFixedWing />
 
+      {/* Adventure & Expedition Components */}
+      <SectionTitle>Adventure Components</SectionTitle>
+      <TopographicBackground />
+      <CompassNavigation />
+      <PolaroidPhotoTrail />
+      <TripRegistrationCard />
+      <PassportStamps />
+      <CountdownBlocks />
+      <AviationDividers />
+
+      {/* Backgrounds & Decorative */}
+      <SectionTitle>Backgrounds & Decorative</SectionTitle>
+      <FloatingStars />
+      <ParallaxCloudLayers />
+      <CoordinateGridOverlay />
+
+      {/* Animations */}
+      <SectionTitle>Animations</SectionTitle>
+      <TypewriterEffect />
+      <StaggeredReveal />
+
       {/* Footer */}
       <SectionTitle>Footer</SectionTitle>
       <MegaFooter />
+      <CompassRoseFooter />
     </div>
   );
 };

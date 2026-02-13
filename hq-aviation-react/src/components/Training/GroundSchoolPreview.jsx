@@ -1,78 +1,96 @@
 import React from 'react';
 
-const ComponentNote = ({ status, feedback }) => {
-  if (!feedback) return null;
+/**
+ * Ground School Preview - comp-048
+ * EXACT conversion from inspiration-2.html
+ * Status: approved
+ * Feedback: "Explanatory page - how getting your PPL works. Very good component"
+ */
 
+const ComponentNote = ({ status, feedback }) => {
   return (
     <div className={`component-note component-note--${status}`}>
       <div className="component-note__label">
         {status === 'approved' ? 'Approved' : 'Needs Work'} - comp-048
       </div>
-      <p className="component-note__text">{feedback}</p>
+      {feedback && <p className="component-note__text">{feedback}</p>}
     </div>
   );
 };
 
 const GroundSchoolPreview = ({ showNote = true }) => {
-  const modules = [
-    { icon: 'fa-cloud', title: 'Meteorology', description: 'Understanding weather patterns for safe flight decisions' },
-    { icon: 'fa-plane', title: 'Principles of Flight', description: 'How helicopters generate lift and maintain control' },
-    { icon: 'fa-compass', title: 'Navigation', description: 'Map reading, flight planning, and GPS systems' },
-    { icon: 'fa-broadcast-tower', title: 'Radio Communications', description: 'Proper RT procedures and phraseology' },
-    { icon: 'fa-gavel', title: 'Air Law', description: 'Regulations, airspace, and licensing requirements' },
-    { icon: 'fa-user-md', title: 'Human Performance', description: 'Physiology, psychology, and decision making' }
-  ];
-
   return (
     <>
-      <section style={{ padding: '4rem 2rem', background: 'var(--hq-background)' }}>
-        <div className="hq-container">
-          <div className="hq-section-header">
-            <span className="hq-overline hq-overline--accent">Ground School</span>
-            <h2 className="hq-section-title">What You'll Learn</h2>
-            <p className="hq-section-subtitle">9 exams covering all aspects of helicopter theory</p>
+      <section style={{ padding: '4rem 2rem', background: '#fff' }}>
+        <div className="hq-container" style={{ maxWidth: '900px' }}>
+          <div className="hq-section-header" style={{ marginBottom: '2.5rem' }}>
+            <span className="hq-overline hq-overline--accent">Theory Training</span>
+            <h2 className="hq-section-title">9 Ground School Subjects</h2>
           </div>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1.5rem'
-          }}>
-            {modules.map((module, index) => (
-              <div key={index} style={{
-                background: '#fff',
-                padding: '2rem',
-                borderRadius: 'var(--radius-lg)',
-                boxShadow: 'var(--shadow-light)',
-                transition: 'transform 0.3s, box-shadow 0.3s'
-              }}>
-                <div style={{
-                  width: '50px',
-                  height: '50px',
-                  background: 'rgba(224,74,47,0.1)',
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginBottom: '1rem'
-                }}>
-                  <i className={`fas ${module.icon}`} style={{
-                    fontSize: '1.25rem',
-                    color: 'var(--hq-accent)'
-                  }}></i>
-                </div>
-                <h3 style={{
-                  fontSize: '1rem',
-                  fontWeight: 700,
-                  marginBottom: '0.5rem'
-                }}>{module.title}</h3>
-                <p style={{
-                  fontSize: '0.85rem',
-                  color: 'var(--hq-body)',
-                  lineHeight: 1.6,
-                  margin: 0
-                }}>{module.description}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>01</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Air Law</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Regulations &amp; procedures</p>
               </div>
-            ))}
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>02</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Navigation</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Charts &amp; flight planning</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>03</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Meteorology</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Weather understanding</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>04</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Human Performance</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Physiology &amp; psychology</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>05</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Principles of Flight</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Aerodynamics</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>06</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Operations</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Flight procedures</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>07</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Performance</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Weight &amp; balance</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>08</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Communications</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Radio procedures</p>
+              </div>
+            </div>
+            <div style={{ background: 'var(--hq-background)', padding: '1.25rem', borderRadius: '8px', display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <div style={{ width: '40px', height: '40px', background: 'var(--hq-primary)', color: '#fff', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--font-mono)', fontSize: '0.8rem', flexShrink: 0 }}>09</div>
+              <div>
+                <h4 style={{ fontSize: '0.9rem', fontWeight: 600 }}>Aircraft Knowledge</h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--hq-muted)', margin: 0 }}>Systems &amp; engines</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
