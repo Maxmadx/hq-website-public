@@ -2274,6 +2274,180 @@ const styles = `
   width: auto;
 }
 
+/* ========== SECTION 17: AIRCRAFT CARDS ========== */
+.maint-aircraft {
+  padding: 0 2rem 5rem;
+}
+
+.maint-aircraft__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.maint-aircraft__card {
+  border-left: 3px solid #1a1a1a;
+  padding-left: 1rem;
+}
+
+.maint-aircraft__image {
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.maint-aircraft__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.maint-aircraft__card:hover .maint-aircraft__image img {
+  transform: scale(1.05);
+}
+
+.maint-aircraft__model {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.maint-aircraft__notes {
+  font-size: 0.75rem;
+  color: #888;
+}
+
+@media (max-width: 900px) {
+  .maint-aircraft__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .maint-aircraft__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== SECTION 18-19: TEAM ========== */
+.maint-team {
+  padding: 5rem 2rem;
+  background: #faf9f6;
+}
+
+.maint-profile {
+  max-width: 600px;
+  margin: 0 auto;
+  background: #ffffff;
+  border-left: 3px solid #1a1a1a;
+  padding: 2rem;
+  display: flex;
+  gap: 1.5rem;
+}
+
+.maint-profile__image {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.maint-profile__image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.maint-profile__name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.maint-profile__title {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.maint-profile__stats {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e8e6e2;
+}
+
+.maint-profile__stat-value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.25rem;
+  display: block;
+}
+
+.maint-profile__stat-label {
+  font-size: 0.65rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.maint-profile__bio {
+  font-size: 0.9rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 500px) {
+  .maint-profile {
+    flex-direction: column;
+    text-align: center;
+  }
+  .maint-profile__image {
+    margin: 0 auto;
+  }
+  .maint-profile__stats {
+    justify-content: center;
+  }
+}
+
+.maint-team-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 600px;
+  margin: 2rem auto 0;
+}
+
+.maint-team-member {
+  background: #ffffff;
+  border-left: 2px solid #1a1a1a;
+  padding: 0.75rem 1rem;
+  min-width: 140px;
+}
+
+.maint-team-member__name {
+  font-size: 0.75rem;
+  font-weight: 600;
+  margin: 0 0 0.1rem;
+}
+
+.maint-team-member__role {
+  font-size: 0.6rem;
+  color: #888;
+}
+
 /* === 05. SERVICES === */
 .maint-services {
   padding: 4rem 2rem;
@@ -3907,6 +4081,100 @@ function FinalMaintenance() {
             <Reveal key={logo} delay={i * 0.1}>
               <div className="maint-logos__item">
                 <img src={`/assets/images/logos/${logo}-logo.png`} alt={logo.toUpperCase()} />
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 15: PARALLAX - FLEET ========== */}
+      <ParallaxSection
+        image="/assets/images/facility/hq-aviation-robinsons.jpg"
+        number="03"
+        label="Supported Models"
+        largeText="FLEET"
+      />
+
+      {/* ========== SECTION 16: AIRCRAFT HEADER ========== */}
+      <section className="maint-section">
+        <div className="maint-container maint-container--narrow" style={{ textAlign: 'center' }}>
+          <Reveal>
+            <span className="maint-pre-text">Supported Aircraft</span>
+            <h2 className="maint-headline">
+              <span className="maint-text--dark">Robinson </span>
+              <span className="maint-text--mid">& </span>
+              <span className="maint-text--light">Guimbal</span>
+            </h2>
+            <p className="maint-body" style={{ margin: '0 auto' }}>
+              We provide full maintenance support for the complete Robinson range
+              and Guimbal Cabri G2.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 17: AIRCRAFT CARDS ========== */}
+      <section className="maint-aircraft">
+        <div className="maint-aircraft__grid">
+          {[
+            { model: 'Robinson R22', image: '/assets/images/new-aircraft/r22-beta.webp', notes: 'Beta II, all variants' },
+            { model: 'Robinson R44', image: '/assets/images/new-aircraft/r44-raven.webp', notes: 'Raven, Cadet, Clipper' },
+            { model: 'Robinson R66', image: '/assets/images/new-aircraft/r66-turbine.webp', notes: 'Turbine expertise' },
+            { model: 'Guimbal Cabri G2', image: '/assets/images/new-aircraft/cabri-g2.webp', notes: 'Certified centre' },
+          ].map((a, i) => (
+            <Reveal key={a.model} delay={i * 0.1}>
+              <div className="maint-aircraft__card">
+                <div className="maint-aircraft__image">
+                  <img src={a.image} alt={a.model} />
+                </div>
+                <div className="maint-aircraft__model">{a.model}</div>
+                <div className="maint-aircraft__notes">{a.notes}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 18: CHIEF ENGINEER ========== */}
+      <section className="maint-team">
+        <Reveal>
+          <div className="maint-profile">
+            <div className="maint-profile__image">
+              <img src="/assets/images/team/engineer-chief.jpg" alt="Chief Engineer" />
+            </div>
+            <div className="maint-profile__content">
+              <h3 className="maint-profile__name">David Cross</h3>
+              <span className="maint-profile__title">Chief Engineer</span>
+              <div className="maint-profile__stats">
+                <div>
+                  <span className="maint-profile__stat-value"><AnimatedNumber value={30} />+</span>
+                  <span className="maint-profile__stat-label">Years Experience</span>
+                </div>
+                <div>
+                  <span className="maint-profile__stat-value"><AnimatedNumber value={500} />+</span>
+                  <span className="maint-profile__stat-label">Overhauls Completed</span>
+                </div>
+              </div>
+              <p className="maint-profile__bio">
+                David has been with HQ Aviation since 1995 and leads our team of factory-trained
+                engineers. His expertise spans the complete Robinson range and Guimbal aircraft.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* ========== SECTION 19: TEAM GRID ========== */}
+        <div className="maint-team-grid">
+          {[
+            { name: 'James Mitchell', role: 'Licensed Engineer' },
+            { name: 'Robert Taylor', role: 'Licensed Engineer' },
+            { name: 'Sarah Williams', role: 'Avionics Specialist' },
+            { name: 'Tom Anderson', role: 'Engineering Apprentice' },
+          ].map((member, i) => (
+            <Reveal key={member.name} delay={i * 0.1}>
+              <div className="maint-team-member">
+                <div className="maint-team-member__name">{member.name}</div>
+                <div className="maint-team-member__role">{member.role}</div>
               </div>
             </Reveal>
           ))}
