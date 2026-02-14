@@ -4269,6 +4269,412 @@ const styles = `
   font-size: 0.8rem;
   color: rgba(250,249,246,0.6);
 }
+
+/* ========== SECTION 25: REFURBISHMENT ========== */
+.maint-refurb {
+  padding: 5rem 2rem;
+  background: #faf9f6;
+}
+
+.maint-refurb__container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.maint-refurb__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+}
+
+.maint-refurb__tab {
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  border: 1px solid #e8e6e2;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.maint-refurb__tab:hover {
+  border-color: #1a1a1a;
+}
+
+.maint-refurb__tab--active {
+  background: #1a1a1a;
+  color: #faf9f6;
+  border-color: #1a1a1a;
+}
+
+.maint-refurb__content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.maint-refurb__image {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.maint-refurb__image img {
+  width: 100%;
+  height: auto;
+}
+
+.maint-refurb__text h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.maint-refurb__text p {
+  color: #666;
+  line-height: 1.7;
+}
+
+@media (max-width: 768px) {
+  .maint-refurb__content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== SECTION 26: TURNAROUND & PRICING ========== */
+.maint-pricing {
+  padding: 5rem 2rem;
+  background: #ffffff;
+}
+
+.maint-pricing__grid {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr;
+  gap: 3rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.maint-pricing__divider {
+  background: #e8e6e2;
+}
+
+.maint-pricing__col h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+}
+
+.maint-pricing__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.maint-pricing__list li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 0.9rem;
+}
+
+.maint-pricing__list li span:last-child {
+  font-family: 'Share Tech Mono', monospace;
+  color: #666;
+}
+
+.maint-pricing__text {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.maint-pricing__btn {
+  display: inline-block;
+  padding: 0.875rem 1.75rem;
+  background: #1a1a1a;
+  color: #faf9f6;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+.maint-pricing__btn:hover {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .maint-pricing__grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .maint-pricing__divider {
+    display: none;
+  }
+}
+
+/* ========== SECTION 27: LOCATION ========== */
+.maint-location {
+  padding: 5rem 2rem;
+  background: #faf9f6;
+}
+
+.maint-location__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.maint-location__map {
+  height: 180px;
+  background: #e8e6e2;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.maint-location__map-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  color: #888;
+  letter-spacing: 0.1em;
+}
+
+.maint-location__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.maint-location__col h4 {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 0.75rem;
+}
+
+.maint-location__col p {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .maint-location__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== SECTION 29: CTA ========== */
+.maint-cta {
+  background: #1a1a1a;
+  color: #faf9f6;
+  padding: 5rem 2rem;
+}
+
+.maint-cta__container {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+/* Service Ticket */
+.maint-ticket {
+  background: #faf9f6;
+  color: #1a1a1a;
+  border-radius: 8px;
+  overflow: hidden;
+  width: 280px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+}
+
+.maint-ticket__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px dashed #e8e6e2;
+}
+
+.maint-ticket__logo {
+  height: 20px;
+  width: auto;
+}
+
+.maint-ticket__type {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  color: #888;
+}
+
+.maint-ticket__class {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  background: #1a1a1a;
+  color: #faf9f6;
+  padding: 0.25rem 0.5rem;
+  border-radius: 2px;
+}
+
+.maint-ticket__route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 1rem;
+}
+
+.maint-ticket__point {
+  text-align: center;
+}
+
+.maint-ticket__code {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.maint-ticket__city {
+  display: block;
+  font-size: 0.65rem;
+  color: #888;
+  margin-top: 0.25rem;
+}
+
+.maint-ticket__arrow {
+  color: #ccc;
+}
+
+.maint-ticket__perf {
+  height: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 8px,
+    #e8e6e2 8px,
+    #e8e6e2 16px
+  );
+  position: relative;
+}
+
+.maint-ticket__perf::before,
+.maint-ticket__perf::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background: #1a1a1a;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.maint-ticket__perf::before { left: -10px; }
+.maint-ticket__perf::after { right: -10px; }
+
+.maint-ticket__stub {
+  padding: 1rem;
+  background: #f5f4f2;
+}
+
+.maint-ticket__stub-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.maint-ticket__stub-row > div {
+  text-align: center;
+}
+
+.maint-ticket__lbl {
+  display: block;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  color: #888;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.maint-ticket__stub-row span:not(.maint-ticket__lbl) {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.maint-cta__content {
+  max-width: 500px;
+}
+
+.maint-cta__headline {
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.maint-cta__body {
+  color: rgba(250,249,246,0.7);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.maint-cta__buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.maint-cta__btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: transform 0.2s;
+}
+
+.maint-cta__btn:hover {
+  transform: translateY(-2px);
+}
+
+.maint-cta__btn--primary {
+  background: #faf9f6;
+  color: #1a1a1a;
+}
+
+.maint-cta__btn--outline {
+  background: transparent;
+  color: #faf9f6;
+  border: 1px solid rgba(250,249,246,0.3);
+}
+
+@media (max-width: 900px) {
+  .maint-cta__container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .maint-ticket {
+    margin: 0 auto;
+  }
+  .maint-cta__buttons {
+    justify-content: center;
+  }
+}
 `;
 
 // ============================================
@@ -4278,6 +4684,24 @@ const styles = `
 function FinalMaintenance() {
   const [activeInspection, setActiveInspection] = useState(0);
   const [openAccordion, setOpenAccordion] = useState(null);
+  const [activeRefurb, setActiveRefurb] = useState('interior');
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const refurbOptions = [
+    { id: 'interior', title: 'Interior Refurbishment', desc: 'Complete interior overhaul including seats, carpets, panels, and headliners. We source premium materials to match or exceed original specifications.', image: '/assets/images/facility/interior-refurb.jpg' },
+    { id: 'paint', title: 'Exterior Paint', desc: 'Custom paint schemes, touch-ups, or full repaints. Our paint facility delivers showroom finishes with industry-leading durability.', image: '/assets/images/facility/paint-booth.jpg' },
+    { id: 'avionics', title: 'Avionics Upgrades', desc: 'Modern glass cockpits, upgraded navigation systems, and the latest safety equipment. We handle everything from basic radio swaps to complete panel overhauls.', image: '/assets/images/facility/avionics-panel.jpg' },
+    { id: 'corrosion', title: 'Corrosion Treatment', desc: 'Comprehensive corrosion prevention and repair services. We identify, treat, and protect against corrosion to extend your aircraft\'s service life.', image: '/assets/images/facility/corrosion-treatment.jpg' },
+  ];
+
+  const faqs = [
+    { id: '01', q: 'How long does a 100-hour inspection take?', a: 'Typically 2-3 working days, depending on any additional work required. We\'ll provide a detailed timeline with your quote.' },
+    { id: '02', q: 'Do you provide loan aircraft?', a: 'We can arrange loan aircraft through our network of partners. Contact us to discuss availability and terms.' },
+    { id: '03', q: 'Can you collect my aircraft?', a: 'Yes, we offer ferry services throughout the UK and Europe. Our experienced pilots can collect and deliver your aircraft.' },
+    { id: '04', q: 'What\'s included in an annual?', a: 'A complete airworthiness review including all scheduled maintenance items, AD compliance check, and full documentation.' },
+    { id: '05', q: 'Do you work on other helicopter types?', a: 'We specialize in Robinson and Guimbal aircraft. For other types, please contact us to discuss your requirements.' },
+    { id: '06', q: 'What about warranty work?', a: 'As an authorized service centre, we handle all warranty claims directly with the manufacturers.' },
+  ];
 
   const inspections = [
     {
@@ -4747,23 +5171,208 @@ function FinalMaintenance() {
         </div>
       </section>
 
-      {/* 05 */ } <ServicesGrid />
-      {/* 05B */} <RebuildsSection />
-      {/* 05C */} <WeBuySection />
-      {/* 06 */ } <Timeline />
-      {/* 07 */ } <CertificationBadges />
-      {/* 08 */ } <ProcessFlow />
-      {/* 09 */ } <TeamProfiles />
-      {/* 11 */ } <FacilityShowcase />
-      {/* 12 */ } <EquipmentGallery />
-      {/* 14 */ } <MaintenanceSchedule />
-      {/* 15 */ } <PartsInventory />
-      {/* 16 */ } <ServiceComparison />
-      {/* 17 */ } <FAQAccordion />
-      {/* 18 */ } <ContactCTA />
-      {/* 19 */ } <TrustIndicators />
-      {/* 20 */ } <EmergencySupport />
+      {/* ========== SECTION 25: REFURBISHMENT ========== */}
+      <section className="maint-refurb">
+        <div className="maint-refurb__container">
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <Reveal>
+              <span className="maint-pre-text">Restoration Services</span>
+              <h2 className="maint-headline">
+                <span className="maint-text--dark">Aircraft </span>
+                <span className="maint-text--light">Refurbishment</span>
+              </h2>
+            </Reveal>
+          </div>
 
+          <div className="maint-refurb__tabs">
+            {refurbOptions.map((opt) => (
+              <button
+                key={opt.id}
+                className={`maint-refurb__tab ${activeRefurb === opt.id ? 'maint-refurb__tab--active' : ''}`}
+                onClick={() => setActiveRefurb(opt.id)}
+              >
+                {opt.title}
+              </button>
+            ))}
+          </div>
+
+          <div className="maint-refurb__content">
+            <div className="maint-refurb__image">
+              <img src={refurbOptions.find(r => r.id === activeRefurb).image} alt={refurbOptions.find(r => r.id === activeRefurb).title} />
+            </div>
+            <div className="maint-refurb__text">
+              <h3>{refurbOptions.find(r => r.id === activeRefurb).title}</h3>
+              <p>{refurbOptions.find(r => r.id === activeRefurb).desc}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== SECTION 26: TURNAROUND & PRICING ========== */}
+      <section className="maint-pricing">
+        <div className="maint-pricing__grid">
+          <div className="maint-pricing__col">
+            <Reveal>
+              <h3>Typical Turnaround</h3>
+              <ul className="maint-pricing__list">
+                <li><span>50-Hour Inspection</span><span>1-2 days</span></li>
+                <li><span>100-Hour Inspection</span><span>2-3 days</span></li>
+                <li><span>Annual Inspection</span><span>3-5 days</span></li>
+                <li><span>2200-Hour Overhaul</span><span>4-6 weeks</span></li>
+                <li><span>AOG Response</span><span>Same day</span></li>
+              </ul>
+            </Reveal>
+          </div>
+          <div className="maint-pricing__divider" />
+          <div className="maint-pricing__col">
+            <Reveal delay={0.2}>
+              <h3>Transparent Pricing</h3>
+              <p className="maint-pricing__text">
+                We provide detailed quotes for all work before commencement.
+                No hidden fees, no surprises. Just honest, professional service.
+              </p>
+              <Link to="/contact" className="maint-pricing__btn">Request a Quote</Link>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== SECTION 27: LOCATION ========== */}
+      <section className="maint-location">
+        <div className="maint-location__container">
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <Reveal>
+              <span className="maint-pre-text">Visit Us</span>
+              <h2 className="maint-headline">
+                <span className="maint-text--dark">Denham </span>
+                <span className="maint-text--light">Aerodrome</span>
+              </h2>
+            </Reveal>
+          </div>
+
+          <Reveal>
+            <div className="maint-location__map">
+              <span className="maint-location__map-text">51.5751°N • 0.5059°W</span>
+            </div>
+          </Reveal>
+
+          <p className="maint-body" style={{ textAlign: 'center', margin: '0 auto 2rem' }}>
+            Our purpose-built maintenance facility offers modern workshops,
+            climate-controlled storage, and easy access from London.
+          </p>
+
+          <div className="maint-location__grid">
+            <Reveal>
+              <div className="maint-location__col">
+                <h4>Address</h4>
+                <p>
+                  HQ Aviation<br />
+                  Tilehouse Lane<br />
+                  Denham, UB9 5DF
+                </p>
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <div className="maint-location__col">
+                <h4>Getting Here</h4>
+                <p>
+                  5 min from M40 J1<br />
+                  20 min from M25 J16<br />
+                  On-site parking available
+                </p>
+              </div>
+            </Reveal>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== SECTION 28: FAQ ========== */}
+      <section className="maint-accordion maint-section--alt">
+        <div className="maint-accordion__container">
+          <div className="maint-accordion__header">
+            <Reveal>
+              <span className="maint-pre-text">Common Questions</span>
+              <h2 className="maint-headline">
+                <span className="maint-text--dark">Frequently </span>
+                <span className="maint-text--light">Asked</span>
+              </h2>
+            </Reveal>
+          </div>
+          {faqs.map((faq) => (
+            <div
+              key={faq.id}
+              className={`maint-accordion__item ${openFaq === faq.id ? 'maint-accordion__item--open' : ''}`}
+            >
+              <button
+                className="maint-accordion__trigger"
+                onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
+              >
+                <span className="maint-accordion__num">{faq.id}</span>
+                <span className="maint-accordion__title">{faq.q}</span>
+                <span className="maint-accordion__icon" />
+              </button>
+              <div className="maint-accordion__content">
+                <p className="maint-accordion__text">{faq.a}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 29: CTA ========== */}
+      <section className="maint-cta">
+        <div className="maint-cta__container">
+          <Reveal direction="left">
+            <div className="maint-ticket">
+              <div className="maint-ticket__header">
+                <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ" className="maint-ticket__logo" />
+                <span className="maint-ticket__type">SERVICE TICKET</span>
+                <span className="maint-ticket__class">MAINT</span>
+              </div>
+              <div className="maint-ticket__route">
+                <div className="maint-ticket__point">
+                  <span className="maint-ticket__code">AIRCRAFT</span>
+                  <span className="maint-ticket__city">Current</span>
+                </div>
+                <div className="maint-ticket__arrow">
+                  <svg width="24" height="8" viewBox="0 0 24 8" fill="none">
+                    <path d="M0 4H22M22 4L18 1M22 4L18 7" stroke="currentColor" strokeWidth="1"/>
+                  </svg>
+                </div>
+                <div className="maint-ticket__point">
+                  <span className="maint-ticket__code">AIRWORTHY</span>
+                  <span className="maint-ticket__city">Certified</span>
+                </div>
+              </div>
+              <div className="maint-ticket__perf" />
+              <div className="maint-ticket__stub">
+                <div className="maint-ticket__stub-row">
+                  <div><span className="maint-ticket__lbl">TYPE</span><span>Inspection</span></div>
+                  <div><span className="maint-ticket__lbl">BAY</span><span>01</span></div>
+                  <div><span className="maint-ticket__lbl">ETA</span><span>TBD</span></div>
+                </div>
+              </div>
+            </div>
+          </Reveal>
+
+          <Reveal direction="right">
+            <div className="maint-cta__content">
+              <span className="maint-pre-text" style={{ color: 'rgba(250,249,246,0.5)' }}>Ready to Schedule?</span>
+              <h2 className="maint-cta__headline">Book Your Service</h2>
+              <p className="maint-cta__body">
+                Contact our maintenance team to discuss your requirements and schedule
+                your next inspection or service.
+              </p>
+              <div className="maint-cta__buttons">
+                <Link to="/contact" className="maint-cta__btn maint-cta__btn--primary">Contact Maintenance</Link>
+                <Link to="/contact" className="maint-cta__btn maint-cta__btn--outline">Request Quote</Link>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 30: FOOTER ========== */}
       <FooterMinimal />
     </div>
   );
