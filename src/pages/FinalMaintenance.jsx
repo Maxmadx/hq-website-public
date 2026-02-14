@@ -227,6 +227,42 @@ function MaintenanceHeader() {
 }
 
 // ============================================
+// PARALLAX IMAGE SECTION WITH WAVE OVERLAYS
+// ============================================
+
+function ParallaxSection({ image, number, label, largeText }) {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ['-15%', '15%']);
+
+  return (
+    <section ref={ref} className="maint-parallax">
+      <motion.div className="maint-parallax__bg" style={{ y }}>
+        <img src={image} alt="" />
+      </motion.div>
+      <div className="maint-parallax__overlay" />
+
+      {/* Wave overlays */}
+      <svg className="maint-parallax__wave maint-parallax__wave--top" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,50 C360,100 1080,0 1440,50 L1440,0 L0,0 Z" fill="#faf9f6"/>
+      </svg>
+      <svg className="maint-parallax__wave maint-parallax__wave--bottom" viewBox="0 0 1440 100" preserveAspectRatio="none">
+        <path d="M0,50 C360,0 1080,100 1440,50 L1440,100 L0,100 Z" fill="#ffffff"/>
+      </svg>
+
+      <div className="maint-parallax__content">
+        <span className="maint-parallax__number">— {number} —</span>
+        <span className="maint-parallax__label">{label}</span>
+        <span className="maint-parallax__large">{largeText}</span>
+      </div>
+    </section>
+  );
+}
+
+// ============================================
 // COMPONENT 01: HERO WITH STATUS BOARD
 // ============================================
 
@@ -2019,6 +2055,192 @@ const styles = `
   letter-spacing: 0.1em;
 }
 
+/* ========== PARALLAX SECTIONS ========== */
+.maint-parallax {
+  position: relative;
+  height: 400px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maint-parallax__bg {
+  position: absolute;
+  inset: -15%;
+  z-index: 0;
+}
+
+.maint-parallax__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.maint-parallax__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 1;
+}
+
+.maint-parallax__wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100px;
+  z-index: 2;
+}
+
+.maint-parallax__wave--top {
+  top: 0;
+}
+
+.maint-parallax__wave--bottom {
+  bottom: 0;
+}
+
+.maint-parallax__content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  color: #faf9f6;
+}
+
+.maint-parallax__number {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.maint-parallax__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,249,246,0.7);
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.maint-parallax__large {
+  font-size: clamp(4rem, 12vw, 9rem);
+  font-weight: 600;
+  text-transform: uppercase;
+  opacity: 0.7;
+  letter-spacing: 0.05em;
+  -webkit-text-stroke: 1px rgba(250,249,246,0.3);
+  color: transparent;
+}
+
+/* ========== SECTION 6-7: CORE SERVICES ========== */
+.maint-core-services {
+  background: #ffffff;
+  padding: 5rem 2rem;
+}
+
+.maint-core-services__header {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 3rem;
+}
+
+.maint-core-services__headline {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.maint-core-services__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: #e8e6e2;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.maint-core-services__card {
+  background: #ffffff;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: transform 0.3s ease;
+}
+
+.maint-core-services__card:hover {
+  transform: translateY(-3px);
+}
+
+.maint-core-services__num {
+  width: 44px;
+  height: 44px;
+  background: #1a1a1a;
+  color: #faf9f6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.maint-core-services__text h4 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.maint-core-services__text p {
+  font-size: 0.75rem;
+  color: #666;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ========== SECTION 8: PARTS BADGE ========== */
+.maint-badge {
+  display: flex;
+  justify-content: center;
+  padding: 2rem;
+  background: #ffffff;
+}
+
+.maint-badge__inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid #e8e6e2;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.maint-badge__label {
+  color: #666;
+}
+
+.maint-badge__tag {
+  background: #1a1a1a;
+  color: #faf9f6;
+  padding: 0.25rem 0.75rem;
+  border-radius: 2px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+}
+
+@media (max-width: 768px) {
+  .maint-core-services__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* === 05. SERVICES === */
 .maint-services {
   padding: 4rem 2rem;
@@ -3564,6 +3786,67 @@ function FinalMaintenance() {
       {/* 02 */ } <ScrollProgress />
       {/* 03 */ } <StatsStrip />
       {/* 04 */ } <PhilosophySection />
+
+      {/* ========== SECTION 5: PARALLAX - HANGAR ========== */}
+      <ParallaxSection
+        image="/assets/images/facility/maintenance-hangar.jpg"
+        number="01"
+        label="Factory Trained"
+        largeText="MAINTENANCE"
+      />
+
+      {/* ========== SECTION 6-7: CORE SERVICES ========== */}
+      <section className="maint-core-services">
+        <div className="maint-core-services__header">
+          <Reveal>
+            <span className="maint-pre-text">Our Services</span>
+            <h2 className="maint-core-services__headline">
+              <span className="maint-text--dark">9 </span>
+              <span className="maint-text--mid">Core </span>
+              <span className="maint-text--light">Services</span>
+            </h2>
+            <p className="maint-body" style={{ margin: '0 auto' }}>
+              Comprehensive maintenance solutions for Robinson and Guimbal helicopters,
+              delivered by factory-trained engineers using genuine parts.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="maint-core-services__grid">
+          {[
+            { num: '01', title: '50-Hour Inspections', desc: 'Routine checks to maintain airworthiness' },
+            { num: '02', title: '100-Hour Inspections', desc: 'Comprehensive scheduled maintenance' },
+            { num: '03', title: 'Annual Inspections', desc: 'Full yearly airworthiness review' },
+            { num: '04', title: '2200-Hour Overhauls', desc: 'Complete engine and component overhaul' },
+            { num: '05', title: 'Component Repairs', desc: 'Expert repair of all aircraft systems' },
+            { num: '06', title: 'Avionics Services', desc: 'Navigation, communication, and displays' },
+            { num: '07', title: 'Pre-Purchase Inspections', desc: 'Thorough evaluation before purchase' },
+            { num: '08', title: 'AOG Support', desc: 'Emergency Aircraft on Ground assistance' },
+            { num: '09', title: 'Refurbishment', desc: 'Interior and exterior restoration' },
+          ].map((service, i) => (
+            <Reveal key={service.num} delay={i * 0.05}>
+              <div className="maint-core-services__card">
+                <span className="maint-core-services__num">{service.num}</span>
+                <div className="maint-core-services__text">
+                  <h4>{service.title}</h4>
+                  <p>{service.desc}</p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 8: PARTS BADGE ========== */}
+      <div className="maint-badge">
+        <Reveal>
+          <div className="maint-badge__inner">
+            <span className="maint-badge__label">All Services Include</span>
+            <span className="maint-badge__tag">GENUINE PARTS</span>
+          </div>
+        </Reveal>
+      </div>
+
       {/* 05 */ } <ServicesGrid />
       {/* 05B */} <RebuildsSection />
       {/* 05C */} <WeBuySection />
