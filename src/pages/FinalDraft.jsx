@@ -13,7 +13,7 @@
  * - hero-74: Varying font colors (luxury feel)
  */
 
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 
@@ -51,6 +51,7 @@ import { ScrollingStrips } from '../components';
 function StaggeredDropdownTrigger({ isOpen, onClick, images, variation }) {
   const triggerRef = useRef(null);
   const isInView = useInView(triggerRef, { once: false, amount: 0.5 });
+  const isGhost = variation?.ghostStyle;
 
   const { scrollYProgress } = useScroll({
     target: triggerRef,
@@ -64,75 +65,77 @@ function StaggeredDropdownTrigger({ isOpen, onClick, images, variation }) {
   return (
     <motion.button
       ref={triggerRef}
-      className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--staggered ${isOpen ? 'open' : ''}`}
+      className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--staggered ${isGhost ? 'fd-why-fly-dropdown__trigger--staggered-ghost' : ''} ${isOpen ? 'open' : ''}`}
       onClick={onClick}
       style={{
-        background: useTransform(springGradient, (v) =>
-          `linear-gradient(${135 + v * 20}deg, #0a0a0a ${v * 10}%, #1a1a1a ${50 + v * 10}%, #0f0f0f 100%)`
-        ),
+        background: isGhost
+          ? 'transparent'
+          : useTransform(springGradient, (v) =>
+              `linear-gradient(${135 + v * 20}deg, #0a0a0a ${v * 10}%, #1a1a1a ${50 + v * 10}%, #0f0f0f 100%)`
+            ),
       }}
     >
       {/* Full Width Image Strip */}
-      <div className="fd-why-fly-dropdown__staggered-images">
+      <div className={`fd-why-fly-dropdown__staggered-images ${isGhost ? 'fd-why-fly-dropdown__staggered-images--ghost' : ''}`}>
         {images.map((src, idx) => (
           <motion.div
             key={idx}
-            className="fd-why-fly-dropdown__staggered-img"
+            className={`fd-why-fly-dropdown__staggered-img ${isGhost ? 'fd-why-fly-dropdown__staggered-img--ghost' : ''}`}
             style={{ backgroundImage: `url(${src})` }}
             initial={{
-              y: idx % 2 === 0 ? -40 : 40,
-              scale: 0.9,
-              opacity: 0.5
+              y: isGhost ? 0 : (idx % 2 === 0 ? -40 : 40),
+              scale: isGhost ? 1 : 0.85,
+              opacity: isGhost ? 0.15 : 0.5
             }}
             animate={{
-              y: isInView ? 0 : (idx % 2 === 0 ? -40 : 40),
-              scale: isInView ? 1 : 0.9,
-              opacity: isInView ? 0.75 : 0.5
+              y: isInView ? 0 : (isGhost ? 0 : (idx % 2 === 0 ? -40 : 40)),
+              scale: isInView ? 1 : (isGhost ? 1 : 0.85),
+              opacity: isInView ? (isGhost ? 0.25 : 0.75) : (isGhost ? 0.15 : 0.5)
             }}
             transition={{
-              duration: 1,
-              delay: idx * 0.08,
-              ease: [0.25, 0.1, 0.25, 1]
+              duration: isGhost ? 0.6 : 1,
+              delay: isGhost ? 0 : idx * 0.08,
+              ease: 'easeOut'
             }}
           />
         ))}
       </div>
 
-      {/* Centered Text with Shadow */}
-      <div className="fd-why-fly-dropdown__staggered-content">
+      {/* Centered Text */}
+      <div className={`fd-why-fly-dropdown__staggered-content ${isGhost ? 'fd-why-fly-dropdown__staggered-content--ghost' : ''}`}>
         <motion.span
-          className="fd-why-fly-dropdown__staggered-title"
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: isInView ? 1 : 0, scale: isInView ? 1 : 0.95 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
+          className={`fd-why-fly-dropdown__staggered-title ${isGhost ? 'fd-why-fly-dropdown__staggered-title--ghost' : ''}`}
+          initial={{ opacity: isGhost ? 0.8 : 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.3 }}
         >
           Why We Fly Helicopters?
         </motion.span>
         <motion.span
-          className="fd-why-fly-dropdown__staggered-hint"
+          className={`fd-why-fly-dropdown__staggered-hint ${isGhost ? 'fd-why-fly-dropdown__staggered-hint--ghost' : ''}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: isInView ? 1 : 0 }}
           transition={{ duration: 0.4, delay: 0.5 }}
         >
-          Click to Discover
+          {isGhost ? 'click to find out' : 'Click to Discover'}
         </motion.span>
       </div>
 
       {/* Chevron */}
       <motion.div
-        className="fd-why-fly-dropdown__staggered-chevron"
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: isInView ? 1 : 0, y: isInView ? 0 : -10 }}
-        transition={{ duration: 0.4, delay: 0.6 }}
+        className={`fd-why-fly-dropdown__staggered-chevron ${isGhost ? 'fd-why-fly-dropdown__staggered-chevron--ghost' : ''}`}
+        initial={{ opacity: isGhost ? 0.6 : 0 }}
+        animate={{ opacity: isGhost ? 0.8 : (isInView ? 1 : 0) }}
+        transition={{ duration: 0.3 }}
       >
         <svg
           className={`fd-why-fly-dropdown__chevron ${isOpen ? 'open' : ''}`}
-          width="24"
-          height="24"
+          width={isGhost ? '16' : '24'}
+          height={isGhost ? '16' : '24'}
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#fff"
-          strokeWidth="2"
+          stroke={isGhost ? '#999' : '#fff'}
+          strokeWidth={isGhost ? '1.5' : '2'}
         >
           <path d="M6 9l6 6 6-6" />
         </svg>
@@ -478,9 +481,44 @@ function FinalDraft() {
   const [trainingSlide, setTrainingSlide] = useState(2); // Start on Commercial
   const [whyFlyOpen, setWhyFlyOpen] = useState(false);
   const [whyFlySlide, setWhyFlySlide] = useState(0);
-  const [whyFlyVariation, setWhyFlyVariation] = useState(18); // Start on Film Strip (v19)
+  const [whyFlyVariation, setWhyFlyVariation] = useState(18); // Film Strip (v19)
   const [visibleImages, setVisibleImages] = useState(8);
   const whyFlyTriggerRef = useRef(null);
+
+  // Dynamic image count based on available space
+  useEffect(() => {
+    const MIN_IMAGE_WIDTH = 55;
+    const GAP = 8;
+    const CENTER_WIDTH = 250;
+
+    const calculateVisibleImages = () => {
+      const trigger = whyFlyTriggerRef.current;
+      if (!trigger) return;
+
+      const triggerWidth = trigger.getBoundingClientRect().width;
+      const availablePerSide = (triggerWidth - CENTER_WIDTH) / 2;
+      const maxImages = Math.floor(availablePerSide / (MIN_IMAGE_WIDTH + GAP));
+      const clamped = Math.max(0, Math.min(8, maxImages));
+
+      setVisibleImages(clamped);
+    };
+
+    // Run on mount and resize
+    calculateVisibleImages();
+    window.addEventListener('resize', calculateVisibleImages);
+
+    // Also use ResizeObserver for more accurate tracking
+    let observer;
+    if (whyFlyTriggerRef.current) {
+      observer = new ResizeObserver(calculateVisibleImages);
+      observer.observe(whyFlyTriggerRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', calculateVisibleImages);
+      if (observer) observer.disconnect();
+    };
+  }, []);
 
   // 20 variations of the collapsed dropdown - different layouts, styles, and arrangements
   const whyFlyVariations = [
@@ -714,7 +752,7 @@ function FinalDraft() {
       titleSize: '0.9rem',
       padding: '1.75rem 2rem',
       imageStyle: 'filmstrip',
-      borderStyle: 'sprocket'
+      borderStyle: 'none'
     },
     {
       id: 20,
@@ -731,17 +769,243 @@ function FinalDraft() {
     },
     {
       id: 21,
-      name: 'Staggered Flow',
-      bg: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%)',
+      name: 'Ghost Flow',
+      bg: 'transparent',
       layout: 'fullwidth-staggered',
       showLeftImages: false,
       showRightImages: false,
       showFullWidthImages: true,
-      titleSize: '1.1rem',
+      titleSize: '0.8rem',
+      titleColor: '#333',
       padding: '0',
-      imageStyle: 'staggered',
+      imageStyle: 'minimal',
       borderStyle: 'none',
-      scrollAnimation: true
+      ghostStyle: true
+    },
+    // ===== COMPACT VARIATIONS (22-40) =====
+    {
+      id: 22,
+      name: 'Compact Dark',
+      bg: '#0a0a0a',
+      layout: 'compact',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.75rem',
+      padding: '0.75rem 1.5rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 23,
+      name: 'Compact Light',
+      bg: '#f5f5f5',
+      layout: 'compact',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.75rem',
+      titleColor: '#1a1a1a',
+      padding: '0.75rem 1.5rem',
+      borderStyle: 'thin-bottom'
+    },
+    {
+      id: 24,
+      name: 'Slim Navy',
+      bg: '#1a3a52',
+      layout: 'compact',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 25,
+      name: 'Pill Dark',
+      bg: '#1a1a1a',
+      layout: 'compact-pill',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.5rem 2rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 26,
+      name: 'Pill Light',
+      bg: '#ffffff',
+      layout: 'compact-pill',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      titleColor: '#1a1a1a',
+      padding: '0.5rem 2rem',
+      borderStyle: 'outline'
+    },
+    {
+      id: 27,
+      name: 'Underline',
+      bg: 'transparent',
+      layout: 'compact-underline',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.8rem',
+      titleColor: '#1a1a1a',
+      padding: '0.75rem 0',
+      borderStyle: 'underline'
+    },
+    {
+      id: 28,
+      name: 'Tag Dark',
+      bg: '#2d2d2d',
+      layout: 'compact-tag',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.65rem',
+      padding: '0.4rem 1rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 29,
+      name: 'Tag Outline',
+      bg: 'transparent',
+      layout: 'compact-tag',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.65rem',
+      titleColor: '#1a1a1a',
+      padding: '0.4rem 1rem',
+      borderStyle: 'outline-dark'
+    },
+    {
+      id: 30,
+      name: 'Bar Minimal',
+      bg: '#faf9f6',
+      layout: 'compact-bar',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      titleColor: '#666',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'top-line'
+    },
+    {
+      id: 31,
+      name: 'Bar Dark',
+      bg: '#1a1a1a',
+      layout: 'compact-bar',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 32,
+      name: 'Link Style',
+      bg: 'transparent',
+      layout: 'compact-link',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.8rem',
+      titleColor: '#1a3a52',
+      padding: '0.5rem 0',
+      borderStyle: 'none',
+      fontStyle: 'underline'
+    },
+    {
+      id: 33,
+      name: 'Mono Compact',
+      bg: '#1a1a1a',
+      layout: 'compact',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.65rem',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'none',
+      fontStyle: 'mono'
+    },
+    {
+      id: 34,
+      name: 'Accent Left',
+      bg: '#faf9f6',
+      layout: 'compact-accent',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.75rem',
+      titleColor: '#1a1a1a',
+      padding: '0.75rem 1.5rem',
+      borderStyle: 'accent-left-thin',
+      accentColor: '#1a3a52'
+    },
+    {
+      id: 35,
+      name: 'Dot Indicator',
+      bg: '#1a1a1a',
+      layout: 'compact-dot',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'none',
+      accentColor: '#4ade80'
+    },
+    {
+      id: 36,
+      name: 'Chevron Only',
+      bg: 'transparent',
+      layout: 'compact-chevron',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.75rem',
+      titleColor: '#1a1a1a',
+      padding: '0.5rem 1rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 37,
+      name: 'Split Tone',
+      bg: 'linear-gradient(90deg, #1a1a1a 50%, #2d2d2d 50%)',
+      layout: 'compact',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.6rem 1.5rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 38,
+      name: 'Filled Rounded',
+      bg: '#1a3a52',
+      layout: 'compact-rounded',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      padding: '0.6rem 1.75rem',
+      borderStyle: 'none'
+    },
+    {
+      id: 39,
+      name: 'Outline Rounded',
+      bg: 'transparent',
+      layout: 'compact-rounded',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.7rem',
+      titleColor: '#1a3a52',
+      padding: '0.6rem 1.75rem',
+      borderStyle: 'outline-navy'
+    },
+    {
+      id: 40,
+      name: 'Inline Text',
+      bg: 'transparent',
+      layout: 'compact-inline',
+      showLeftImages: false,
+      showRightImages: false,
+      titleSize: '0.85rem',
+      titleColor: '#1a1a1a',
+      padding: '0.5rem 0',
+      borderStyle: 'none',
+      fontStyle: 'inline'
     },
   ];
 
@@ -870,46 +1134,7 @@ function FinalDraft() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Dynamic image calculation for Film Strip variation
-  useEffect(() => {
-    const MIN_IMAGE_WIDTH = 55;
-    const GAP = 8;
-    const CENTER_WIDTH = 200; // Approximate center content width
-
-    const calculateVisibleImages = () => {
-      const trigger = whyFlyTriggerRef.current;
-      if (!trigger) return;
-
-      const triggerWidth = trigger.getBoundingClientRect().width;
-      const padding = 48; // Total horizontal padding
-      const availableWidth = triggerWidth - CENTER_WIDTH - padding;
-      const availablePerSide = availableWidth / 2;
-      const maxImages = Math.floor((availablePerSide + GAP) / (MIN_IMAGE_WIDTH + GAP));
-      const clamped = Math.max(0, Math.min(8, maxImages));
-
-      setVisibleImages(clamped);
-    };
-
-    // Initial calculation
-    calculateVisibleImages();
-
-    // Listen for window resize
-    window.addEventListener('resize', calculateVisibleImages);
-
-    // Use ResizeObserver for more precise tracking
-    let observer;
-    if (whyFlyTriggerRef.current) {
-      observer = new ResizeObserver(calculateVisibleImages);
-      observer.observe(whyFlyTriggerRef.current);
-    }
-
-    return () => {
-      window.removeEventListener('resize', calculateVisibleImages);
-      if (observer) observer.disconnect();
-    };
-  }, []);
-
-
+  
   useEffect(() => {
     const handleScroll = () => {
       if (!containerRef.current) return;
@@ -1331,24 +1556,6 @@ function FinalDraft() {
 
           {/* ===== WHY FLY A HELICOPTER DROPDOWN ===== */}
           <div className="fd-why-fly-dropdown">
-            {/* Variation Picker */}
-            <div className="fd-why-fly-dropdown__picker">
-              <div className="fd-why-fly-dropdown__picker-info">
-                <span className="fd-why-fly-dropdown__picker-label">Variation</span>
-                <span className="fd-why-fly-dropdown__picker-name">{whyFlyVariations[whyFlyVariation].name}</span>
-                <span className="fd-why-fly-dropdown__picker-counter">{whyFlyVariation + 1} / {whyFlyVariations.length}</span>
-              </div>
-              <div className="fd-why-fly-dropdown__picker-nav">
-                <button
-                  className="fd-why-fly-dropdown__picker-btn"
-                  onClick={() => setWhyFlyVariation(prev => prev === 0 ? whyFlyVariations.length - 1 : prev - 1)}
-                >←</button>
-                <button
-                  className="fd-why-fly-dropdown__picker-btn"
-                  onClick={() => setWhyFlyVariation(prev => prev === whyFlyVariations.length - 1 ? 0 : prev + 1)}
-                >→</button>
-              </div>
-            </div>
             {whyFlyVariations[whyFlyVariation].layout === 'fullwidth-staggered' ? (
               /* Staggered Flow Layout */
               <StaggeredDropdownTrigger
@@ -1358,11 +1565,14 @@ function FinalDraft() {
                 variation={whyFlyVariations[whyFlyVariation]}
               />
             ) : (
-              /* Standard Layouts - Film Strip v19 with dynamic images */
+              /* Standard Layouts */
               <button
                 ref={whyFlyTriggerRef}
-                className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--filmstrip-v19 ${whyFlyOpen ? 'open' : ''}`}
+                className={`fd-why-fly-dropdown__trigger ${whyFlyOpen ? 'open' : ''}`}
                 onClick={() => setWhyFlyOpen(!whyFlyOpen)}
+                style={{
+                  background: whyFlyVariations[whyFlyVariation].bg,
+                }}
               >
                 {/* Left Images */}
                 <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--left">
@@ -1371,8 +1581,8 @@ function FinalDraft() {
                     '/assets/images/expeditions/north-pole.jpg',
                     '/assets/images/facility/hq-0089.jpg',
                     '/assets/images/expeditions/antartica.jpg',
-                    '/assets/images/facility/hq-0053.jpg',
                     '/assets/images/expeditions/channel.jpg',
+                    '/assets/images/facility/hq-0035.jpg',
                     '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
                     '/assets/images/facility/busy-hangar.jpg'
                   ].slice(0, visibleImages).map((src, idx) => (
@@ -1389,8 +1599,8 @@ function FinalDraft() {
                   <span className="fd-why-fly-dropdown__title">
                     Why We Fly Helicopters?
                   </span>
-                  <div className="fd-why-fly-dropdown__click-hint">
-                    <span className="fd-why-fly-dropdown__click-text">click here</span>
+                  <div className="fd-why-fly-dropdown__click-row">
+                    <span className="fd-why-fly-dropdown__click-hint">click here</span>
                     <span className="fd-why-fly-dropdown__pulse-dot"></span>
                   </div>
                 </div>
@@ -1399,13 +1609,13 @@ function FinalDraft() {
                 <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--right">
                   {[
                     '/assets/images/facility/hq-0035.jpg',
+                    '/assets/images/expeditions/channel.jpg',
+                    '/assets/images/facility/busy-hangar.jpg',
                     '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-                    '/assets/images/gallery/carousel/rotating-4.jpg',
-                    '/assets/images/expeditions/world-helicopter-champion-quentin-smith.webp',
-                    '/assets/images/facility/hq-0007.jpg',
-                    '/assets/images/expeditions/yacht-landing.jpg',
-                    '/assets/images/facility/hq-0075.jpg',
-                    '/assets/images/lifestyle/q-dubai.jpg'
+                    '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
+                    '/assets/images/facility/hq-0089.jpg',
+                    '/assets/images/expeditions/north-pole.jpg',
+                    '/assets/images/expeditions/antartica.jpg'
                   ].slice(0, visibleImages).map((src, idx) => (
                     <div
                       key={idx}
@@ -1414,6 +1624,7 @@ function FinalDraft() {
                     />
                   ))}
                 </div>
+
               </button>
             )}
 
@@ -2702,6 +2913,11 @@ function FinalDraft() {
             0 8px 20px rgba(0, 0, 0, 0.15);
         }
 
+        .fd-why-fly-dropdown--ghost {
+          background: transparent;
+          box-shadow: none;
+        }
+
         /* Variation Picker */
         .fd-why-fly-dropdown__picker {
           position: absolute;
@@ -2815,11 +3031,6 @@ function FinalDraft() {
           opacity: 0.3;
         }
 
-        .fd-why-fly-dropdown__trigger-thumbs--filmstrip .fd-why-fly-dropdown__thumb {
-          aspect-ratio: 4 / 3;
-          border: 3px solid #1a1a1a;
-          border-radius: 0;
-        }
 
         .fd-why-fly-dropdown__trigger-thumbs--framed .fd-why-fly-dropdown__thumb {
           border: 2px solid var(--accent-color, #c9a227);
@@ -3065,17 +3276,267 @@ function FinalDraft() {
           filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
         }
 
+        /* ===== GHOST FLOW STYLES ===== */
+        /* Ghost Flow - Minimal */
+        .fd-why-fly-dropdown__staggered-images--ghost {
+          opacity: 1;
+        }
+
+        .fd-why-fly-dropdown__staggered-img--ghost {
+          opacity: 0.08;
+          filter: grayscale(100%);
+          border-radius: 0;
+        }
+
+        .fd-why-fly-dropdown__trigger--staggered:hover .fd-why-fly-dropdown__staggered-img--ghost {
+          opacity: 0.15;
+          filter: grayscale(60%);
+        }
+
+        .fd-why-fly-dropdown__staggered-content--ghost {
+          background: transparent;
+          border: none;
+          padding: 0;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .fd-why-fly-dropdown__staggered-title--ghost {
+          color: #1a1a1a;
+          font-family: 'Space Grotesk', -apple-system, sans-serif;
+          font-size: 0.75rem;
+          font-weight: 500;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          text-shadow:
+            0 0 20px rgba(250, 249, 246, 0.9),
+            0 0 40px rgba(250, 249, 246, 0.6);
+        }
+
+        .fd-why-fly-dropdown__staggered-hint--ghost {
+          color: #999;
+          font-family: 'Space Grotesk', -apple-system, sans-serif;
+          font-size: 0.6rem;
+          font-weight: 400;
+          letter-spacing: 0.15em;
+          text-transform: lowercase;
+          text-shadow:
+            0 0 15px rgba(250, 249, 246, 0.8),
+            0 0 30px rgba(250, 249, 246, 0.5);
+        }
+
+        .fd-why-fly-dropdown__staggered-chevron--ghost {
+          display: none;
+        }
+
+        .fd-why-fly-dropdown__trigger--staggered-ghost {
+          min-height: 70px;
+          background: transparent !important;
+        }
+
+        .fd-why-fly-dropdown__trigger--staggered-ghost .fd-why-fly-dropdown__staggered-img {
+          box-shadow: none;
+        }
+
+        .fd-why-fly-dropdown__trigger--staggered-ghost:hover .fd-why-fly-dropdown__staggered-img {
+          box-shadow: none;
+        }
+
+        /* ===== COMPACT VARIATIONS ===== */
+        .fd-why-fly-dropdown__trigger--compact {
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-pill {
+          width: auto;
+          margin: 0 auto;
+          border-radius: 100px;
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-tag {
+          width: auto;
+          margin: 0 auto;
+          border-radius: 4px;
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-bar {
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-underline {
+          min-height: auto;
+          background: transparent !important;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-link {
+          min-height: auto;
+          width: auto;
+          margin: 0 auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-accent {
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-dot {
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-dot::before {
+          content: '';
+          position: absolute;
+          left: 1rem;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: var(--accent-color, #4ade80);
+          animation: compactDotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes compactDotPulse {
+          0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
+          50% { opacity: 0.6; transform: translateY(-50%) scale(0.8); }
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-chevron {
+          min-height: auto;
+          width: auto;
+          margin: 0 auto;
+          gap: 0.5rem;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-rounded {
+          width: auto;
+          margin: 0 auto;
+          border-radius: 8px;
+          min-height: auto;
+        }
+
+        .fd-why-fly-dropdown__trigger--compact-inline {
+          min-height: auto;
+          width: auto;
+          margin: 0 auto;
+          gap: 0.75rem;
+        }
+
+        /* Compact Border Styles */
+        .fd-why-fly-dropdown__trigger--border-thin-bottom {
+          border-bottom: 1px solid #e5e5e5;
+        }
+
+        .fd-why-fly-dropdown__trigger--border-outline {
+          border: 1px solid #e5e5e5;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .fd-why-fly-dropdown__trigger--border-outline-dark {
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-why-fly-dropdown__trigger--border-outline-navy {
+          border: 1.5px solid #1a3a52;
+        }
+
+        .fd-why-fly-dropdown__trigger--border-underline {
+          border-bottom: 2px solid #1a1a1a;
+        }
+
+        .fd-why-fly-dropdown__trigger--border-top-line {
+          border-top: 1px solid #e5e5e5;
+        }
+
+        .fd-why-fly-dropdown__trigger--border-accent-left-thin {
+          border-left: 3px solid var(--accent-color, #1a3a52);
+        }
+
+        .fd-why-fly-dropdown__trigger--border-dashed-light {
+          border: 1px dashed rgba(0,0,0,0.15);
+        }
+
+        /* Compact Font Styles */
+        .fd-why-fly-dropdown__trigger--font-underline .fd-why-fly-dropdown__title {
+          text-decoration: underline;
+          text-underline-offset: 3px;
+        }
+
+        .fd-why-fly-dropdown__trigger--font-inline .fd-why-fly-dropdown__title {
+          font-weight: 400;
+          text-transform: none;
+          letter-spacing: 0;
+        }
+
+        .fd-why-fly-dropdown__trigger--font-inline .fd-why-fly-dropdown__title::after {
+          content: ' →';
+          opacity: 0.5;
+          transition: opacity 0.2s ease;
+        }
+
+        .fd-why-fly-dropdown__trigger--font-inline:hover .fd-why-fly-dropdown__title::after {
+          opacity: 1;
+        }
+
+        /* Compact layout adjustments */
+        .fd-why-fly-dropdown__trigger--compact .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-pill .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-tag .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-bar .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-underline .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-link .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-accent .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-dot .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-chevron .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-rounded .fd-why-fly-dropdown__trigger-center,
+        .fd-why-fly-dropdown__trigger--compact-inline .fd-why-fly-dropdown__trigger-center {
+          position: static;
+          transform: none;
+        }
+
+        /* Compact chevron sizing */
+        .fd-why-fly-dropdown__trigger--compact .fd-why-fly-dropdown__chevron,
+        .fd-why-fly-dropdown__trigger--compact-pill .fd-why-fly-dropdown__chevron,
+        .fd-why-fly-dropdown__trigger--compact-tag .fd-why-fly-dropdown__chevron,
+        .fd-why-fly-dropdown__trigger--compact-bar .fd-why-fly-dropdown__chevron,
+        .fd-why-fly-dropdown__trigger--compact-rounded .fd-why-fly-dropdown__chevron {
+          width: 14px;
+          height: 14px;
+        }
+
+        /* Hide hint on compact variations */
+        .fd-why-fly-dropdown__trigger--compact .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-pill .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-tag .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-bar .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-underline .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-link .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-accent .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-dot .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-chevron .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-rounded .fd-why-fly-dropdown__hint,
+        .fd-why-fly-dropdown__trigger--compact-inline .fd-why-fly-dropdown__hint {
+          display: none;
+        }
+
+        /* Hide chevron on link and inline styles */
+        .fd-why-fly-dropdown__trigger--compact-link .fd-why-fly-dropdown__trigger-right,
+        .fd-why-fly-dropdown__trigger--compact-inline .fd-why-fly-dropdown__trigger-right,
+        .fd-why-fly-dropdown__trigger--compact-underline .fd-why-fly-dropdown__trigger-right {
+          display: none;
+        }
+
         .fd-why-fly-dropdown__trigger {
           width: 100%;
-          display: flex;
+          display: grid;
+          grid-template-columns: 1fr auto 1fr;
           align-items: center;
-          justify-content: center;
-          padding: 2rem 2.5rem;
+          padding: 1rem 1.5rem;
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
+          min-height: 160px;
         }
 
         .fd-why-fly-dropdown__trigger:hover {
@@ -3101,10 +3562,11 @@ function FinalDraft() {
 
         .fd-why-fly-dropdown__trigger-center {
           display: flex;
+          flex-direction: column;
           align-items: center;
           justify-content: center;
-          flex-shrink: 0;
-          padding: 0 1.5rem;
+          padding: 1rem 3rem;
+          gap: 0.25rem;
         }
 
         .fd-why-fly-dropdown__title {
@@ -3114,6 +3576,44 @@ function FinalDraft() {
           text-transform: uppercase;
           letter-spacing: 0.1em;
           color: #fff;
+        }
+
+        .fd-why-fly-dropdown__click-row {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+          margin-top: 0.25rem;
+        }
+
+        .fd-why-fly-dropdown__click-hint {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.6rem;
+          font-weight: 400;
+          letter-spacing: 0.15em;
+          text-transform: lowercase;
+          color: rgba(255, 255, 255, 0.5);
+        }
+
+        .fd-why-fly-dropdown__pulse-dot {
+          width: 8px;
+          height: 8px;
+          background: rgba(255, 255, 255, 0.8);
+          border-radius: 50%;
+          animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseDot {
+          0%, 100% {
+            opacity: 0.4;
+            transform: scale(1);
+            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+          }
+          50% {
+            opacity: 1;
+            transform: scale(1.2);
+            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+          }
         }
 
         .fd-why-fly-dropdown__trigger-divider {
@@ -3145,43 +3645,40 @@ function FinalDraft() {
 
         .fd-why-fly-dropdown__trigger-thumbs {
           display: flex;
-          align-items: stretch;
-          gap: 0;
-          position: absolute;
-          top: 0;
-          bottom: 0;
+          align-items: center;
+          gap: 0.5rem;
+          flex: 1;
+          height: 120px;
         }
 
         .fd-why-fly-dropdown__trigger-thumbs--left {
-          left: 1.5rem;
-          gap: 0.5rem;
-        }
-
-        .fd-why-fly-dropdown__trigger-thumbs--left .fd-why-fly-dropdown__thumb {
-          border-right: none;
-          border-radius: 3px;
+          justify-content: flex-end;
         }
 
         .fd-why-fly-dropdown__trigger-thumbs--right {
-          right: 1.5rem;
-          gap: 0.5rem;
+          justify-content: flex-start;
         }
 
         .fd-why-fly-dropdown__thumb {
+          flex: 1;
+          min-width: 55px;
           height: 100%;
-          aspect-ratio: 3 / 5;
           background-size: cover;
           background-position: center;
           opacity: 0.7;
-          transition: opacity 0.3s ease;
-          border-right: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 45px;
+          transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
+          filter: brightness(0.85);
         }
 
-        .fd-why-fly-dropdown__trigger-thumbs--right .fd-why-fly-dropdown__thumb {
-          border-right: none;
-          border-left: none;
-          border-radius: 3px;
+        .fd-why-fly-dropdown__thumb:hover {
+          transform: scale(1.08);
+          opacity: 1;
+          filter: brightness(1.1);
+          z-index: 2;
         }
+
+
 
         .fd-why-fly-dropdown__trigger:hover .fd-why-fly-dropdown__thumb {
           opacity: 0.85;
@@ -3190,174 +3687,6 @@ function FinalDraft() {
         .fd-why-fly-dropdown__thumb:hover {
           opacity: 1;
         }
-
-        /* ===== FILM STRIP V19 STYLES ===== */
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 {
-          width: 100%;
-          display: grid;
-          grid-template-columns: 1fr auto 1fr;
-          align-items: center;
-          padding: 1rem 1.5rem;
-          background: #0a0a0a;
-          border: none;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          min-height: 140px;
-          overflow: visible;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs {
-          position: relative;
-          top: auto;
-          bottom: auto;
-          left: auto;
-          right: auto;
-          display: flex;
-          align-items: stretch;
-          gap: 8px;
-          height: 110px;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs--left {
-          justify-content: flex-end;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs--right {
-          justify-content: flex-start;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__thumb {
-          flex: 1;
-          min-width: 55px;
-          max-width: 120px;
-          height: 100%;
-          background-size: cover;
-          background-position: center;
-          opacity: 0.75;
-          border-radius: 45px;
-          border: none;
-          transition: transform 0.3s ease, opacity 0.3s ease, filter 0.3s ease;
-          filter: brightness(0.85);
-          aspect-ratio: auto;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__thumb:hover {
-          transform: scale(1.08);
-          opacity: 1;
-          filter: brightness(1.15);
-          z-index: 2;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-center {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 0 2rem;
-          text-align: center;
-          position: relative;
-          flex-shrink: 0;
-        }
-
-        .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__title {
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.95rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          color: #fff;
-          text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-          margin-bottom: 0.75rem;
-          white-space: nowrap;
-        }
-
-        .fd-why-fly-dropdown__click-hint {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.5rem;
-        }
-
-        .fd-why-fly-dropdown__click-text {
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 0.7rem;
-          font-weight: 400;
-          text-transform: lowercase;
-          letter-spacing: 0.15em;
-          color: rgba(255, 255, 255, 0.5);
-        }
-
-        .fd-why-fly-dropdown__pulse-dot {
-          width: 8px;
-          height: 8px;
-          background: rgba(255, 255, 255, 0.8);
-          border-radius: 50%;
-          animation: pulseDot 2s ease-in-out infinite;
-        }
-
-        @keyframes pulseDot {
-          0%, 100% {
-            opacity: 0.4;
-            transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
-          }
-          50% {
-            opacity: 1;
-            transform: scale(1.2);
-            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
-          }
-        }
-
-        /* Film Strip V19 Responsive */
-        @media (max-width: 768px) {
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 {
-            grid-template-columns: auto 1fr;
-            padding: 1rem;
-            min-height: 100px;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-center {
-            align-items: flex-start;
-            text-align: left;
-            padding: 0 0 0 1.5rem;
-            order: 1;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs--left {
-            display: none;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs--right {
-            order: 2;
-            height: 80px;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__click-hint {
-            flex-direction: row;
-            gap: 0.75rem;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__title {
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__thumb {
-            border-radius: 30px;
-          }
-        }
-
-        @media (max-width: 500px) {
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__trigger-thumbs--right {
-            height: 70px;
-          }
-
-          .fd-why-fly-dropdown__trigger--filmstrip-v19 .fd-why-fly-dropdown__thumb {
-            border-radius: 20px;
-            min-width: 45px;
-          }
-        }
-        /* ===== END FILM STRIP V19 STYLES ===== */
 
         .fd-why-fly-dropdown__trigger-right {
           display: flex;
@@ -3574,18 +3903,26 @@ function FinalDraft() {
           }
 
           .fd-why-fly-dropdown__trigger {
+            grid-template-columns: auto 1fr;
             padding: 1rem 1.5rem;
           }
 
-          .fd-why-fly-dropdown__trigger-left,
-          .fd-why-fly-dropdown__hint,
-          .fd-why-fly-dropdown__trigger-thumbs,
-          .fd-why-fly-dropdown__picker {
+          .fd-why-fly-dropdown__trigger-thumbs--left {
             display: none;
           }
 
-          .fd-why-fly-dropdown__trigger {
-            padding: 1rem 1.5rem;
+          .fd-why-fly-dropdown__trigger-center {
+            align-items: flex-start;
+            text-align: left;
+          }
+
+          .fd-why-fly-dropdown__trigger-thumbs--right {
+            justify-content: flex-end;
+          }
+
+          .fd-why-fly-dropdown__click-row {
+            flex-direction: row;
+            align-items: center;
           }
 
           .fd-why-fly-dropdown__trigger-center {
@@ -3614,6 +3951,15 @@ function FinalDraft() {
 
           .fd-why-fly-dropdown__staggered-img:nth-child(n+6) {
             display: none;
+          }
+
+          .fd-why-fly-dropdown__staggered-content--ghost {
+            padding: 0;
+          }
+
+          .fd-why-fly-dropdown__staggered-chevron--ghost {
+            width: auto;
+            height: auto;
           }
 
           .fd-why-fly-dropdown__body,

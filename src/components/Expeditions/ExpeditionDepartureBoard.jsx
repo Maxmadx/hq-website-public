@@ -20,8 +20,9 @@ const defaultFlights = [
   { code: 'HQ-004', dest: 'NORWAY', status: 'COMPLETED', distance: '650nm', year: '2018' },
   { code: 'HQ-005', dest: 'ALPS', status: 'COMPLETED', distance: '500nm', year: '2020' },
   { code: 'HQ-006', dest: 'GREENLAND', status: 'COMPLETED', distance: '2,100nm', year: '2023' },
-  { code: 'HQ-007', dest: 'BAHAMAS', status: 'SCHEDULED', distance: '4,200nm', year: '2025' },
-  { code: 'HQ-008', dest: 'COSTA RICA', status: 'PLANNING', distance: '5,100nm', year: '2026' },
+  { code: 'HQ-007', dest: 'BAHAMAS', status: 'UPCOMING', distance: '4,200nm', year: '2025' },
+  { code: 'HQ-008', dest: 'COSTA RICA', status: 'UPCOMING', distance: '5,100nm', year: '2026' },
+  { code: 'HQ-009', dest: 'PATAGONIA', status: 'UPCOMING', distance: '7,800nm', year: '2027' },
 ];
 
 function ExpeditionDepartureBoard({
@@ -237,6 +238,12 @@ function ExpeditionDepartureBoard({
           background: rgba(59, 130, 246, 0.2);
           color: #60a5fa;
           border: 1px solid rgba(96, 165, 250, 0.3);
+        }
+
+        .exp-board__status--upcoming {
+          background: rgba(168, 85, 247, 0.2);
+          color: #c084fc;
+          border: 1px solid rgba(192, 132, 252, 0.3);
         }
 
         .exp-board__status--cancelled {

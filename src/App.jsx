@@ -34,6 +34,7 @@ import SelfFlyHire from './pages/SelfFlyHire';
 import FinalMaintenance from './pages/FinalMaintenance';
 import Sitemap from './pages/Sitemap';
 import JourneyPicker from './pages/JourneyPicker';
+import VideoSliderPicker from './pages/VideoSliderPicker';
 
 // Import styles
 import './assets/css/main.css';
@@ -67,6 +68,7 @@ function App() {
         <Route path="/journey-lines-picker" element={<JourneyLinesPicker />} />
         <Route path="/sitemap" element={<Sitemap />} />
         <Route path="/journey-picker" element={<JourneyPicker />} />
+        <Route path="/video-slider-picker" element={<VideoSliderPicker />} />
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

@@ -760,6 +760,9 @@ function GalleryGrid() {
             </Reveal>
           ))}
         </div>
+
+        {/* Barcode manifest embedded in gallery */}
+        <ExpeditionBarcode />
       </div>
 
       {selectedImage && (
@@ -1620,36 +1623,53 @@ function FinalExpeditions() {
       <section className="fexp-leader-quote">
         <div className="fexp-leader-quote__container">
           <Reveal delay={0.1}>
-            <div className="fexp-leader-quote__layout">
-              <div className="fexp-leader-quote__left">
-                <div className="fexp-leader-quote__header">
-                  <div className="fexp-leader-quote__image">
-                    <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Captain Quentin Smith" />
-                  </div>
-                  <div>
-                    <span className="fexp-pre-text fexp-pre-text--light">Your Expedition Leader</span>
-                    <h3>Captain Quentin Smith</h3>
-                  </div>
+            <div className="fexp-leader-quote__card">
+              {/* Decorative flight path SVG */}
+              <svg className="fexp-leader-quote__path" viewBox="0 0 400 200" preserveAspectRatio="none">
+                <path d="M0,100 Q100,20 200,100 T400,100" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+              </svg>
+
+              <div className="fexp-leader-quote__portrait">
+                <div className="fexp-leader-quote__portrait-ring">
+                  <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Captain Quentin Smith" />
                 </div>
+                <div className="fexp-leader-quote__compass">
+                  <svg viewBox="0 0 40 40">
+                    <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="0.5" />
+                    <line x1="20" y1="4" x2="20" y2="8" stroke="currentColor" strokeWidth="1" />
+                    <line x1="20" y1="32" x2="20" y2="36" stroke="currentColor" strokeWidth="1" />
+                    <line x1="4" y1="20" x2="8" y2="20" stroke="currentColor" strokeWidth="1" />
+                    <line x1="32" y1="20" x2="36" y2="20" stroke="currentColor" strokeWidth="1" />
+                    <text x="20" y="14" textAnchor="middle" fontSize="4" fill="currentColor">N</text>
+                  </svg>
+                </div>
+              </div>
+
+              <div className="fexp-leader-quote__content">
+                <span className="fexp-leader-quote__role">Your Expedition Leader</span>
+                <h3 className="fexp-leader-quote__name">Captain Quentin Smith</h3>
                 <blockquote className="fexp-leader-quote__quote">
                   "{featuredQuote.text}"
                 </blockquote>
-                <Link to="/about-us/captain-q" className="fexp-btn fexp-btn--outline fexp-btn--light fexp-btn--sm">
-                  Full Biography →
+                <Link to="/about-us/captain-q" className="fexp-leader-quote__cta">
+                  Full Biography <span>→</span>
                 </Link>
               </div>
-              <div className="fexp-leader-quote__right">
-                <div className="fexp-leader-quote__stat-card">
-                  <span className="fexp-leader-quote__stat-value"><AnimatedNumber value="18000" />+</span>
-                  <span className="fexp-leader-quote__stat-label">Flight Hours</span>
+
+              <div className="fexp-leader-quote__stats">
+                <div className="fexp-leader-quote__stat">
+                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="18000" />+</span>
+                  <span className="fexp-leader-quote__stat-text">Flight Hours</span>
                 </div>
-                <div className="fexp-leader-quote__stat-card">
-                  <span className="fexp-leader-quote__stat-value"><AnimatedNumber value="7" /></span>
-                  <span className="fexp-leader-quote__stat-label">Continents Flown</span>
+                <div className="fexp-leader-quote__stat-divider" />
+                <div className="fexp-leader-quote__stat">
+                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="7" /></span>
+                  <span className="fexp-leader-quote__stat-text">Continents</span>
                 </div>
-                <div className="fexp-leader-quote__stat-card">
-                  <span className="fexp-leader-quote__stat-value"><AnimatedNumber value="3" /></span>
-                  <span className="fexp-leader-quote__stat-label">World Records</span>
+                <div className="fexp-leader-quote__stat-divider" />
+                <div className="fexp-leader-quote__stat">
+                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="3" /></span>
+                  <span className="fexp-leader-quote__stat-text">World Records</span>
                 </div>
               </div>
             </div>
@@ -1885,9 +1905,6 @@ function FinalExpeditions() {
 
       {/* ========== TRIP WAITLIST ========== */}
       <TripWaitlistForm />
-
-      {/* ========== EXPEDITION MANIFEST ========== */}
-      <ExpeditionBarcode />
 
       {/* ========== FOOTER ========== */}
       <FooterMinimal />
@@ -2660,10 +2677,17 @@ function FinalExpeditions() {
         }
 
         .fexp-upcoming__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
+          display: flex;
           gap: 1.5rem;
           margin-bottom: 3rem;
+          overflow-x: auto;
+          padding-bottom: 1rem;
+          scroll-snap-type: x mandatory;
+        }
+
+        .fexp-upcoming__grid > div {
+          flex: 0 0 320px;
+          scroll-snap-align: start;
         }
 
         .fexp-upcoming__card {
@@ -2671,6 +2695,9 @@ function FinalExpeditions() {
           border: 1px solid #e8e6e2;
           border-radius: 8px;
           overflow: hidden;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
 
         .fexp-upcoming__image {
@@ -2700,6 +2727,9 @@ function FinalExpeditions() {
 
         .fexp-upcoming__content {
           padding: 1.5rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
         }
 
         .fexp-upcoming__date {
@@ -2721,6 +2751,7 @@ function FinalExpeditions() {
           color: #666;
           line-height: 1.6;
           margin-bottom: 1.25rem;
+          flex: 1;
         }
 
         .fexp-upcoming__cta {
@@ -2915,8 +2946,8 @@ function FinalExpeditions() {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .fexp-upcoming__grid {
-            grid-template-columns: 1fr;
+          .fexp-upcoming__grid > div {
+            flex: 0 0 280px;
           }
         }
 
@@ -4041,125 +4072,207 @@ function FinalExpeditions() {
 
         /* 18. LEADER + QUOTE COMBINED */
         .fexp-leader-quote {
-          padding: 3rem 2rem;
-          background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+          padding: 3.5rem 2rem;
+          background: #faf9f6;
+          position: relative;
         }
 
         .fexp-leader-quote__container {
-          max-width: 1000px;
+          max-width: 900px;
           margin: 0 auto;
         }
 
-        .fexp-leader-quote__layout {
+        .fexp-leader-quote__card {
+          position: relative;
+          background: #fff;
+          border: 1px solid #e8e4d9;
+          border-radius: 2px;
+          padding: 2.5rem;
           display: grid;
-          grid-template-columns: 1fr auto;
-          gap: 3rem;
-          align-items: center;
-          color: #fff;
-        }
-
-        .fexp-leader-quote__left {
-          max-width: 550px;
-        }
-
-        .fexp-leader-quote__header {
-          display: flex;
-          align-items: center;
-          gap: 1.25rem;
-          margin-bottom: 1.25rem;
-        }
-
-        .fexp-leader-quote__image {
-          flex-shrink: 0;
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
+          grid-template-columns: auto 1fr;
+          grid-template-rows: 1fr auto;
+          gap: 2rem 2.5rem;
           overflow: hidden;
-          border: 2px solid rgba(255,255,255,0.2);
         }
 
-        .fexp-leader-quote__image img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
+        .fexp-leader-quote__path {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 60px;
+          color: #d0ccc4;
+          opacity: 0.5;
+          pointer-events: none;
         }
 
-        .fexp-leader-quote__header h3 {
-          font-size: 1.35rem;
-          margin: 0.25rem 0 0;
-          color: #fff;
-        }
-
-        .fexp-leader-quote__quote {
-          font-size: 1rem;
-          line-height: 1.7;
-          font-style: italic;
-          color: rgba(255,255,255,0.8);
-          margin: 0 0 1.25rem;
-        }
-
-        .fexp-leader-quote__right {
+        .fexp-leader-quote__portrait {
+          grid-row: 1;
           display: flex;
           flex-direction: column;
+          align-items: center;
           gap: 0.75rem;
         }
 
-        .fexp-leader-quote__stat-card {
-          background: rgba(255,255,255,0.08);
-          border: 1px solid rgba(255,255,255,0.15);
-          border-radius: 8px;
-          padding: 1rem 1.5rem;
-          text-align: center;
-          min-width: 160px;
+        .fexp-leader-quote__portrait-ring {
+          width: 100px;
+          height: 100px;
+          border-radius: 50%;
+          padding: 3px;
+          background: linear-gradient(135deg, #b8860b 0%, #daa520 50%, #b8860b 100%);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
         }
 
-        .fexp-leader-quote__stat-value {
-          display: block;
-          font-size: 1.75rem;
-          font-weight: 700;
-          color: #fff;
-          font-family: 'Share Tech Mono', monospace;
+        .fexp-leader-quote__portrait-ring img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          border-radius: 50%;
+          border: 2px solid #fff;
         }
 
-        .fexp-leader-quote__stat-label {
+        .fexp-leader-quote__compass {
+          width: 36px;
+          height: 36px;
+          color: #b8860b;
+          opacity: 0.7;
+        }
+
+        .fexp-leader-quote__content {
+          grid-row: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .fexp-leader-quote__role {
+          font-family: 'Space Grotesk', sans-serif;
           font-size: 0.7rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #b8860b;
+          margin-bottom: 0.25rem;
+        }
+
+        .fexp-leader-quote__name {
+          font-family: 'Playfair Display', Georgia, serif;
+          font-size: 1.75rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 1rem;
+          letter-spacing: 0.02em;
+        }
+
+        .fexp-leader-quote__quote {
+          font-family: 'Playfair Display', Georgia, serif;
+          font-size: 1.1rem;
+          font-style: italic;
+          line-height: 1.7;
+          color: #4a4a4a;
+          margin: 0 0 1.25rem;
+          padding-left: 1rem;
+          border-left: 2px solid #daa520;
+        }
+
+        .fexp-leader-quote__cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 500;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: rgba(255,255,255,0.5);
+          color: #1a1a1a;
+          text-decoration: none;
+          transition: all 0.2s ease;
         }
 
-        .fexp-btn--light {
-          border-color: rgba(255,255,255,0.4);
-          color: #fff;
+        .fexp-leader-quote__cta span {
+          transition: transform 0.2s ease;
         }
 
-        .fexp-btn--light:hover {
-          background: rgba(255,255,255,0.1);
-          border-color: #fff;
+        .fexp-leader-quote__cta:hover {
+          color: #b8860b;
         }
 
-        @media (max-width: 800px) {
-          .fexp-leader-quote__layout {
+        .fexp-leader-quote__cta:hover span {
+          transform: translateX(4px);
+        }
+
+        .fexp-leader-quote__stats {
+          grid-column: 1 / -1;
+          grid-row: 2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 2rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid #e8e4d9;
+        }
+
+        .fexp-leader-quote__stat {
+          text-align: center;
+        }
+
+        .fexp-leader-quote__stat-num {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          line-height: 1;
+          margin-bottom: 0.25rem;
+        }
+
+        .fexp-leader-quote__stat-text {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #888;
+        }
+
+        .fexp-leader-quote__stat-divider {
+          width: 1px;
+          height: 30px;
+          background: linear-gradient(180deg, transparent, #d0ccc4, transparent);
+        }
+
+        @media (max-width: 700px) {
+          .fexp-leader-quote__card {
             grid-template-columns: 1fr;
             text-align: center;
+            padding: 2rem 1.5rem;
           }
 
-          .fexp-leader-quote__left {
-            max-width: none;
+          .fexp-leader-quote__portrait {
+            justify-self: center;
           }
 
-          .fexp-leader-quote__header {
-            flex-direction: column;
+          .fexp-leader-quote__content {
+            align-items: center;
           }
 
-          .fexp-leader-quote__right {
-            flex-direction: row;
+          .fexp-leader-quote__quote {
+            border-left: none;
+            padding-left: 0;
+            border-top: 2px solid #daa520;
+            padding-top: 1rem;
+          }
+
+          .fexp-leader-quote__cta {
             justify-content: center;
-            flex-wrap: wrap;
           }
 
-          .fexp-leader-quote__stat-card {
-            min-width: 140px;
+          .fexp-leader-quote__stats {
+            flex-wrap: wrap;
+            gap: 1.5rem;
+          }
+
+          .fexp-leader-quote__stat-divider {
+            display: none;
           }
         }
 
