@@ -1045,10 +1045,10 @@ function FacilityShowcase() {
 function EquipmentGallery() {
   const equipment = [
     { name: 'Vibration Analysis', icon: 'fa-wave-square' },
-    { name: 'NDT Equipment', icon: 'fa-radiation-alt' },
+    { name: 'Track & Balance', icon: 'fa-balance-scale' },
     { name: 'Precision Tooling', icon: 'fa-tools' },
     { name: 'Diagnostic Systems', icon: 'fa-laptop-medical' },
-    { name: 'Lifting Equipment', icon: 'fa-crane' },
+    { name: 'Lifting Equipment', icon: 'fa-arrow-up' },
     { name: 'Cleaning Systems', icon: 'fa-spray-can' },
   ];
 
@@ -1072,68 +1072,6 @@ function EquipmentGallery() {
                 <i className={`fas ${eq.icon}`}></i>
                 <span>{eq.name}</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ============================================
-// COMPONENT 13: TESTIMONIALS
-// ============================================
-
-function Testimonials() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const testimonials = [
-    { quote: "HQ Aviation's attention to detail is unmatched. They treat my R66 as if it were their own.", author: 'James H.', role: 'Private Owner' },
-    { quote: "24/7 support saved us when we had an AOG in France. They had us flying again in 48 hours.", author: 'Sarah M.', role: 'Fleet Manager' },
-    { quote: "Transparent pricing, expert work, and always on schedule. The best in the business.", author: 'Michael R.', role: 'R44 Owner' },
-  ];
-
-  return (
-    <section className="maint-testimonials">
-      <div className="maint-testimonials__container">
-        <Reveal>
-          <div className="maint-section-header">
-            <span className="maint-pre-text">What Clients Say</span>
-            <h2>
-              <span className="maint-text--dark">Trusted </span>
-              <span className="maint-text--mid">by </span>
-              <span className="maint-text--light">Owners</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="maint-testimonials__slider">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeSlide}
-              className="maint-testimonials__slide"
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="maint-testimonials__quote">
-                <i className="fas fa-quote-left"></i>
-                <p>{testimonials[activeSlide].quote}</p>
-              </div>
-              <div className="maint-testimonials__author">
-                <span className="maint-testimonials__name">{testimonials[activeSlide].author}</span>
-                <span className="maint-testimonials__role">{testimonials[activeSlide].role}</span>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          <div className="maint-testimonials__dots">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                className={`maint-testimonials__dot ${activeSlide === i ? 'active' : ''}`}
-                onClick={() => setActiveSlide(i)}
-              />
             ))}
           </div>
         </div>
@@ -1211,8 +1149,8 @@ function PartsInventory() {
           <Reveal>
             <span className="maint-pre-text maint-pre-text--light">Parts Supply</span>
             <h2>
-              <span style={{ color: '#fff' }}>Genuine </span>
-              <span style={{ color: 'rgba(255,255,255,0.7)' }}>Robinson </span>
+              <span style={{ color: '#fff' }}>Factory </span>
+              <span style={{ color: 'rgba(255,255,255,0.7)' }}>Authorized </span>
               <span style={{ color: 'rgba(255,255,255,0.5)' }}>Parts</span>
             </h2>
           </Reveal>
@@ -3144,80 +3082,6 @@ const styles = `
   white-space: nowrap;
 }
 
-/* === 13. TESTIMONIALS === */
-.maint-testimonials {
-  padding: 6rem 2rem;
-  background: #fff;
-}
-
-.maint-testimonials__container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.maint-testimonials__slider {
-  text-align: center;
-}
-
-.maint-testimonials__slide {
-  padding: 2rem;
-}
-
-.maint-testimonials__quote {
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.maint-testimonials__quote i {
-  font-size: 2rem;
-  color: #e8e6e2;
-  margin-bottom: 1rem;
-  display: block;
-}
-
-.maint-testimonials__quote p {
-  font-size: 1.25rem;
-  line-height: 1.7;
-  color: #1a1a1a;
-  font-style: italic;
-}
-
-.maint-testimonials__name {
-  display: block;
-  font-weight: 600;
-  font-size: 1rem;
-}
-
-.maint-testimonials__role {
-  display: block;
-  font-size: 0.75rem;
-  color: #888;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-
-.maint-testimonials__dots {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  margin-top: 2rem;
-}
-
-.maint-testimonials__dot {
-  width: 10px;
-  height: 10px;
-  border: 1px solid #ccc;
-  border-radius: 50%;
-  background: transparent;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.maint-testimonials__dot.active {
-  background: #1a1a1a;
-  border-color: #1a1a1a;
-}
-
 /* === 14. SCHEDULE === */
 .maint-schedule {
   padding: 6rem 2rem;
@@ -4058,7 +3922,6 @@ function FinalMaintenance() {
       {/* 09 */ } <TeamProfiles />
       {/* 11 */ } <FacilityShowcase />
       {/* 12 */ } <EquipmentGallery />
-      {/* 13 */ } <Testimonials />
       {/* 14 */ } <MaintenanceSchedule />
       {/* 15 */ } <PartsInventory />
       {/* 16 */ } <ServiceComparison />
