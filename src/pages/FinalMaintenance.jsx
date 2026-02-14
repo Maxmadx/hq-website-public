@@ -387,11 +387,137 @@ const styles = `
   letter-spacing: 0.15em;
   color: rgba(250,249,246,0.6);
 }
+
+/* ========== SECTION 2: SCROLL PROMPT ========== */
+.maint-scroll-prompt {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  transition: opacity 0.3s ease;
+}
+
+.maint-scroll-prompt--hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.maint-scroll-prompt__text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250,249,246,0.6);
+}
+
+.maint-scroll-prompt__line {
+  width: 1px;
+  height: 50px;
+  background: rgba(250,249,246,0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.maint-scroll-prompt__line::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: rgba(250,249,246,0.8);
+  animation: scrollLine 1.5s ease-in-out infinite;
+}
+
+@keyframes scrollLine {
+  0% { top: -30%; }
+  100% { top: 100%; }
+}
+
+/* ========== SECTION 3: STATS STRIP ========== */
+.maint-stats {
+  background: #1a1a1a;
+  padding: 4rem 2rem;
+}
+
+.maint-stats__container {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.maint-stats__item {
+  text-align: center;
+}
+
+.maint-stats__value {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: #faf9f6;
+  display: block;
+}
+
+.maint-stats__label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250,249,246,0.5);
+  margin-top: 0.5rem;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .maint-stats__container {
+    gap: 2rem;
+  }
+}
+
+/* ========== SECTION 4: PHILOSOPHY ========== */
+.maint-philosophy {
+  padding: 6rem 2rem;
+  background: #faf9f6;
+}
+
+.maint-philosophy__container {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.maint-philosophy__headline {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  margin-bottom: 1.5rem;
+}
+
+.maint-philosophy__body {
+  font-size: 1.1rem;
+  color: #666;
+  line-height: 1.8;
+}
 `;
 
 function FinalMaintenance() {
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  const [showScrollPrompt, setShowScrollPrompt] = useState(true);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShowScrollPrompt(window.scrollY < 100);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
@@ -487,6 +613,55 @@ function FinalMaintenance() {
           >
             51.5751°N • 0.5059°W
           </motion.span>
+        </div>
+      </section>
+
+      {/* ========== SECTION 2: SCROLL PROMPT ========== */}
+      <div className={`maint-scroll-prompt ${!showScrollPrompt ? 'maint-scroll-prompt--hidden' : ''}`}>
+        <span className="maint-scroll-prompt__text">Scroll to explore</span>
+        <div className="maint-scroll-prompt__line" />
+      </div>
+
+      {/* ========== SECTION 3: STATS STRIP ========== */}
+      <section className="maint-stats">
+        <div className="maint-stats__container">
+          <div className="maint-stats__item">
+            <span className="maint-stats__value">
+              <AnimatedNumber value={85} suffix="+" />
+            </span>
+            <span className="maint-stats__label">Aircraft Under Care</span>
+          </div>
+          <div className="maint-stats__item">
+            <span className="maint-stats__value">
+              <AnimatedNumber value={30} suffix="+" />
+            </span>
+            <span className="maint-stats__label">Years Experience</span>
+          </div>
+          <div className="maint-stats__item">
+            <span className="maint-stats__value">
+              <AnimatedNumber value={100} suffix="%" />
+            </span>
+            <span className="maint-stats__label">Genuine Parts</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ========== SECTION 4: PHILOSOPHY ========== */}
+      <section className="maint-philosophy">
+        <div className="maint-philosophy__container">
+          <Reveal>
+            <span className="maint-pre-text">Our Approach</span>
+            <h2 className="maint-philosophy__headline">
+              <span className="maint-text--dark">Where </span>
+              <span className="maint-text--mid">Precision </span>
+              <span className="maint-text--light">Meets Care</span>
+            </h2>
+            <p className="maint-philosophy__body">
+              At HQ Aviation, maintenance isn't just a service—it's a commitment to excellence.
+              Every inspection, every repair, every overhaul is performed with the same meticulous
+              attention to detail that has defined us since 1990.
+            </p>
+          </Reveal>
         </div>
       </section>
 
