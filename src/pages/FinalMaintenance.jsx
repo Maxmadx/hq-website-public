@@ -3899,6 +3899,376 @@ const styles = `
     text-align: center;
   }
 }
+
+/* ========== SECTION 21: INSPECTION STICKY SCROLL ========== */
+.maint-inspect {
+  display: flex;
+  min-height: 300vh;
+}
+
+.maint-inspect__left {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 40%;
+  background: #1a1a1a;
+  color: #faf9f6;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 3rem;
+}
+
+.maint-inspect__number {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 4rem;
+  opacity: 0.3;
+}
+
+.maint-inspect__title {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.maint-inspect__current {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.maint-inspect__dots {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.maint-inspect__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(250,249,246,0.3);
+  transition: background 0.3s;
+}
+
+.maint-inspect__dot--active {
+  background: #faf9f6;
+}
+
+.maint-inspect__right {
+  width: 60%;
+  background: #faf9f6;
+}
+
+.maint-inspect__item {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 4rem;
+}
+
+.maint-inspect__content h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.maint-inspect__content p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.maint-inspect__details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.maint-inspect__detail-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #888;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.maint-inspect__detail-value {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+@media (max-width: 900px) {
+  .maint-inspect {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .maint-inspect__left {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 3rem 2rem;
+  }
+  .maint-inspect__right {
+    width: 100%;
+  }
+  .maint-inspect__item {
+    min-height: auto;
+    padding: 3rem 2rem;
+  }
+}
+
+/* ========== SECTION 22: OVERHAUL ========== */
+.maint-overhaul {
+  padding: 5rem 2rem;
+  background: #ffffff;
+}
+
+.maint-overhaul__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.maint-overhaul__image {
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.maint-overhaul__image img {
+  width: 100%;
+  height: auto;
+}
+
+.maint-overhaul__timeline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #faf9f6;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-top: 1.5rem;
+}
+
+.maint-overhaul__timeline-icon {
+  font-size: 1rem;
+}
+
+.maint-overhaul__timeline-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+}
+
+.maint-overhaul__features {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.maint-overhaul__features li {
+  font-size: 0.85rem;
+  color: #666;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.maint-overhaul__features li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  .maint-overhaul__grid {
+    grid-template-columns: 1fr;
+  }
+  .maint-overhaul__features {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ========== SECTION 23: COMPONENT ACCORDION ========== */
+.maint-accordion {
+  padding: 5rem 2rem;
+  background: #faf9f6;
+}
+
+.maint-accordion__container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.maint-accordion__header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.maint-accordion__item {
+  background: #ffffff;
+  margin-bottom: 1px;
+  overflow: hidden;
+}
+
+.maint-accordion__trigger {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.2s;
+}
+
+.maint-accordion__trigger:hover {
+  background: #faf9f6;
+}
+
+.maint-accordion__num {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: #888;
+  width: 24px;
+}
+
+.maint-accordion__title {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.maint-accordion__icon {
+  width: 20px;
+  height: 20px;
+  position: relative;
+}
+
+.maint-accordion__icon::before,
+.maint-accordion__icon::after {
+  content: '';
+  position: absolute;
+  background: #1a1a1a;
+  transition: transform 0.3s;
+}
+
+.maint-accordion__icon::before {
+  width: 12px;
+  height: 1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.maint-accordion__icon::after {
+  width: 1px;
+  height: 12px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.maint-accordion__item--open .maint-accordion__icon::after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.maint-accordion__content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+}
+
+.maint-accordion__item--open .maint-accordion__content {
+  max-height: 200px;
+}
+
+.maint-accordion__text {
+  padding: 0 1.5rem 1.5rem;
+  padding-left: calc(1.5rem + 24px + 1rem);
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+/* ========== SECTION 24: AOG SUPPORT ========== */
+.maint-aog {
+  background: #1a1a1a;
+  color: #faf9f6;
+  padding: 5rem 2rem;
+  text-align: center;
+}
+
+.maint-aog__container {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.maint-aog__headline {
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.maint-aog__body {
+  color: rgba(250,249,246,0.7);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.maint-aog__phone {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  color: #faf9f6;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 2rem;
+  transition: opacity 0.2s;
+}
+
+.maint-aog__phone:hover {
+  opacity: 0.8;
+}
+
+.maint-aog__btn {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: #faf9f6;
+  color: #1a1a1a;
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.maint-aog__btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+.maint-aog__features {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.maint-aog__feature {
+  font-size: 0.8rem;
+  color: rgba(250,249,246,0.6);
+}
 `;
 
 // ============================================
@@ -3906,8 +4276,58 @@ const styles = `
 // ============================================
 
 function FinalMaintenance() {
+  const [activeInspection, setActiveInspection] = useState(0);
+  const [openAccordion, setOpenAccordion] = useState(null);
+
+  const inspections = [
+    {
+      id: '01',
+      title: '50-Hour Inspection',
+      desc: 'A routine inspection ensuring all critical systems are functioning correctly. Ideal for aircraft in regular use.',
+      duration: '1-2 days',
+      checks: 'Engine, transmission, controls, fluid levels',
+      docs: 'Full compliance report',
+    },
+    {
+      id: '02',
+      title: '100-Hour Inspection',
+      desc: 'Comprehensive scheduled maintenance required for commercial operations and recommended for private use.',
+      duration: '2-3 days',
+      checks: 'All 50-hour items plus deeper inspection',
+      docs: 'Maintenance release certificate',
+    },
+    {
+      id: '03',
+      title: 'Annual Inspection',
+      desc: 'Complete airworthiness review required yearly regardless of flight hours.',
+      duration: '3-5 days',
+      checks: 'Full aircraft inspection, AD compliance',
+      docs: 'Annual airworthiness certificate',
+    },
+  ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
+    const handleInspectScroll = () => {
+      const inspectSection = document.querySelector('.maint-inspect');
+      if (!inspectSection) return;
+
+      const rect = inspectSection.getBoundingClientRect();
+      const sectionHeight = inspectSection.offsetHeight;
+      const scrollInSection = -rect.top;
+      const itemHeight = sectionHeight / 3;
+
+      if (scrollInSection >= 0 && scrollInSection < sectionHeight) {
+        const index = Math.min(2, Math.floor(scrollInSection / itemHeight));
+        setActiveInspection(index);
+      }
+    };
+
+    window.addEventListener('scroll', handleInspectScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleInspectScroll);
   }, []);
 
   return (
@@ -4178,6 +4598,152 @@ function FinalMaintenance() {
               </div>
             </Reveal>
           ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 20: PARALLAX - PRECISION ========== */}
+      <ParallaxSection
+        image="/assets/images/facility/precision-tooling.jpg"
+        number="04"
+        label="Attention to Detail"
+        largeText="PRECISION"
+      />
+
+      {/* ========== SECTION 21: INSPECTION STICKY SCROLL ========== */}
+      <section className="maint-inspect">
+        <div className="maint-inspect__left">
+          <span className="maint-inspect__number">{inspections[activeInspection].id}</span>
+          <span className="maint-inspect__title">INSPECTIONS</span>
+          <span className="maint-inspect__current">{inspections[activeInspection].title}</span>
+          <div className="maint-inspect__dots">
+            {inspections.map((_, i) => (
+              <span
+                key={i}
+                className={`maint-inspect__dot ${i === activeInspection ? 'maint-inspect__dot--active' : ''}`}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="maint-inspect__right">
+          {inspections.map((insp) => (
+            <div key={insp.id} className="maint-inspect__item">
+              <div className="maint-inspect__content">
+                <h3>{insp.title}</h3>
+                <p>{insp.desc}</p>
+                <div className="maint-inspect__details">
+                  <div>
+                    <span className="maint-inspect__detail-label">Duration</span>
+                    <span className="maint-inspect__detail-value">{insp.duration}</span>
+                  </div>
+                  <div>
+                    <span className="maint-inspect__detail-label">Checks</span>
+                    <span className="maint-inspect__detail-value">{insp.checks}</span>
+                  </div>
+                  <div>
+                    <span className="maint-inspect__detail-label">Documentation</span>
+                    <span className="maint-inspect__detail-value">{insp.docs}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 22: OVERHAUL ========== */}
+      <section className="maint-overhaul">
+        <div className="maint-overhaul__grid">
+          <Reveal direction="left">
+            <div className="maint-overhaul__content">
+              <span className="maint-pre-text">Major Service</span>
+              <h2 className="maint-headline">
+                <span className="maint-text--dark">2200-Hour </span>
+                <span className="maint-text--light">Overhaul</span>
+              </h2>
+              <p className="maint-body">
+                At 2200 hours, Robinson helicopters require a complete overhaul.
+                This is a comprehensive process involving disassembly, inspection,
+                repair, and reassembly of major components.
+              </p>
+              <div className="maint-overhaul__timeline">
+                <span className="maint-overhaul__timeline-icon">⏱</span>
+                <span className="maint-overhaul__timeline-text">Typically 4-6 weeks</span>
+              </div>
+              <ul className="maint-overhaul__features">
+                <li>Engine overhaul</li>
+                <li>Transmission rebuild</li>
+                <li>Rotor system inspection</li>
+                <li>Complete documentation</li>
+              </ul>
+            </div>
+          </Reveal>
+          <Reveal direction="right">
+            <div className="maint-overhaul__image">
+              <img src="/assets/images/facility/overhaul-process.jpg" alt="Overhaul" />
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 23: COMPONENT ACCORDION ========== */}
+      <section className="maint-accordion">
+        <div className="maint-accordion__container">
+          <div className="maint-accordion__header">
+            <Reveal>
+              <span className="maint-pre-text">Comprehensive Coverage</span>
+              <h2 className="maint-headline">
+                <span className="maint-text--dark">Component </span>
+                <span className="maint-text--light">Services</span>
+              </h2>
+            </Reveal>
+          </div>
+          {[
+            { id: '01', title: 'Engine Components', details: 'Pistons, cylinders, crankshaft, bearings, camshafts, and valve assemblies.' },
+            { id: '02', title: 'Gearbox & Transmission', details: 'Main rotor gearbox, tail rotor gearbox, freewheeling units, and driveshafts.' },
+            { id: '03', title: 'Rotor Systems', details: 'Main rotor blades, tail rotor blades, hub assemblies, pitch links, and grips.' },
+            { id: '04', title: 'Avionics', details: 'GPS units, radios, transponders, EFDs, autopilots, and weather radar.' },
+            { id: '05', title: 'Electrical Systems', details: 'Wiring harnesses, alternators, batteries, lighting, and circuit breakers.' },
+          ].map((comp) => (
+            <div
+              key={comp.id}
+              className={`maint-accordion__item ${openAccordion === comp.id ? 'maint-accordion__item--open' : ''}`}
+            >
+              <button
+                className="maint-accordion__trigger"
+                onClick={() => setOpenAccordion(openAccordion === comp.id ? null : comp.id)}
+              >
+                <span className="maint-accordion__num">{comp.id}</span>
+                <span className="maint-accordion__title">{comp.title}</span>
+                <span className="maint-accordion__icon" />
+              </button>
+              <div className="maint-accordion__content">
+                <p className="maint-accordion__text">{comp.details}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ========== SECTION 24: AOG SUPPORT ========== */}
+      <section className="maint-aog">
+        <div className="maint-aog__container">
+          <Reveal>
+            <span className="maint-pre-text" style={{ color: 'rgba(250,249,246,0.5)' }}>24/7 Support</span>
+            <h2 className="maint-aog__headline">Aircraft On Ground</h2>
+            <p className="maint-aog__body">
+              When you need us most, we're here. Our AOG support ensures minimal
+              downtime for your aircraft with rapid response and expert diagnosis.
+            </p>
+            <a href="tel:+441234567890" className="maint-aog__phone">
+              +44 (0) 1234 567 890
+            </a>
+            <Link to="/contact" className="maint-aog__btn">Emergency Contact</Link>
+            <div className="maint-aog__features">
+              <span className="maint-aog__feature">Rapid Response</span>
+              <span className="maint-aog__feature">Mobile Service</span>
+              <span className="maint-aog__feature">Parts Network</span>
+            </div>
+          </Reveal>
         </div>
       </section>
 
