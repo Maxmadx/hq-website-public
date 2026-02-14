@@ -2241,6 +2241,101 @@ const styles = `
   }
 }
 
+/* ========== SECTIONS 11-13: CERTIFICATIONS ========== */
+.maint-cert {
+  padding: 4rem 2rem;
+}
+
+.maint-cert__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+.maint-cert__image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.maint-cert__image img {
+  max-width: 200px;
+  height: auto;
+}
+
+.maint-cert__content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 1rem;
+}
+
+.maint-cert__content p {
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.maint-cert__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.maint-cert__list li {
+  position: relative;
+  padding-left: 1.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.maint-cert__list li::before {
+  content: '\u2713';
+  position: absolute;
+  left: 0;
+  color: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  .maint-cert__grid {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+}
+
+/* ========== SECTION 14: LOGOS STRIP ========== */
+.maint-logos {
+  background: #ffffff;
+  padding: 3rem 2rem;
+}
+
+.maint-logos__container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+
+.maint-logos__item {
+  filter: grayscale(100%);
+  opacity: 0.6;
+  transition: all 0.3s ease;
+}
+
+.maint-logos__item:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.maint-logos__item img {
+  height: 50px;
+  width: auto;
+}
+
 /* === 05. SERVICES === */
 .maint-services {
   padding: 4rem 2rem;
@@ -3846,6 +3941,113 @@ function FinalMaintenance() {
           </div>
         </Reveal>
       </div>
+
+      {/* ========== SECTION 9: PARALLAX - EXPERTISE ========== */}
+      <ParallaxSection
+        image="/assets/images/facility/engineer-working.jpg"
+        number="02"
+        label="Expert Team"
+        largeText="EXPERTISE"
+      />
+
+      {/* ========== SECTION 10: CERTIFICATIONS HEADER ========== */}
+      <section className="maint-section">
+        <div className="maint-container maint-container--narrow" style={{ textAlign: 'center' }}>
+          <Reveal>
+            <span className="maint-pre-text">Approved & Certified</span>
+            <h2 className="maint-headline">
+              <span className="maint-text--dark">Industry </span>
+              <span className="maint-text--mid">Leading </span>
+              <span className="maint-text--light">Standards</span>
+            </h2>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 11: EASA PART 145 ========== */}
+      <section className="maint-cert">
+        <div className="maint-cert__grid">
+          <Reveal direction="left">
+            <div className="maint-cert__image">
+              <img src="/assets/images/logos/easa-logo.png" alt="EASA Part 145" />
+            </div>
+          </Reveal>
+          <Reveal direction="right">
+            <div className="maint-cert__content">
+              <h3>EASA Part 145 Maintenance Organisation</h3>
+              <p>
+                HQ Aviation operates a fully EASA Part 145 approved maintenance facility
+                at Denham Aerodrome. This certification represents the highest European
+                standard for aircraft maintenance.
+              </p>
+              <ul className="maint-cert__list">
+                <li>Approved maintenance procedures</li>
+                <li>Quality management system</li>
+                <li>Continuous airworthiness management</li>
+                <li>Trained and qualified personnel</li>
+              </ul>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 12: ROBINSON AUTHORIZED ========== */}
+      <section className="maint-cert maint-section--alt">
+        <div className="maint-cert__grid" style={{ direction: 'rtl' }}>
+          <Reveal direction="right">
+            <div className="maint-cert__content" style={{ direction: 'ltr' }}>
+              <span className="maint-pre-text">Factory Authorized</span>
+              <h3>Robinson Helicopter Company Service Centre</h3>
+              <p>
+                As a Robinson Authorized Service Centre, we are approved to perform
+                all maintenance, repairs, and overhauls on R22, R44, and R66 helicopters.
+                Our technicians complete regular factory training at Robinson's California facility.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal direction="left">
+            <div className="maint-cert__image" style={{ direction: 'ltr' }}>
+              <img src="/assets/images/logos/robinson-authorized.png" alt="Robinson Authorized" />
+              <span className="maint-pre-text" style={{ marginTop: '1rem' }}>Since 1990</span>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 13: GUIMBAL CERTIFIED ========== */}
+      <section className="maint-cert">
+        <div className="maint-cert__grid">
+          <Reveal direction="left">
+            <div className="maint-cert__image">
+              <img src="/assets/images/logos/guimbal-logo.png" alt="Guimbal" />
+            </div>
+          </Reveal>
+          <Reveal direction="right">
+            <div className="maint-cert__content">
+              <span className="maint-pre-text">Certified Centre</span>
+              <h3>Guimbal Cabri G2 Service Centre</h3>
+              <p>
+                We are proud to be one of the UK's certified Guimbal Cabri G2 service
+                centres. The Cabri G2 has become increasingly popular for training,
+                and our technicians have completed comprehensive factory training.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== SECTION 14: LOGOS STRIP ========== */}
+      <section className="maint-logos">
+        <div className="maint-logos__container">
+          {['easa', 'robinson', 'guimbal', 'caa'].map((logo, i) => (
+            <Reveal key={logo} delay={i * 0.1}>
+              <div className="maint-logos__item">
+                <img src={`/assets/images/logos/${logo}-logo.png`} alt={logo.toUpperCase()} />
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </section>
 
       {/* 05 */ } <ServicesGrid />
       {/* 05B */} <RebuildsSection />
