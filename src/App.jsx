@@ -35,6 +35,7 @@ import FinalMaintenance from './pages/FinalMaintenance';
 import Sitemap from './pages/Sitemap';
 import JourneyPicker from './pages/JourneyPicker';
 import VideoSliderPicker from './pages/VideoSliderPicker';
+import TestimonialsPicker from './pages/TestimonialsPicker';
 import Fleet from './pages/Fleet';
 import UsedSales from './pages/UsedSales';
 import AircraftR66 from './pages/AircraftR66';
@@ -77,6 +78,7 @@ function App() {
         <Route path="/sitemap" element={<Sitemap />} />
         <Route path="/journey-picker" element={<JourneyPicker />} />
         <Route path="/video-slider-picker" element={<VideoSliderPicker />} />
+        <Route path="/testimonials-picker" element={<TestimonialsPicker />} />
         <Route path="/fleet" element={<Fleet />} />
         <Route path="/aircraft/r66" element={<AircraftR66 />} />
         <Route path="/aircraft/r44" element={<AircraftR44 />} />
