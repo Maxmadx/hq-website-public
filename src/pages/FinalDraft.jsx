@@ -47,6 +47,9 @@ import PrecisionEngineering from '../components/AwesomeComponents/PrecisionEngin
 import EditorialGrid from '../components/AwesomeComponents/EditorialGrid';
 import { ScrollingStrips } from '../components';
 
+// Blog Section
+import BlogSection from '../components/BlogSection';
+
 // Staggered Dropdown Trigger Component with scroll animations
 function StaggeredDropdownTrigger({ isOpen, onClick, images, variation }) {
   const triggerRef = useRef(null);
@@ -2442,6 +2445,11 @@ function FinalDraft() {
       {/* ===== EDITORIAL GRID (Hero 90) ===== */}
       <div className="reveal-element">
         <EditorialGrid />
+      </div>
+
+      {/* ===== BLOG SECTION ===== */}
+      <div className="reveal-element">
+        <BlogSection />
       </div>
 
       {/* ===== FOOTER ===== */}

@@ -36,6 +36,7 @@ import Sitemap from './pages/Sitemap';
 import JourneyPicker from './pages/JourneyPicker';
 import VideoSliderPicker from './pages/VideoSliderPicker';
 import TestimonialsPicker from './pages/TestimonialsPicker';
+import Testimonials from './pages/Testimonials';
 import Fleet from './pages/Fleet';
 import UsedSales from './pages/UsedSales';
 import AircraftR66 from './pages/AircraftR66';
@@ -43,6 +44,8 @@ import AircraftR44 from './pages/AircraftR44';
 import AircraftR22 from './pages/AircraftR22';
 import AircraftH500 from './pages/AircraftH500';
 import AircraftR88 from './pages/AircraftR88';
+import HelicopterTourOfLondon from './pages/HelicopterTourOfLondon';
+import HQAccount from './pages/HQAccount';
 
 // Import styles
 import './assets/css/main.css';
@@ -79,6 +82,7 @@ function App() {
         <Route path="/journey-picker" element={<JourneyPicker />} />
         <Route path="/video-slider-picker" element={<VideoSliderPicker />} />
         <Route path="/testimonials-picker" element={<TestimonialsPicker />} />
+        <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/fleet" element={<Fleet />} />
         <Route path="/aircraft/r66" element={<AircraftR66 />} />
         <Route path="/aircraft/r44" element={<AircraftR44 />} />
@@ -87,6 +91,8 @@ function App() {
         <Route path="/aircraft-sales/new/r22" element={<AircraftR22 />} />
         <Route path="/aircraft/h500" element={<AircraftH500 />} />
         <Route path="/aircraft/r88" element={<AircraftR88 />} />
+        <Route path="/helicopter-tour-of-london" element={<HelicopterTourOfLondon />} />
+        <Route path="/hq-account" element={<HQAccount />} />
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
