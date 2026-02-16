@@ -1092,7 +1092,7 @@ function FinalDraft() {
       id: 'intro',
       preText: 'Welcome to',
       headline: ['HQ', 'Aviation'],
-      description: 'The Robinson Specialists since 1990',
+      description: 'The Robinson Specialists since 2010',
       image: null,
     },
     {
@@ -1460,10 +1460,8 @@ function FinalDraft() {
             <span>About Us</span>
             <span className="fd-about__label-line"></span>
           </div>
-          <h2 className="fd-about__headline">
-            <span>The Story</span>
-            <span>Behind the</span>
-            <span>Journey</span>
+          <h2 className="fd-about__headline fd-about__headline--single-line">
+            <span>The Story</span> <span>Behind the</span> <span>Journey</span>
           </h2>
 
           <div className="fd-about__video" ref={videoLinesRef}>
@@ -1479,7 +1477,7 @@ function FinalDraft() {
           </div>
 
           <p className="fd-about__text">
-            Founded in 1990 at Denham Aerodrome, HQ Aviation has grown to become
+            Founded in 2010 at Denham Aerodrome, HQ Aviation has grown to become
             the UK's leading Robinson helicopter specialists. Our commitment to
             excellence in training, sales, and maintenance has earned us the trust
             of pilots worldwide.
@@ -1556,77 +1554,62 @@ function FinalDraft() {
 
           {/* ===== WHY FLY A HELICOPTER DROPDOWN ===== */}
           <div className="fd-why-fly-dropdown">
-            {whyFlyVariations[whyFlyVariation].layout === 'fullwidth-staggered' ? (
-              /* Staggered Flow Layout */
-              <StaggeredDropdownTrigger
-                isOpen={whyFlyOpen}
-                onClick={() => setWhyFlyOpen(!whyFlyOpen)}
-                images={staggeredImages}
-                variation={whyFlyVariations[whyFlyVariation]}
-              />
-            ) : (
-              /* Standard Layouts */
-              <button
-                ref={whyFlyTriggerRef}
-                className={`fd-why-fly-dropdown__trigger ${whyFlyOpen ? 'open' : ''}`}
-                onClick={() => setWhyFlyOpen(!whyFlyOpen)}
-                style={{
-                  background: whyFlyVariations[whyFlyVariation].bg,
-                }}
-              >
-                {/* Left Images */}
-                <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--left">
-                  {[
-                    '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
-                    '/assets/images/expeditions/north-pole.jpg',
-                    '/assets/images/facility/hq-0089.jpg',
-                    '/assets/images/expeditions/antartica.jpg',
-                    '/assets/images/expeditions/channel.jpg',
-                    '/assets/images/facility/hq-0035.jpg',
-                    '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
-                    '/assets/images/facility/busy-hangar.jpg'
-                  ].slice(0, visibleImages).map((src, idx) => (
-                    <div
-                      key={idx}
-                      className="fd-why-fly-dropdown__thumb"
-                      style={{ backgroundImage: `url(${src})` }}
-                    />
-                  ))}
-                </div>
+            <button
+              ref={whyFlyTriggerRef}
+              className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--filmstrip-v19 ${whyFlyOpen ? 'open' : ''}`}
+              onClick={() => setWhyFlyOpen(!whyFlyOpen)}
+            >
+              {/* Left Images */}
+              <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--left">
+                {[
+                  '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
+                  '/assets/images/expeditions/north-pole.jpg',
+                  '/assets/images/facility/hq-0089.jpg',
+                  '/assets/images/expeditions/antartica.jpg',
+                  '/assets/images/expeditions/channel.jpg',
+                  '/assets/images/facility/hq-0035.jpg',
+                  '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
+                  '/assets/images/facility/busy-hangar.jpg'
+                ].slice(0, visibleImages).map((src, idx) => (
+                  <div
+                    key={idx}
+                    className="fd-why-fly-dropdown__thumb"
+                    style={{ backgroundImage: `url(${src})` }}
+                  />
+                ))}
+              </div>
 
-                {/* Center Content */}
-                <div className="fd-why-fly-dropdown__trigger-center">
-                  <span className="fd-why-fly-dropdown__title">
-                    Why We Fly Helicopters?
-                  </span>
-                  <div className="fd-why-fly-dropdown__click-row">
-                    <span className="fd-why-fly-dropdown__click-hint">click here</span>
-                    <span className="fd-why-fly-dropdown__pulse-dot"></span>
-                  </div>
+              {/* Center Content */}
+              <div className="fd-why-fly-dropdown__trigger-center">
+                <span className="fd-why-fly-dropdown__title">
+                  Why We Fly Helicopters?
+                </span>
+                <div className="fd-why-fly-dropdown__click-hint">
+                  <span className="fd-why-fly-dropdown__click-text">click here</span>
+                  <span className="fd-why-fly-dropdown__pulse-dot"></span>
                 </div>
+              </div>
 
-                {/* Right Images */}
-                <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--right">
-                  {[
-                    '/assets/images/facility/hq-0035.jpg',
-                    '/assets/images/expeditions/channel.jpg',
-                    '/assets/images/facility/busy-hangar.jpg',
-                    '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-                    '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
-                    '/assets/images/facility/hq-0089.jpg',
-                    '/assets/images/expeditions/north-pole.jpg',
-                    '/assets/images/expeditions/antartica.jpg'
-                  ].slice(0, visibleImages).map((src, idx) => (
-                    <div
-                      key={idx}
-                      className="fd-why-fly-dropdown__thumb"
-                      style={{ backgroundImage: `url(${src})` }}
-                    />
-                  ))}
-                </div>
-
-              </button>
-            )}
+              {/* Right Images */}
+              <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--right">
+                {[
+                  '/assets/images/facility/hq-0035.jpg',
+                  '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
+                  '/assets/images/gallery/carousel/rotating-4.jpg',
+                  '/assets/images/facility/hq-0053.jpg',
+                  '/assets/images/facility/hq-0007.jpg',
+                  '/assets/images/facility/hq-0129.jpg',
+                  '/assets/images/facility/hq-0075.jpg',
+                  '/assets/images/lifestyle/q-dubai.jpg'
+                ].slice(0, visibleImages).map((src, idx) => (
+                  <div
+                    key={idx}
+                    className="fd-why-fly-dropdown__thumb"
+                    style={{ backgroundImage: `url(${src})` }}
+                  />
+                ))}
+              </div>
+            </button>
 
             <div className={`fd-why-fly-dropdown__content ${whyFlyOpen ? 'open' : ''}`}>
               <div className="fd-why-fly-dropdown__card">
@@ -1728,6 +1711,8 @@ function FinalDraft() {
 
           {/* ===== TRAINING CAROUSEL ===== */}
           <div className="fd-carousel-section">
+          <div className="fd-section-divider"></div>
+          <h2 className="fd-carousel-title">Explore our courses</h2>
           <div className="carousel carousel--97">
             <div className="carousel__tabs-wrapper">
               <div className="carousel__tabs">
@@ -1806,20 +1791,185 @@ function FinalDraft() {
           <span className="parallax-section__number">02</span>
           <span className="parallax-section__line"></span>
         </div>
-        <span className="parallax-section__label">An Extensive</span>
-        <h2 className="parallax-section__title">Fleet</h2>
+        <span className="parallax-section__label">Escape The Ordinary</span>
+        <h2 className="parallax-section__title">Self-Fly Hire</h2>
       </ParallaxSection>
 
-      <section className="fd-section fd-section--alt reveal-element" id="fleet">
-        <div className="fd-section__inner">
-          <span className="fd-section__number">02</span>
-          <h2 className="fd-section__title">Fleet</h2>
-          <p className="fd-section__text">
-            Our meticulously maintained fleet of Robinson helicopters
-            represents the pinnacle of rotary-wing aviation.
+      {/* ===== IMMERSIVE FLEET SECTION ===== */}
+      <section className="fd-fleet reveal-element" id="fleet">
+        {/* Hero Statement */}
+        <div className="fd-fleet__intro">
+          <span className="fd-fleet__number">02</span>
+          <h2 className="fd-fleet__title">
+            <span className="fd-fleet__title-line fd-fleet__title-line--1">Your Time</span>
+            <span className="fd-fleet__title-line fd-fleet__title-line--2">Is Precious</span>
+          </h2>
+          <p className="fd-fleet__tagline">
+            Skip the traffic. Avoid the queues. Arrive in style.
           </p>
-          <Link to="/fleet" className="fd-section__link">View Fleet →</Link>
         </div>
+
+        {/* Time Comparison Grid - The Hero Feature */}
+        <div className="fd-fleet__time-grid">
+          <div className="fd-fleet__time-header">
+            <span className="fd-fleet__time-label">Journey Time Comparison</span>
+            <div className="fd-fleet__time-legend">
+              <span className="fd-fleet__legend-item fd-fleet__legend-item--car">
+                <span className="fd-fleet__legend-icon">🚗</span> By Car
+              </span>
+              <span className="fd-fleet__legend-divider">/</span>
+              <span className="fd-fleet__legend-item fd-fleet__legend-item--heli">
+                <img src="/assets/images/icons/r66-icon-transparent going right.svg" alt="" className="fd-fleet__legend-icon fd-fleet__legend-icon--heli" />
+                By Helicopter
+              </span>
+            </div>
+          </div>
+
+          <div className="fd-fleet__destinations">
+            {/* Cotswolds */}
+            <div className="fd-fleet__dest-card">
+              <div className="fd-fleet__dest-image">
+                <img src="/assets/images/destinations/cotswolds-aerial.jpg" alt="Cotswolds" />
+                <div className="fd-fleet__dest-overlay"></div>
+                <div className="fd-fleet__dest-time-badge">
+                  <span className="fd-fleet__dest-time-value">35 min</span>
+                </div>
+              </div>
+              <div className="fd-fleet__dest-label">
+                <span className="fd-fleet__dest-name">The Cotswolds</span>
+              </div>
+            </div>
+
+            {/* Le Touquet */}
+            <div className="fd-fleet__dest-card">
+              <div className="fd-fleet__dest-image">
+                <img src="/assets/images/destinations/le-touquet.jpg" alt="Le Touquet" />
+                <div className="fd-fleet__dest-overlay"></div>
+                <div className="fd-fleet__dest-time-badge">
+                  <span className="fd-fleet__dest-time-value">55 min</span>
+                </div>
+              </div>
+              <div className="fd-fleet__dest-label">
+                <span className="fd-fleet__dest-name">Le Touquet</span>
+              </div>
+            </div>
+
+            {/* Scottish Highlands */}
+            <div className="fd-fleet__dest-card">
+              <div className="fd-fleet__dest-image">
+                <img src="/assets/images/destinations/scottish-highlands.jpg" alt="Scottish Highlands" />
+                <div className="fd-fleet__dest-overlay"></div>
+                <div className="fd-fleet__dest-time-badge">
+                  <span className="fd-fleet__dest-time-value">2h 45min</span>
+                </div>
+              </div>
+              <div className="fd-fleet__dest-label">
+                <span className="fd-fleet__dest-name">Scottish Highlands</span>
+              </div>
+            </div>
+
+            {/* Cornwall */}
+            <div className="fd-fleet__dest-card">
+              <div className="fd-fleet__dest-image">
+                <img src="/assets/images/destinations/cornwall.jpg" alt="Cornwall" />
+                <div className="fd-fleet__dest-overlay"></div>
+                <div className="fd-fleet__dest-time-badge">
+                  <span className="fd-fleet__dest-time-value">1h 30min</span>
+                </div>
+              </div>
+              <div className="fd-fleet__dest-label">
+                <span className="fd-fleet__dest-name">Cornwall</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Benefits Strip */}
+        <div className="fd-fleet__benefits">
+          <div className="fd-fleet__benefit">
+            <span className="fd-fleet__benefit-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 6v6l4 2"/>
+              </svg>
+            </span>
+            <span className="fd-fleet__benefit-stat">30+</span>
+            <span className="fd-fleet__benefit-label">Aircraft Available</span>
+          </div>
+          <div className="fd-fleet__benefit-divider"></div>
+          <div className="fd-fleet__benefit">
+            <span className="fd-fleet__benefit-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                <line x1="16" y1="2" x2="16" y2="6"/>
+                <line x1="8" y1="2" x2="8" y2="6"/>
+                <line x1="3" y1="10" x2="21" y2="10"/>
+              </svg>
+            </span>
+            <span className="fd-fleet__benefit-stat">7 Days</span>
+            <span className="fd-fleet__benefit-label">A Week Availability</span>
+          </div>
+          <div className="fd-fleet__benefit-divider"></div>
+          <div className="fd-fleet__benefit">
+            <span className="fd-fleet__benefit-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </span>
+            <span className="fd-fleet__benefit-stat">2,000+</span>
+            <span className="fd-fleet__benefit-label">Destinations Reachable</span>
+          </div>
+        </div>
+
+        {/* Fleet Showcase */}
+        <div className="fd-fleet__aircraft">
+          <span className="fd-fleet__aircraft-label">Our Fleet</span>
+          <div className="fd-fleet__aircraft-grid">
+            <Link to="/fleet/r22" className="fd-fleet__aircraft-card">
+              <div className="fd-fleet__aircraft-image">
+                <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22" />
+              </div>
+              <div className="fd-fleet__aircraft-info">
+                <h4>R22</h4>
+                <span className="fd-fleet__aircraft-seats">2 Seats</span>
+                <span className="fd-fleet__aircraft-rate">From £275/hr</span>
+              </div>
+            </Link>
+            <Link to="/fleet/r44" className="fd-fleet__aircraft-card fd-fleet__aircraft-card--featured">
+              <div className="fd-fleet__aircraft-badge">Most Popular</div>
+              <div className="fd-fleet__aircraft-image">
+                <img src="/assets/images/new-aircraft/r44/raven-ii-front-alpha.png" alt="R44" />
+              </div>
+              <div className="fd-fleet__aircraft-info">
+                <h4>R44</h4>
+                <span className="fd-fleet__aircraft-seats">4 Seats</span>
+                <span className="fd-fleet__aircraft-rate">From £395/hr</span>
+              </div>
+            </Link>
+            <Link to="/fleet/r66" className="fd-fleet__aircraft-card">
+              <div className="fd-fleet__aircraft-image">
+                <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66" />
+              </div>
+              <div className="fd-fleet__aircraft-info">
+                <h4>R66 Turbine</h4>
+                <span className="fd-fleet__aircraft-seats">5 Seats</span>
+                <span className="fd-fleet__aircraft-rate">From £595/hr</span>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+        {/* Lifestyle Quote */}
+        <div className="fd-fleet__lifestyle">
+          <blockquote className="fd-fleet__quote">
+            "The helicopter isn't just transport—it's a lifestyle. Land at the golf course,
+            arrive at the races, reach your country house for lunch and still be back in
+            London for dinner."
+          </blockquote>
+          <span className="fd-fleet__quote-attr">— The Freedom of Flight</span>
+        </div>
+
       </section>
 
       {/* ===== SCROLLING STRIPS - DESTINATIONS ===== */}
@@ -1840,38 +1990,185 @@ function FinalDraft() {
           <span className="parallax-section__number">03</span>
           <span className="parallax-section__line"></span>
         </div>
-        <span className="parallax-section__label">Beyond Horizons</span>
+        <span className="parallax-section__label">Journey of a Lifetime</span>
         <h2 className="parallax-section__title">Expeditions</h2>
       </ParallaxSection>
 
-      <section className="fd-section reveal-element" id="expeditions">
-        <div className="fd-section__inner">
-          <span className="fd-section__number">03</span>
-          <h2 className="fd-section__title">Expeditions</h2>
-          <p className="fd-section__text">
-            Join Captain Q on extraordinary adventures across the globe,
-            from the Arctic to Antarctica and everywhere in between.
-          </p>
-          <Link to="/expeditions" className="fd-section__link">Discover Adventures →</Link>
+      {/* ===== IMMERSIVE EXPEDITIONS SECTION ===== */}
+      <section className="fd-exped reveal-element" id="expeditions">
+        {/* Cinematic Opening */}
+        <div className="fd-exped__cinematic">
+          <div className="fd-exped__cinematic-bg">
+            <video autoPlay muted loop playsInline>
+              <source src="/assets/video/expedition-reel.mp4" type="video/mp4" />
+            </video>
+            <div className="fd-exped__cinematic-overlay"></div>
+          </div>
+          <div className="fd-exped__cinematic-content">
+            <span className="fd-exped__pre-title">With Captain Quentin Smith</span>
+            <h2 className="fd-exped__title">
+              <span className="fd-exped__title-word fd-exped__title-word--1">Explore</span>
+              <span className="fd-exped__title-word fd-exped__title-word--2">The</span>
+              <span className="fd-exped__title-word fd-exped__title-word--3">Unreachable</span>
+            </h2>
+            <p className="fd-exped__cinematic-desc">
+              This isn't transport. This is using the helicopter as a gateway to the world—
+              a first-class ticket to the beauty of our planet, seeing places in ways that
+              very few have ever experienced before.
+            </p>
+          </div>
         </div>
-      </section>
 
-      <section className="fd-section fd-section--alt reveal-element" id="sales">
-        <div className="fd-section__inner">
-          <div className="fd-section__badge">
+
+        {/* Journey Map - Visual Route Display */}
+        <div className="fd-exped__journey">
+          <div className="fd-exped__journey-header">
+            <span className="fd-exped__label">From Denham to the Ends of the Earth</span>
+            <h3 className="fd-exped__journey-title">Where Will You Go?</h3>
+          </div>
+          <div className="fd-exped__journey-map">
+            <svg className="fd-exped__map-svg" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet">
+              {/* Center point - Denham */}
+              <circle cx="500" cy="200" r="8" fill="#1a1a1a" className="fd-exped__map-origin" />
+              <text x="500" y="230" textAnchor="middle" className="fd-exped__map-label">DENHAM</text>
+
+              {/* Journey Lines with Destinations */}
+              <line x1="500" y1="200" x2="200" y2="80" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="200" cy="80" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="200" y="60" textAnchor="middle" className="fd-exped__map-dest">ARCTIC</text>
+
+              <line x1="500" y1="200" x2="150" y2="200" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="150" cy="200" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="150" y="180" textAnchor="middle" className="fd-exped__map-dest">ICELAND</text>
+
+              <line x1="500" y1="200" x2="300" y2="320" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="300" cy="320" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="300" y="350" textAnchor="middle" className="fd-exped__map-dest">SAHARA</text>
+
+              <line x1="500" y1="200" x2="800" y2="80" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="800" cy="80" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="800" y="60" textAnchor="middle" className="fd-exped__map-dest">GREENLAND</text>
+
+              <line x1="500" y1="200" x2="850" y2="200" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="850" cy="200" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="850" y="180" textAnchor="middle" className="fd-exped__map-dest">BAHAMAS</text>
+
+              <line x1="500" y1="200" x2="700" y2="350" stroke="#e8e6e2" strokeWidth="1" strokeDasharray="4 4" className="fd-exped__map-line" />
+              <circle cx="700" cy="350" r="6" fill="#fff" stroke="#1a1a1a" strokeWidth="2" />
+              <text x="700" y="380" textAnchor="middle" className="fd-exped__map-dest">ANTARCTICA</text>
+            </svg>
+            {/* Animated Helicopter */}
             <img
-              src="/assets/images/robinson-assets/logos/rhc-authorized-dealer-logo-logo-yellow-rotor-black-type.svg"
-              alt="Robinson Authorized Dealer"
-              className="fd-section__badge-logo"
+              src="/assets/images/icons/r66-icon-transparent going right.svg"
+              alt=""
+              className="fd-exped__map-heli"
             />
           </div>
-          <span className="fd-section__number">04</span>
-          <h2 className="fd-section__title">Aircraft Sales</h2>
-          <p className="fd-section__text">
-            New and pre-owned Robinson helicopters, expertly sourced
-            and prepared to the highest standards.
-          </p>
-          <Link to="/sales" className="fd-section__link">Browse Aircraft →</Link>
+        </div>
+
+        {/* Featured Expedition Regions - Large Cards */}
+        <div className="fd-exped__regions">
+          <span className="fd-exped__regions-label">Choose Your Adventure</span>
+          <div className="fd-exped__regions-grid">
+            {/* Polar */}
+            <Link to="/expeditions?region=polar" className="fd-exped__region-card fd-exped__region-card--polar">
+              <div className="fd-exped__region-bg">
+                <img src="/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp" alt="Polar Expeditions" />
+              </div>
+              <div className="fd-exped__region-overlay"></div>
+              <div className="fd-exped__region-content">
+                <span className="fd-exped__region-tag">Extreme</span>
+                <h3 className="fd-exped__region-title">Polar Expeditions</h3>
+                <p className="fd-exped__region-desc">North Pole • South Pole • Greenland • Antarctica</p>
+                <div className="fd-exped__region-meta">
+                  <span className="fd-exped__region-duration">10-21 Days</span>
+                  <span className="fd-exped__region-arrow">→</span>
+                </div>
+              </div>
+              <div className="fd-exped__region-badge">
+                <span>World</span>
+                <span>Record</span>
+                <span>Holder</span>
+              </div>
+            </Link>
+
+            {/* European */}
+            <Link to="/expeditions?region=european" className="fd-exped__region-card fd-exped__region-card--euro">
+              <div className="fd-exped__region-bg">
+                <img src="/assets/images/expeditions/channel.jpg" alt="European Expeditions" />
+              </div>
+              <div className="fd-exped__region-overlay"></div>
+              <div className="fd-exped__region-content">
+                <span className="fd-exped__region-tag">Classic</span>
+                <h3 className="fd-exped__region-title">European Journeys</h3>
+                <p className="fd-exped__region-desc">Scottish Highlands • Norwegian Fjords • Swiss Alps • Iceland</p>
+                <div className="fd-exped__region-meta">
+                  <span className="fd-exped__region-duration">4-7 Days</span>
+                  <span className="fd-exped__region-arrow">→</span>
+                </div>
+              </div>
+            </Link>
+
+            {/* Tropical */}
+            <Link to="/expeditions?region=tropical" className="fd-exped__region-card fd-exped__region-card--tropical">
+              <div className="fd-exped__region-bg">
+                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Tropical Expeditions" />
+              </div>
+              <div className="fd-exped__region-overlay"></div>
+              <div className="fd-exped__region-content">
+                <span className="fd-exped__region-tag">Paradise</span>
+                <h3 className="fd-exped__region-title">Tropical Escapes</h3>
+                <p className="fd-exped__region-desc">Bahamas • Costa Rica • Caribbean Islands</p>
+                <div className="fd-exped__region-meta">
+                  <span className="fd-exped__region-duration">7-10 Days</span>
+                  <span className="fd-exped__region-arrow">→</span>
+                </div>
+              </div>
+            </Link>
+          </div>
+        </div>
+
+
+        {/* Upcoming Expeditions - Departure Board Style */}
+        <div className="fd-exped__departures">
+          <div className="fd-exped__departures-header">
+            <span className="fd-exped__departures-status">NOW BOARDING</span>
+            <h3 className="fd-exped__departures-title">Upcoming Expeditions</h3>
+          </div>
+          <div className="fd-exped__departures-board">
+            <div className="fd-exped__departure">
+              <span className="fd-exped__departure-badge fd-exped__departure-badge--new">NEW</span>
+              <span className="fd-exped__departure-date">AUG 2025</span>
+              <span className="fd-exped__departure-dest">GREENLAND EXPLORER</span>
+              <span className="fd-exped__departure-duration">10 Days</span>
+              <span className="fd-exped__departure-status fd-exped__departure-status--boarding">BOOKING</span>
+            </div>
+            <div className="fd-exped__departure">
+              <span className="fd-exped__departure-badge fd-exped__departure-badge--spaces">SPACES</span>
+              <span className="fd-exped__departure-date">MAR 2026</span>
+              <span className="fd-exped__departure-dest">ICELAND: NORTHERN LIGHTS</span>
+              <span className="fd-exped__departure-duration">7 Days</span>
+              <span className="fd-exped__departure-status fd-exped__departure-status--open">OPEN</span>
+            </div>
+            <div className="fd-exped__departure">
+              <span className="fd-exped__departure-badge fd-exped__departure-badge--filling">FILLING</span>
+              <span className="fd-exped__departure-date">JUN 2026</span>
+              <span className="fd-exped__departure-dest">SCOTTISH HIGHLANDS</span>
+              <span className="fd-exped__departure-duration">5 Days</span>
+              <span className="fd-exped__departure-status fd-exped__departure-status--limited">LIMITED</span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="fd-exped__cta">
+          <div className="fd-exped__cta-content">
+            <p className="fd-exped__cta-text">Ready to embark on the journey of a lifetime?</p>
+            <div className="fd-exped__cta-buttons">
+              <Link to="/expeditions" className="fd-exped__btn fd-exped__btn--primary">View All Expeditions</Link>
+              <Link to="/contact?subject=expedition" className="fd-exped__btn fd-exped__btn--outline">Enquire Now</Link>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1889,22 +2186,125 @@ function FinalDraft() {
         </p>
       </ParallaxSection>
 
-      <section className="fd-section reveal-element" id="maintenance">
-        <div className="fd-section__inner">
-          <div className="fd-section__badge">
-            <img
-              src="/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg"
-              alt="Robinson Authorized Service Center"
-              className="fd-section__badge-logo"
-            />
+      <section className="fd-sales reveal-element" id="sales">
+        {/* Robinson Authorized Dealer - Prominent Certification Card */}
+        <div className="fd-cert">
+          <div className="fd-cert__card fd-cert__card--dealer">
+            <div className="fd-cert__glow"></div>
+            <div className="fd-cert__content">
+              <div className="fd-cert__logo-wrap">
+                <img
+                  src="/assets/images/robinson-assets/logos/rhc-authorized-dealer-logo-logo-yellow-rotor-black-type.svg"
+                  alt="Robinson Authorized Dealer"
+                  className="fd-cert__logo"
+                />
+              </div>
+              <div className="fd-cert__info">
+                <span className="fd-cert__label">Official</span>
+                <h3 className="fd-cert__title">Robinson Authorized Dealer</h3>
+                <p className="fd-cert__desc">
+                  The UK's premier Robinson dealership since 1990. Factory-direct pricing,
+                  full warranty support, and expert guidance from purchase to delivery.
+                </p>
+                <div className="fd-cert__stats">
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">35+</span>
+                    <span className="fd-cert__stat-label">Years</span>
+                  </div>
+                  <div className="fd-cert__stat-divider"></div>
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">500+</span>
+                    <span className="fd-cert__stat-label">Aircraft Sold</span>
+                  </div>
+                  <div className="fd-cert__stat-divider"></div>
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">UK</span>
+                    <span className="fd-cert__stat-label">Exclusive</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-          <span className="fd-section__number">05</span>
-          <h2 className="fd-section__title">Maintenance</h2>
-          <p className="fd-section__text">
-            Robinson Approved Service Centre with factory-trained
-            engineers and genuine parts.
+        </div>
+
+        <div className="fd-sales__header">
+          <span className="fd-sales__number">04</span>
+          <h2 className="fd-sales__title">Aircraft Sales</h2>
+          <p className="fd-sales__text">
+            New and pre-owned Robinson helicopters, expertly sourced and prepared to the highest standards.
           </p>
-          <Link to="/maintenance" className="fd-section__link">Our Services →</Link>
+        </div>
+
+        <div className="fd-sales__grid">
+          <Link to="/sales/new?model=r88" className="fd-sales__card fd-sales__card--featured">
+            <div className="fd-sales__card-badge">NEW</div>
+            <div className="fd-sales__card-image">
+              <img src="/assets/images/new-aircraft/r88/r88-jellybean-left.png" alt="R88" />
+            </div>
+            <div className="fd-sales__card-info">
+              <h3>R88</h3>
+              <span className="fd-sales__card-tagline">The Future of Rotorcraft</span>
+              <div className="fd-sales__card-specs">
+                <span>8 seats</span>
+                <span>140 kts</span>
+                <span>Turbine</span>
+              </div>
+              <span className="fd-sales__card-price">POA</span>
+            </div>
+          </Link>
+
+          <Link to="/sales/new?model=r66" className="fd-sales__card">
+            <div className="fd-sales__card-image">
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66" />
+            </div>
+            <div className="fd-sales__card-info">
+              <h3>R66</h3>
+              <span className="fd-sales__card-tagline">Turbine Performance</span>
+              <div className="fd-sales__card-specs">
+                <span>5 seats</span>
+                <span>120 kts</span>
+                <span>Turbine</span>
+              </div>
+              <span className="fd-sales__card-price">$1,290,000</span>
+            </div>
+          </Link>
+
+          <Link to="/sales/new?model=r44" className="fd-sales__card">
+            <div className="fd-sales__card-image">
+              <img src="/assets/images/new-aircraft/r44/raven-ii-front-alpha.png" alt="R44" />
+            </div>
+            <div className="fd-sales__card-info">
+              <h3>R44</h3>
+              <span className="fd-sales__card-tagline">World's Best-Selling</span>
+              <div className="fd-sales__card-specs">
+                <span>4 seats</span>
+                <span>113 kts</span>
+                <span>Piston</span>
+              </div>
+              <span className="fd-sales__card-price">$535,000</span>
+            </div>
+          </Link>
+
+          <Link to="/sales/new?model=r22" className="fd-sales__card">
+            <div className="fd-sales__card-image">
+              <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22" />
+            </div>
+            <div className="fd-sales__card-info">
+              <h3>R22</h3>
+              <span className="fd-sales__card-tagline">Training Excellence</span>
+              <div className="fd-sales__card-specs">
+                <span>2 seats</span>
+                <span>96 kts</span>
+                <span>Piston</span>
+              </div>
+              <span className="fd-sales__card-price">$345,000</span>
+            </div>
+          </Link>
+        </div>
+
+        <div className="fd-sales__actions">
+          <Link to="/sales/new" className="fd-sales__btn fd-sales__btn--primary">New Aircraft</Link>
+          <Link to="/sales/used" className="fd-sales__btn fd-sales__btn--outline">Pre-Owned</Link>
         </div>
       </section>
 
@@ -1921,6 +2321,106 @@ function FinalDraft() {
           Factory-trained precision
         </p>
       </ParallaxSection>
+
+      <section className="fd-maint reveal-element" id="maintenance">
+        {/* Robinson Authorized Service Center - Prominent Certification Card */}
+        <div className="fd-cert">
+          <div className="fd-cert__card fd-cert__card--service">
+            <div className="fd-cert__glow fd-cert__glow--blue"></div>
+            <div className="fd-cert__content">
+              <div className="fd-cert__logo-wrap">
+                <img
+                  src="/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg"
+                  alt="Robinson Authorized Service Center"
+                  className="fd-cert__logo"
+                />
+              </div>
+              <div className="fd-cert__info">
+                <span className="fd-cert__label">Certified</span>
+                <h3 className="fd-cert__title">Robinson Authorized Service Center</h3>
+                <p className="fd-cert__desc">
+                  EASA Part 145 approved facility with factory-trained engineers,
+                  genuine Robinson parts, and industry-leading turnaround times.
+                </p>
+                <div className="fd-cert__stats">
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">85+</span>
+                    <span className="fd-cert__stat-label">Aircraft</span>
+                  </div>
+                  <div className="fd-cert__stat-divider"></div>
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">Part 145</span>
+                    <span className="fd-cert__stat-label">EASA</span>
+                  </div>
+                  <div className="fd-cert__stat-divider"></div>
+                  <div className="fd-cert__stat">
+                    <span className="fd-cert__stat-value">100%</span>
+                    <span className="fd-cert__stat-label">Genuine Parts</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="fd-maint__header">
+          <span className="fd-maint__number">05</span>
+          <h2 className="fd-maint__title">Maintenance</h2>
+          <p className="fd-maint__text">
+            EASA Part 145 approved facility with factory-trained engineers and genuine parts.
+          </p>
+        </div>
+
+        <div className="fd-maint__stats">
+          <div className="fd-maint__stat">
+            <span className="fd-maint__stat-value">85+</span>
+            <span className="fd-maint__stat-label">Aircraft Under Care</span>
+          </div>
+          <div className="fd-maint__stat-divider"></div>
+          <div className="fd-maint__stat">
+            <span className="fd-maint__stat-value">15+</span>
+            <span className="fd-maint__stat-label">Years Experience</span>
+          </div>
+          <div className="fd-maint__stat-divider"></div>
+          <div className="fd-maint__stat">
+            <span className="fd-maint__stat-value">Part 145</span>
+            <span className="fd-maint__stat-label">EASA Approved</span>
+          </div>
+          <div className="fd-maint__stat-divider"></div>
+          <div className="fd-maint__stat">
+            <span className="fd-maint__stat-value">100%</span>
+            <span className="fd-maint__stat-label">Genuine Parts</span>
+          </div>
+        </div>
+
+        <div className="fd-maint__services">
+          <div className="fd-maint__service">
+            <span className="fd-maint__service-num">01</span>
+            <h3>Scheduled Maintenance</h3>
+            <p>100-hour, annual, and progressive inspections to manufacturer specifications.</p>
+          </div>
+          <div className="fd-maint__service">
+            <span className="fd-maint__service-num">02</span>
+            <h3>Overhaul Services</h3>
+            <p>Complete engine, transmission, and component overhauls by factory-trained engineers.</p>
+          </div>
+          <div className="fd-maint__service">
+            <span className="fd-maint__service-num">03</span>
+            <h3>Avionics & Upgrades</h3>
+            <p>Modern avionics installation, glass cockpit upgrades, and system integration.</p>
+          </div>
+          <div className="fd-maint__service">
+            <span className="fd-maint__service-num">04</span>
+            <h3>AOG Support</h3>
+            <p>24/7 Aircraft on Ground emergency support to minimize your downtime.</p>
+          </div>
+        </div>
+
+        <div className="fd-maint__actions">
+          <Link to="/maintenance" className="fd-maint__btn fd-maint__btn--primary">View All Services</Link>
+          <Link to="/contact?subject=maintenance" className="fd-maint__btn fd-maint__btn--outline">Book Inspection</Link>
+        </div>
+      </section>
 
       <section className="fd-section fd-section--alt reveal-element" id="contact">
         <div className="fd-section__inner">
@@ -2443,6 +2943,13 @@ function FinalDraft() {
         .fd-about__headline span:nth-child(2) { color: #4a4a4a; }
         .fd-about__headline span:nth-child(3) { color: #7a7a7a; }
 
+        .fd-about__headline--single-line {
+          flex-direction: row;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+
         .fd-about__video {
           margin-bottom: 3rem;
           position: relative;
@@ -2806,11 +3313,18 @@ function FinalDraft() {
           margin-right: 0;
         }
 
+        /* ===== SECTION DIVIDER ===== */
+        .fd-section-divider {
+          width: 80px;
+          height: 1px;
+          background: #e0e0e0;
+          margin: 0 auto 2.5rem;
+        }
+
         /* ===== CAROUSEL SECTION ===== */
         .fd-carousel-section {
-          padding: 3rem 2rem 6rem;
+          padding: 2.5rem 2rem 6rem;
           background: #fff;
-          box-shadow: -15px 0 30px -10px rgba(0, 0, 0, 0.1), 15px 0 30px -10px rgba(0, 0, 0, 0.1), 0 -15px 30px -10px rgba(0, 0, 0, 0.1);
           width: 100vw;
           margin-left: -50vw;
           margin-right: -50vw;
@@ -2819,6 +3333,7 @@ function FinalDraft() {
           box-sizing: border-box;
           position: relative;
           z-index: 10;
+          box-shadow: inset 0 20px 30px -20px rgba(0, 0, 0, 0.15);
         }
 
         .fd-carousel-section__header {
@@ -2851,8 +3366,19 @@ function FinalDraft() {
           color: #1a1a1a;
         }
 
+        .fd-carousel-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.25rem, 3vw, 1.75rem);
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          text-align: center;
+          margin: 0 0 2rem;
+          color: #1a1a1a;
+        }
+
         /* ===== V97 CAROUSEL - MINIMAL WHITE + OUTLINE ===== */
-        .carousel--97 { max-width: 1000px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05); }
+        .carousel--97 { max-width: 1000px; margin: 0 auto; background: #fff; padding: 2rem; border-radius: 16px; border: 1px solid #e5e7eb; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
         .carousel--97 .carousel__tabs-wrapper { position: relative; margin-bottom: 2rem; }
         .carousel--97 .carousel__tabs-wrapper::before, .carousel--97 .carousel__tabs-wrapper::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40px; pointer-events: none; z-index: 1; }
         .carousel--97 .carousel__tabs-wrapper::before { left: 0; background: linear-gradient(to right, #fff, transparent); }
@@ -2908,9 +3434,8 @@ function FinalDraft() {
           left: 50%;
           position: relative;
           background: #faf9f6;
-          box-shadow:
-            0 -8px 20px rgba(0, 0, 0, 0.15),
-            0 8px 20px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.2);
+          z-index: 10;
         }
 
         .fd-why-fly-dropdown--ghost {
@@ -3575,10 +4100,10 @@ function FinalDraft() {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: #fff;
+          color: #1a1a1a;
         }
 
-        .fd-why-fly-dropdown__click-row {
+        .fd-why-fly-dropdown__click-hint {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -3586,33 +4111,34 @@ function FinalDraft() {
           margin-top: 0.25rem;
         }
 
-        .fd-why-fly-dropdown__click-hint {
+        .fd-why-fly-dropdown__click-text {
           font-family: 'Space Grotesk', sans-serif;
           font-size: 0.6rem;
           font-weight: 400;
           letter-spacing: 0.15em;
           text-transform: lowercase;
-          color: rgba(255, 255, 255, 0.5);
+          color: rgba(26, 26, 26, 0.5);
         }
 
         .fd-why-fly-dropdown__pulse-dot {
-          width: 8px;
-          height: 8px;
-          background: rgba(255, 255, 255, 0.8);
+          width: 10px;
+          height: 10px;
+          background: rgba(26, 26, 26, 0.8);
           border-radius: 50%;
           animation: pulseDot 2s ease-in-out infinite;
+          margin-top: 1rem;
         }
 
         @keyframes pulseDot {
           0%, 100% {
             opacity: 0.4;
             transform: scale(1);
-            box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 0 0 rgba(26, 26, 26, 0.4);
           }
           50% {
             opacity: 1;
             transform: scale(1.2);
-            box-shadow: 0 0 0 8px rgba(255, 255, 255, 0);
+            box-shadow: 0 0 0 8px rgba(26, 26, 26, 0);
           }
         }
 
@@ -3970,6 +4496,1620 @@ function FinalDraft() {
 
           .fd-why-fly-dropdown__content.open {
             max-height: 800px;
+          }
+        }
+
+        /* ===== FLEET SECTION (Self-Fly Hire) ===== */
+        .fd-fleet {
+          background: #faf9f6;
+          padding: 0;
+        }
+
+        .fd-fleet__intro {
+          text-align: center;
+          padding: 5rem 2rem 3rem;
+          max-width: 800px;
+          margin: 0 auto;
+        }
+
+        .fd-fleet__number {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #999;
+          margin-bottom: 1.5rem;
+        }
+
+        .fd-fleet__title {
+          margin: 0 0 1.5rem;
+        }
+
+        .fd-fleet__title-line {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 1;
+          letter-spacing: -0.02em;
+        }
+
+        .fd-fleet__title-line--1 { color: #1a1a1a; }
+        .fd-fleet__title-line--2 { color: #4a4a4a; }
+
+        .fd-fleet__tagline {
+          font-size: 1.1rem;
+          color: #666;
+          font-weight: 400;
+        }
+
+        /* Time Comparison Grid */
+        .fd-fleet__time-grid {
+          background: #1a1a1a;
+          padding: 1.25rem 1.5rem;
+        }
+
+        .fd-fleet__time-header {
+          max-width: 1100px;
+          margin: 0 auto 0.75rem;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+
+        .fd-fleet__time-label {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: rgba(255,255,255,0.5);
+        }
+
+        .fd-fleet__time-legend {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+
+        .fd-fleet__legend-item {
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.65rem;
+          color: rgba(255,255,255,0.7);
+        }
+
+        .fd-fleet__legend-icon { font-size: 0.85rem; }
+        .fd-fleet__legend-icon--heli { width: 16px; height: auto; filter: brightness(0) invert(1); opacity: 0.7; }
+        .fd-fleet__legend-divider { color: rgba(255,255,255,0.3); }
+
+        .fd-fleet__destinations {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0.6rem;
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .fd-fleet__dest-card {
+          border-radius: 8px;
+          overflow: hidden;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fd-fleet__dest-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+        }
+
+        .fd-fleet__dest-image {
+          position: relative;
+          aspect-ratio: 4/3;
+          overflow: hidden;
+        }
+
+        .fd-fleet__dest-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .fd-fleet__dest-card:hover .fd-fleet__dest-image img {
+          transform: scale(1.08);
+        }
+
+        .fd-fleet__dest-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 40%, transparent 100%);
+        }
+
+        .fd-fleet__dest-time-badge {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: rgba(255,255,255,0.95);
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .fd-fleet__dest-time-value {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          letter-spacing: 0.02em;
+        }
+
+        .fd-fleet__dest-label {
+          padding: 0.75rem;
+          background: #1a1a1a;
+          text-align: center;
+        }
+
+        .fd-fleet__dest-name {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #fff;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .fd-fleet__time-row {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.2rem 0;
+        }
+
+        .fd-fleet__time-row--car {
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding-bottom: 0.3rem;
+        }
+
+        .fd-fleet__time-icon {
+          font-size: 0.75rem;
+          width: 16px;
+          text-align: center;
+        }
+
+        .fd-fleet__time-icon--heli {
+          width: 16px;
+          height: auto;
+          filter: brightness(0) invert(1);
+        }
+
+        .fd-fleet__time-value {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: rgba(255,255,255,0.6);
+        }
+
+        .fd-fleet__time-value--highlight {
+          color: #4ade80;
+          font-weight: 700;
+          font-size: 0.75rem;
+        }
+
+        .fd-fleet__time-note {
+          font-size: 0.5rem;
+          color: rgba(255,255,255,0.3);
+          margin-left: auto;
+        }
+
+        .fd-fleet__time-saved {
+          font-size: 0.5rem;
+          color: #4ade80;
+          background: rgba(74, 222, 128, 0.15);
+          padding: 0.1rem 0.35rem;
+          border-radius: 8px;
+          margin-left: auto;
+        }
+
+        /* Benefits Strip */
+        .fd-fleet__benefits {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 3rem;
+          padding: 3rem 2rem;
+          background: #fff;
+          border-bottom: 1px solid #e8e6e2;
+        }
+
+        .fd-fleet__benefit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 0.5rem;
+        }
+
+        .fd-fleet__benefit-icon {
+          width: 32px;
+          height: 32px;
+          color: #1a1a1a;
+        }
+
+        .fd-fleet__benefit-icon svg {
+          width: 100%;
+          height: 100%;
+        }
+
+        .fd-fleet__benefit-stat {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+
+        .fd-fleet__benefit-label {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #888;
+        }
+
+        .fd-fleet__benefit-divider {
+          width: 1px;
+          height: 50px;
+          background: linear-gradient(to bottom, transparent, #e8e6e2, transparent);
+        }
+
+        /* Aircraft Showcase */
+        .fd-fleet__aircraft {
+          padding: 4rem 2rem;
+          background: #faf9f6;
+        }
+
+        .fd-fleet__aircraft-label {
+          display: block;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: #999;
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .fd-fleet__aircraft-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        .fd-fleet__aircraft-card {
+          position: relative;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          padding: 2rem;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.3s ease;
+          text-align: center;
+        }
+
+        .fd-fleet__aircraft-card:hover {
+          border-color: #1a1a1a;
+          transform: translateY(-4px);
+          box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+        }
+
+        .fd-fleet__aircraft-card--featured {
+          border-color: #1a1a1a;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .fd-fleet__aircraft-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          background: #1a1a1a;
+          color: #fff;
+          padding: 0.25rem 0.5rem;
+        }
+
+        .fd-fleet__aircraft-image {
+          height: 120px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1rem;
+        }
+
+        .fd-fleet__aircraft-image img {
+          max-width: 100%;
+          max-height: 100%;
+          object-fit: contain;
+        }
+
+        .fd-fleet__aircraft-info h4 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.25rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          margin: 0 0 0.5rem;
+          color: #1a1a1a;
+        }
+
+        .fd-fleet__aircraft-seats {
+          display: block;
+          font-size: 0.75rem;
+          color: #666;
+          margin-bottom: 0.5rem;
+        }
+
+        .fd-fleet__aircraft-rate {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.85rem;
+          color: #1a1a1a;
+          font-weight: 600;
+        }
+
+        /* Lifestyle Quote */
+        .fd-fleet__lifestyle {
+          padding: 4rem 2rem;
+          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+          text-align: center;
+        }
+
+        .fd-fleet__quote {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+          font-weight: 400;
+          font-style: italic;
+          color: #fff;
+          max-width: 800px;
+          margin: 0 auto 1.5rem;
+          line-height: 1.6;
+        }
+
+        .fd-fleet__quote-attr {
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: rgba(255,255,255,0.5);
+        }
+
+        /* Fleet CTA */
+        .fd-fleet__cta {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+          padding: 3rem 2rem;
+          background: #faf9f6;
+        }
+
+        .fd-fleet__btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem 2rem;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+
+        .fd-fleet__btn--primary {
+          background: #1a1a1a;
+          color: #fff;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-fleet__btn--primary:hover {
+          background: #333;
+        }
+
+        .fd-fleet__btn--outline {
+          background: transparent;
+          color: #1a1a1a;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-fleet__btn--outline:hover {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        /* Fleet Responsive */
+        @media (max-width: 1024px) {
+          .fd-fleet__destinations {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .fd-fleet__destinations {
+            grid-template-columns: 1fr;
+            max-width: 400px;
+          }
+
+          .fd-fleet__benefits {
+            flex-wrap: wrap;
+            gap: 2rem;
+          }
+
+          .fd-fleet__benefit-divider {
+            display: none;
+          }
+
+          .fd-fleet__benefit {
+            flex: 0 0 calc(50% - 1rem);
+          }
+
+          .fd-fleet__aircraft-grid {
+            grid-template-columns: 1fr;
+            max-width: 350px;
+          }
+
+          .fd-fleet__cta {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .fd-fleet__btn {
+            width: 100%;
+            max-width: 300px;
+          }
+        }
+
+        /* ===== EXPEDITIONS SECTION (Immersive) ===== */
+        .fd-exped {
+          background: #faf9f6;
+        }
+
+        /* Cinematic Opening */
+        .fd-exped__cinematic {
+          position: relative;
+          min-height: 70vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .fd-exped__cinematic-bg {
+          position: absolute;
+          inset: 0;
+        }
+
+        .fd-exped__cinematic-bg video,
+        .fd-exped__cinematic-bg img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .fd-exped__cinematic-overlay {
+          position: absolute;
+          inset: 0;
+          background: transparent;
+        }
+
+        .fd-exped__cinematic-content {
+          position: relative;
+          z-index: 2;
+          text-align: center;
+          max-width: 900px;
+          padding: 4rem 2rem;
+        }
+
+        .fd-exped__pre-title {
+          display: block;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #888;
+          margin-bottom: 1rem;
+        }
+
+        .fd-exped__title {
+          margin: 0 0 2rem;
+        }
+
+        .fd-exped__title-word {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2.5rem, 6vw, 5rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 1;
+          letter-spacing: -0.02em;
+        }
+
+        .fd-exped__title-word--1 { color: #1a1a1a; }
+        .fd-exped__title-word--2 { color: #4a4a4a; }
+        .fd-exped__title-word--3 { color: #7a7a7a; }
+
+        .fd-exped__cinematic-desc {
+          font-size: 1.1rem;
+          line-height: 1.8;
+          color: #666;
+          max-width: 600px;
+          margin: 0 auto;
+        }
+
+        /* Stats Bar */
+        .fd-exped__stats-bar {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 3rem;
+          padding: 2rem;
+          background: #1a1a1a;
+        }
+
+        .fd-exped__stat-item {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .fd-exped__stat-num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 2rem;
+          font-weight: 700;
+          color: #fff;
+        }
+
+        .fd-exped__stat-text {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: rgba(255,255,255,0.5);
+          line-height: 1.4;
+        }
+
+        .fd-exped__stat-divider {
+          width: 1px;
+          height: 40px;
+          background: rgba(255,255,255,0.2);
+        }
+
+        /* Journey Map */
+        .fd-exped__journey {
+          padding: 5rem 2rem;
+          background: #fff;
+        }
+
+        .fd-exped__journey-header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .fd-exped__label {
+          display: block;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: #999;
+          margin-bottom: 0.5rem;
+        }
+
+        .fd-exped__journey-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.5rem, 3vw, 2.5rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 0;
+        }
+
+        .fd-exped__journey-map {
+          position: relative;
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        .fd-exped__map-svg {
+          width: 100%;
+          height: auto;
+        }
+
+        .fd-exped__map-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 10px;
+          fill: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+        }
+
+        .fd-exped__map-dest {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 8px;
+          fill: #666;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        .fd-exped__map-heli {
+          position: absolute;
+          width: 30px;
+          height: auto;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          animation: heliFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes heliFloat {
+          0%, 100% { transform: translate(-50%, -50%) translateY(0); }
+          50% { transform: translate(-50%, -50%) translateY(-10px); }
+        }
+
+        /* Region Cards */
+        .fd-exped__regions {
+          padding: 4rem 2rem;
+          background: #faf9f6;
+        }
+
+        .fd-exped__regions-label {
+          display: block;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
+          color: #999;
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .fd-exped__regions-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.5rem;
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        .fd-exped__region-card {
+          position: relative;
+          min-height: 400px;
+          border-radius: 8px;
+          overflow: hidden;
+          text-decoration: none;
+          color: #fff;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-end;
+        }
+
+        .fd-exped__region-bg {
+          position: absolute;
+          inset: 0;
+        }
+
+        .fd-exped__region-bg img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .fd-exped__region-card:hover .fd-exped__region-bg img {
+          transform: scale(1.1);
+        }
+
+        .fd-exped__region-overlay {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.1) 100%);
+        }
+
+        .fd-exped__region-content {
+          position: relative;
+          z-index: 2;
+          padding: 2rem;
+        }
+
+        .fd-exped__region-tag {
+          display: inline-block;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          background: rgba(255,255,255,0.2);
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          margin-bottom: 1rem;
+        }
+
+        .fd-exped__region-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          margin: 0 0 0.5rem;
+        }
+
+        .fd-exped__region-desc {
+          font-size: 0.85rem;
+          color: rgba(255,255,255,0.7);
+          margin: 0 0 1rem;
+          line-height: 1.5;
+        }
+
+        .fd-exped__region-meta {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .fd-exped__region-duration {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.75rem;
+        }
+
+        .fd-exped__region-arrow {
+          font-size: 1.25rem;
+          transition: transform 0.3s ease;
+        }
+
+        .fd-exped__region-card:hover .fd-exped__region-arrow {
+          transform: translateX(5px);
+        }
+
+        .fd-exped__region-badge {
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          background: #fff;
+          color: #1a1a1a;
+          padding: 0.5rem;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          text-align: center;
+          line-height: 1.4;
+        }
+
+        .fd-exped__region-badge span {
+          display: block;
+        }
+
+        /* Leader Section */
+        .fd-exped__leader {
+          display: flex;
+          align-items: center;
+          gap: 4rem;
+          padding: 5rem 2rem;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        .fd-exped__leader-image {
+          position: relative;
+          flex-shrink: 0;
+        }
+
+        .fd-exped__leader-image img {
+          width: 200px;
+          height: 200px;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        .fd-exped__leader-ring {
+          position: absolute;
+          inset: -10px;
+          border: 1px dashed #ccc;
+          border-radius: 50%;
+          animation: ringRotate 20s linear infinite;
+        }
+
+        @keyframes ringRotate {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+
+        .fd-exped__leader-content {
+          flex: 1;
+        }
+
+        .fd-exped__leader-role {
+          display: block;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #999;
+          margin-bottom: 0.5rem;
+        }
+
+        .fd-exped__leader-name {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.5rem, 3vw, 2rem);
+          font-weight: 700;
+          margin: 0 0 1.5rem;
+          color: #1a1a1a;
+        }
+
+        .fd-exped__leader-quote {
+          font-size: 1.1rem;
+          font-style: italic;
+          line-height: 1.8;
+          color: #666;
+          margin: 0 0 1.5rem;
+          padding-left: 1.5rem;
+          border-left: 3px solid #e8e6e2;
+        }
+
+        .fd-exped__leader-link {
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #1a1a1a;
+          text-decoration: none;
+          border-bottom: 1px solid #ccc;
+          padding-bottom: 0.25rem;
+          transition: border-color 0.3s ease;
+        }
+
+        .fd-exped__leader-link:hover {
+          border-color: #1a1a1a;
+        }
+
+        /* Departures Board */
+        .fd-exped__departures {
+          background: #1a1a1a;
+          padding: 4rem 2rem;
+        }
+
+        .fd-exped__departures-header {
+          text-align: center;
+          margin-bottom: 2rem;
+        }
+
+        .fd-exped__departures-status {
+          display: inline-block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          letter-spacing: 0.2em;
+          color: #4ade80;
+          margin-bottom: 0.5rem;
+          animation: statusBlink 2s ease-in-out infinite;
+        }
+
+        @keyframes statusBlink {
+          0%, 100% { opacity: 1; }
+          50% { opacity: 0.5; }
+        }
+
+        .fd-exped__departures-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #fff;
+          margin: 0;
+        }
+
+        .fd-exped__departures-board {
+          max-width: 900px;
+          margin: 0 auto;
+          background: #0a0a0a;
+          border: 1px solid #333;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .fd-exped__departure {
+          display: grid;
+          grid-template-columns: auto 100px 1fr 100px auto;
+          gap: 1.5rem;
+          align-items: center;
+          padding: 1.25rem 1.5rem;
+          border-bottom: 1px solid #222;
+          font-family: 'Share Tech Mono', monospace;
+        }
+
+        .fd-exped__departure:last-child {
+          border-bottom: none;
+        }
+
+        .fd-exped__departure-badge {
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          padding: 0.2rem 0.5rem;
+          border-radius: 2px;
+        }
+
+        .fd-exped__departure-badge--new { background: #3b82f6; color: #fff; }
+        .fd-exped__departure-badge--spaces { background: #22c55e; color: #fff; }
+        .fd-exped__departure-badge--filling { background: #f59e0b; color: #000; }
+
+        .fd-exped__departure-date {
+          font-size: 0.8rem;
+          color: rgba(255,255,255,0.5);
+        }
+
+        .fd-exped__departure-dest {
+          font-size: 1rem;
+          color: #fff;
+          letter-spacing: 0.05em;
+        }
+
+        .fd-exped__departure-duration {
+          font-size: 0.75rem;
+          color: rgba(255,255,255,0.4);
+        }
+
+        .fd-exped__departure-status {
+          font-size: 0.7rem;
+          letter-spacing: 0.1em;
+        }
+
+        .fd-exped__departure-status--boarding { color: #4ade80; }
+        .fd-exped__departure-status--open { color: #3b82f6; }
+        .fd-exped__departure-status--limited { color: #f59e0b; }
+
+        /* Expedition CTA */
+        .fd-exped__cta {
+          padding: 4rem 2rem;
+          background: #faf9f6;
+          text-align: center;
+        }
+
+        .fd-exped__cta-text {
+          font-size: 1.1rem;
+          color: #666;
+          margin: 0 0 2rem;
+        }
+
+        .fd-exped__cta-buttons {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .fd-exped__btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem 2rem;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+
+        .fd-exped__btn--primary {
+          background: #1a1a1a;
+          color: #fff;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-exped__btn--primary:hover {
+          background: #333;
+        }
+
+        .fd-exped__btn--outline {
+          background: transparent;
+          color: #1a1a1a;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-exped__btn--outline:hover {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        /* Expeditions Responsive */
+        @media (max-width: 1024px) {
+          .fd-exped__regions-grid {
+            grid-template-columns: 1fr;
+            max-width: 500px;
+          }
+
+          .fd-exped__region-card {
+            min-height: 300px;
+          }
+
+          .fd-exped__leader {
+            flex-direction: column;
+            text-align: center;
+          }
+
+          .fd-exped__leader-quote {
+            border-left: none;
+            padding-left: 0;
+            border-top: 3px solid #e8e6e2;
+            padding-top: 1.5rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .fd-exped__stats-bar {
+            flex-wrap: wrap;
+            gap: 1.5rem;
+          }
+
+          .fd-exped__stat-divider {
+            display: none;
+          }
+
+          .fd-exped__stat-item {
+            flex: 0 0 calc(50% - 0.75rem);
+            justify-content: center;
+          }
+
+          .fd-exped__departure {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+            text-align: center;
+            padding: 1rem;
+          }
+
+          .fd-exped__cta-buttons {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .fd-exped__btn {
+            width: 100%;
+            max-width: 300px;
+          }
+        }
+
+        /* ===== CERTIFICATION CARDS (Dealer & Service Center) ===== */
+        .fd-cert {
+          padding: 0 2rem 3rem;
+          display: flex;
+          justify-content: center;
+        }
+
+        .fd-cert__card {
+          position: relative;
+          background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+          border-radius: 12px;
+          overflow: hidden;
+          max-width: 900px;
+          width: 100%;
+        }
+
+        .fd-cert__glow {
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: radial-gradient(circle at center, rgba(201, 162, 39, 0.15) 0%, transparent 50%);
+          pointer-events: none;
+        }
+
+        .fd-cert__glow--blue {
+          background: radial-gradient(circle at center, rgba(59, 130, 246, 0.12) 0%, transparent 50%);
+        }
+
+        .fd-cert__content {
+          position: relative;
+          z-index: 1;
+          display: flex;
+          align-items: center;
+          gap: 3rem;
+          padding: 2.5rem 3rem;
+        }
+
+        .fd-cert__logo-wrap {
+          flex-shrink: 0;
+          padding: 1.5rem;
+          background: rgba(255, 255, 255, 0.05);
+          border-radius: 8px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .fd-cert__logo {
+          height: 80px;
+          width: auto;
+          display: block;
+        }
+
+        .fd-cert__info {
+          flex: 1;
+        }
+
+        .fd-cert__label {
+          display: inline-block;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #c9a227;
+          background: rgba(201, 162, 39, 0.15);
+          padding: 0.25rem 0.75rem;
+          border-radius: 20px;
+          margin-bottom: 0.75rem;
+        }
+
+        .fd-cert__card--service .fd-cert__label {
+          color: #60a5fa;
+          background: rgba(96, 165, 250, 0.15);
+        }
+
+        .fd-cert__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 0.75rem;
+        }
+
+        .fd-cert__desc {
+          font-size: 0.9rem;
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.7);
+          margin: 0 0 1.5rem;
+          max-width: 500px;
+        }
+
+        .fd-cert__stats {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+        }
+
+        .fd-cert__stat {
+          text-align: center;
+        }
+
+        .fd-cert__stat-value {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #fff;
+          line-height: 1.2;
+        }
+
+        .fd-cert__stat-label {
+          display: block;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: rgba(255, 255, 255, 0.5);
+          margin-top: 0.25rem;
+        }
+
+        .fd-cert__stat-divider {
+          width: 1px;
+          height: 30px;
+          background: rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+          .fd-cert__content {
+            flex-direction: column;
+            text-align: center;
+            padding: 2rem;
+            gap: 1.5rem;
+          }
+
+          .fd-cert__desc {
+            max-width: none;
+          }
+
+          .fd-cert__stats {
+            justify-content: center;
+          }
+        }
+
+        /* ===== SALES SECTION ===== */
+        .fd-sales {
+          padding: 2rem 2rem 5rem;
+          background: #fff;
+        }
+
+        .fd-sales__header {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+
+        .fd-sales__number {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #999;
+          margin-bottom: 1rem;
+        }
+
+        .fd-sales__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          margin: 0 0 1rem;
+          color: #1a1a1a;
+        }
+
+        .fd-sales__text {
+          font-size: 1rem;
+          line-height: 1.7;
+          color: #666;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+
+        .fd-sales__grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+          max-width: 1100px;
+          margin: 0 auto 3rem;
+        }
+
+        .fd-sales__card {
+          background: #faf9f6;
+          border: 1px solid #e8e6e2;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.3s ease;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .fd-sales__card:hover {
+          border-color: #ccc;
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        .fd-sales__card--featured {
+          border-color: #1a1a1a;
+        }
+
+        .fd-sales__card-badge {
+          position: absolute;
+          top: 0.75rem;
+          right: 0.75rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          padding: 0.25rem 0.5rem;
+          background: #1a1a1a;
+          color: #fff;
+          z-index: 2;
+        }
+
+        .fd-sales__card-image {
+          aspect-ratio: 4/3;
+          background: linear-gradient(135deg, #f5f4f0 0%, #eae8e2 100%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 1rem;
+        }
+
+        .fd-sales__card-image img {
+          max-width: 90%;
+          max-height: 90%;
+          object-fit: contain;
+          transition: transform 0.4s ease;
+        }
+
+        .fd-sales__card:hover .fd-sales__card-image img {
+          transform: scale(1.05);
+        }
+
+        .fd-sales__card-info {
+          padding: 1.25rem;
+        }
+
+        .fd-sales__card-info h3 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          margin: 0 0 0.25rem;
+          color: #1a1a1a;
+        }
+
+        .fd-sales__card-tagline {
+          display: block;
+          font-size: 0.75rem;
+          color: #888;
+          margin-bottom: 0.75rem;
+        }
+
+        .fd-sales__card-specs {
+          display: flex;
+          gap: 0.75rem;
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.75rem;
+          border-bottom: 1px solid #e8e6e2;
+        }
+
+        .fd-sales__card-specs span {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #666;
+          text-transform: uppercase;
+        }
+
+        .fd-sales__card-price {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.9rem;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+
+        .fd-sales__actions {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .fd-sales__btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.875rem 2rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+
+        .fd-sales__btn--primary {
+          background: #1a1a1a;
+          color: #fff;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-sales__btn--primary:hover {
+          background: #333;
+        }
+
+        .fd-sales__btn--outline {
+          background: transparent;
+          color: #1a1a1a;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-sales__btn--outline:hover {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        @media (max-width: 900px) {
+          .fd-sales__grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 550px) {
+          .fd-sales__grid {
+            grid-template-columns: 1fr;
+            max-width: 320px;
+          }
+
+          .fd-sales__actions {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .fd-sales__btn {
+            width: 100%;
+            max-width: 280px;
+          }
+        }
+
+        /* ===== MAINTENANCE SECTION ===== */
+        .fd-maint {
+          padding: 2rem 2rem 5rem;
+          background: #faf9f6;
+        }
+
+        .fd-maint__header {
+          text-align: center;
+          margin-bottom: 3rem;
+        }
+
+        .fd-maint__number {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #999;
+          margin-bottom: 1rem;
+        }
+
+        .fd-maint__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          margin: 0 0 1rem;
+          color: #1a1a1a;
+        }
+
+        .fd-maint__text {
+          font-size: 1rem;
+          line-height: 1.7;
+          color: #666;
+          max-width: 500px;
+          margin: 0 auto;
+        }
+
+        .fd-maint__stats {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 2rem;
+          margin-bottom: 3rem;
+          padding: 1.5rem 0;
+          border-top: 1px solid #e8e6e2;
+          border-bottom: 1px solid #e8e6e2;
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .fd-maint__stat {
+          text-align: center;
+        }
+
+        .fd-maint__stat-value {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          line-height: 1.2;
+        }
+
+        .fd-maint__stat-label {
+          display: block;
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #888;
+          margin-top: 0.25rem;
+        }
+
+        .fd-maint__stat-divider {
+          width: 1px;
+          height: 40px;
+          background: linear-gradient(to bottom, transparent, #c0bdb8, transparent);
+        }
+
+        .fd-maint__services {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+          max-width: 1000px;
+          margin: 0 auto 3rem;
+        }
+
+        .fd-maint__service {
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          padding: 1.5rem;
+          transition: all 0.3s ease;
+        }
+
+        .fd-maint__service:hover {
+          border-color: #ccc;
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+
+        .fd-maint__service-num {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #999;
+          margin-bottom: 0.75rem;
+        }
+
+        .fd-maint__service h3 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1rem;
+          font-weight: 600;
+          margin: 0 0 0.5rem;
+          color: #1a1a1a;
+        }
+
+        .fd-maint__service p {
+          font-size: 0.8rem;
+          line-height: 1.6;
+          color: #666;
+          margin: 0;
+        }
+
+        .fd-maint__actions {
+          display: flex;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .fd-maint__btn {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          padding: 0.875rem 2rem;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+
+        .fd-maint__btn--primary {
+          background: #1a1a1a;
+          color: #fff;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-maint__btn--primary:hover {
+          background: #333;
+        }
+
+        .fd-maint__btn--outline {
+          background: transparent;
+          color: #1a1a1a;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-maint__btn--outline:hover {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        @media (max-width: 900px) {
+          .fd-maint__services {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .fd-maint__stats {
+            flex-wrap: wrap;
+            gap: 1.5rem;
+          }
+
+          .fd-maint__stat-divider {
+            display: none;
+          }
+        }
+
+        @media (max-width: 550px) {
+          .fd-maint__services {
+            grid-template-columns: 1fr;
+            max-width: 320px;
+          }
+
+          .fd-maint__stats {
+            gap: 1rem;
+          }
+
+          .fd-maint__stat {
+            flex: 0 0 45%;
+          }
+
+          .fd-maint__actions {
+            flex-direction: column;
+            align-items: center;
+          }
+
+          .fd-maint__btn {
+            width: 100%;
+            max-width: 280px;
           }
         }
 

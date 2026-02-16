@@ -270,91 +270,6 @@ function ParallaxSection({ image, alt, children, className = '' }) {
   );
 }
 
-// Journey Lines Animation
-function JourneyLines() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, amount: 0.3 });
-
-  return (
-    <div ref={ref} className="fexp-journey">
-      <svg className="fexp-journey__svg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid meet">
-        {/* Center point - Denham */}
-        <circle cx="600" cy="200" r="8" fill="#1a1a1a" />
-        <text x="600" y="230" textAnchor="middle" className="fexp-journey__label">DENHAM</text>
-
-        {/* Journey lines with animation */}
-        {[
-          { x: 200, y: 80, label: 'ARCTIC', delay: 0 },
-          { x: 150, y: 200, label: 'ICELAND', delay: 0.1 },
-          { x: 250, y: 320, label: 'MOROCCO', delay: 0.2 },
-          { x: 450, y: 100, label: 'NORWAY', delay: 0.3 },
-          { x: 750, y: 100, label: 'ALPS', delay: 0.4 },
-          { x: 1000, y: 80, label: 'GREENLAND', delay: 0.5 },
-          { x: 1050, y: 200, label: 'BAHAMAS', delay: 0.6 },
-          { x: 950, y: 320, label: 'COSTA RICA', delay: 0.7 },
-        ].map((dest, i) => (
-          <g key={i}>
-            <motion.line
-              x1="600"
-              y1="200"
-              x2={dest.x}
-              y2={dest.y}
-              stroke="#e8e6e2"
-              strokeWidth="1"
-              strokeDasharray="4 4"
-              initial={{ pathLength: 0, opacity: 0 }}
-              animate={isInView ? { pathLength: 1, opacity: 1 } : {}}
-              transition={{ duration: 1, delay: dest.delay, ease: "easeOut" }}
-            />
-            <motion.circle
-              cx={dest.x}
-              cy={dest.y}
-              r="5"
-              fill="#fff"
-              stroke="#1a1a1a"
-              strokeWidth="2"
-              initial={{ scale: 0, opacity: 0 }}
-              animate={isInView ? { scale: 1, opacity: 1 } : {}}
-              transition={{ duration: 0.3, delay: dest.delay + 0.8 }}
-            />
-            <motion.text
-              x={dest.x}
-              y={dest.y + 20}
-              textAnchor="middle"
-              className="fexp-journey__dest-label"
-              initial={{ opacity: 0 }}
-              animate={isInView ? { opacity: 1 } : {}}
-              transition={{ duration: 0.3, delay: dest.delay + 1 }}
-            >
-              {dest.label}
-            </motion.text>
-          </g>
-        ))}
-
-        {/* Animated helicopter */}
-        <motion.g
-          initial={{ x: 0, y: 0, opacity: 0 }}
-          animate={isInView ? {
-            x: [0, -350, -350, 0, 350, 350, 0],
-            y: [0, -100, 100, 0, -100, 100, 0],
-            opacity: 1
-          } : {}}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear", delay: 1.5 }}
-        >
-          <image
-            href="/assets/images/icons/r66-icon-transparent going right.svg"
-            x="585"
-            y="185"
-            width="30"
-            height="30"
-          />
-        </motion.g>
-      </svg>
-      <p className="fexp-journey__text">From Denham to the ends of the Earth</p>
-    </div>
-  );
-}
-
 // Expedition destinations data
 const destinations = {
   polar: [
@@ -435,7 +350,7 @@ const faqs = [
 
 // 1. Stats data for StatsCounter component
 const expeditionStats = [
-  { value: '35', suffix: '+', label: 'Years Experience', icon: 'fa-calendar' },
+  { value: '15', suffix: '+', label: 'Years Experience', icon: 'fa-calendar' },
   { value: '7', suffix: '', label: 'Continents Explored', icon: 'fa-globe' },
   { value: '18000', suffix: '+', label: 'Flight Hours', icon: 'fa-clock' },
   { value: '150', suffix: '+', label: 'Expeditions Completed', icon: 'fa-route' },
@@ -465,16 +380,6 @@ const testimonials = [
     expedition: "Greenland Explorer 2024",
     image: "/assets/images/testimonials/testimonial-3.jpg",
   },
-];
-
-// 3. Gallery images data
-const galleryImages = [
-  { src: '/assets/images/expeditions/gallery/heli-glacier.jpg', alt: 'Helicopter over glacier', caption: 'Greenland Ice Cap' },
-  { src: '/assets/images/expeditions/gallery/heli-sunset.jpg', alt: 'Sunset flight', caption: 'Iceland Sunset' },
-  { src: '/assets/images/expeditions/gallery/heli-mountains.jpg', alt: 'Mountain approach', caption: 'Swiss Alps' },
-  { src: '/assets/images/expeditions/gallery/heli-poles.jpg', alt: 'Polar landing', caption: 'Antarctic Base' },
-  { src: '/assets/images/expeditions/gallery/heli-fjords.jpg', alt: 'Norwegian fjords', caption: 'Norwegian Coast' },
-  { src: '/assets/images/expeditions/gallery/heli-tropical.jpg', alt: 'Tropical island', caption: 'Bahamas Islands' },
 ];
 
 // 4. Sample itinerary data
@@ -562,7 +467,7 @@ const bookingSteps = [
 
 // 14. Timeline data for Captain Q's expedition history
 const expeditionTimeline = [
-  { year: '1990', title: 'HQ Aviation Founded', desc: 'Established at Denham Aerodrome, UK' },
+  { year: '2010', title: 'HQ Aviation Founded', desc: 'Established at Denham Aerodrome, UK' },
   { year: '2004', title: 'First Polar Expedition', desc: 'Arctic Circle crossing in Robinson R44' },
   { year: '2013', title: 'Antarctic Achievement', desc: 'First solo helicopter flight to South Pole' },
   { year: '2016', title: 'World Circumnavigation', desc: 'First helicopter round-the-world via both poles' },
@@ -705,78 +610,13 @@ function HighlightReel() {
             </div>
           )}
         </motion.div>
-
-        <Reveal delay={0.3}>
-          <p className="fexp-highlight__caption">
-            Quick cuts and stunning moments from our helicopter expeditions around the world
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.4}>
-          <div className="fexp-highlight__description">
-            <p>
-              This isn't transport. This is using the helicopter as a gateway to the world — seeing places in a way that very few have experienced before. The helicopter becomes your first-class ticket to the beauty of the planet, where the journey itself is the destination.
-            </p>
-            <p>
-              Over 35 years, we've flown to the Arctic, crossed the Sahara, landed on glaciers in Greenland, and navigated the volcanic landscapes of Iceland. Each expedition is a journey of a lifetime, blending adventure with the development of real-world flying skills in fully immersed scenarios.
-            </p>
-            <p>
-              Behind every expedition is our dedicated operations team — eyes on the ground in constant communication, facilitating logistics and ensuring a seamless experience from departure to return.
-            </p>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
 }
 
 
-// 3. Gallery Grid
-function GalleryGrid() {
-  const [selectedImage, setSelectedImage] = useState(null);
-
-  return (
-    <section className="fexp-gallery">
-      <div className="fexp-gallery__container">
-        <Reveal>
-          <div className="fexp-section-header">
-            <span className="fexp-pre-text">Visual Journey</span>
-            <h2>
-              <span className="fexp-text--dark">Expedition</span>{' '}
-              <span className="fexp-text--mid">Gallery</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="fexp-gallery__grid">
-          {galleryImages.map((img, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div className="fexp-gallery__item" onClick={() => setSelectedImage(img)}>
-                <img src={img.src} alt={img.alt} />
-                <div className="fexp-gallery__overlay">
-                  <span>{img.caption}</span>
-                </div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-
-        {/* Barcode manifest embedded in gallery */}
-        <ExpeditionBarcode />
-      </div>
-
-      {selectedImage && (
-        <div className="fexp-gallery__lightbox" onClick={() => setSelectedImage(null)}>
-          <img src={selectedImage.src} alt={selectedImage.alt} />
-          <span className="fexp-gallery__lightbox-caption">{selectedImage.caption}</span>
-          <button className="fexp-gallery__lightbox-close">×</button>
-        </div>
-      )}
-    </section>
-  );
-}
-
-// 4. Video Showcase
+// 3. Video Showcase
 function VideoShowcase() {
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -1112,16 +952,6 @@ function ExpeditionHistory() {
   return (
     <section className="fexp-philosophy">
       <div className="fexp-philosophy__container">
-        <Reveal>
-          <div className="fexp-section-header">
-            <span className="fexp-pre-text">Built On</span>
-            <h2>
-              <span className="fexp-text--dark">35 Years</span>{' '}
-              <span className="fexp-text--mid">Of Adventure</span>
-            </h2>
-          </div>
-        </Reveal>
-
         <div className="fexp-philosophy__layout">
           <Reveal delay={0.2}>
             <div className="fexp-philosophy__left">
@@ -1578,7 +1408,7 @@ function FinalExpeditions() {
                 <div className="fexp-hero__passport-stub-row">
                   <div><span className="fexp-hero__passport-lbl">CONTINENTS</span><span>7</span></div>
                   <div><span className="fexp-hero__passport-lbl">RECORDS</span><span>3</span></div>
-                  <div><span className="fexp-hero__passport-lbl">SINCE</span><span>1990</span></div>
+                  <div><span className="fexp-hero__passport-lbl">SINCE</span><span>2010</span></div>
                 </div>
               </div>
             </motion.div>
@@ -1604,78 +1434,24 @@ function FinalExpeditions() {
             </motion.p>
           </div>
         </motion.div>
+        <StatsCounter />
       </section>
 
-      {/* ========== JOURNEY LINES ANIMATION ========== */}
+      {/* ========== EXPEDITION BARCODE GRID ========== */}
       <section className="fexp-journey-section">
         <Reveal>
-          <JourneyLines />
+          <div className="fexp-journey-section__header">
+            <span className="fexp-pre-text">From Denham to the Ends of the Earth</span>
+            <h2 className="fexp-journey-section__title">Where Will You Go?</h2>
+          </div>
+        </Reveal>
+        <Reveal>
+          <ExpeditionBarcode />
         </Reveal>
       </section>
 
-      {/* ========== NEW: STATS COUNTER ========== */}
-      <StatsCounter />
-
       {/* ========== HIGHLIGHT REEL ========== */}
       <HighlightReel />
-
-      {/* ========== CAPTAIN Q + QUOTE COMBINED ========== */}
-      <section className="fexp-leader-quote">
-        <div className="fexp-leader-quote__container">
-          <Reveal delay={0.1}>
-            <div className="fexp-leader-quote__card">
-              {/* Decorative flight path SVG */}
-              <svg className="fexp-leader-quote__path" viewBox="0 0 400 200" preserveAspectRatio="none">
-                <path d="M0,100 Q100,20 200,100 T400,100" fill="none" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
-              </svg>
-
-              <div className="fexp-leader-quote__portrait">
-                <div className="fexp-leader-quote__portrait-ring">
-                  <img src="/assets/images/team/quentin-smith-profile-picture.jpg" alt="Captain Quentin Smith" />
-                </div>
-                <div className="fexp-leader-quote__compass">
-                  <svg viewBox="0 0 40 40">
-                    <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" strokeWidth="0.5" />
-                    <line x1="20" y1="4" x2="20" y2="8" stroke="currentColor" strokeWidth="1" />
-                    <line x1="20" y1="32" x2="20" y2="36" stroke="currentColor" strokeWidth="1" />
-                    <line x1="4" y1="20" x2="8" y2="20" stroke="currentColor" strokeWidth="1" />
-                    <line x1="32" y1="20" x2="36" y2="20" stroke="currentColor" strokeWidth="1" />
-                    <text x="20" y="14" textAnchor="middle" fontSize="4" fill="currentColor">N</text>
-                  </svg>
-                </div>
-              </div>
-
-              <div className="fexp-leader-quote__content">
-                <span className="fexp-leader-quote__role">Your Expedition Leader</span>
-                <h3 className="fexp-leader-quote__name">Captain Quentin Smith</h3>
-                <blockquote className="fexp-leader-quote__quote">
-                  "{featuredQuote.text}"
-                </blockquote>
-                <Link to="/about-us/captain-q" className="fexp-leader-quote__cta">
-                  Full Biography <span>→</span>
-                </Link>
-              </div>
-
-              <div className="fexp-leader-quote__stats">
-                <div className="fexp-leader-quote__stat">
-                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="18000" />+</span>
-                  <span className="fexp-leader-quote__stat-text">Flight Hours</span>
-                </div>
-                <div className="fexp-leader-quote__stat-divider" />
-                <div className="fexp-leader-quote__stat">
-                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="7" /></span>
-                  <span className="fexp-leader-quote__stat-text">Continents</span>
-                </div>
-                <div className="fexp-leader-quote__stat-divider" />
-                <div className="fexp-leader-quote__stat">
-                  <span className="fexp-leader-quote__stat-num"><AnimatedNumber value="3" /></span>
-                  <span className="fexp-leader-quote__stat-text">World Records</span>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
 
       {/* ========== NEW: EXPEDITION HISTORY ========== */}
       <ExpeditionHistory />
@@ -1750,53 +1526,6 @@ function FinalExpeditions() {
       {/* ========== VIDEO SLIDER ========== */}
       <ExpeditionVideoSlider title="Expedition Footage" />
 
-      {/* ========== GALLERY GRID ========== */}
-      <GalleryGrid />
-
-      {/* ========== UPCOMING EXPEDITIONS ========== */}
-      <section className="fexp-upcoming">
-        <div className="fexp-upcoming__container">
-          <Reveal>
-            <div className="fexp-section-header">
-              <span className="fexp-pre-text">Join Us</span>
-              <h2 className="fexp-upcoming__title">
-                <span className="fexp-text--dark">Upcoming</span>{' '}
-                <span className="fexp-text--mid">Expeditions</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="fexp-upcoming__grid">
-            {upcomingExpeditions.map((exp, i) => (
-              <Reveal key={i} delay={i * 0.15}>
-                <div className="fexp-upcoming__card">
-                  <div className="fexp-upcoming__image">
-                    <span className="fexp-upcoming__badge">{exp.badge}</span>
-                    <img src={exp.image} alt={exp.title} />
-                  </div>
-                  <div className="fexp-upcoming__content">
-                    <span className="fexp-upcoming__date">{exp.date}</span>
-                    <h3>{exp.title}</h3>
-                    <p>{exp.description}</p>
-                    <Link to={exp.link} className="fexp-btn fexp-btn--primary fexp-btn--block">
-                      View Details
-                    </Link>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.5}>
-            <div className="fexp-upcoming__cta">
-              <Link to="/expeditions/calendar" className="fexp-btn fexp-btn--outline">
-                View Full Calendar
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
       {/* ========== NEW: ITINERARY SAMPLE ========== */}
       <ItinerarySection />
 
@@ -1806,32 +1535,25 @@ function FinalExpeditions() {
       {/* ========== FAQ SECTION ========== */}
       <section className="fexp-faq">
         <div className="fexp-faq__container">
-          {/* Left: Contact Card */}
-          <div className="fexp-faq__left">
-            <Reveal>
-              <div className="fexp-contact-card">
-                <div className="fexp-contact-card__header">
-                  <span className="fexp-label">Have Questions?</span>
-                  <h3>Get in Touch</h3>
-                </div>
-                <p className="fexp-contact-card__desc">
-                  Our expedition team is ready to help plan your adventure. Contact us for availability, pricing, or custom expedition inquiries.
-                </p>
-                <div className="fexp-contact-card__details">
-                  <div className="fexp-contact-card__detail">
-                    <span className="fexp-contact-card__label">Email</span>
-                    <a href="mailto:expeditions@hqaviation.com">expeditions@hqaviation.com</a>
-                  </div>
-                  <div className="fexp-contact-card__detail">
-                    <span className="fexp-contact-card__label">Phone</span>
-                    <a href="tel:+441234567890">+44 (0)1234 567 890</a>
-                  </div>
-                </div>
-                <Link to="/contact" className="fexp-btn fexp-btn--primary fexp-btn--block">
-                  Contact Us
-                </Link>
-              </div>
-            </Reveal>
+          {/* Left: Boarding */}
+          <div className="fexp-faq__boarding">
+            <div className="fexp-boarding__announcement">
+              <span className="fexp-boarding__now">NOW BOARDING</span>
+              <span className="fexp-boarding__call">Calling last passengers</span>
+            </div>
+            <div className="fexp-boarding__board">
+              <ExpeditionDepartureBoard
+                title="UPCOMING EXPEDITIONS"
+                origin="GATE: DENHAM AERODROME"
+                flights={[
+                  { code: 'HQ-025', dest: 'BAHAMAS', status: 'BOARDING', distance: '4,200nm', year: '2025' },
+                  { code: 'HQ-026', dest: 'COSTA RICA', status: 'SCHEDULED', distance: '5,100nm', year: '2026' },
+                  { code: 'HQ-027', dest: 'GREENLAND', status: 'SCHEDULED', distance: '2,100nm', year: '2026' },
+                  { code: 'HQ-028', dest: 'ICELAND', status: 'PLANNING', distance: '1,200nm', year: '2026' },
+                ]}
+              />
+            </div>
+            <TripWaitlistForm />
           </div>
 
           {/* Divider */}
@@ -1875,36 +1597,6 @@ function FinalExpeditions() {
           </div>
         </div>
       </section>
-
-      {/* ========== NOW BOARDING ========== */}
-      <section className="fexp-boarding">
-        <div className="fexp-boarding__container">
-          <div className="fexp-boarding__announcement">
-            <span className="fexp-boarding__now">NOW BOARDING</span>
-            <span className="fexp-boarding__call">Calling last passengers</span>
-          </div>
-          <div className="fexp-boarding__board">
-            <ExpeditionDepartureBoard
-              title="UPCOMING EXPEDITIONS"
-              origin="GATE: DENHAM AERODROME"
-              flights={[
-                { code: 'HQ-025', dest: 'BAHAMAS', status: 'BOARDING', distance: '4,200nm', year: '2025' },
-                { code: 'HQ-026', dest: 'COSTA RICA', status: 'SCHEDULED', distance: '5,100nm', year: '2026' },
-                { code: 'HQ-027', dest: 'GREENLAND', status: 'SCHEDULED', distance: '2,100nm', year: '2026' },
-                { code: 'HQ-028', dest: 'ICELAND', status: 'PLANNING', distance: '1,200nm', year: '2026' },
-              ]}
-            />
-          </div>
-          <div className="fexp-boarding__cta">
-            <Link to="/contact?subject=expedition-enquiry" className="fexp-btn fexp-btn--primary">
-              Reserve Your Seat
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== TRIP WAITLIST ========== */}
-      <TripWaitlistForm />
 
       {/* ========== FOOTER ========== */}
       <FooterMinimal />
@@ -2252,49 +1944,47 @@ function FinalExpeditions() {
           color: #1a1a1a;
         }
 
-        /* ===== JOURNEY LINES ===== */
+        /* ===== JOURNEY / BARCODE SECTION ===== */
         .fexp-journey-section {
           padding: 4rem 2rem;
           background: #fff;
+          position: relative;
+          z-index: 10;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
-        .fexp-journey {
-          max-width: 1200px;
-          margin: 0 auto;
+        .fexp-journey-section::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 200px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #999, transparent);
+        }
+
+        .fexp-journey-section__header {
           text-align: center;
+          margin-bottom: 2rem;
         }
 
-        .fexp-journey__svg {
-          width: 100%;
-          height: auto;
-          max-height: 400px;
-        }
-
-        .fexp-journey__label {
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 10px;
-          fill: #1a1a1a;
-          letter-spacing: 0.1em;
-        }
-
-        .fexp-journey__dest-label {
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 8px;
-          fill: #666;
-          letter-spacing: 0.05em;
-        }
-
-        .fexp-journey__text {
-          margin-top: 2rem;
-          font-size: 1.1rem;
-          color: #666;
-          font-style: italic;
+        .fexp-journey-section__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.75rem, 3vw, 2.5rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 0;
         }
 
         /* ===== PHILOSOPHY SECTION ===== */
         .fexp-philosophy {
-          padding: 4rem 2rem;
+          padding: 30px 2rem 4rem;
           background: #faf9f6;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.1);
         }
 
         .fexp-philosophy__container {
@@ -2988,14 +2678,6 @@ function FinalExpeditions() {
             background: linear-gradient(180deg, rgba(250,249,246,0.97) 0%, rgba(250,249,246,0.92) 60%, rgba(250,249,246,0.7) 100%);
           }
 
-          .fexp-journey__svg {
-            display: none;
-          }
-
-          .fexp-journey__text {
-            margin-top: 0;
-          }
-
           .fexp-included__grid {
             grid-template-columns: 1fr;
             gap: 2.5rem;
@@ -3038,16 +2720,18 @@ function FinalExpeditions() {
 
         /* 2. STATS COUNTER */
         .fexp-stats {
-          padding: 4rem 2rem;
+          position: relative;
+          z-index: 10;
+          padding: 1.5rem 2rem;
           background: #1a1a1a;
         }
 
         .fexp-stats__container {
-          max-width: 1000px;
+          max-width: 900px;
           margin: 0 auto;
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 2rem;
+          gap: 1rem;
         }
 
         .fexp-stats__item {
@@ -3056,45 +2740,63 @@ function FinalExpeditions() {
         }
 
         .fexp-stats__item i {
-          font-size: 1.5rem;
-          color: rgba(255,255,255,0.6);
-          margin-bottom: 0.75rem;
+          font-size: 1rem;
+          color: rgba(255,255,255,0.5);
+          margin-bottom: 0.4rem;
           display: block;
         }
 
         .fexp-stats__value {
           display: block;
           font-family: 'Share Tech Mono', monospace;
-          font-size: 2rem;
+          font-size: 1.4rem;
           font-weight: 700;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.15rem;
         }
 
         .fexp-stats__label {
-          font-size: 0.7rem;
+          font-size: 0.6rem;
           text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: rgba(255,255,255,0.5);
+          letter-spacing: 0.08em;
+          color: rgba(255,255,255,0.45);
         }
 
         @media (max-width: 1024px) {
           .fexp-stats__container {
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(5, 1fr);
           }
         }
 
         @media (max-width: 768px) {
           .fexp-stats__container {
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+          }
+          .fexp-stats__value {
+            font-size: 1.1rem;
+          }
+          .fexp-stats__label {
+            font-size: 0.5rem;
           }
         }
 
         /* HIGHLIGHT REEL */
         .fexp-highlight {
-          padding: 5rem 2rem;
+          padding: 5rem 2rem 0;
           background: #faf9f6;
           position: relative;
           overflow: hidden;
+        }
+
+        .fexp-highlight::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 200px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #999, transparent);
         }
 
         .fexp-highlight__lines {
@@ -3263,109 +2965,7 @@ function FinalExpeditions() {
           }
         }
 
-        /* 4. GALLERY */
-        .fexp-gallery {
-          padding: 5rem 2rem;
-          background: #fff;
-        }
-
-        .fexp-gallery__container {
-          max-width: 1200px;
-          margin: 0 auto;
-        }
-
-        .fexp-gallery__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1rem;
-        }
-
-        .fexp-gallery__item {
-          position: relative;
-          aspect-ratio: 4/3;
-          overflow: hidden;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-
-        .fexp-gallery__item img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.5s ease;
-        }
-
-        .fexp-gallery__item:hover img {
-          transform: scale(1.1);
-        }
-
-        .fexp-gallery__overlay {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-          display: flex;
-          align-items: flex-end;
-          padding: 1rem;
-          opacity: 0;
-          transition: opacity 0.3s ease;
-        }
-
-        .fexp-gallery__item:hover .fexp-gallery__overlay {
-          opacity: 1;
-        }
-
-        .fexp-gallery__overlay span {
-          color: #fff;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-        }
-
-        .fexp-gallery__lightbox {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.95);
-          z-index: 100001;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: center;
-          padding: 2rem;
-          cursor: pointer;
-        }
-
-        .fexp-gallery__lightbox img {
-          max-width: 90%;
-          max-height: 80vh;
-          object-fit: contain;
-        }
-
-        .fexp-gallery__lightbox-caption {
-          color: #fff;
-          margin-top: 1rem;
-          font-size: 0.9rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-        }
-
-        .fexp-gallery__lightbox-close {
-          position: absolute;
-          top: 2rem;
-          right: 2rem;
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: 2rem;
-          cursor: pointer;
-        }
-
-        @media (max-width: 768px) {
-          .fexp-gallery__grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        /* 5. VIDEO */
+        /* 4. VIDEO */
         .fexp-video {
           padding: 5rem 2rem;
           background: #1a1a1a;

@@ -26,7 +26,7 @@ const FounderStory = ({ showNote = true }) => {
         <div style={{ background: 'var(--hq-primary)', color: '#fff', padding: '4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--hq-accent)', marginBottom: '1rem' }}>MEET THE FOUNDER</span>
           <h2 style={{ fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 1.1, marginBottom: '1.5rem' }}>Captain Quentin Smith</h2>
-          <p style={{ fontSize: '1rem', opacity: 0.8, lineHeight: 1.8, marginBottom: '1.5rem' }}>"In 1990, I turned my passion for flight into HQ Aviation. Today, we're the UK's leading Robinson specialist, but our mission remains the same: sharing the joy of helicopter flight with everyone who walks through our doors."</p>
+          <p style={{ fontSize: '1rem', opacity: 0.8, lineHeight: 1.8, marginBottom: '1.5rem' }}>"In 2010, I turned my passion for flight into HQ Aviation. Today, we're the UK's leading Robinson specialist, but our mission remains the same: sharing the joy of helicopter flight with everyone who walks through our doors."</p>
           <div style={{ display: 'flex', gap: '2rem', marginBottom: '2rem' }}>
             <div>
               <span style={{ fontFamily: 'var(--font-mono)', fontSize: '1.5rem', fontWeight: 700, display: 'block' }}>15,000+</span>

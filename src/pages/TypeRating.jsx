@@ -539,134 +539,65 @@ function TypeRating() {
               </p>
             </div>
           </Reveal>
-
-          <div className="tr-intro__grid">
-            <Reveal delay={0.1}>
-              <div className="tr-intro__card">
-                <div className="tr-intro__card-num">01</div>
-                <h3>Piston Types</h3>
-                <p>R22 and R44 piston-powered helicopters. Ideal for pilots looking to upgrade within the Robinson family or add versatility to their flying.</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="tr-intro__card">
-                <div className="tr-intro__card-num">02</div>
-                <h3>Turbine Types</h3>
-                <p>Step up to turbine power with the R66. Enhanced performance, speed, and reliability for pilots ready to advance their capabilities.</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <div className="tr-intro__card">
-                <div className="tr-intro__card-num">03</div>
-                <h3>Differences Training</h3>
-                <p>Already rated on one Robinson? Differences training can streamline your path to additional types within the same family.</p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== PREREQUISITES ========== */}
-      <section className="tr-prereq">
-        <div className="tr-prereq__container">
-          <Reveal>
-            <div className="tr-section-header">
-              <span className="tr-pre-text">Before You Begin</span>
-              <h2>
-                <span className="tr-text--dark">Entry</span>{' '}
-                <span className="tr-text--mid">Requirements</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="tr-prereq__content">
-            <Reveal delay={0.1}>
-              <div className="tr-prereq__list">
-                {prerequisites.map((item, i) => (
-                  <div key={i} className="tr-prereq__item">
-                    <span className="tr-prereq__icon">{item.icon}</span>
-                    <span className="tr-prereq__text">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="tr-prereq__note">
-                <span className="tr-prereq__note-label">Important</span>
-                <p>
-                  No minimum flight hours are required beyond your PPL(H), but we recommend having
-                  some recent flying experience to get the most from your type rating training.
-                </p>
-              </div>
-            </Reveal>
-          </div>
         </div>
       </section>
 
       {/* ========== FLEET / AIRCRAFT SELECTION ========== */}
       <section className="tr-fleet" id="fleet">
         <div className="tr-fleet__container">
-          <Reveal>
-            <div className="tr-section-header">
-              <span className="tr-pre-text">Our Fleet</span>
-              <h2>
-                <span className="tr-text--dark">Choose</span>{' '}
-                <span className="tr-text--mid">Your</span>{' '}
-                <span className="tr-text--light">Type</span>
-              </h2>
-              <p>Select from our extensive Robinson fleet. Each aircraft offers unique capabilities for different flying missions.</p>
-            </div>
-          </Reveal>
-
           <div className="tr-fleet__grid">
             {fleet.map((aircraft, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <AircraftCard
-                  model={aircraft.model}
-                  image={aircraft.image}
-                  specs={aircraft.specs}
-                  isActive={selectedAircraft === i}
-                  onClick={() => setSelectedAircraft(i)}
-                />
-              </Reveal>
+              <div key={i} className="tr-fleet__card-wrapper">
+                <Reveal delay={i * 0.1}>
+                  <AircraftCard
+                    model={aircraft.model}
+                    image={aircraft.image}
+                    specs={aircraft.specs}
+                    isActive={selectedAircraft === i}
+                    onClick={() => setSelectedAircraft(selectedAircraft === i ? null : i)}
+                  />
+                </Reveal>
+
+                {/* Dropdown Details */}
+                <AnimatePresence>
+                  {selectedAircraft === i && (
+                    <motion.div
+                      className="tr-fleet__dropdown"
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: 'auto' }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                    >
+                      <div className="tr-fleet__dropdown-inner">
+                        <div className="tr-fleet__dropdown-header">
+                          <h4>{aircraft.model} Type Rating</h4>
+                          <span className="tr-fleet__dropdown-price">{aircraft.price}</span>
+                        </div>
+                        <p className="tr-fleet__dropdown-desc">{aircraft.description}</p>
+                        <div className="tr-fleet__dropdown-specs">
+                          <div className="tr-fleet__dropdown-spec">
+                            <span className="tr-fleet__dropdown-value">{aircraft.groundHours}</span>
+                            <span className="tr-fleet__dropdown-label">Ground Hours</span>
+                          </div>
+                          <div className="tr-fleet__dropdown-spec">
+                            <span className="tr-fleet__dropdown-value">{aircraft.flightHours}</span>
+                            <span className="tr-fleet__dropdown-label">Flight Hours</span>
+                          </div>
+                          <div className="tr-fleet__dropdown-spec">
+                            <span className="tr-fleet__dropdown-value">1</span>
+                            <span className="tr-fleet__dropdown-label">Skill Test</span>
+                          </div>
+                        </div>
+                        <a href={`/contact?subject=type-rating-${aircraft.model.toLowerCase().replace(' ', '-')}`} className="tr-btn tr-btn--primary tr-btn--small">
+                          Enquire Now
+                        </a>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ))}
           </div>
-
-          {/* Selected Aircraft Details */}
-          <Reveal delay={0.3}>
-            <motion.div
-              className="tr-fleet__details"
-              key={selectedAircraft}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div className="tr-fleet__details-header">
-                <h3>{fleet[selectedAircraft].model} Type Rating</h3>
-                <span className="tr-fleet__details-price">{fleet[selectedAircraft].price}</span>
-              </div>
-              <p className="tr-fleet__details-desc">{fleet[selectedAircraft].description}</p>
-              <div className="tr-fleet__details-breakdown">
-                <div className="tr-fleet__details-item">
-                  <span className="tr-fleet__details-value">{fleet[selectedAircraft].groundHours}</span>
-                  <span className="tr-fleet__details-label">Ground School Hours</span>
-                </div>
-                <div className="tr-fleet__details-divider" />
-                <div className="tr-fleet__details-item">
-                  <span className="tr-fleet__details-value">{fleet[selectedAircraft].flightHours}</span>
-                  <span className="tr-fleet__details-label">Min Flight Hours</span>
-                </div>
-                <div className="tr-fleet__details-divider" />
-                <div className="tr-fleet__details-item">
-                  <span className="tr-fleet__details-value">1</span>
-                  <span className="tr-fleet__details-label">Skill Test</span>
-                </div>
-              </div>
-              <a href={`/contact?subject=type-rating-${fleet[selectedAircraft].model.toLowerCase().replace(' ', '-')}`} className="tr-btn tr-btn--primary">
-                Enquire About This Type Rating
-              </a>
-            </motion.div>
-          </Reveal>
         </div>
       </section>
 
@@ -717,172 +648,6 @@ function TypeRating() {
               </div>
             </div>
           </Reveal>
-        </div>
-      </section>
-
-      {/* ========== PRICING SUMMARY ========== */}
-      <section className="tr-pricing">
-        <div className="tr-pricing__container">
-          <Reveal>
-            <div className="tr-section-header">
-              <span className="tr-pre-text">Investment</span>
-              <h2>
-                <span className="tr-text--dark">Type Rating</span>{' '}
-                <span className="tr-text--mid">Costs</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="tr-pricing__grid">
-            {fleet.map((aircraft, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="tr-pricing__card">
-                  <div className="tr-pricing__card-header">
-                    <span className="tr-pricing__card-type">{aircraft.model}</span>
-                    <span className="tr-pricing__card-badge">
-                      {aircraft.model.includes('66') ? 'Turbine' : 'Piston'}
-                    </span>
-                  </div>
-                  <div className="tr-pricing__card-price">
-                    <span className="tr-pricing__card-from">From</span>
-                    <span className="tr-pricing__card-amount">{aircraft.price}</span>
-                  </div>
-                  <div className="tr-pricing__card-includes">
-                    <span className="tr-pricing__card-includes-label">Includes</span>
-                    <ul>
-                      <li>{aircraft.groundHours} hours ground school</li>
-                      <li>{aircraft.flightHours} hours minimum flight training</li>
-                      <li>Training materials</li>
-                      <li>Skill test fee</li>
-                    </ul>
-                  </div>
-                  <a href={`/contact?subject=type-rating-${aircraft.model.toLowerCase().replace(' ', '-')}`} className="tr-btn tr-btn--outline tr-btn--full">
-                    Get Started
-                  </a>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="tr-pricing__note">
-              <p>
-                <strong>Note:</strong> Prices are based on the minimum required hours.
-                Additional training may be required based on individual progress.
-                Contact us for a personalized quote.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== WHY HQ AVIATION ========== */}
-      <section className="tr-why">
-        <div className="tr-why__container">
-          <div className="tr-why__content">
-            <Reveal>
-              <div className="tr-why__header">
-                <span className="tr-pre-text">Why Choose Us</span>
-                <h2>
-                  <span className="tr-text--dark">The HQ</span>{' '}
-                  <span className="tr-text--mid">Advantage</span>
-                </h2>
-              </div>
-            </Reveal>
-
-            <div className="tr-why__grid">
-              <Reveal delay={0.1}>
-                <div className="tr-why__item">
-                  <div className="tr-why__item-icon">
-                    <span><AnimatedNumber value="30" />+</span>
-                  </div>
-                  <div className="tr-why__item-text">
-                    <h4>Aircraft Fleet</h4>
-                    <p>The UK's largest Robinson fleet ensures aircraft availability when you need it.</p>
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={0.15}>
-                <div className="tr-why__item">
-                  <div className="tr-why__item-icon">
-                    <span><AnimatedNumber value="35" />+</span>
-                  </div>
-                  <div className="tr-why__item-text">
-                    <h4>Years Experience</h4>
-                    <p>The Robinson Specialists since 1990, with unmatched expertise and knowledge.</p>
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={0.2}>
-                <div className="tr-why__item">
-                  <div className="tr-why__item-icon">
-                    <span>CAA</span>
-                  </div>
-                  <div className="tr-why__item-text">
-                    <h4>Approved Centre</h4>
-                    <p>Fully approved training organization with experienced examiners on staff.</p>
-                  </div>
-                </div>
-              </Reveal>
-              <Reveal delay={0.25}>
-                <div className="tr-why__item">
-                  <div className="tr-why__item-icon">
-                    <span>✓</span>
-                  </div>
-                  <div className="tr-why__item-text">
-                    <h4>Factory Trained</h4>
-                    <p>Our instructors are Robinson factory-trained, ensuring the highest standards.</p>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-
-          <div className="tr-why__image">
-            <img src="/assets/images/facility/hangar-main.jpg" alt="HQ Aviation Hangar" />
-          </div>
-        </div>
-      </section>
-
-      {/* ========== FAQ SECTION ========== */}
-      <section className="tr-faq" id="faq">
-        <div className="tr-faq__container">
-          <Reveal>
-            <div className="tr-section-header">
-              <span className="tr-pre-text">Questions</span>
-              <h2>
-                <span className="tr-text--dark">Frequently</span>{' '}
-                <span className="tr-text--mid">Asked</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="tr-faq__list">
-            {faqs.map((faq, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <div
-                  className={`tr-faq__item ${openFaq === i ? 'tr-faq__item--open' : ''}`}
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                >
-                  <div className="tr-faq__number">{String(i + 1).padStart(2, '0')}</div>
-                  <div className="tr-faq__content">
-                    <h4>
-                      {faq.q}
-                      <span className="tr-faq__toggle">{openFaq === i ? '−' : '+'}</span>
-                    </h4>
-                    <motion.div
-                      className="tr-faq__answer"
-                      initial={false}
-                      animate={{ height: openFaq === i ? 'auto' : 0, opacity: openFaq === i ? 1 : 0 }}
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <p>{faq.a}</p>
-                    </motion.div>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -1362,7 +1127,6 @@ function TypeRating() {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
-          margin-bottom: 2rem;
         }
 
         /* Aircraft Card */
@@ -1459,74 +1223,86 @@ function TypeRating() {
           letter-spacing: 0.1em;
         }
 
-        /* Fleet Details */
-        .tr-fleet__details {
-          background: var(--hq-background, #faf9f6);
-          padding: 2rem;
-          border-left: 3px solid #1a1a1a;
+        /* Fleet Card Wrapper */
+        .tr-fleet__card-wrapper {
+          display: flex;
+          flex-direction: column;
         }
 
-        .tr-fleet__details-header {
+        /* Fleet Dropdown */
+        .tr-fleet__dropdown {
+          overflow: hidden;
+        }
+
+        .tr-fleet__dropdown-inner {
+          background: #1a1a1a;
+          padding: 1.5rem;
+          margin-top: 0.5rem;
+          border-radius: 0 0 8px 8px;
+        }
+
+        .tr-fleet__dropdown-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-bottom: 1rem;
+          margin-bottom: 0.75rem;
         }
 
-        .tr-fleet__details-header h3 {
-          font-size: 1.25rem;
+        .tr-fleet__dropdown-header h4 {
+          font-size: 1rem;
           font-weight: 600;
           margin: 0;
+          color: #fff;
           text-transform: uppercase;
         }
 
-        .tr-fleet__details-price {
+        .tr-fleet__dropdown-price {
           font-family: 'Share Tech Mono', monospace;
-          font-size: 1.5rem;
+          font-size: 1.25rem;
           font-weight: 700;
-          color: #1a1a1a;
+          color: #fff;
         }
 
-        .tr-fleet__details-desc {
-          font-size: 1rem;
-          color: #666;
-          line-height: 1.7;
-          margin: 0 0 1.5rem;
+        .tr-fleet__dropdown-desc {
+          font-size: 0.85rem;
+          color: rgba(255,255,255,0.7);
+          line-height: 1.6;
+          margin: 0 0 1rem;
         }
 
-        .tr-fleet__details-breakdown {
+        .tr-fleet__dropdown-specs {
           display: flex;
-          gap: 2rem;
-          margin-bottom: 1.5rem;
-          padding: 1.5rem 0;
-          border-top: 1px solid #e8e6e2;
-          border-bottom: 1px solid #e8e6e2;
+          gap: 1.5rem;
+          margin-bottom: 1rem;
+          padding: 1rem 0;
+          border-top: 1px solid rgba(255,255,255,0.15);
+          border-bottom: 1px solid rgba(255,255,255,0.15);
         }
 
-        .tr-fleet__details-item {
+        .tr-fleet__dropdown-spec {
           text-align: center;
         }
 
-        .tr-fleet__details-value {
+        .tr-fleet__dropdown-value {
           display: block;
           font-family: 'Share Tech Mono', monospace;
-          font-size: 1.75rem;
+          font-size: 1.25rem;
           font-weight: 700;
-          color: #1a1a1a;
+          color: #fff;
           line-height: 1;
           margin-bottom: 0.25rem;
         }
 
-        .tr-fleet__details-label {
-          font-size: 0.65rem;
-          color: #888;
+        .tr-fleet__dropdown-label {
+          font-size: 0.6rem;
+          color: rgba(255,255,255,0.5);
           text-transform: uppercase;
           letter-spacing: 0.1em;
         }
 
-        .tr-fleet__details-divider {
-          width: 1px;
-          background: linear-gradient(to bottom, transparent, #e8e6e2, transparent);
+        .tr-btn--small {
+          padding: 0.75rem 1.5rem;
+          font-size: 0.7rem;
         }
 
         /* ===== PROCESS SECTION ===== */

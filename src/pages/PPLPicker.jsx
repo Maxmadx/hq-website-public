@@ -113,7 +113,7 @@ const componentVariations = {
     // NEW VARIATIONS 21-40 - Based on feedback
     { id: 'intro-21', name: 'Instructor Network', style: 'Quentin with animated lines to all instructors he trained', variation: 21 },
     { id: 'intro-22', name: 'Why HQ', style: 'Three compelling reasons with bold typography', variation: 22 },
-    { id: 'intro-23', name: 'Heritage Timeline', style: 'Since 1990 - key milestones visual', variation: 23 },
+    { id: 'intro-23', name: 'Heritage Timeline', style: 'Since 2010 - key milestones visual', variation: 23 },
     { id: 'intro-24', name: 'Compare Schools', style: 'Why HQ vs other schools - feature comparison', variation: 24 },
     { id: 'intro-25', name: 'Student Journey', style: 'First-person narrative with progress photos', variation: 25 },
     { id: 'intro-26', name: 'Fleet Tour', style: 'Walk through aircraft options for training', variation: 26 },
@@ -539,7 +539,7 @@ function HeroComponent({ variation }) {
         <div className="hero-preview__content hero-preview__content--editorial">
           <div className="hero-preview__editorial-grid">
             <div className="hero-preview__editorial-text">
-              <span className="hero-preview__label">Est. 1990</span>
+              <span className="hero-preview__label">Est. 2010</span>
               <h1 style={{ fontFamily: style.fontFamily, fontSize: '3rem', fontWeight: 400 }}>
                 The Art of<br /><em>Helicopter Flight</em>
               </h1>
@@ -1020,7 +1020,7 @@ function HeroComponent({ variation }) {
             </div>
             <div className="hero-preview__brutalist-meta">
               <span>HELICOPTERS</span>
-              <span>SINCE 1990</span>
+              <span>SINCE 2010</span>
               <span>DENHAM UK</span>
             </div>
             <button className="hero-preview__btn hero-preview__btn--brutalist">START NOW →</button>
@@ -1361,7 +1361,7 @@ function HeroComponent({ variation }) {
             <div className="hero-preview__v46-bl">
               <span>HQ AVIATION</span>
               <span>DENHAM AERODROME</span>
-              <span>EST. 1990</span>
+              <span>EST. 2010</span>
             </div>
             <div className="hero-preview__v46-br">
               <button className="hero-preview__v46-btn">BOOK NOW</button>
@@ -1732,7 +1732,7 @@ function HeroComponent({ variation }) {
           <img src="/assets/images/gallery/carousel/rotating6.jpg" alt="Scenic flight" className="hero-preview__bg-image" />
           <div className="hero-preview__v55-overlay"></div>
           <div className="hero-preview__v55-content">
-            <span className="hero-preview__v55-issue">VOL. 35 — SINCE 1990</span>
+            <span className="hero-preview__v55-issue">VOL. 35 — SINCE 2010</span>
             <h1 className="hero-preview__v55-title">
               <span>THE</span>
               <span>ART OF</span>
@@ -1795,7 +1795,7 @@ function IntroComponent({ variation }) {
         {variation === 2 && (
           <div className="intro-preview__story">
             <h2>Your Aviation Journey Starts Here</h2>
-            <p>At HQ Aviation, we've been training pilots since 1990. Our structured approach ensures you receive the highest quality training.</p>
+            <p>At HQ Aviation, we've been training pilots since 2010. Our structured approach ensures you receive the highest quality training.</p>
             <img src="/assets/images/facility/hq-0254.jpg" alt="HQ Facility" className="intro-preview__inline-img" />
             <p>Based at Denham Aerodrome, we offer an ideal training environment with excellent facilities.</p>
           </div>
@@ -1896,7 +1896,7 @@ function IntroComponent({ variation }) {
                     <span className="intro-preview__q-title">Founder & Chief Instructor</span>
                     <div className="intro-preview__q-stats">
                       <span><strong>18,000+</strong> Instructing Hours</span>
-                      <span><strong>35+</strong> Years Dedicated to Teaching</span>
+                      <span><strong>15+</strong> Years Dedicated to Teaching</span>
                     </div>
                     <p className="intro-preview__q-dedication">
                       Quentin has dedicated his life to teaching pilots to fly to the highest possible standard.
@@ -1974,23 +1974,23 @@ function IntroComponent({ variation }) {
               <div className="intro-preview__why-card">
                 <div className="intro-preview__why-number">03</div>
                 <h3>Proven Track Record</h3>
-                <p>Since 1990, we've trained hundreds of successful pilots. Our graduates fly commercially, privately, and on expeditions worldwide.</p>
+                <p>Since 2010, we've trained hundreds of successful pilots. Our graduates fly commercially, privately, and on expeditions worldwide.</p>
                 <img src="/assets/images/gallery/events/img_2199.jpg" alt="Graduates" />
               </div>
             </div>
           </div>
         )}
 
-        {/* INTRO 23: Heritage Timeline - Since 1990 */}
+        {/* INTRO 23: Heritage Timeline - Since 2010 */}
         {variation === 23 && (
           <div className="intro-preview__heritage">
             <div className="intro-preview__heritage-header">
               <span className="intro-preview__label">Our Story</span>
-              <h2>Excellence Since <span className="intro-preview__accent">1990</span></h2>
+              <h2>Excellence Since <span className="intro-preview__accent">2010</span></h2>
             </div>
             <div className="intro-preview__heritage-timeline">
               <div className="intro-preview__heritage-item">
-                <span className="intro-preview__heritage-year">1990</span>
+                <span className="intro-preview__heritage-year">2010</span>
                 <div className="intro-preview__heritage-content">
                   <h4>HQ Aviation Founded</h4>
                   <p>Quentin Smith establishes HQ Aviation at Denham Aerodrome</p>
@@ -2068,7 +2068,7 @@ function IntroComponent({ variation }) {
                 <p className="intro-preview__letter-greeting">Dear Future Pilot,</p>
                 <p>
                   Learning to fly a helicopter is one of the most rewarding experiences you'll ever have.
-                  I've dedicated over 35 years of my life to teaching this incredible skill, and I can tell you—there's
+                  I've dedicated over 15 years at HQ Aviation to teaching this incredible skill, and I can tell you—there's
                   nothing quite like the moment you first hover on your own.
                 </p>
                 <p>
@@ -2156,7 +2156,7 @@ function IntroComponent({ variation }) {
                 <div className="intro-preview__varied-text">
                   <p className="intro-preview__style-label">{componentVariations.intros[variation - 1]?.style}</p>
                   <p>
-                    HQ Aviation has been the UK's premier helicopter training school since 1990.
+                    HQ Aviation has been the UK's premier helicopter training school since 2010.
                     Our commitment to excellence and safety has produced hundreds of confident, skilled pilots.
                   </p>
                   <ul className="intro-preview__varied-list">

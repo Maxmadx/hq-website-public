@@ -35,6 +35,13 @@ import FinalMaintenance from './pages/FinalMaintenance';
 import Sitemap from './pages/Sitemap';
 import JourneyPicker from './pages/JourneyPicker';
 import VideoSliderPicker from './pages/VideoSliderPicker';
+import Fleet from './pages/Fleet';
+import UsedSales from './pages/UsedSales';
+import AircraftR66 from './pages/AircraftR66';
+import AircraftR44 from './pages/AircraftR44';
+import AircraftR22 from './pages/AircraftR22';
+import AircraftH500 from './pages/AircraftH500';
+import AircraftR88 from './pages/AircraftR88';
 
 // Import styles
 import './assets/css/main.css';
@@ -61,7 +68,8 @@ function App() {
         <Route path="/final-why-fly-a-helicopter" element={<FinalWhyFlyAHelicopter />} />
         <Route path="/type-rating" element={<TypeRating />} />
         <Route path="/training/type-rating" element={<TypeRating />} />
-        <Route path="/sales" element={<Sales />} />
+        <Route path="/sales/new" element={<Sales />} />
+        <Route path="/sales/used" element={<UsedSales />} />
         <Route path="/self-fly-hire" element={<SelfFlyHire />} />
         <Route path="/maintenance" element={<FinalMaintenance />} />
         <Route path="/expeditions" element={<FinalExpeditions />} />
@@ -69,6 +77,14 @@ function App() {
         <Route path="/sitemap" element={<Sitemap />} />
         <Route path="/journey-picker" element={<JourneyPicker />} />
         <Route path="/video-slider-picker" element={<VideoSliderPicker />} />
+        <Route path="/fleet" element={<Fleet />} />
+        <Route path="/aircraft/r66" element={<AircraftR66 />} />
+        <Route path="/aircraft/r44" element={<AircraftR44 />} />
+        <Route path="/aircraft-sales/new/r44" element={<AircraftR44 />} />
+        <Route path="/aircraft/r22" element={<AircraftR22 />} />
+        <Route path="/aircraft-sales/new/r22" element={<AircraftR22 />} />
+        <Route path="/aircraft/h500" element={<AircraftH500 />} />
+        <Route path="/aircraft/r88" element={<AircraftR88 />} />
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />

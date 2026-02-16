@@ -221,7 +221,7 @@ function Home() {
         <div className="hq-hero-carousel__overlay"></div>
         <div className="hq-hero-carousel__content">
           <h1 className="hq-hero-carousel__headline">Elevate Your Journey</h1>
-          <p className="hq-hero-carousel__tagline">Robinson helicopter specialists since 1990</p>
+          <p className="hq-hero-carousel__tagline">Robinson helicopter specialists since 2010</p>
         </div>
 
         {/* Scroll Indicator */}

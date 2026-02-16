@@ -595,69 +595,6 @@ function FinalPPL() {
       {/* ========== COMPACT SUMMARY: Hours & Costs ========== */}
       <TrainingSummary />
 
-      {/* ========== CTA: Discovery Flight (Compact) ========== */}
-      <section id="discovery" className="fppl-discovery fppl-discovery--compact">
-        <div className="fppl-discovery__inner">
-          <div className="fppl-discovery__image">
-            <motion.img
-              src="/assets/images/gallery/carousel/rotating1.jpg"
-              alt="Discovery flight over countryside"
-              initial={{ scale: 1.05 }}
-              whileInView={{ scale: 1 }}
-              transition={{ duration: 1.5, ease: [0.16, 1, 0.3, 1] }}
-              viewport={{ once: true }}
-            />
-            <div className="fppl-discovery__image-overlay" />
-          </div>
-
-          <div className="fppl-discovery__content">
-            <div className="fppl-discovery__header">
-              <span className="fppl-pre-text">Your First Flight</span>
-              <h2>
-                <span className="fppl-text--dark">Discovery</span>{' '}
-                <span className="fppl-text--mid">Flight</span>
-              </h2>
-            </div>
-
-            <p className="fppl-discovery__desc">
-              Experience helicopter flying firsthand. Take the controls and discover the freedom of vertical flight.
-            </p>
-
-            <div className="fppl-discovery__compact-row">
-              <div className="fppl-discovery__selling-points">
-                <div className="fppl-discovery__point">
-                  <span className="fppl-discovery__point-icon">⏱</span>
-                  <span className="fppl-discovery__point-text">30 min flight</span>
-                </div>
-                <div className="fppl-discovery__point">
-                  <span className="fppl-discovery__point-icon">✓</span>
-                  <span className="fppl-discovery__point-text">Counts to PPL</span>
-                </div>
-                <div className="fppl-discovery__point">
-                  <span className="fppl-discovery__point-icon">🎮</span>
-                  <span className="fppl-discovery__point-text">You fly the controls</span>
-                </div>
-                <div className="fppl-discovery__point">
-                  <span className="fppl-discovery__point-icon">📸</span>
-                  <span className="fppl-discovery__point-text">Photo opportunity</span>
-                </div>
-              </div>
-
-              <div className="fppl-discovery__booking">
-                <div className="fppl-discovery__price">
-                  <span className="fppl-discovery__price-from">From</span>
-                  <span className="fppl-discovery__price-amount">£199</span>
-                </div>
-                <a href="/contact?subject=discovery-flight" className="fppl-discovery__book-btn">
-                  <span className="fppl-discovery__book-btn-text">Book Now</span>
-                  <span className="fppl-discovery__book-btn-arrow">→</span>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ========== CTA: Visit Us ========== */}
       <section className="fppl-visit">
         <div className="fppl-visit__content-wrap">
@@ -800,6 +737,53 @@ function FinalPPL() {
             <a href="/training/faq" className="fppl-btn fppl-btn--outline">View All FAQs</a>
           </div>
         </Reveal>
+      </section>
+
+      {/* ========== DISCOVERY FLIGHT ========== */}
+      <section id="discovery" className="fppl-discovery fppl-discovery--compact">
+        <div className="fppl-discovery__inner">
+          <div className="fppl-discovery__image">
+            <img alt="Discovery flight over countryside" src="/assets/images/gallery/carousel/rotating1.jpg" style={{ transform: 'none' }} />
+            <div className="fppl-discovery__image-overlay"></div>
+          </div>
+          <div className="fppl-discovery__content">
+            <div className="fppl-discovery__header">
+              <span className="fppl-pre-text">Your First Flight</span>
+              <h2><span className="fppl-text--dark">Discovery</span> <span className="fppl-text--mid">Flight</span></h2>
+            </div>
+            <p className="fppl-discovery__desc">Experience helicopter flying firsthand. Take the controls and discover the freedom of vertical flight.</p>
+            <div className="fppl-discovery__compact-row">
+              <div className="fppl-discovery__selling-points">
+                <div className="fppl-discovery__point">
+                  <span className="fppl-discovery__point-icon">⏱</span>
+                  <span className="fppl-discovery__point-text">30 min flight</span>
+                </div>
+                <div className="fppl-discovery__point">
+                  <span className="fppl-discovery__point-icon">✓</span>
+                  <span className="fppl-discovery__point-text">Counts to PPL</span>
+                </div>
+                <div className="fppl-discovery__point">
+                  <span className="fppl-discovery__point-icon">🎮</span>
+                  <span className="fppl-discovery__point-text">You fly the controls</span>
+                </div>
+                <div className="fppl-discovery__point">
+                  <span className="fppl-discovery__point-icon">📸</span>
+                  <span className="fppl-discovery__point-text">Photo opportunity</span>
+                </div>
+              </div>
+              <div className="fppl-discovery__booking">
+                <div className="fppl-discovery__price">
+                  <span className="fppl-discovery__price-from">From</span>
+                  <span className="fppl-discovery__price-amount">£199</span>
+                </div>
+                <a href="/contact?subject=discovery-flight" className="fppl-discovery__book-btn">
+                  <span className="fppl-discovery__book-btn-text">Book Now</span>
+                  <span className="fppl-discovery__book-btn-arrow">→</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ========== FOOTER ========== */}
@@ -1781,10 +1765,20 @@ function FinalPPL() {
 
         /* ===== DISCOVERY CTA ===== */
         .fppl-discovery {
-          background: #1a1a1a;
+          background: #3a3a3a;
           position: relative;
           overflow: hidden;
           border-radius: 0;
+        }
+
+        .fppl-discovery::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(to right, #444 0%, #444 35%, #777 50%, #444 65%, #444 100%);
         }
 
         .fppl-discovery__inner {
@@ -2110,23 +2104,45 @@ function FinalPPL() {
           position: absolute;
           left: 0;
           right: 0;
-          height: 40%;
-          z-index: 2;
+          height: 25%;
+          z-index: 6;
           pointer-events: none;
         }
 
         .gallery-v3::before {
           top: 0;
-          background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
+          background: linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, transparent 100%);
         }
 
         .gallery-v3::after {
           bottom: 0;
-          background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 40%, transparent 100%);
+          background: linear-gradient(to top, rgba(0,0,0,0.4) 0%, transparent 100%);
         }
 
         .gallery-v3 .fppl-visit__gallery-track {
           gap: 0;
+          position: relative;
+        }
+
+        .gallery-v3 .fppl-visit__gallery-track::before,
+        .gallery-v3 .fppl-visit__gallery-track::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          width: 30%;
+          height: 100%;
+          z-index: 5;
+          pointer-events: none;
+        }
+
+        .gallery-v3 .fppl-visit__gallery-track::before {
+          left: 0;
+          background: linear-gradient(to right, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 40%, transparent 100%);
+        }
+
+        .gallery-v3 .fppl-visit__gallery-track::after {
+          right: 0;
+          background: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.5) 40%, transparent 100%);
         }
 
         .gallery-v3 .fppl-visit__gallery-item {

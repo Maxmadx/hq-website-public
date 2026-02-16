@@ -108,7 +108,6 @@ function getYouTubeID(url) {
 
 function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const thumbnailRef = useRef(null);
 
   const currentVideo = videos[currentIndex];
@@ -151,24 +150,22 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
         )}
 
         <div className="exp-video-slider__main">
+          {/* Prev Chevron */}
+          <motion.button
+            className="exp-video-slider__chevron exp-video-slider__chevron--prev"
+            onClick={() => changeSlide(-1)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Previous video"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </motion.button>
+
           {/* Video Side */}
           <div className="exp-video-slider__video-side">
-            <div
-              className="exp-video-slider__video-wrapper"
-              onMouseEnter={() => setIsHovered(true)}
-              onMouseLeave={() => setIsHovered(false)}
-            >
-              <motion.button
-                className="exp-video-slider__arrow exp-video-slider__arrow--prev"
-                onClick={() => changeSlide(-1)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                whileHover={{ scale: 1.1 }}
-                aria-label="Previous video"
-              >
-                ‹
-              </motion.button>
-
+            <div className="exp-video-slider__video-wrapper">
               <iframe
                 src={videoId ? `https://www.youtube.com/embed/${videoId}?enablejsapi=1` : ''}
                 frameBorder="0"
@@ -176,17 +173,6 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
                 allowFullScreen
                 title={currentVideo.title}
               />
-
-              <motion.button
-                className="exp-video-slider__arrow exp-video-slider__arrow--next"
-                onClick={() => changeSlide(1)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: isHovered ? 1 : 0 }}
-                whileHover={{ scale: 1.1 }}
-                aria-label="Next video"
-              >
-                ›
-              </motion.button>
             </div>
           </div>
 
@@ -216,6 +202,19 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
               </div>
             </div>
           </div>
+
+          {/* Next Chevron */}
+          <motion.button
+            className="exp-video-slider__chevron exp-video-slider__chevron--next"
+            onClick={() => changeSlide(1)}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Next video"
+          >
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+          </motion.button>
         </div>
 
         {/* Thumbnail Strip */}
@@ -278,9 +277,32 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
 
         .exp-video-slider__main {
           display: flex;
-          gap: 2rem;
-          align-items: center;
+          gap: 1.5rem;
+          align-items: stretch;
           margin-bottom: 2rem;
+        }
+
+        .exp-video-slider__chevron {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          flex-shrink: 0;
+          align-self: center;
+          background: #fff;
+          border: 1px solid #e0e0e0;
+          border-radius: 50%;
+          cursor: pointer;
+          color: #1a1a1a;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          transition: all 0.2s ease;
+        }
+
+        .exp-video-slider__chevron:hover {
+          background: #1a1a1a;
+          color: #fff;
+          border-color: #1a1a1a;
         }
 
         .exp-video-slider__video-side {
@@ -307,32 +329,18 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
           z-index: 1;
         }
 
-        .exp-video-slider__arrow {
-          background: none;
-          border: none;
-          font-size: 3rem;
-          font-weight: 100;
-          color: #fff;
-          text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-          cursor: pointer;
-          padding: 0 1rem;
-          position: absolute;
-          top: 50%;
-          transform: translateY(-50%);
-          z-index: 10;
-          transition: all 0.3s ease;
-        }
-
-        .exp-video-slider__arrow--prev { left: 0; }
-        .exp-video-slider__arrow--next { right: 0; }
-
         .exp-video-slider__text-side {
           flex: 4;
-          padding: 0 1rem;
+          display: flex;
+          flex-direction: column;
         }
 
         .exp-video-slider__content-box {
-          padding: 1.5rem;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 2rem;
           background: #fff;
           border-radius: 8px;
           box-shadow: 0 4px 20px rgba(0,0,0,0.05);
@@ -364,22 +372,27 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
           display: flex;
           gap: 1rem;
           overflow-x: auto;
-          padding: 1rem 0;
+          padding: 1.5rem 0;
           scrollbar-width: thin;
+          scrollbar-color: rgba(26,26,26,0.3) transparent;
         }
 
         .exp-video-slider__thumbnails::-webkit-scrollbar {
-          height: 6px;
+          height: 4px;
         }
 
         .exp-video-slider__thumbnails::-webkit-scrollbar-track {
-          background: #e8e4d4;
-          border-radius: 3px;
+          background: transparent;
+          margin: 0 2rem;
         }
 
         .exp-video-slider__thumbnails::-webkit-scrollbar-thumb {
-          background: #999;
-          border-radius: 3px;
+          background: linear-gradient(90deg, transparent, rgba(26,26,26,0.25), transparent);
+          border-radius: 4px;
+        }
+
+        .exp-video-slider__thumbnails::-webkit-scrollbar-thumb:hover {
+          background: linear-gradient(90deg, transparent, rgba(26,26,26,0.4), transparent);
         }
 
         .exp-video-slider__thumb {
@@ -416,19 +429,44 @@ function ExpeditionVideoSlider({ videos = defaultVideos, title }) {
           display: block;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1024px) {
           .exp-video-slider__main {
             flex-direction: column;
+            gap: 1.5rem;
+            position: relative;
+          }
+
+          .exp-video-slider__chevron {
+            position: absolute;
+            top: calc((56.25vw - 4rem) / 2);
+            transform: translateY(-50%);
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+          }
+
+          .exp-video-slider__chevron--prev {
+            left: 0.5rem;
+          }
+
+          .exp-video-slider__chevron--next {
+            right: 0.5rem;
+          }
+
+          .exp-video-slider__video-side {
+            width: 100%;
           }
 
           .exp-video-slider__text-side {
             width: 100%;
-            padding: 1rem 0 0 0;
+            padding: 0;
           }
 
-          .exp-video-slider__arrow {
-            opacity: 1 !important;
-            font-size: 2.5rem;
+          .exp-video-slider__content-box {
+            flex: none;
+            padding: 1.5rem;
           }
         }
 

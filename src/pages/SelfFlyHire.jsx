@@ -284,14 +284,41 @@ const requirements = [
 const benefits = [
   { stat: '30+', label: 'Aircraft Available', desc: 'The largest Robinson fleet in Europe' },
   { stat: '7', label: 'Days a Week', desc: 'Flexible scheduling to suit your plans' },
-  { stat: '35+', label: 'Years Experience', desc: 'Trusted expertise since 1990' },
   { stat: '2,000+', label: 'Destinations', desc: 'Fly anywhere in the UK and Europe' }
+];
+
+// Destinations data
+const allDestinations = [
+  // UK destinations
+  { name: 'Goodwood', type: 'UK', time: '25 mins', image: '/assets/images/gallery/carousel/rotating4.jpg' },
+  { name: 'Cotswolds', type: 'UK', time: '35 mins', image: '/assets/images/gallery/carousel/rotating5.jpg' },
+  { name: 'Cambridge', type: 'UK', time: '30 mins', image: '/assets/images/gallery/carousel/rotating2.jpg' },
+  { name: 'Oxford', type: 'UK', time: '25 mins', image: '/assets/images/gallery/carousel/rotating3.jpg' },
+  { name: 'Lake District', type: 'UK', time: '1h 50m', image: '/assets/images/gallery/carousel/rotating6.jpg' },
+  { name: 'Channel Islands', type: 'UK', time: '1h 15m', image: '/assets/images/gallery/carousel/rotating7.jpg' },
+  { name: 'St Andrews', type: 'UK', time: '2h 45m', image: '/assets/images/gallery/carousel/rotating8.jpg' },
+  { name: 'Brighton', type: 'UK', time: '30 mins', image: '/assets/images/gallery/carousel/rotating9.jpg' },
+  { name: 'Bath', type: 'UK', time: '45 mins', image: '/assets/images/gallery/carousel/rotating10.jpg' },
+  { name: 'Cardiff', type: 'UK', time: '1h 10m', image: '/assets/images/gallery/carousel/rotating2.jpg' },
+  { name: 'Edinburgh', type: 'UK', time: '3h', image: '/assets/images/gallery/carousel/rotating3.jpg' },
+  { name: 'Silverstone', type: 'UK', time: '35 mins', image: '/assets/images/gallery/carousel/rotating4.jpg' },
+  // Europe destinations
+  { name: 'Le Touquet', type: 'France', time: '45 mins', image: '/assets/images/gallery/carousel/rotating5.jpg' },
+  { name: 'Paris', type: 'France', time: '1h 30m', image: '/assets/images/gallery/carousel/rotating6.jpg' },
+  { name: 'Deauville', type: 'France', time: '1h', image: '/assets/images/gallery/carousel/rotating7.jpg' },
+  { name: 'Chantilly', type: 'France', time: '1h 15m', image: '/assets/images/gallery/carousel/rotating8.jpg' },
+  { name: 'Reims', type: 'France', time: '1h 25m', image: '/assets/images/gallery/carousel/rotating9.jpg' },
+  { name: 'Bruges', type: 'Europe', time: '1h 10m', image: '/assets/images/gallery/carousel/rotating10.jpg' },
+  { name: 'Amsterdam', type: 'Europe', time: '1h 45m', image: '/assets/images/gallery/carousel/rotating2.jpg' },
+  { name: 'Brussels', type: 'Europe', time: '1h 20m', image: '/assets/images/gallery/carousel/rotating3.jpg' },
 ];
 
 function SelfFlyHire() {
   const heroRef = useRef(null);
   const [openFaq, setOpenFaq] = useState(null);
   const [activeFleet, setActiveFleet] = useState(1);
+  const [destFilter, setDestFilter] = useState('All');
+  const [visibleDests, setVisibleDests] = useState(6);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
@@ -514,11 +541,6 @@ function SelfFlyHire() {
                     <span key={i} className="sfh-fleet__feature">{feature}</span>
                   ))}
                 </div>
-                <div className="sfh-fleet__price">
-                  <span className="sfh-fleet__price-label">From</span>
-                  <span className="sfh-fleet__price-value">{fleetData[activeFleet].hourlyRate}</span>
-                  <span className="sfh-fleet__price-unit">/hour</span>
-                </div>
               </div>
             </div>
           </Reveal>
@@ -558,9 +580,6 @@ function SelfFlyHire() {
                     <li>Insurance included</li>
                     <li>Landing fees extra</li>
                   </ul>
-                  <a href="/contact?subject=hire" className="sfh-btn sfh-btn--outline">
-                    Book Now
-                  </a>
                 </div>
               ))}
             </div>
@@ -573,44 +592,6 @@ function SelfFlyHire() {
                 All prices include VAT. Landing fees at destination airfields are charged separately.
                 Block booking discounts: 10+ hours receive 5% discount, 25+ hours receive 10% discount.
               </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== REQUIREMENTS SECTION ========== */}
-      <section className="sfh-requirements">
-        <div className="sfh-requirements__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Getting Started</span>
-              <h2>
-                <span className="sfh-text--dark">Hire</span>{' '}
-                <span className="sfh-text--mid">Requirements</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sfh-requirements__grid">
-            {requirements.map((req, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sfh-requirements__card">
-                  <span className="sfh-requirements__num">{req.icon}</span>
-                  <div className="sfh-requirements__text">
-                    <h4>{req.title}</h4>
-                    <p>{req.desc}</p>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.5}>
-            <div className="sfh-requirements__cta">
-              <p>New to HQ Aviation? Complete a checkout flight with one of our instructors to get started.</p>
-              <a href="/contact?subject=checkout" className="sfh-btn sfh-btn--primary">
-                Arrange Checkout Flight
-              </a>
             </div>
           </Reveal>
         </div>
@@ -630,46 +611,54 @@ function SelfFlyHire() {
             </div>
           </Reveal>
 
-          <div className="sfh-process__steps">
-            <Reveal delay={0.1}>
+          <Reveal delay={0.1}>
+            <div className="sfh-process__steps sfh-process__steps--horizontal">
               <div className="sfh-process__step">
                 <div className="sfh-process__step-num">01</div>
                 <div className="sfh-process__step-content">
-                  <h4>Check Availability</h4>
-                  <p>Call or email us with your preferred dates, aircraft type, and estimated flying hours.</p>
+                  <h4>Call Operations</h4>
+                  <p className="sfh-process__desc">Confirm Booking</p>
+                  <span className="sfh-process__time">1-2 mins</span>
                 </div>
               </div>
-            </Reveal>
-            <div className="sfh-process__connector" />
-            <Reveal delay={0.2}>
-              <div className="sfh-process__step">
+              <div className="sfh-process__arrow">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+              </div>
+              <div className="sfh-process__step sfh-process__step--fly">
                 <div className="sfh-process__step-num">02</div>
                 <div className="sfh-process__step-content">
-                  <h4>Confirm Booking</h4>
-                  <p>We'll confirm availability and send you a booking confirmation with all details.</p>
-                </div>
-              </div>
-            </Reveal>
-            <div className="sfh-process__connector" />
-            <Reveal delay={0.3}>
-              <div className="sfh-process__step">
-                <div className="sfh-process__step-num">03</div>
-                <div className="sfh-process__step-content">
-                  <h4>Pre-Flight Brief</h4>
-                  <p>Arrive at Denham, complete paperwork, and receive your aircraft briefing.</p>
-                </div>
-              </div>
-            </Reveal>
-            <div className="sfh-process__connector" />
-            <Reveal delay={0.4}>
-              <div className="sfh-process__step">
-                <div className="sfh-process__step-num">04</div>
-                <div className="sfh-process__step-content">
                   <h4>Fly</h4>
-                  <p>Take to the skies and enjoy the freedom of helicopter flight.</p>
+                  <p className="sfh-process__desc">Arrive at your aircraft washed and filled on the pad, ready for your imminent departure.</p>
                 </div>
               </div>
-            </Reveal>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== OPS TEAM SECTION (COMPACT) ========== */}
+      <section className="sfh-team sfh-team--compact">
+        <div className="sfh-team__container">
+          <div className="sfh-team__inline">
+            <span className="sfh-team__label">Operations Team</span>
+            <div className="sfh-team__members">
+              {[
+                { name: 'Alex Allison', role: 'Operations Manager' },
+                { name: 'Nicola West', role: 'Dispatch Coordinator' },
+                { name: 'Cian Mickey', role: 'Customer Relations' },
+                { name: 'Joseph Pringle', role: 'Flight Coordinator' },
+              ].map((member, i) => (
+                <div key={i} className="sfh-team__member-compact">
+                  <span className="sfh-team__name">{member.name}</span>
+                  <span className="sfh-team__role-compact">{member.role}</span>
+                </div>
+              ))}
+            </div>
+            <a href="tel:+441895833373" className="sfh-btn sfh-btn--primary sfh-btn--small">
+              Call Now
+            </a>
           </div>
         </div>
       </section>
@@ -690,722 +679,57 @@ function SelfFlyHire() {
             </div>
           </Reveal>
 
+          <Reveal delay={0.1}>
+            <div className="sfh-destinations__filters">
+              {['All', 'UK', 'Europe', 'France'].map((filter) => (
+                <button
+                  key={filter}
+                  className={`sfh-destinations__filter ${destFilter === filter ? 'sfh-destinations__filter--active' : ''}`}
+                  onClick={() => { setDestFilter(filter); setVisibleDests(6); }}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+          </Reveal>
+
           <div className="sfh-destinations__grid">
-            {[
-              { name: 'St Andrews', type: 'Golf', time: '2h 45m', image: '/assets/images/gallery/carousel/rotating2.jpg' },
-              { name: 'Le Touquet', type: 'France', time: '45m', image: '/assets/images/gallery/carousel/rotating3.jpg' },
-              { name: 'Goodwood', type: 'Racing', time: '25m', image: '/assets/images/gallery/carousel/rotating4.jpg' },
-              { name: 'Cotswolds', type: 'Leisure', time: '35m', image: '/assets/images/gallery/carousel/rotating5.jpg' },
-              { name: 'Lake District', type: 'Scenic', time: '1h 50m', image: '/assets/images/gallery/carousel/rotating6.jpg' },
-              { name: 'Channel Islands', type: 'Islands', time: '1h 15m', image: '/assets/images/gallery/carousel/rotating7.jpg' },
-            ].map((dest, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sfh-destinations__card">
-                  <div className="sfh-destinations__image">
-                    <img src={dest.image} alt={dest.name} />
-                    <div className="sfh-destinations__overlay">
-                      <span className="sfh-destinations__time">{dest.time}</span>
+            {allDestinations
+              .filter(d => destFilter === 'All' || d.type === destFilter || (destFilter === 'Europe' && (d.type === 'Europe' || d.type === 'France')))
+              .slice(0, visibleDests)
+              .map((dest, i) => (
+                <Reveal key={dest.name} delay={i * 0.05}>
+                  <div className="sfh-destinations__card">
+                    <div className="sfh-destinations__image">
+                      <img src={dest.image} alt={dest.name} />
+                      <div className="sfh-destinations__overlay">
+                        <span className="sfh-destinations__time">{dest.time}</span>
+                      </div>
                     </div>
-                  </div>
-                  <div className="sfh-destinations__info">
-                    <span className="sfh-destinations__type">{dest.type}</span>
-                    <h4>{dest.name}</h4>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SAFETY SECTION ========== */}
-      <section className="sfh-safety">
-        <div className="sfh-safety__container">
-          <div className="sfh-safety__content">
-            <Reveal>
-              <div className="sfh-safety__header">
-                <span className="sfh-pre-text">Your Safety First</span>
-                <h2>
-                  <span className="sfh-text--dark">Maintained</span>{' '}
-                  <span className="sfh-text--mid">To</span>{' '}
-                  <span className="sfh-text--light">Perfection</span>
-                </h2>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <p className="sfh-safety__desc">
-                Every aircraft in our fleet undergoes rigorous maintenance by our CAA Part-145 approved workshop.
-                Our dedicated team of engineers ensures each helicopter exceeds safety standards before every flight.
-              </p>
-            </Reveal>
-
-            <div className="sfh-safety__features">
-              {[
-                { title: 'Daily Inspections', desc: 'Pre-flight checks by qualified engineers' },
-                { title: '100-Hour Services', desc: 'Comprehensive maintenance schedules' },
-                { title: 'Component Tracking', desc: 'Full lifecycle monitoring of all parts' },
-                { title: 'CAA Approved', desc: 'Part-145 maintenance organization' },
-              ].map((feature, i) => (
-                <Reveal key={i} delay={0.1 + i * 0.1}>
-                  <div className="sfh-safety__feature">
-                    <div className="sfh-safety__feature-num">{String(i + 1).padStart(2, '0')}</div>
-                    <div>
-                      <h4>{feature.title}</h4>
-                      <p>{feature.desc}</p>
+                    <div className="sfh-destinations__info">
+                      <span className="sfh-destinations__type">{dest.type}</span>
+                      <h4>{dest.name}</h4>
                     </div>
                   </div>
                 </Reveal>
               ))}
-            </div>
           </div>
-          <Reveal direction="right">
-            <div className="sfh-safety__image">
-              <img src="/assets/images/gallery/carousel/rotating9.jpg" alt="Maintenance" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
 
-      {/* ========== OPERATING HOURS SECTION ========== */}
-      <section className="sfh-hours">
-        <div className="sfh-hours__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Open 7 Days</span>
-              <h2>
-                <span className="sfh-text--dark">Operating</span>{' '}
-                <span className="sfh-text--mid">Hours</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-hours__grid">
-              <div className="sfh-hours__card">
-                <div className="sfh-hours__icon">
-                  <span>MON-FRI</span>
-                </div>
-                <div className="sfh-hours__times">
-                  <span className="sfh-hours__time">07:00 - 21:00</span>
-                  <span className="sfh-hours__note">Summer hours (Apr-Sep)</span>
-                </div>
-                <div className="sfh-hours__times">
-                  <span className="sfh-hours__time">08:00 - 18:00</span>
-                  <span className="sfh-hours__note">Winter hours (Oct-Mar)</span>
-                </div>
-              </div>
-              <div className="sfh-hours__card">
-                <div className="sfh-hours__icon">
-                  <span>SAT-SUN</span>
-                </div>
-                <div className="sfh-hours__times">
-                  <span className="sfh-hours__time">08:00 - 20:00</span>
-                  <span className="sfh-hours__note">Summer hours (Apr-Sep)</span>
-                </div>
-                <div className="sfh-hours__times">
-                  <span className="sfh-hours__time">09:00 - 17:00</span>
-                  <span className="sfh-hours__note">Winter hours (Oct-Mar)</span>
-                </div>
-              </div>
-              <div className="sfh-hours__card sfh-hours__card--special">
-                <div className="sfh-hours__icon">
-                  <span>SPECIAL</span>
-                </div>
-                <div className="sfh-hours__times">
-                  <span className="sfh-hours__time">By Arrangement</span>
-                  <span className="sfh-hours__note">Early/late departures available</span>
-                </div>
-                <p className="sfh-hours__special-note">Contact us for out-of-hours requests</p>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== WEATHER SECTION ========== */}
-      <section className="sfh-weather">
-        <div className="sfh-weather__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Flight Planning</span>
-              <h2>
-                <span className="sfh-text--dark">Weather</span>{' '}
-                <span className="sfh-text--mid">Minimums</span>
-              </h2>
-              <p className="sfh-section-desc">
-                VFR flying requires appropriate weather conditions. We'll help you plan around the forecast.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-weather__table">
-              <div className="sfh-weather__row sfh-weather__row--header">
-                <span>Parameter</span>
-                <span>Day VFR</span>
-                <span>Night VFR</span>
-              </div>
-              <div className="sfh-weather__row">
-                <span>Visibility</span>
-                <span>≥ 3km</span>
-                <span>≥ 5km</span>
-              </div>
-              <div className="sfh-weather__row">
-                <span>Cloud Base</span>
-                <span>≥ 1,500ft</span>
-                <span>≥ 2,000ft</span>
-              </div>
-              <div className="sfh-weather__row">
-                <span>Wind</span>
-                <span>≤ 25kts</span>
-                <span>≤ 20kts</span>
-              </div>
-              <div className="sfh-weather__row">
-                <span>Crosswind</span>
-                <span>≤ 15kts</span>
-                <span>≤ 12kts</span>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sfh-weather__resources">
-              <a href="https://www.metoffice.gov.uk/aviation" target="_blank" rel="noopener noreferrer" className="sfh-weather__link">
-                <span className="sfh-weather__link-icon">☁</span>
-                <span>Met Office Aviation</span>
-              </a>
-              <a href="https://www.notaminfo.com" target="_blank" rel="noopener noreferrer" className="sfh-weather__link">
-                <span className="sfh-weather__link-icon">📋</span>
-                <span>NOTAMs</span>
-              </a>
-              <a href="https://www.skydemon.aero" target="_blank" rel="noopener noreferrer" className="sfh-weather__link">
-                <span className="sfh-weather__link-icon">🗺</span>
-                <span>SkyDemon</span>
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== FUEL POLICY SECTION ========== */}
-      <section className="sfh-fuel">
-        <div className="sfh-fuel__inner">
-          <Reveal>
-            <div className="sfh-fuel__content">
-              <span className="sfh-pre-text">Simple & Transparent</span>
-              <h2>
-                <span className="sfh-text--dark">Fuel</span>{' '}
-                <span className="sfh-text--mid">Policy</span>
-              </h2>
-              <p>
-                All our hire rates include fuel at no additional cost. Aircraft are dispatched with full tanks and
-                should be returned with full tanks—we'll simply reimburse you for any fuel purchased away from base.
-              </p>
-              <div className="sfh-fuel__points">
-                <div className="sfh-fuel__point">
-                  <span className="sfh-fuel__point-icon">✓</span>
-                  <span>Fuel included in hourly rate</span>
-                </div>
-                <div className="sfh-fuel__point">
-                  <span className="sfh-fuel__point-icon">✓</span>
-                  <span>Return with full tanks</span>
-                </div>
-                <div className="sfh-fuel__point">
-                  <span className="sfh-fuel__point-icon">✓</span>
-                  <span>Away-fuel reimbursed</span>
-                </div>
-                <div className="sfh-fuel__point">
-                  <span className="sfh-fuel__point-icon">✓</span>
-                  <span>Avgas & Jet-A1 supported</span>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== INSURANCE SECTION ========== */}
-      <section className="sfh-insurance">
-        <div className="sfh-insurance__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Fly With Confidence</span>
-              <h2>
-                <span className="sfh-text--dark">Insurance</span>{' '}
-                <span className="sfh-text--mid">Coverage</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-insurance__grid">
-              <div className="sfh-insurance__card">
-                <h4>Hull Insurance</h4>
-                <p className="sfh-insurance__value">Full Value</p>
-                <p className="sfh-insurance__desc">Complete coverage for aircraft damage</p>
-              </div>
-              <div className="sfh-insurance__card">
-                <h4>Third Party Liability</h4>
-                <p className="sfh-insurance__value">£5M</p>
-                <p className="sfh-insurance__desc">Per occurrence coverage</p>
-              </div>
-              <div className="sfh-insurance__card">
-                <h4>Passenger Liability</h4>
-                <p className="sfh-insurance__value">£1M</p>
-                <p className="sfh-insurance__desc">Per passenger coverage</p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sfh-insurance__excess">
-              <h4>Excess Amounts</h4>
-              <div className="sfh-insurance__excess-grid">
-                <div className="sfh-insurance__excess-item">
-                  <span className="sfh-insurance__excess-model">R22</span>
-                  <span className="sfh-insurance__excess-amount">£5,000</span>
-                </div>
-                <div className="sfh-insurance__excess-item">
-                  <span className="sfh-insurance__excess-model">R44</span>
-                  <span className="sfh-insurance__excess-amount">£7,500</span>
-                </div>
-                <div className="sfh-insurance__excess-item">
-                  <span className="sfh-insurance__excess-model">R66</span>
-                  <span className="sfh-insurance__excess-amount">£10,000</span>
-                </div>
-              </div>
-              <p className="sfh-insurance__excess-note">Optional excess waiver available for £50/day</p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== CURRENCY SECTION ========== */}
-      <section className="sfh-currency">
-        <div className="sfh-currency__container">
-          <div className="sfh-currency__content">
-            <Reveal>
-              <span className="sfh-pre-text">Stay Current</span>
-              <h2>
-                <span className="sfh-text--dark">Recency</span>{' '}
-                <span className="sfh-text--mid">Requirements</span>
-              </h2>
-            </Reveal>
-
-            <Reveal delay={0.1}>
-              <p className="sfh-currency__desc">
-                To hire our aircraft, you must maintain adequate recency on the specific type.
-                If you haven't flown recently, we can arrange a checkout flight.
-              </p>
-            </Reveal>
-
-            <div className="sfh-currency__requirements">
-              <Reveal delay={0.2}>
-                <div className="sfh-currency__req">
-                  <div className="sfh-currency__req-header">
-                    <span className="sfh-currency__req-hours">3</span>
-                    <span className="sfh-currency__req-label">Hours in last 90 days</span>
-                  </div>
-                  <p>Required on the specific helicopter type you wish to hire</p>
-                </div>
-              </Reveal>
-              <Reveal delay={0.3}>
-                <div className="sfh-currency__req">
-                  <div className="sfh-currency__req-header">
-                    <span className="sfh-currency__req-hours">1</span>
-                    <span className="sfh-currency__req-label">Hour with HQ in last 12 months</span>
-                  </div>
-                  <p>Checkout or recency flight with our instructors</p>
-                </div>
-              </Reveal>
-            </div>
-
-            <Reveal delay={0.4}>
-              <div className="sfh-currency__checkout">
-                <h4>Need a Checkout?</h4>
-                <p>Our instructors can conduct currency checks in as little as one hour. Perfect for getting back in the air.</p>
-                <a href="/contact?subject=checkout" className="sfh-btn sfh-btn--outline">Book Checkout</a>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== INTERNATIONAL SECTION ========== */}
-      <section className="sfh-international">
-        <div className="sfh-international__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Cross Borders</span>
-              <h2>
-                <span className="sfh-text--dark">International</span>{' '}
-                <span className="sfh-text--mid">Travel</span>
-              </h2>
-              <p className="sfh-section-desc">
-                Flying abroad with our aircraft is straightforward. We'll help with the paperwork.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-international__steps">
-              <div className="sfh-international__step">
-                <div className="sfh-international__step-num">01</div>
-                <div className="sfh-international__step-content">
-                  <h4>Notify Us</h4>
-                  <p>Let us know your intended route and dates at least 48 hours in advance.</p>
-                </div>
-              </div>
-              <div className="sfh-international__step">
-                <div className="sfh-international__step-num">02</div>
-                <div className="sfh-international__step-content">
-                  <h4>We Prepare</h4>
-                  <p>We'll arrange GAR forms, customs documentation, and any required permissions.</p>
-                </div>
-              </div>
-              <div className="sfh-international__step">
-                <div className="sfh-international__step-num">03</div>
-                <div className="sfh-international__step-content">
-                  <h4>You Fly</h4>
-                  <p>Depart from Denham with all paperwork ready. We'll brief you on procedures.</p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sfh-international__popular">
-              <h4>Popular International Destinations</h4>
-              <div className="sfh-international__destinations">
-                <span>Le Touquet</span>
-                <span>Deauville</span>
-                <span>Amsterdam</span>
-                <span>Brussels</span>
-                <span>Jersey</span>
-                <span>Guernsey</span>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== TESTIMONIALS SECTION ========== */}
-      <section className="sfh-testimonials">
-        <div className="sfh-testimonials__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">What Pilots Say</span>
-              <h2>
-                <span className="sfh-text--dark">Client</span>{' '}
-                <span className="sfh-text--mid">Reviews</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sfh-testimonials__grid">
-            {[
-              {
-                quote: "The fleet is impeccable. Every aircraft I've hired has been in pristine condition. HQ sets the standard for helicopter hire in the UK.",
-                author: "James P.",
-                role: "R44 Pilot",
-                hours: "450+ hours"
-              },
-              {
-                quote: "Booking is seamless and the team couldn't be more helpful. Last minute changes are handled without fuss. True professionals.",
-                author: "Sarah M.",
-                role: "R66 Pilot",
-                hours: "280+ hours"
-              },
-              {
-                quote: "As a low-hours pilot, I appreciate their thorough briefings and the confidence they give me before each flight. Outstanding service.",
-                author: "David K.",
-                role: "R22 Pilot",
-                hours: "85+ hours"
-              }
-            ].map((testimonial, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sfh-testimonials__card">
-                  <div className="sfh-testimonials__quote">"</div>
-                  <p>{testimonial.quote}</p>
-                  <div className="sfh-testimonials__author">
-                    <span className="sfh-testimonials__name">{testimonial.author}</span>
-                    <span className="sfh-testimonials__role">{testimonial.role}</span>
-                    <span className="sfh-testimonials__hours">{testimonial.hours}</span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== GALLERY SECTION ========== */}
-      <section className="sfh-gallery">
-        <div className="sfh-gallery__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">In Flight</span>
-              <h2>
-                <span className="sfh-text--dark">Gallery</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sfh-gallery__grid">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((num, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <div className="sfh-gallery__item">
-                  <img src={`/assets/images/gallery/carousel/rotating${num}.jpg`} alt={`Flight ${num}`} />
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== COMPARISON SECTION ========== */}
-      <section className="sfh-comparison">
-        <div className="sfh-comparison__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Side by Side</span>
-              <h2>
-                <span className="sfh-text--dark">Fleet</span>{' '}
-                <span className="sfh-text--mid">Comparison</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-comparison__table">
-              <div className="sfh-comparison__header">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label"></div>
-                <div className="sfh-comparison__cell">R22</div>
-                <div className="sfh-comparison__cell">R44</div>
-                <div className="sfh-comparison__cell">R66</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Seats</div>
-                <div className="sfh-comparison__cell">2</div>
-                <div className="sfh-comparison__cell">4</div>
-                <div className="sfh-comparison__cell">5</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Cruise Speed</div>
-                <div className="sfh-comparison__cell">96 kts</div>
-                <div className="sfh-comparison__cell">113 kts</div>
-                <div className="sfh-comparison__cell">120 kts</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Range</div>
-                <div className="sfh-comparison__cell">185 nm</div>
-                <div className="sfh-comparison__cell">300 nm</div>
-                <div className="sfh-comparison__cell">350 nm</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Engine</div>
-                <div className="sfh-comparison__cell">Piston</div>
-                <div className="sfh-comparison__cell">Piston</div>
-                <div className="sfh-comparison__cell">Turbine</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Hourly Rate</div>
-                <div className="sfh-comparison__cell">£275</div>
-                <div className="sfh-comparison__cell">£395</div>
-                <div className="sfh-comparison__cell">£595</div>
-              </div>
-              <div className="sfh-comparison__row">
-                <div className="sfh-comparison__cell sfh-comparison__cell--label">Best For</div>
-                <div className="sfh-comparison__cell">Solo trips</div>
-                <div className="sfh-comparison__cell">Day trips</div>
-                <div className="sfh-comparison__cell">Long range</div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== ADDONS SECTION ========== */}
-      <section className="sfh-addons">
-        <div className="sfh-addons__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Enhance Your Flight</span>
-              <h2>
-                <span className="sfh-text--dark">Additional</span>{' '}
-                <span className="sfh-text--mid">Services</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-addons__grid">
-              {[
-                { title: 'Safety Pilot', price: '£150/hr', desc: 'Experienced pilot accompanies your flight' },
-                { title: 'Life Raft', price: '£50/day', desc: 'Required for over-water flights beyond glide distance' },
-                { title: 'Excess Waiver', price: '£50/day', desc: 'Reduces your insurance excess to £500' },
-                { title: 'Overnight Parking', price: 'At cost', desc: 'We arrange parking at your destination' },
-                { title: 'Customs Handling', price: '£75', desc: 'International flight paperwork assistance' },
-                { title: 'PPR Booking', price: 'Free', desc: 'We handle destination PPR requests' },
-              ].map((addon, i) => (
-                <div key={i} className="sfh-addons__card">
-                  <div className="sfh-addons__header">
-                    <h4>{addon.title}</h4>
-                    <span className="sfh-addons__price">{addon.price}</span>
-                  </div>
-                  <p>{addon.desc}</p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== GIFT VOUCHERS SECTION ========== */}
-      <section className="sfh-vouchers">
-        <div className="sfh-vouchers__inner">
-          <div className="sfh-vouchers__image">
-            <img src="/assets/images/gallery/carousel/rotating10.jpg" alt="Gift Voucher" />
-          </div>
-          <div className="sfh-vouchers__content">
-            <Reveal>
-              <span className="sfh-pre-text">The Perfect Gift</span>
-              <h2>
-                <span className="sfh-text--dark">Flight</span>{' '}
-                <span className="sfh-text--mid">Vouchers</span>
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p>
-                Give the gift of flight with an HQ Aviation voucher. Perfect for birthdays, anniversaries, or any special occasion.
-                Vouchers can be used for self-fly hire, training hours, or charter flights.
-              </p>
-            </Reveal>
+          {visibleDests < allDestinations.filter(d => destFilter === 'All' || d.type === destFilter || (destFilter === 'Europe' && (d.type === 'Europe' || d.type === 'France'))).length && (
             <Reveal delay={0.2}>
-              <div className="sfh-vouchers__options">
-                <div className="sfh-vouchers__option">
-                  <span className="sfh-vouchers__amount">£500</span>
-                  <span className="sfh-vouchers__desc">~2 hours R22</span>
-                </div>
-                <div className="sfh-vouchers__option">
-                  <span className="sfh-vouchers__amount">£1,000</span>
-                  <span className="sfh-vouchers__desc">~2.5 hours R44</span>
-                </div>
-                <div className="sfh-vouchers__option">
-                  <span className="sfh-vouchers__amount">Custom</span>
-                  <span className="sfh-vouchers__desc">Any amount</span>
-                </div>
+              <div className="sfh-destinations__load-more">
+                <button
+                  className="sfh-destinations__chevron"
+                  onClick={() => setVisibleDests(prev => prev + 6)}
+                >
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                  <span>Load More</span>
+                </button>
               </div>
             </Reveal>
-            <Reveal delay={0.3}>
-              <a href="/contact?subject=voucher" className="sfh-btn sfh-btn--primary">Purchase Voucher</a>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== BLOCK BOOKING SECTION ========== */}
-      <section className="sfh-block">
-        <div className="sfh-block__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Fly More, Save More</span>
-              <h2>
-                <span className="sfh-text--dark">Block</span>{' '}
-                <span className="sfh-text--mid">Booking</span>{' '}
-                <span className="sfh-text--light">Discounts</span>
-              </h2>
-              <p className="sfh-section-desc">
-                Commit to more hours and enjoy significant savings on your flying.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-block__tiers">
-              <div className="sfh-block__tier">
-                <div className="sfh-block__tier-badge">Standard</div>
-                <div className="sfh-block__tier-hours">1-9 hours</div>
-                <div className="sfh-block__tier-discount">Standard Rate</div>
-                <ul>
-                  <li>Pay as you fly</li>
-                  <li>No commitment</li>
-                  <li>Full flexibility</li>
-                </ul>
-              </div>
-              <div className="sfh-block__tier sfh-block__tier--popular">
-                <div className="sfh-block__tier-badge">Popular</div>
-                <div className="sfh-block__tier-hours">10-24 hours</div>
-                <div className="sfh-block__tier-discount">5% Off</div>
-                <ul>
-                  <li>Pre-pay block</li>
-                  <li>12 month validity</li>
-                  <li>Priority booking</li>
-                </ul>
-              </div>
-              <div className="sfh-block__tier">
-                <div className="sfh-block__tier-badge">Premium</div>
-                <div className="sfh-block__tier-hours">25+ hours</div>
-                <div className="sfh-block__tier-discount">10% Off</div>
-                <ul>
-                  <li>Best value</li>
-                  <li>18 month validity</li>
-                  <li>Guaranteed availability</li>
-                </ul>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== PILOT RESOURCES SECTION ========== */}
-      <section className="sfh-resources">
-        <div className="sfh-resources__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Plan Your Flight</span>
-              <h2>
-                <span className="sfh-text--dark">Pilot</span>{' '}
-                <span className="sfh-text--mid">Resources</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-resources__grid">
-              <a href="https://www.metoffice.gov.uk/aviation" target="_blank" rel="noopener noreferrer" className="sfh-resources__card">
-                <div className="sfh-resources__icon">☁️</div>
-                <h4>Weather</h4>
-                <p>Met Office aviation forecasts, TAFs and METARs</p>
-              </a>
-              <a href="https://www.notaminfo.com" target="_blank" rel="noopener noreferrer" className="sfh-resources__card">
-                <div className="sfh-resources__icon">📋</div>
-                <h4>NOTAMs</h4>
-                <p>Current notices to airmen for your route</p>
-              </a>
-              <a href="https://www.skydemon.aero" target="_blank" rel="noopener noreferrer" className="sfh-resources__card">
-                <div className="sfh-resources__icon">🗺️</div>
-                <h4>Flight Planning</h4>
-                <p>SkyDemon route planning and charts</p>
-              </a>
-              <a href="https://www.caa.co.uk" target="_blank" rel="noopener noreferrer" className="sfh-resources__card">
-                <div className="sfh-resources__icon">✈️</div>
-                <h4>CAA</h4>
-                <p>Regulations, AICs and safety bulletins</p>
-              </a>
-              <a href="/assets/docs/denham-chart.pdf" className="sfh-resources__card">
-                <div className="sfh-resources__icon">📍</div>
-                <h4>Denham Chart</h4>
-                <p>Local area chart and circuit patterns</p>
-              </a>
-              <a href="/assets/docs/poh-library.pdf" className="sfh-resources__card">
-                <div className="sfh-resources__icon">📖</div>
-                <h4>POH Library</h4>
-                <p>Pilot operating handbooks for our fleet</p>
-              </a>
-            </div>
-          </Reveal>
+          )}
         </div>
       </section>
 
@@ -1446,32 +770,44 @@ function SelfFlyHire() {
         </div>
       </section>
 
-      {/* ========== EXPERIENCE STATS SECTION ========== */}
-      <section className="sfh-experience">
-        <div className="sfh-experience__inner">
+      {/* ========== SAFETY SECTION ========== */}
+      <section className="sfh-safety sfh-safety--compact">
+        <div className="sfh-safety__container sfh-safety__container--compact">
           <Reveal>
-            <div className="sfh-experience__header">
-              <span className="sfh-pre-text">Our Track Record</span>
+            <div className="sfh-safety__header">
+              <span className="sfh-pre-text">Safety First</span>
               <h2>
-                <span className="sfh-text--dark">35 Years</span>{' '}
-                <span className="sfh-text--mid">of Excellence</span>
+                <span className="sfh-text--dark">Maintained</span>
               </h2>
             </div>
           </Reveal>
 
-          <div className="sfh-experience__stats">
-            {[
-              { value: '35+', label: 'Years Operating' },
-              { value: '150K+', label: 'Flight Hours' },
-              { value: '500+', label: 'Active Pilots' },
-              { value: '50K+', label: 'Flights Completed' },
-              { value: '98%', label: 'Availability Rate' },
-              { value: '30+', label: 'Aircraft Fleet' },
-            ].map((stat, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sfh-experience__stat">
-                  <span className="sfh-experience__value"><AnimatedNumber value={stat.value} /></span>
-                  <span className="sfh-experience__label">{stat.label}</span>
+          <Reveal delay={0.1}>
+            <p className="sfh-safety__desc">
+              Every aircraft in our fleet undergoes rigorous maintenance by our CAA Part-145 approved workshop.
+              Our dedicated team of engineers ensures each helicopter exceeds safety standards before every flight.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ========== GALLERY SECTION ========== */}
+      <section className="sfh-gallery">
+        <div className="sfh-gallery__container">
+          <Reveal>
+            <div className="sfh-section-header">
+              <span className="sfh-pre-text">In Flight</span>
+              <h2>
+                <span className="sfh-text--dark">Gallery</span>
+              </h2>
+            </div>
+          </Reveal>
+
+          <div className="sfh-gallery__grid">
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((num, i) => (
+              <Reveal key={i} delay={i * 0.05}>
+                <div className="sfh-gallery__item">
+                  <img src={`/assets/images/gallery/carousel/rotating${num}.jpg`} alt={`Flight ${num}`} />
                 </div>
               </Reveal>
             ))}
@@ -1479,34 +815,32 @@ function SelfFlyHire() {
         </div>
       </section>
 
-      {/* ========== OPS TEAM SECTION ========== */}
-      <section className="sfh-team">
-        <div className="sfh-team__container">
+      {/* ========== ADDONS SECTION ========== */}
+      <section className="sfh-addons">
+        <div className="sfh-addons__container">
           <Reveal>
             <div className="sfh-section-header">
-              <span className="sfh-pre-text">Here to Help</span>
+              <span className="sfh-pre-text">Enhance Your Flight</span>
               <h2>
-                <span className="sfh-text--dark">Operations</span>{' '}
-                <span className="sfh-text--mid">Team</span>
+                <span className="sfh-text--dark">Additional</span>{' '}
+                <span className="sfh-text--mid">Services</span>
               </h2>
-              <p className="sfh-section-desc">
-                Our friendly operations team is here to assist with bookings, planning, and any questions.
-              </p>
             </div>
           </Reveal>
 
           <Reveal delay={0.1}>
-            <div className="sfh-team__grid">
+            <div className="sfh-addons__grid">
               {[
-                { name: 'Sarah Wilson', role: 'Operations Manager', desc: 'Oversees all hire operations' },
-                { name: 'Tom Bradley', role: 'Dispatch Coordinator', desc: 'Handles daily scheduling' },
-                { name: 'Emma Clarke', role: 'Customer Relations', desc: 'Your first point of contact' },
-              ].map((member, i) => (
-                <div key={i} className="sfh-team__card">
-                  <div className="sfh-team__avatar">{member.name.split(' ').map(n => n[0]).join('')}</div>
-                  <h4>{member.name}</h4>
-                  <span className="sfh-team__role">{member.role}</span>
-                  <p>{member.desc}</p>
+                { title: 'Safety Pilot', price: '£150/hr', desc: 'Experienced pilot accompanies your flight' },
+                { title: 'Customs Handling', price: '£75', desc: 'International flight paperwork assistance' },
+                { title: 'PPR Booking', price: 'Free', desc: 'We handle destination PPR requests' },
+              ].map((addon, i) => (
+                <div key={i} className="sfh-addons__card">
+                  <div className="sfh-addons__header">
+                    <h4>{addon.title}</h4>
+                    <span className="sfh-addons__price">{addon.price}</span>
+                  </div>
+                  <p>{addon.desc}</p>
                 </div>
               ))}
             </div>
@@ -1514,182 +848,70 @@ function SelfFlyHire() {
         </div>
       </section>
 
-      {/* ========== CONTACT FORM SECTION ========== */}
-      <section className="sfh-contact">
-        <div className="sfh-contact__container">
-          <div className="sfh-contact__content">
-            <Reveal>
-              <span className="sfh-pre-text">Get in Touch</span>
-              <h2>
-                <span className="sfh-text--dark">Make an</span>{' '}
-                <span className="sfh-text--mid">Enquiry</span>
-              </h2>
-              <p>
-                Fill in the form and our team will get back to you within 24 hours.
-                For urgent enquiries, please call us directly.
-              </p>
-            </Reveal>
-
-            <div className="sfh-contact__details">
-              <div className="sfh-contact__detail">
-                <span className="sfh-contact__detail-label">Phone</span>
-                <a href="tel:+441895833373">+44 1895 833 373</a>
-              </div>
-              <div className="sfh-contact__detail">
-                <span className="sfh-contact__detail-label">Email</span>
-                <a href="mailto:hire@hqaviation.com">hire@hqaviation.com</a>
-              </div>
-              <div className="sfh-contact__detail">
-                <span className="sfh-contact__detail-label">Location</span>
-                <span>Denham Aerodrome, UB9 5DF</span>
-              </div>
-            </div>
-          </div>
-
-          <Reveal delay={0.1}>
-            <form className="sfh-contact__form">
-              <div className="sfh-contact__row">
-                <div className="sfh-contact__field">
-                  <label>Name</label>
-                  <input type="text" placeholder="Your name" />
-                </div>
-                <div className="sfh-contact__field">
-                  <label>Email</label>
-                  <input type="email" placeholder="your@email.com" />
-                </div>
-              </div>
-              <div className="sfh-contact__row">
-                <div className="sfh-contact__field">
-                  <label>Phone</label>
-                  <input type="tel" placeholder="+44 000 000 0000" />
-                </div>
-                <div className="sfh-contact__field">
-                  <label>Aircraft</label>
-                  <select>
-                    <option>Select aircraft</option>
-                    <option>R22</option>
-                    <option>R44</option>
-                    <option>R66</option>
-                  </select>
-                </div>
-              </div>
-              <div className="sfh-contact__field">
-                <label>Preferred Date</label>
-                <input type="date" />
-              </div>
-              <div className="sfh-contact__field">
-                <label>Message</label>
-                <textarea rows="4" placeholder="Tell us about your flight plans..."></textarea>
-              </div>
-              <button type="submit" className="sfh-btn sfh-btn--primary sfh-btn--large">
-                Submit Enquiry
-              </button>
-            </form>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== LOCATION SECTION ========== */}
-      <section className="sfh-location">
-        <div className="sfh-location__inner">
-          <div className="sfh-location__map">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2479.5!2d-0.5!3d51.58!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNTHCsDM0JzQ4LjAiTiAwwrAzMCcwMC4wIlc!5e0!3m2!1sen!2suk!4v1234567890"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen=""
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
-          <div className="sfh-location__content">
-            <Reveal>
-              <span className="sfh-pre-text">Find Us</span>
-              <h2>
-                <span className="sfh-text--dark">Denham</span>{' '}
-                <span className="sfh-text--mid">Aerodrome</span>
-              </h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p>
-                Located just 18 miles from central London, Denham Aerodrome offers easy access from the M40 and M25.
-                Free parking available for all hire customers.
-              </p>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="sfh-location__info">
-                <div className="sfh-location__info-item">
-                  <span className="sfh-location__info-label">Address</span>
-                  <span>Denham Aerodrome<br />Tilehouse Lane<br />Denham, UB9 5DF</span>
-                </div>
-                <div className="sfh-location__info-item">
-                  <span className="sfh-location__info-label">ICAO Code</span>
-                  <span>EGLD</span>
-                </div>
-                <div className="sfh-location__info-item">
-                  <span className="sfh-location__info-label">From London</span>
-                  <span>18 miles / 35 mins</span>
-                </div>
-              </div>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <a
-                href="https://www.google.com/maps/dir//Denham+Aerodrome"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="sfh-btn sfh-btn--outline"
-              >
-                Get Directions
-              </a>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== FINAL CTA SECTION ========== */}
-      <section className="sfh-final-cta">
-        <div className="sfh-final-cta__container">
+      {/* ========== BLOCK BOOKING SECTION (COMPACT) ========== */}
+      <section className="sfh-block sfh-block--compact">
+        <div className="sfh-block__container">
           <Reveal>
-            <span className="sfh-pre-text">Start Your Journey</span>
-            <h2>
-              <span className="sfh-text--dark">Ready</span>{' '}
-              <span className="sfh-text--mid">to</span>{' '}
-              <span className="sfh-text--light">Fly?</span>
-            </h2>
-            <p>
-              Contact our team today to discuss your flying requirements and get started with HQ Aviation.
-            </p>
-          </Reveal>
-          <Reveal delay={0.1}>
-            <div className="sfh-final-cta__buttons">
-              <a href="tel:+441895833373" className="sfh-btn sfh-btn--primary sfh-btn--large">
-                Call Now
-              </a>
-              <a href="/contact?subject=hire" className="sfh-btn sfh-btn--outline sfh-btn--large">
-                Send Enquiry
-              </a>
+            <div className="sfh-block__compact-content">
+              <div className="sfh-block__compact-text">
+                <h3>Block Booking Discounts</h3>
+                <p>Commit to more hours and save: <strong>10-24hrs = 5% off</strong> | <strong>25+ hrs = 10% off</strong></p>
+              </div>
+              <a href="/contact?subject=block-booking" className="sfh-btn sfh-btn--outline">Enquire</a>
             </div>
           </Reveal>
         </div>
       </section>
 
-      {/* ========== FAQ SECTION ========== */}
-      <section className="sfh-faq">
-        <div className="sfh-faq__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Common Questions</span>
-              <h2>
-                <span className="sfh-text--dark">FAQ</span>
-              </h2>
+      {/* ========== FAQ & LOCATION SECTION ========== */}
+      <section className="sfh-faq-location">
+        <div className="sfh-faq-location__container">
+          <div className="sfh-faq-location__map">
+            <Reveal>
+              <div className="sfh-section-header">
+                <span className="sfh-pre-text">Visit Us</span>
+                <h2>
+                  <span className="sfh-text--dark">Find Us</span>
+                </h2>
+              </div>
+            </Reveal>
+            <div className="sfh-faq-location__map-frame">
+              <img
+                src="/assets/images/maps/denham-map.png"
+                alt="Denham Aerodrome location map"
+                className="sfh-faq-location__map-image"
+              />
+              <div className="sfh-faq-location__map-info">
+                <h4>Denham Aerodrome</h4>
+                <p>Tilehouse Lane, Denham, UB9 5DF</p>
+                <div className="sfh-faq-location__actions">
+                  <span className="sfh-faq-location__icao">EGLD</span>
+                  <a
+                    href="https://www.google.com/maps/dir//Denham+Aerodrome"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="sfh-btn sfh-btn--outline sfh-btn--small"
+                  >
+                    Get Directions
+                  </a>
+                </div>
+              </div>
             </div>
-          </Reveal>
+          </div>
+          <div className="sfh-faq-location__faq">
+            <Reveal>
+              <div className="sfh-section-header">
+                <span className="sfh-pre-text">Common Questions</span>
+                <h2>
+                  <span className="sfh-text--dark">FAQ</span>
+                </h2>
+              </div>
+            </Reveal>
 
-          <div className="sfh-faq__list">
-            {faqs.map((faq, i) => (
-              <Reveal key={i} delay={i * 0.05}>
+            <div className="sfh-faq__list">
+              {faqs.map((faq, i) => (
                 <div
+                  key={i}
                   className={`sfh-faq__item ${openFaq === i ? 'sfh-faq__item--open' : ''}`}
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                 >
@@ -1709,8 +931,8 @@ function SelfFlyHire() {
                     </motion.div>
                   </div>
                 </div>
-              </Reveal>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -2013,46 +1235,46 @@ function SelfFlyHire() {
         }
 
         .sfh-intro__benefits {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          display: flex;
+          justify-content: center;
+          align-items: center;
           gap: 2rem;
+          flex-wrap: wrap;
         }
 
         .sfh-intro__benefit {
-          text-align: center;
-          padding: 1.5rem;
-          background: #faf9f6;
-          border-left: 3px solid #1a1a1a;
-          border-radius: 0 8px 8px 0;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          text-align: left;
+          padding: 0;
+          background: transparent;
+          border: none;
         }
 
         .sfh-intro__benefit-stat {
-          display: block;
           font-family: 'Share Tech Mono', monospace;
-          font-size: 2rem;
+          font-size: 1.25rem;
           font-weight: 700;
           color: #1a1a1a;
-          margin-bottom: 0.5rem;
+          line-height: 1;
         }
 
         .sfh-intro__benefit-label {
-          display: block;
-          font-size: 0.8rem;
-          font-weight: 600;
+          font-size: 0.7rem;
+          font-weight: 500;
           text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #1a1a1a;
-          margin-bottom: 0.5rem;
+          letter-spacing: 0.05em;
+          color: #666;
         }
 
         .sfh-intro__benefit-desc {
-          font-size: 0.8rem;
-          color: #888;
+          display: none;
         }
 
         /* ===== FLEET ===== */
         .sfh-fleet {
-          padding: 5rem 2rem;
+          padding: 2.5rem 1.5rem;
           background: #faf9f6;
           position: relative;
         }
@@ -2076,20 +1298,20 @@ function SelfFlyHire() {
         .sfh-fleet__selector {
           display: flex;
           justify-content: center;
-          gap: 0.5rem;
-          margin-bottom: 2rem;
+          gap: 0.35rem;
+          margin-bottom: 1rem;
         }
 
         .sfh-fleet__tab {
           display: flex;
           align-items: center;
-          gap: 0.75rem;
-          padding: 0.75rem 1.5rem;
+          gap: 0.5rem;
+          padding: 0.5rem 1rem;
           background: #fff;
           border: 1px solid #e8e6e2;
           cursor: pointer;
           transition: all 0.3s ease;
-          border-radius: 8px;
+          border-radius: 6px;
         }
 
         .sfh-fleet__tab:hover {
@@ -2123,7 +1345,7 @@ function SelfFlyHire() {
         .sfh-fleet__card {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 3rem;
+          gap: 1.5rem;
           background: #fff;
           border-radius: 8px;
           overflow: hidden;
@@ -2132,7 +1354,7 @@ function SelfFlyHire() {
 
         .sfh-fleet__image {
           position: relative;
-          min-height: 350px;
+          min-height: 220px;
         }
 
         .sfh-fleet__image img {
@@ -2158,7 +1380,7 @@ function SelfFlyHire() {
         }
 
         .sfh-fleet__info {
-          padding: 2rem;
+          padding: 1.25rem;
           display: flex;
           flex-direction: column;
         }
@@ -2166,9 +1388,9 @@ function SelfFlyHire() {
         .sfh-fleet__specs {
           display: flex;
           align-items: center;
-          gap: 1.5rem;
-          margin-bottom: 1.5rem;
-          padding-bottom: 1.5rem;
+          gap: 1rem;
+          margin-bottom: 0.75rem;
+          padding-bottom: 0.75rem;
           border-bottom: 1px solid #e8e6e2;
         }
 
@@ -2199,15 +1421,15 @@ function SelfFlyHire() {
 
         .sfh-fleet__desc {
           color: #666;
-          line-height: 1.7;
-          margin-bottom: 1.5rem;
+          font-size: 0.85rem;
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
         }
 
         .sfh-fleet__features {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.5rem;
-          margin-bottom: 1.5rem;
+          gap: 0.35rem;
         }
 
         .sfh-fleet__feature {
@@ -2246,7 +1468,7 @@ function SelfFlyHire() {
 
         /* ===== RATES ===== */
         .sfh-rates {
-          padding: 5rem 2rem;
+          padding: 2.5rem 1.5rem;
           background: #fff;
           position: relative;
         }
@@ -2270,62 +1492,62 @@ function SelfFlyHire() {
         .sfh-rates__grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
-          margin-bottom: 2rem;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
         }
 
         .sfh-rates__card {
           background: #faf9f6;
-          padding: 2rem;
+          padding: 1rem 1.25rem;
           text-align: center;
-          border-left: 3px solid #1a1a1a;
-          border-radius: 0 8px 8px 0;
+          border: 1px solid #e0deda;
+          border-radius: 8px;
         }
 
         .sfh-rates__card-header {
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.75rem;
         }
 
         .sfh-rates__card-model {
           display: block;
-          font-size: 1.25rem;
+          font-size: 1rem;
           font-weight: 700;
           text-transform: uppercase;
           color: #1a1a1a;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.15rem;
         }
 
         .sfh-rates__card-seats {
-          font-size: 0.75rem;
+          font-size: 0.65rem;
           color: #888;
         }
 
         .sfh-rates__card-price {
-          margin-bottom: 1.5rem;
+          margin-bottom: 0.75rem;
         }
 
         .sfh-rates__card-amount {
           font-family: 'Share Tech Mono', monospace;
-          font-size: 2.5rem;
+          font-size: 1.75rem;
           font-weight: 700;
           color: #1a1a1a;
         }
 
         .sfh-rates__card-unit {
-          font-size: 0.9rem;
+          font-size: 0.75rem;
           color: #666;
         }
 
         .sfh-rates__card-features {
           list-style: none;
           padding: 0;
-          margin: 0 0 1.5rem;
+          margin: 0 0 0.75rem;
         }
 
         .sfh-rates__card-features li {
-          font-size: 0.85rem;
+          font-size: 0.7rem;
           color: #666;
-          padding: 0.5rem 0;
+          padding: 0.3rem 0;
           border-bottom: 1px solid #e8e6e2;
         }
 
@@ -2336,31 +1558,31 @@ function SelfFlyHire() {
         .sfh-rates__note {
           display: flex;
           align-items: flex-start;
-          gap: 1rem;
-          padding: 1.5rem;
+          gap: 0.75rem;
+          padding: 0.75rem 1rem;
           background: #faf9f6;
           border-radius: 8px;
         }
 
         .sfh-rates__note-icon {
-          width: 24px;
-          height: 24px;
+          width: 18px;
+          height: 18px;
           background: #1a1a1a;
           color: #fff;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.75rem;
+          font-size: 0.6rem;
           font-weight: 700;
           flex-shrink: 0;
         }
 
         .sfh-rates__note p {
           margin: 0;
-          font-size: 0.85rem;
+          font-size: 0.7rem;
           color: #666;
-          line-height: 1.6;
+          line-height: 1.5;
         }
 
         /* ===== REQUIREMENTS ===== */
@@ -2443,7 +1665,7 @@ function SelfFlyHire() {
 
         /* ===== PROCESS ===== */
         .sfh-process {
-          padding: 5rem 2rem;
+          padding: 2rem 1.5rem;
           background: #fff;
           position: relative;
         }
@@ -2468,6 +1690,74 @@ function SelfFlyHire() {
           display: flex;
           flex-direction: column;
           gap: 0;
+        }
+
+        .sfh-process__steps--horizontal {
+          flex-direction: row;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+        }
+
+        .sfh-process__steps--horizontal .sfh-process__step {
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          border: 1px solid #e0deda;
+          border-radius: 8px;
+          padding: 1rem 1.25rem;
+          flex: 1;
+          max-width: 180px;
+          min-height: 120px;
+          display: flex;
+          justify-content: flex-start;
+        }
+
+        .sfh-process__steps--horizontal .sfh-process__step--fly {
+          flex: 1.8;
+          max-width: 280px;
+          border: 2px solid #1a1a1a;
+          background: #faf9f6;
+        }
+
+        .sfh-process__steps--horizontal .sfh-process__step-num {
+          width: 36px;
+          height: 36px;
+          font-size: 0.85rem;
+          margin-bottom: 0.5rem;
+        }
+
+        .sfh-process__steps--horizontal .sfh-process__step-content h4 {
+          font-size: 0.9rem;
+          margin-bottom: 0.25rem;
+        }
+
+        .sfh-process__time {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #888;
+          background: #f0efec;
+          padding: 0.2rem 0.5rem;
+          border-radius: 4px;
+          margin-top: 0.25rem;
+          display: inline-block;
+        }
+
+        .sfh-process__arrow {
+          color: #ccc;
+          flex-shrink: 0;
+        }
+
+        .sfh-process__desc {
+          margin: 0;
+          font-size: 0.75rem;
+          color: #666;
+          line-height: 1.4;
+          max-width: 160px;
+        }
+
+        .sfh-process__steps--horizontal .sfh-process__desc {
+          text-align: center;
         }
 
         .sfh-process__step {
@@ -2598,6 +1888,149 @@ function SelfFlyHire() {
           color: #666;
           line-height: 1.7;
           font-size: 0.95rem;
+        }
+
+        /* ===== FAQ & LOCATION MERGED ===== */
+        .sfh-faq-location {
+          padding: 2.5rem 1.5rem;
+          background: #faf9f6;
+        }
+
+        .sfh-faq-location__container {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: start;
+        }
+
+        .sfh-faq-location__map {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .sfh-faq-location__map .sfh-section-header {
+          margin-bottom: 1rem;
+        }
+
+        .sfh-faq-location__map-frame {
+          position: relative;
+          border-radius: 8px;
+          overflow: hidden;
+          flex: 1;
+          min-height: 350px;
+        }
+
+        .sfh-faq-location__map-frame iframe {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+        }
+
+        .sfh-faq-location__map-image {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: 25% 30%;
+          transform: scale(1.5);
+        }
+
+        .sfh-faq-location__map-info {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 1.25rem;
+          background: rgba(26,26,26,0.95);
+          color: #fff;
+        }
+
+        .sfh-faq-location__map-info h4 {
+          margin: 0 0 0.25rem;
+          font-size: 1rem;
+          font-weight: 600;
+          color: #fff;
+        }
+
+        .sfh-faq-location__map-info p {
+          margin: 0 0 0.5rem;
+          font-size: 0.8rem;
+          color: rgba(255,255,255,0.7);
+        }
+
+        .sfh-faq-location__icao {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          background: rgba(255,255,255,0.15);
+          padding: 0;
+          border-radius: 4px;
+          margin-right: 10px;
+          height: 32px;
+          padding: 0 0.75rem;
+          box-sizing: border-box;
+        }
+
+        .sfh-faq-location__actions {
+          display: flex;
+          align-items: center;
+          margin-top: 0.75rem;
+        }
+
+        .sfh-faq-location__map-info .sfh-btn--small {
+          height: 32px;
+          padding: 0 0.75rem;
+          font-size: 0.7rem;
+          color: #fff;
+          border-color: #fff;
+          display: inline-flex;
+          align-items: center;
+          box-sizing: border-box;
+        }
+
+        .sfh-faq-location__map-info .sfh-btn--small:hover {
+          background: #fff;
+          color: #1a1a1a;
+        }
+
+        .sfh-faq-location__faq {
+          padding: 0;
+        }
+
+        .sfh-faq-location__faq .sfh-section-header {
+          margin-bottom: 1rem;
+        }
+
+        .sfh-faq-location__faq .sfh-faq__list {
+          gap: 0;
+        }
+
+        .sfh-faq-location__faq .sfh-faq__item {
+          padding: 0.75rem 0;
+        }
+
+        .sfh-faq-location__faq .sfh-faq__content h4 {
+          font-size: 0.9rem;
+        }
+
+        .sfh-faq-location__faq .sfh-faq__answer p {
+          font-size: 0.85rem;
+        }
+
+        @media (max-width: 900px) {
+          .sfh-faq-location__container {
+            grid-template-columns: 1fr;
+          }
+
+          .sfh-faq-location__map {
+            min-height: 300px;
+          }
         }
 
         /* ===== CTA ===== */
@@ -2815,11 +2248,86 @@ function SelfFlyHire() {
           font-weight: 600;
         }
 
+        .sfh-destinations__filters {
+          display: flex;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .sfh-destinations__filter {
+          padding: 0.5rem 1rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 500;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 4px;
+        }
+
+        .sfh-destinations__filter:hover {
+          border-color: #1a1a1a;
+          color: #1a1a1a;
+        }
+
+        .sfh-destinations__filter--active {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
+        }
+
+        .sfh-destinations__load-more {
+          display: flex;
+          justify-content: center;
+          margin-top: 1.5rem;
+        }
+
+        .sfh-destinations__chevron {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.25rem;
+          padding: 0.5rem 1.5rem;
+          background: transparent;
+          border: 1px solid #e8e6e2;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border-radius: 4px;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
+
+        .sfh-destinations__chevron:hover {
+          border-color: #1a1a1a;
+          color: #1a1a1a;
+        }
+
+        .sfh-destinations__chevron svg {
+          animation: bounceDown 1.5s ease-in-out infinite;
+        }
+
+        @keyframes bounceDown {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(4px); }
+        }
+
         /* ===== SAFETY ===== */
         .sfh-safety {
           padding: 5rem 2rem;
           background: #faf9f6;
           position: relative;
+        }
+
+        .sfh-safety--compact {
+          padding: 2rem 1.5rem;
         }
 
         .sfh-safety::before {
@@ -2842,6 +2350,12 @@ function SelfFlyHire() {
           align-items: center;
         }
 
+        .sfh-safety__container--compact {
+          display: block;
+          max-width: 700px;
+          text-align: center;
+        }
+
         .sfh-safety__header h2 {
           font-size: clamp(1.75rem, 3.5vw, 2.5rem);
           margin: 0.5rem 0 1.5rem;
@@ -2849,10 +2363,19 @@ function SelfFlyHire() {
           font-weight: 700;
         }
 
+        .sfh-safety__container--compact .sfh-safety__header h2 {
+          margin-bottom: 0.75rem;
+        }
+
         .sfh-safety__desc {
           color: #666;
           line-height: 1.8;
           margin-bottom: 2rem;
+        }
+
+        .sfh-safety__container--compact .sfh-safety__desc {
+          margin-bottom: 0;
+          font-size: 0.9rem;
         }
 
         .sfh-safety__features {
@@ -3739,6 +3262,47 @@ function SelfFlyHire() {
           position: relative;
         }
 
+        .sfh-block--compact {
+          padding: 1.5rem;
+          background: #f5f4f0;
+        }
+
+        .sfh-block--compact::before {
+          display: none;
+        }
+
+        .sfh-block__compact-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1.5rem;
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        .sfh-block__compact-text h3 {
+          margin: 0 0 0.25rem;
+          font-size: 1rem;
+          font-weight: 600;
+        }
+
+        .sfh-block__compact-text p {
+          margin: 0;
+          font-size: 0.85rem;
+          color: #666;
+        }
+
+        .sfh-block__compact-text strong {
+          color: #1a1a1a;
+        }
+
+        @media (max-width: 600px) {
+          .sfh-block__compact-content {
+            flex-direction: column;
+            text-align: center;
+          }
+        }
+
         .sfh-block::before {
           content: '';
           position: absolute;
@@ -4078,6 +3642,64 @@ function SelfFlyHire() {
           color: #888;
         }
 
+        /* Compact Team Styles */
+        .sfh-team--compact {
+          padding: 1.5rem 2rem;
+          background: #f5f4f1;
+        }
+
+        .sfh-team--compact::before {
+          display: none;
+        }
+
+        .sfh-team--compact .sfh-team__container {
+          max-width: 1000px;
+        }
+
+        .sfh-team__inline {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+          flex-wrap: wrap;
+        }
+
+        .sfh-team__label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #888;
+        }
+
+        .sfh-team__members {
+          display: flex;
+          gap: 2rem;
+          flex-wrap: wrap;
+          flex: 1;
+          justify-content: center;
+        }
+
+        .sfh-team__member-compact {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.15rem;
+        }
+
+        .sfh-team__name {
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+
+        .sfh-team__role-compact {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: #888;
+        }
+
         /* ===== CONTACT FORM ===== */
         .sfh-contact {
           padding: 5rem 2rem;
@@ -4305,7 +3927,7 @@ function SelfFlyHire() {
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
           .sfh-intro__benefits {
-            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
           }
 
           .sfh-fleet__card {
@@ -4433,7 +4055,7 @@ function SelfFlyHire() {
           }
 
           .sfh-intro__benefits {
-            grid-template-columns: 1fr;
+            gap: 1.5rem;
           }
 
           .sfh-fleet__selector {
@@ -4467,12 +4089,31 @@ function SelfFlyHire() {
           }
 
           .sfh-destinations__grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
           }
 
-          .sfh-weather__resources {
+          .sfh-process__steps--horizontal {
             flex-direction: column;
-            align-items: center;
+            gap: 0.5rem;
+          }
+
+          .sfh-process__steps--horizontal .sfh-process__step {
+            flex-direction: row;
+            max-width: 100%;
+            text-align: left;
+            min-height: auto;
+          }
+
+          .sfh-process__steps--horizontal .sfh-process__step--fly {
+            max-width: 100%;
+          }
+
+          .sfh-process__arrow {
+            display: none;
+          }
+
+          .sfh-destinations__filters {
+            flex-wrap: wrap;
           }
 
           .sfh-fuel__points {

@@ -1902,7 +1902,7 @@ const Version34_SplitHero = () => (
   <section className="own-section" style={{ minHeight: '100vh', display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
     <style>{globalStyles}</style>
     <div style={{ background: '#1a1a1a', padding: '6rem 4rem', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-      <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.65rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', marginBottom: '2rem', textTransform: 'uppercase' }}>The Robinson Specialists Since 1990</div>
+      <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.65rem', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', marginBottom: '2rem', textTransform: 'uppercase' }}>The Robinson Specialists Since 2010</div>
       <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 700, margin: '0 0 2rem', color: '#ffffff', textTransform: 'uppercase', lineHeight: 1, letterSpacing: '-0.02em' }}>
         Why Own<br />A Helicopter
       </h2>
@@ -2121,7 +2121,7 @@ const Version40_ThreeColumnGrid = () => (
     <style>{globalStyles}</style>
     <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
       <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-        <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', letterSpacing: '0.2em', color: '#999999', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Since 1990</div>
+        <div style={{ fontFamily: "'Share Tech Mono', monospace", fontSize: '0.7rem', letterSpacing: '0.2em', color: '#999999', marginBottom: '1.5rem', textTransform: 'uppercase' }}>Since 2010</div>
         <h2 style={{ fontFamily: "'Space Grotesk', sans-serif", fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, margin: 0, textTransform: 'uppercase' }}>
           <span style={{ color: '#1a1a1a' }}>Why </span>
           <span style={{ color: '#4a4a4a' }}>Own </span>

@@ -19,13 +19,9 @@
  * 09. TeamProfiles - Engineer spotlight cards with +team count
  * 10. FacilityShowcase - Parallax image gallery
  * 12. EquipmentGallery - Scrolling tool showcase
- * 13. TestimonialSlider - Client reviews
  * 14. MaintenanceSchedule - Interactive booking table
  * 15. PartsInventory - Technical specification cards
- * 16. ServiceComparison - Pricing tiers
- * 17. FAQAccordion - Expandable questions
- * 18. ContactCTA - Split action section
- * 19. TrustIndicators - Logos and certifications
+ * 18. ContactCTA - Split action section with AOG support
  * 20. EmergencySupport - 24/7 support highlight
  */
 
@@ -36,6 +32,7 @@ import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'fra
 import '../assets/css/main.css';
 import '../assets/css/components.css';
 import FooterMinimal from '../components/FooterMinimal';
+import FacilityGallery from '../components/Maintenance/FacilityGallery';
 
 // ============================================
 // UTILITY COMPONENTS
@@ -285,33 +282,10 @@ function HeroSection() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 1.5 }}
       >
-        <img src="/assets/images/facility/maintenance-hangar.jpg" alt="" />
+        <img src="/assets/images/facility/hq-0056.jpg" alt="Helicopter maintenance" />
       </motion.div>
       <div className="maint-hero__overlay" />
-
-      {/* Animated Grid */}
-      <div className="maint-hero__grid">
-        {[20, 40, 60, 80].map((pos, i) => (
-          <motion.div
-            key={`v-${i}`}
-            className="maint-hero__grid-line maint-hero__grid-line--v"
-            style={{ left: `${pos}%` }}
-            initial={{ scaleY: 0 }}
-            animate={{ scaleY: 1 }}
-            transition={{ duration: 1, delay: 0.1 * i, ease: [0.16, 1, 0.3, 1] }}
-          />
-        ))}
-        {[33, 66].map((pos, i) => (
-          <motion.div
-            key={`h-${i}`}
-            className="maint-hero__grid-line maint-hero__grid-line--h"
-            style={{ top: `${pos}%` }}
-            initial={{ scaleX: 0 }}
-            animate={{ scaleX: 1 }}
-            transition={{ duration: 1, delay: 0.4 + 0.1 * i, ease: [0.16, 1, 0.3, 1] }}
-          />
-        ))}
-      </div>
+      <div className="maint-hero__blueprint-grid" />
 
       <motion.div
         className="maint-hero__content"
@@ -342,14 +316,6 @@ function HeroSection() {
             transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             ENGINEERING
-          </motion.span>
-          <motion.span
-            className="maint-hero__word maint-hero__word--3"
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          >
-            EXCELLENCE
           </motion.span>
         </div>
 
@@ -412,7 +378,6 @@ function StatsStrip() {
     { icon: 'fa-helicopter', value: 85, suffix: '+', label: 'Aircraft Under Care' },
     { icon: 'fa-calendar-check', value: 15, suffix: '+', label: 'Years Experience' },
     { icon: 'fa-wrench', value: 2500, suffix: '+', label: 'Services Completed' },
-    { icon: 'fa-certificate', value: 100, suffix: '%', label: 'Genuine Parts' },
     { icon: 'fa-users', value: 12, suffix: '', label: 'Expert Engineers' },
   ];
 
@@ -423,12 +388,11 @@ function StatsStrip() {
           <motion.div
             key={i}
             className="maint-stats__item"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: i * 0.1 }}
+            transition={{ duration: 0.5, delay: i * 0.1 }}
             viewport={{ once: true }}
           >
-            <i className={`fas ${stat.icon}`}></i>
             <span className="maint-stats__value">
               <AnimatedNumber value={stat.value} suffix={stat.suffix} />
             </span>
@@ -445,6 +409,13 @@ function StatsStrip() {
 // ============================================
 
 function PhilosophySection() {
+  const team = [
+    { name: 'David Cross', role: 'Chief Engineer', exp: '25 years', certs: ['EASA Part 66', 'Robinson Certified'] },
+    { name: 'Michael Fowler', role: 'Senior Engineer', exp: '18 years', certs: ['EASA Part 66', 'Avionics Specialist'] },
+    { name: 'David Clarke', role: 'Engine Specialist', exp: '15 years', certs: ['Lycoming Certified', 'Robinson Certified'] },
+  ];
+  const teamCount = 12;
+
   return (
     <section className="maint-philosophy">
       <div className="maint-philosophy__container">
@@ -495,20 +466,36 @@ function PhilosophySection() {
           </Reveal>
         </div>
 
-        <div className="maint-philosophy__visual">
-          <motion.div
-            className="maint-philosophy__image"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            <img src="/assets/images/facility/hq-0053.jpg" alt="Precision engineering" />
-            <div className="maint-philosophy__image-label">
-              <span className="maint-philosophy__image-num">01</span>
-              <span>Precision at every step</span>
+        {/* Meet the Team */}
+        <div className="maint-philosophy__team">
+          <Reveal>
+            <div className="maint-philosophy__team-header">
+              <span className="maint-pre-text">Our Engineers</span>
+              <h3>Meet the Team</h3>
             </div>
-          </motion.div>
+          </Reveal>
+          <div className="maint-philosophy__team-grid">
+            {team.map((member, i) => (
+              <Reveal key={i} delay={i * 0.1}>
+                <div className="maint-philosophy__team-card">
+                  <div className="maint-philosophy__team-icon">
+                    <i className="fas fa-user"></i>
+                  </div>
+                  <div className="maint-philosophy__team-info">
+                    <h4>{member.name}</h4>
+                    <span className="maint-philosophy__team-role">{member.role}</span>
+                    <span className="maint-philosophy__team-exp">{member.exp}</span>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+            <Reveal delay={0.3}>
+              <div className="maint-philosophy__team-card maint-philosophy__team-card--count">
+                <span className="maint-philosophy__team-plus">+{teamCount}</span>
+                <span className="maint-philosophy__team-label">Engineers</span>
+              </div>
+            </Reveal>
+          </div>
         </div>
       </div>
     </section>
@@ -616,90 +603,122 @@ function ServicesGrid() {
 // ============================================
 
 function RebuildsSection() {
+  const steps = [
+    { num: '01', title: 'Strip Down', desc: 'Complete disassembly to bare airframe' },
+    { num: '02', title: 'Inspect', desc: 'Every component examined and tested' },
+    { num: '03', title: 'Rebuild', desc: 'Reassembly with new and certified parts' },
+    { num: '04', title: 'Test Flight', desc: 'Returned to service like new' },
+  ];
+
+  const aircraft = [
+    { model: 'R44', images: [
+      '/assets/images/overhaul/r44-strip.jpg',
+      '/assets/images/overhaul/r44-inspect.jpg',
+      '/assets/images/overhaul/r44-rebuild.jpg',
+      '/assets/images/overhaul/r44-test.jpg',
+    ]},
+    { model: 'R66', images: [
+      '/assets/images/overhaul/r66-strip.jpg',
+      '/assets/images/overhaul/r66-inspect.jpg',
+      '/assets/images/overhaul/r66-rebuild.jpg',
+      '/assets/images/overhaul/r66-test.jpg',
+    ]},
+    { model: 'R22', images: [
+      '/assets/images/overhaul/r22-strip.jpg',
+      '/assets/images/overhaul/r22-inspect.jpg',
+      '/assets/images/overhaul/r22-rebuild.jpg',
+      '/assets/images/overhaul/r22-test.jpg',
+    ]},
+  ];
+
   return (
     <section className="maint-rebuilds">
       <div className="maint-rebuilds__container">
-        <div className="maint-rebuilds__content">
+        <div className="maint-rebuilds__header">
           <Reveal>
-            <span className="maint-pre-text">Complete Restoration</span>
+            <span className="maint-pre-text">Major Service</span>
             <h2 className="maint-rebuilds__headline">
-              <span className="maint-text--dark">12-Year </span>
-              <span className="maint-text--mid">Rebuild </span>
-              <span className="maint-text--light">Programme</span>
+              <span className="maint-text--dark">12-Year / 2200-Hour </span>
+              <span className="maint-text--light">Overhaul</span>
             </h2>
           </Reveal>
 
           <Reveal delay={0.2}>
             <p className="maint-rebuilds__body">
-              When your Robinson helicopter reaches its 12-year inspection, we don't just check it—we
-              transform it. Our comprehensive rebuild programme takes your aircraft through a complete
-              restoration: we strip it down to a bare shell, inspect every component, replace what's
-              needed, and build it back up again to factory-fresh condition.
+              At 2200 hours or 12 years—whichever comes first—Robinson helicopters require a complete
+              overhaul. We don't just check it, we transform it. Our comprehensive programme takes your
+              aircraft through complete disassembly, inspection of every component, replacement of what's
+              needed, and reassembly to factory-fresh condition.
             </p>
-          </Reveal>
-
-          <Reveal delay={0.3}>
-            <div className="maint-rebuilds__process">
-              <div className="maint-rebuilds__step">
-                <span className="maint-rebuilds__step-num">01</span>
-                <h4>Strip Down</h4>
-                <p>Complete disassembly to bare airframe</p>
-              </div>
-              <div className="maint-rebuilds__arrow">
-                <i className="fas fa-chevron-right"></i>
-              </div>
-              <div className="maint-rebuilds__step">
-                <span className="maint-rebuilds__step-num">02</span>
-                <h4>Inspect</h4>
-                <p>Every component examined and tested</p>
-              </div>
-              <div className="maint-rebuilds__arrow">
-                <i className="fas fa-chevron-right"></i>
-              </div>
-              <div className="maint-rebuilds__step">
-                <span className="maint-rebuilds__step-num">03</span>
-                <h4>Rebuild</h4>
-                <p>Reassembly with new and certified parts</p>
-              </div>
-              <div className="maint-rebuilds__arrow">
-                <i className="fas fa-chevron-right"></i>
-              </div>
-              <div className="maint-rebuilds__step">
-                <span className="maint-rebuilds__step-num">04</span>
-                <h4>Test Flight</h4>
-                <p>Returned to service like new</p>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.4}>
-            <div className="maint-rebuilds__cta">
-              <Link to="/contact" className="maint-btn maint-btn--primary">
-                Enquire About Rebuilds
-              </Link>
+            <div className="maint-rebuilds__timeline">
+              <span className="maint-rebuilds__timeline-icon">⏱</span>
+              <span className="maint-rebuilds__timeline-text">Typically 4–6 weeks</span>
             </div>
           </Reveal>
         </div>
 
-        <div className="maint-rebuilds__visual">
-          <motion.div
-            className="maint-rebuilds__image"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-          >
-            {/* TODO: Add flatpack image from Instagram */}
-            <div className="maint-rebuilds__image-placeholder">
-              <i className="fas fa-helicopter"></i>
-              <span>Stripped to shell</span>
+        <Reveal delay={0.3}>
+          <div className="maint-rebuilds__grid">
+            {/* Fixed Labels Column */}
+            <div className="maint-rebuilds__labels">
+              <div className="maint-rebuilds__label-header"></div>
+              {aircraft.map((craft) => (
+                <div key={craft.model} className="maint-rebuilds__model-label">
+                  <span>{craft.model}</span>
+                </div>
+              ))}
             </div>
-            <div className="maint-rebuilds__image-note">
-              <i className="fas fa-camera"></i>
-              <span>See our rebuild progress on Instagram</span>
+
+            {/* Scrollable Content */}
+            <div className="maint-rebuilds__scroll-wrapper">
+              <div className="maint-rebuilds__scroll-content">
+                {/* Step Headers */}
+                <div className="maint-rebuilds__grid-header">
+                  {steps.map((step, i) => (
+                    <div key={step.num} className="maint-rebuilds__step-header">
+                      <span className="maint-rebuilds__step-num">{step.num}</span>
+                      <h4>{step.title}</h4>
+                      <p>{step.desc}</p>
+                      {i < steps.length - 1 && (
+                        <div className="maint-rebuilds__arrow">
+                          <i className="fas fa-chevron-right"></i>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Aircraft Rows */}
+                {aircraft.map((craft, rowIndex) => (
+                  <motion.div
+                    key={craft.model}
+                    className="maint-rebuilds__grid-row"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: rowIndex * 0.1 }}
+                    viewport={{ once: true }}
+                  >
+                    {craft.images.map((img, colIndex) => (
+                      <div key={colIndex} className="maint-rebuilds__cell">
+                        <div className="maint-rebuilds__cell-img">
+                          <img src={img} alt={`${craft.model} ${steps[colIndex].title}`} />
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.4}>
+          <div className="maint-rebuilds__cta">
+            <Link to="/contact" className="maint-btn maint-btn--primary">
+              Enquire About Overhauls
+            </Link>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -749,10 +768,6 @@ function WeBuySection() {
               <div className="maint-webuy__feature">
                 <i className="fas fa-check-circle"></i>
                 <span>All Robinson Models</span>
-              </div>
-              <div className="maint-webuy__feature">
-                <i className="fas fa-check-circle"></i>
-                <span>Any Condition Considered</span>
               </div>
             </div>
           </Reveal>
@@ -823,49 +838,33 @@ function Timeline() {
 }
 
 // ============================================
-// COMPONENT 07: CERTIFICATION BADGES
+// COMPONENT 07: CERTIFICATION BADGES (COMPACT)
 // ============================================
 
 function CertificationBadges() {
   const certs = [
-    { logo: '/assets/images/logos/certifications/caa-logo.png', name: 'UK CAA', desc: 'Civil Aviation Authority Certified' },
-    { logo: '/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg', name: 'Robinson Authorized', desc: 'Factory Authorized Service Centre' },
+    { logo: '/assets/images/logos/certifications/caa-logo.png', name: 'UK CAA Certified' },
+    { logo: '/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg', name: 'Robinson Authorized Service Centre' },
   ];
 
   return (
     <section className="maint-certs">
       <div className="maint-certs__container">
         <Reveal>
-          <div className="maint-section-header">
-            <span className="maint-pre-text">Certifications</span>
-            <h2>
-              <span className="maint-text--dark">Trusted </span>
-              <span className="maint-text--mid">& </span>
-              <span className="maint-text--light">Certified</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="maint-certs__grid maint-certs__grid--two">
-          {certs.map((cert, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <motion.div
-                className="maint-certs__card"
-                whileHover={{ scale: 1.02 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
+          <div className="maint-certs__grid maint-certs__grid--two">
+            {certs.map((cert, i) => (
+              <div key={i} className="maint-certs__card">
                 <div className="maint-certs__logo">
                   <img src={cert.logo} alt={cert.name} onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }} />
                   <div className="maint-certs__logo-fallback" style={{ display: 'none' }}>
                     <i className="fas fa-certificate"></i>
                   </div>
                 </div>
-                <h4>{cert.name}</h4>
-                <p>{cert.desc}</p>
-              </motion.div>
-            </Reveal>
-          ))}
-        </div>
+                <span className="maint-certs__name">{cert.name}</span>
+              </div>
+            ))}
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -1208,126 +1207,6 @@ function PartsInventory() {
   );
 }
 
-// ============================================
-// COMPONENT 16: SERVICE COMPARISON
-// ============================================
-
-function ServiceComparison() {
-  const tiers = [
-    {
-      name: 'Essential',
-      desc: 'Core maintenance services',
-      features: ['Scheduled Inspections', 'Minor Repairs', 'Oil Analysis', 'Basic Documentation'],
-      highlight: false
-    },
-    {
-      name: 'Complete',
-      desc: 'Full care package',
-      features: ['All Essential Services', 'Priority Scheduling', 'Courtesy Aircraft', 'Extended Warranty', 'Pickup & Delivery'],
-      highlight: true
-    },
-    {
-      name: 'Premium',
-      desc: 'Ultimate ownership experience',
-      features: ['All Complete Services', '24/7 AOG Support', 'Dedicated Engineer', 'Annual Paint Touch-up', 'Concierge Service'],
-      highlight: false
-    },
-  ];
-
-  return (
-    <section className="maint-comparison">
-      <div className="maint-comparison__container">
-        <Reveal>
-          <div className="maint-section-header">
-            <span className="maint-pre-text">Packages</span>
-            <h2>
-              <span className="maint-text--dark">Service </span>
-              <span className="maint-text--mid">Programmes </span>
-              <span className="maint-text--light">for Owners</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="maint-comparison__grid">
-          {tiers.map((tier, i) => (
-            <Reveal key={i} delay={i * 0.15}>
-              <div className={`maint-comparison__card ${tier.highlight ? 'maint-comparison__card--highlight' : ''}`}>
-                {tier.highlight && <span className="maint-comparison__badge">Most Popular</span>}
-                <h3>{tier.name}</h3>
-                <p className="maint-comparison__desc">{tier.desc}</p>
-                <ul>
-                  {tier.features.map((f, j) => (
-                    <li key={j}><i className="fas fa-check"></i>{f}</li>
-                  ))}
-                </ul>
-                <Link to="/contact" className={`maint-btn ${tier.highlight ? 'maint-btn--primary' : 'maint-btn--outline'}`}>
-                  Learn More
-                </Link>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-// ============================================
-// COMPONENT 17: FAQ ACCORDION
-// ============================================
-
-function FAQAccordion() {
-  const [openIndex, setOpenIndex] = useState(null);
-  const faqs = [
-    { q: 'How long does a 100-hour inspection take?', a: 'Typically 2-3 working days, depending on any additional findings. We will keep you informed throughout the process.' },
-    { q: 'Do you offer pickup and delivery?', a: 'Yes, we can arrange ferry pilots to collect and return your aircraft from anywhere in the UK and Europe.' },
-    { q: 'What warranty do you offer on repairs?', a: 'All work is warranted for 12 months or until the next scheduled inspection, whichever comes first. Parts carry manufacturer warranty.' },
-    { q: 'Can you service non-Robinson helicopters?', a: 'We specialize in Robinson aircraft, but can provide advice and referrals for other manufacturers.' },
-    { q: 'How do I get a quote for maintenance?', a: 'Contact us with your aircraft details and maintenance requirements. We\'ll provide a detailed written estimate within 24 hours.' },
-  ];
-
-  return (
-    <section className="maint-faq">
-      <div className="maint-faq__container">
-        <Reveal>
-          <div className="maint-section-header">
-            <span className="maint-pre-text">Questions</span>
-            <h2>
-              <span className="maint-text--dark">Frequently </span>
-              <span className="maint-text--mid">Asked </span>
-              <span className="maint-text--light">Questions</span>
-            </h2>
-          </div>
-        </Reveal>
-
-        <div className="maint-faq__list">
-          {faqs.map((faq, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div
-                className={`maint-faq__item ${openIndex === i ? 'maint-faq__item--open' : ''}`}
-                onClick={() => setOpenIndex(openIndex === i ? null : i)}
-              >
-                <div className="maint-faq__question">
-                  <span className="maint-faq__num">{String(i + 1).padStart(2, '0')}</span>
-                  <h4>{faq.q}</h4>
-                  <span className="maint-faq__toggle">{openIndex === i ? '−' : '+'}</span>
-                </div>
-                <motion.div
-                  className="maint-faq__answer"
-                  initial={false}
-                  animate={{ height: openIndex === i ? 'auto' : 0, opacity: openIndex === i ? 1 : 0 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <p>{faq.a}</p>
-                </motion.div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ============================================
 // COMPONENT 18: CONTACT CTA
@@ -1394,36 +1273,6 @@ function ContactCTA() {
   );
 }
 
-// ============================================
-// COMPONENT 19: TRUST INDICATORS
-// ============================================
-
-function TrustIndicators() {
-  const logos = [
-    { name: 'Robinson Helicopters', src: '/assets/images/logos/robinson-logo.png' },
-    { name: 'EASA', src: '/assets/images/logos/easa-logo.png' },
-    { name: 'CAA', src: '/assets/images/logos/caa-logo.png' },
-    { name: 'AOPA', src: '/assets/images/logos/aopa-logo.png' },
-  ];
-
-  return (
-    <section className="maint-trust">
-      <div className="maint-trust__container">
-        <span className="maint-trust__label">Trusted Partners & Certifications</span>
-        <div className="maint-trust__logos">
-          {logos.map((logo, i) => (
-            <div key={i} className="maint-trust__logo">
-              <div className="maint-trust__logo-placeholder">
-                <i className="fas fa-certificate"></i>
-                <span>{logo.name}</span>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
 
 // ============================================
 // COMPONENT 20: EMERGENCY SUPPORT
@@ -1607,30 +1456,15 @@ const styles = `
   z-index: 1;
 }
 
-.maint-hero__grid {
+.maint-hero__blueprint-grid {
   position: absolute;
   inset: 0;
   z-index: 2;
   pointer-events: none;
-}
-
-.maint-hero__grid-line {
-  position: absolute;
-  background: rgba(255,255,255,0.08);
-}
-
-.maint-hero__grid-line--v {
-  width: 1px;
-  height: 100%;
-  top: 0;
-  transform-origin: top;
-}
-
-.maint-hero__grid-line--h {
-  height: 1px;
-  width: 100%;
-  left: 0;
-  transform-origin: left;
+  background-image:
+    linear-gradient(to right, rgba(255,255,255,0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: calc(100% / 5) calc(100% / 5);
 }
 
 .maint-hero__content {
@@ -1847,7 +1681,7 @@ const styles = `
 /* === 03. STATS === */
 .maint-stats {
   background: #1a1a1a;
-  padding: 3rem 2rem;
+  padding: 1rem 2rem;
 }
 
 .maint-stats__container {
@@ -1861,30 +1695,23 @@ const styles = `
 
 .maint-stats__item {
   text-align: center;
-  min-width: 140px;
-}
-
-.maint-stats__item i {
-  font-size: 1.25rem;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 0.75rem;
-  display: block;
+  min-width: 110px;
 }
 
 .maint-stats__value {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 2rem;
+  font-size: 1.4rem;
   color: #faf9f6;
   display: block;
   font-weight: 600;
 }
 
 .maint-stats__label {
-  font-size: 0.65rem;
+  font-size: 0.55rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(250,249,246,0.5);
-  margin-top: 0.25rem;
+  margin-top: 0.1rem;
   display: block;
 }
 
@@ -1898,9 +1725,9 @@ const styles = `
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4rem;
-  align-items: center;
+  grid-template-columns: 1.4fr 0.6fr;
+  gap: 3rem;
+  align-items: start;
 }
 
 .maint-philosophy__headline {
@@ -1912,7 +1739,7 @@ const styles = `
 }
 
 .maint-philosophy__body {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: #666;
   line-height: 1.8;
   margin-bottom: 2rem;
@@ -1921,74 +1748,134 @@ const styles = `
 .maint-philosophy__pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 .maint-philosophy__pillar {
   text-align: center;
-  padding: 1.5rem 1rem;
+  padding: 1rem 0.75rem;
   background: #fff;
   border: 1px solid #e8e6e2;
 }
 
 .maint-philosophy__pillar-icon {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   background: #1a1a1a;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1rem;
+  margin: 0 auto 0.75rem;
+  font-size: 0.9rem;
 }
 
 .maint-philosophy__pillar h4 {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .maint-philosophy__pillar p {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: #666;
   margin: 0;
+  line-height: 1.4;
 }
 
-.maint-philosophy__visual {
-  position: relative;
-}
-
-.maint-philosophy__image {
-  position: relative;
-}
-
-.maint-philosophy__image img {
-  width: 100%;
-  height: 400px;
-  object-fit: cover;
-}
-
-.maint-philosophy__image-label {
-  position: absolute;
-  bottom: -1rem;
-  left: 2rem;
+/* Team Section within Philosophy */
+.maint-philosophy__team {
   background: #1a1a1a;
+  padding: 1.25rem;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+}
+
+.maint-philosophy__team-header {
+  margin-bottom: 1rem;
+}
+
+.maint-philosophy__team-header .maint-pre-text {
+  color: rgba(255,255,255,0.5);
+  font-size: 0.65rem;
+}
+
+.maint-philosophy__team-header h3 {
   color: #fff;
-  padding: 0.75rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0.25rem 0 0;
+}
+
+.maint-philosophy__team-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.maint-philosophy__team-card {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 6px;
 }
 
-.maint-philosophy__image-num {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.7rem;
+.maint-philosophy__team-icon {
+  width: 32px;
+  height: 32px;
+  background: rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: rgba(255,255,255,0.5);
+  font-size: 0.8rem;
+  flex-shrink: 0;
+  border-radius: 50%;
 }
 
-.maint-philosophy__image-label span:last-child {
-  font-size: 0.75rem;
+.maint-philosophy__team-info h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 0.15rem;
+}
+
+.maint-philosophy__team-role {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.6);
+  display: block;
+}
+
+.maint-philosophy__team-exp {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(255,255,255,0.4);
+}
+
+.maint-philosophy__team-card--count {
+  justify-content: center;
+  flex-direction: column;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.maint-philosophy__team-plus {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.maint-philosophy__team-label {
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.5);
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -2077,6 +1964,18 @@ const styles = `
 .maint-core-services {
   background: #ffffff;
   padding: 5rem 2rem;
+  position: relative;
+}
+
+.maint-core-services::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #bbb, transparent);
 }
 
 .maint-core-services__header {
@@ -2100,6 +1999,11 @@ const styles = `
   overflow: hidden;
   max-width: 900px;
   margin: 0 auto;
+  align-items: stretch;
+}
+
+.maint-core-services__grid > * {
+  height: 100%;
 }
 
 .maint-core-services__card {
@@ -2109,6 +2013,7 @@ const styles = `
   align-items: flex-start;
   gap: 1rem;
   transition: transform 0.3s ease;
+  height: 100%;
 }
 
 .maint-core-services__card:hover {
@@ -2336,23 +2241,29 @@ const styles = `
 
 /* ========== SECTION 18-19: TEAM ========== */
 .maint-team {
-  padding: 5rem 2rem;
+  padding: 1.5rem 2rem 1rem;
   background: #faf9f6;
 }
 
+.maint-team__header {
+  text-align: center;
+  margin-bottom: 0.75rem;
+}
+
 .maint-profile {
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   background: #ffffff;
   border-left: 3px solid #1a1a1a;
-  padding: 2rem;
+  padding: 1.25rem 1.5rem;
   display: flex;
-  gap: 1.5rem;
+  align-items: center;
+  gap: 1.25rem;
 }
 
 .maint-profile__image {
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
@@ -2365,46 +2276,44 @@ const styles = `
 }
 
 .maint-profile__name {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 600;
-  margin: 0 0 0.25rem;
+  margin: 0 0 0.15rem;
 }
 
 .maint-profile__title {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #888;
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .maint-profile__stats {
   display: flex;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e8e6e2;
+  gap: 1.25rem;
+  margin-bottom: 0.5rem;
 }
 
 .maint-profile__stat-value {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 1.25rem;
+  font-size: 1rem;
   display: block;
 }
 
 .maint-profile__stat-label {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: #888;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .maint-profile__bio {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   color: #666;
-  line-height: 1.6;
+  line-height: 1.5;
   margin: 0;
 }
 
@@ -2424,10 +2333,10 @@ const styles = `
 .maint-team-grid {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 0.5rem;
-  max-width: 600px;
-  margin: 2rem auto 0;
+  max-width: 700px;
+  margin: 0.75rem auto 0;
 }
 
 .maint-team-member {
@@ -2446,6 +2355,102 @@ const styles = `
 .maint-team-member__role {
   font-size: 0.6rem;
   color: #888;
+}
+
+.maint-team-member--count {
+  background: #1a1a1a;
+  color: #faf9f6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.maint-team-member__plus {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.maint-team-member__count-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin-top: 0.25rem;
+}
+
+/* === COMPACT CERTIFICATIONS === */
+.maint-certs-compact {
+  background: #faf9f6;
+  padding: 2.5rem 2rem;
+}
+
+.maint-certs-compact__title {
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #1a1a1a;
+  margin: 0 0 1.25rem;
+}
+
+.maint-certs-compact__grid {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  max-width: 900px;
+  margin: 0 auto;
+  flex-wrap: wrap;
+}
+
+.maint-certs-compact__card {
+  background: #fff;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid #e8e6e2;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.maint-certs-compact__logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.maint-certs-compact__text {
+  text-align: left;
+}
+
+.maint-certs-compact__card h4 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin: 0;
+  color: #1a1a1a;
+}
+
+.maint-certs-compact__card p {
+  font-size: 0.7rem;
+  color: #888;
+  line-height: 1.4;
+  margin: 0.15rem 0 0;
+}
+
+@media (max-width: 768px) {
+  .maint-certs-compact__grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .maint-certs-compact__card {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
 /* === 05. SERVICES === */
@@ -2553,12 +2558,31 @@ const styles = `
 }
 
 .maint-rebuilds__container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 4rem;
-  align-items: center;
+}
+
+@media (max-width: 1000px) {
+  .maint-rebuilds {
+    padding: 4rem 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .maint-rebuilds {
+    padding: 3rem 0.5rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .maint-rebuilds {
+    padding: 2.5rem 0.25rem;
+  }
+}
+
+.maint-rebuilds__header {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
 .maint-rebuilds__headline {
@@ -2573,24 +2597,77 @@ const styles = `
   font-size: 1rem;
   color: #666;
   line-height: 1.8;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.maint-rebuilds__process {
+.maint-rebuilds__timeline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #f0efec;
+  border-radius: 4px;
+}
+
+.maint-rebuilds__timeline-icon {
+  font-size: 1rem;
+}
+
+.maint-rebuilds__timeline-text {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.8rem;
+  color: #1a1a1a;
+  letter-spacing: 0.05em;
+}
+
+.maint-rebuilds__grid {
+  margin-bottom: 2rem;
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
+  position: relative;
 }
 
-.maint-rebuilds__step {
+.maint-rebuilds__labels {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: 70px;
+  margin-right: 1rem;
+}
+
+.maint-rebuilds__scroll-wrapper {
   flex: 1;
-  min-width: 120px;
+  overflow: visible;
+}
+
+.maint-rebuilds__scroll-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.maint-rebuilds__grid-header {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.maint-rebuilds__step-header {
   text-align: center;
   padding: 1rem;
   background: #fff;
   border: 1px solid #e8e6e2;
+  position: relative;
+}
+
+.maint-rebuilds__step-header .maint-rebuilds__arrow {
+  position: absolute;
+  right: -0.5rem;
+  top: 50%;
+  transform: translate(50%, -50%);
+  z-index: 2;
 }
 
 .maint-rebuilds__step-num {
@@ -2601,71 +2678,255 @@ const styles = `
   margin-bottom: 0.5rem;
 }
 
-.maint-rebuilds__step h4 {
+.maint-rebuilds__step-header h4 {
   font-size: 0.85rem;
   text-transform: uppercase;
-  margin-bottom: 0.25rem;
+  margin: 0 0 0.25rem;
+  font-weight: 700;
 }
 
-.maint-rebuilds__step p {
-  font-size: 0.75rem;
+.maint-rebuilds__step-header p {
+  font-size: 0.7rem;
   color: #888;
   margin: 0;
+  line-height: 1.3;
 }
 
 .maint-rebuilds__arrow {
+  color: #bbb;
+}
+
+.maint-rebuilds__grid-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.maint-rebuilds__label-header {
+  height: 120px;
+  margin-bottom: 1rem;
+}
+
+.maint-rebuilds__model-label {
   display: flex;
-  align-items: center;
-  color: #ccc;
-  padding-top: 1.5rem;
-}
-
-.maint-rebuilds__cta {
-  margin-top: 1rem;
-}
-
-.maint-rebuilds__visual {
-  position: relative;
-}
-
-.maint-rebuilds__image-placeholder {
-  aspect-ratio: 4/3;
-  background: linear-gradient(135deg, #e8e6e2 0%, #d0cdc8 100%);
-  display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  height: 180px;
+  margin-bottom: 1rem;
 }
 
-.maint-rebuilds__image-placeholder i {
-  font-size: 3rem;
-  color: #999;
-}
-
-.maint-rebuilds__image-placeholder span {
-  font-size: 0.85rem;
-  color: #666;
-  text-transform: uppercase;
+.maint-rebuilds__model-label span {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
   letter-spacing: 0.1em;
 }
 
-.maint-rebuilds__image-note {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem;
-  background: #1a1a1a;
-  color: #fff;
+.maint-rebuilds__cell {
+  background: #fff;
+  border: 1px solid #e8e6e2;
+  overflow: hidden;
+  transition: all 0.3s ease;
 }
 
-.maint-rebuilds__image-note i {
-  font-size: 0.85rem;
-  color: rgba(255,255,255,0.6);
+.maint-rebuilds__cell:hover {
+  border-color: #1a1a1a;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.maint-rebuilds__image-note span {
-  font-size: 0.75rem;
+.maint-rebuilds__cell-img {
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.maint-rebuilds__cell-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.maint-rebuilds__cell:hover .maint-rebuilds__cell-img img {
+  transform: scale(1.05);
+}
+
+.maint-rebuilds__cta {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+@media (max-width: 1000px) {
+  .maint-rebuilds__grid-header,
+  .maint-rebuilds__grid-row {
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .maint-rebuilds__step-header p {
+    display: none;
+  }
+
+  .maint-rebuilds__step-header .maint-rebuilds__arrow {
+    display: none;
+  }
+
+  .maint-rebuilds__labels {
+    width: 50px;
+  }
+
+  .maint-rebuilds__model-label span {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 800px) {
+  .maint-rebuilds__labels {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: #faf9f6;
+    width: 35px;
+    margin-right: 15px;
+    overflow: visible;
+  }
+
+  .maint-rebuilds__model-label span {
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .maint-rebuilds__labels::after {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: linear-gradient(to right, rgba(250,249,246,1) 0%, rgba(250,249,246,0) 100%);
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .maint-rebuilds__label-header {
+    height: 68px;
+    margin-bottom: 0.3rem;
+  }
+
+  .maint-rebuilds__labels .maint-rebuilds__model-label {
+    flex: 0 0 auto;
+    height: calc(120px + 2px);
+    margin-bottom: 0.3rem;
+    background: #faf9f6;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
+
+  .maint-rebuilds__scroll-wrapper {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .maint-rebuilds__scroll-wrapper::-webkit-scrollbar {
+    display: none;
+  }
+
+  .maint-rebuilds__scroll-content {
+    min-width: max-content;
+  }
+
+  .maint-rebuilds__grid-header,
+  .maint-rebuilds__grid-row {
+    display: flex;
+    gap: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .maint-rebuilds__step-header {
+    flex: 0 0 140px;
+    min-width: 140px;
+  }
+
+  .maint-rebuilds__cell {
+    flex: 0 0 140px;
+    min-width: 140px;
+  }
+
+  .maint-rebuilds__cell-img {
+    height: 120px;
+    aspect-ratio: auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .maint-rebuilds__labels {
+    width: 28px;
+    margin-right: 10px;
+  }
+
+  .maint-rebuilds__labels::after {
+    right: -10px;
+    width: 10px;
+  }
+
+  .maint-rebuilds__label-header {
+    height: 52px;
+    margin-bottom: 0.2rem;
+  }
+
+  .maint-rebuilds__labels .maint-rebuilds__model-label {
+    height: calc(100px + 2px);
+    margin-bottom: 0.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .maint-rebuilds__step-header {
+    flex: 0 0 120px;
+    min-width: 120px;
+    padding: 0.5rem 0.25rem;
+  }
+
+  .maint-rebuilds__step-header h4 {
+    font-size: 0.65rem;
+  }
+
+  .maint-rebuilds__step-num {
+    font-size: 0.5rem;
+  }
+
+  .maint-rebuilds__cell {
+    flex: 0 0 120px;
+    min-width: 120px;
+  }
+
+  .maint-rebuilds__cell-img {
+    height: 100px;
+  }
+
+  .maint-rebuilds__model-label span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+
+  .maint-rebuilds__grid-header,
+  .maint-rebuilds__grid-row {
+    gap: 0.2rem;
+    margin-bottom: 0.2rem;
+  }
 }
 
 /* === 05C. WE BUY ANY ROBINSON === */
@@ -2845,47 +3106,50 @@ const styles = `
   max-width: 150px;
 }
 
-/* === 07. CERTIFICATIONS === */
+/* === 07. CERTIFICATIONS (COMPACT) === */
 .maint-certs {
-  padding: 6rem 2rem;
+  padding: 3rem 2rem;
   background: #faf9f6;
 }
 
 .maint-certs__container {
-  max-width: 1000px;
+  max-width: 800px;
   margin: 0 auto;
 }
 
 .maint-certs__grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
 }
 
 .maint-certs__grid--two {
-  grid-template-columns: repeat(2, 1fr);
-  max-width: 700px;
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
 }
 
 .maint-certs__card {
-  background: #fff;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  border: 1px solid #e8e6e2;
-  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: transparent;
+  padding: 0;
+  border: none;
 }
 
 .maint-certs__card:hover {
-  border-color: #1a1a1a;
+  opacity: 0.8;
 }
 
 .maint-certs__logo {
-  height: 60px;
+  height: 48px;
+  width: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1rem;
+  flex-shrink: 0;
 }
 
 .maint-certs__logo img {
@@ -2898,22 +3162,15 @@ const styles = `
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
-  color: #ccc;
+  font-size: 1.5rem;
+  color: #999;
 }
 
-.maint-certs__card h4 {
-  font-size: 0.85rem;
+.maint-certs__name {
+  font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.maint-certs__card p {
-  font-size: 0.75rem;
   color: #666;
-  margin: 0;
-  line-height: 1.5;
 }
 
 /* === 08. PROCESS === */
@@ -3412,164 +3669,6 @@ const styles = `
   font-weight: 600;
 }
 
-/* === 16. COMPARISON === */
-.maint-comparison {
-  padding: 6rem 2rem;
-  background: #fff;
-}
-
-.maint-comparison__container {
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.maint-comparison__grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.maint-comparison__card {
-  background: #faf9f6;
-  border: 1px solid #e8e6e2;
-  padding: 2rem;
-  text-align: center;
-  position: relative;
-  transition: all 0.3s ease;
-}
-
-.maint-comparison__card--highlight {
-  background: #1a1a1a;
-  color: #fff;
-  border-color: #1a1a1a;
-  transform: scale(1.05);
-}
-
-.maint-comparison__badge {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #4ade80;
-  color: #1a1a1a;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  padding: 0.35rem 0.75rem;
-  font-weight: 600;
-}
-
-.maint-comparison__card h3 {
-  font-size: 1.25rem;
-  text-transform: uppercase;
-  margin-bottom: 0.5rem;
-}
-
-.maint-comparison__desc {
-  font-size: 0.85rem;
-  color: #888;
-  margin-bottom: 1.5rem;
-}
-
-.maint-comparison__card--highlight .maint-comparison__desc {
-  color: rgba(255,255,255,0.6);
-}
-
-.maint-comparison__card ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 2rem 0;
-  text-align: left;
-}
-
-.maint-comparison__card li {
-  font-size: 0.85rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.maint-comparison__card--highlight li {
-  border-color: rgba(255,255,255,0.1);
-}
-
-.maint-comparison__card li i {
-  color: #4ade80;
-  font-size: 0.7rem;
-}
-
-/* === 17. FAQ === */
-.maint-faq {
-  padding: 6rem 2rem;
-  background: #faf9f6;
-}
-
-.maint-faq__container {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.maint-faq__list {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.maint-faq__item {
-  background: #fff;
-  border: 1px solid #e8e6e2;
-  margin-bottom: -1px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.maint-faq__item:hover {
-  background: #fefefe;
-}
-
-.maint-faq__item--open {
-  border-color: #1a1a1a;
-  z-index: 1;
-}
-
-.maint-faq__question {
-  display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  padding: 1.25rem 1.5rem;
-}
-
-.maint-faq__num {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.75rem;
-  color: #ccc;
-}
-
-.maint-faq__question h4 {
-  flex: 1;
-  font-size: 0.95rem;
-  font-weight: 500;
-  margin: 0;
-}
-
-.maint-faq__toggle {
-  font-size: 1.5rem;
-  color: #888;
-}
-
-.maint-faq__answer {
-  overflow: hidden;
-}
-
-.maint-faq__answer p {
-  padding: 0 1.5rem 1.5rem 4rem;
-  margin: 0;
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.7;
-}
 
 /* === 18. CONTACT CTA === */
 .maint-contact-cta {
@@ -3639,61 +3738,6 @@ const styles = `
   color: #666;
   margin: 0;
   line-height: 1.5;
-}
-
-/* === 19. TRUST === */
-.maint-trust {
-  padding: 3rem 2rem;
-  background: #faf9f6;
-  border-top: 1px solid #e8e6e2;
-}
-
-.maint-trust__container {
-  max-width: 1000px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.maint-trust__label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: #888;
-  margin-bottom: 2rem;
-  display: block;
-}
-
-.maint-trust__logos {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  flex-wrap: wrap;
-}
-
-.maint-trust__logo {
-  opacity: 0.5;
-  transition: opacity 0.3s ease;
-}
-
-.maint-trust__logo:hover {
-  opacity: 1;
-}
-
-.maint-trust__logo-placeholder {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.maint-trust__logo-placeholder i {
-  font-size: 2rem;
-  color: #ccc;
-}
-
-.maint-trust__logo-placeholder span {
-  font-size: 0.7rem;
-  color: #999;
 }
 
 /* === 20. EMERGENCY === */
@@ -3778,7 +3822,11 @@ const styles = `
 
 /* === RESPONSIVE === */
 @media (max-width: 1024px) {
-  .maint-philosophy__container,
+  .maint-philosophy__container {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
   .maint-parts__container,
   .maint-contact-cta__container,
   .maint-rebuilds__container {
@@ -3838,8 +3886,7 @@ const styles = `
 
 @media (max-width: 768px) {
   .maint-services__grid,
-  .maint-team__grid,
-  .maint-comparison__grid {
+  .maint-team__grid {
     grid-template-columns: 1fr;
   }
 
@@ -3853,6 +3900,20 @@ const styles = `
 
   .maint-philosophy__pillars {
     grid-template-columns: 1fr;
+  }
+
+  .maint-philosophy__team-grid {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .maint-philosophy__team-card {
+    flex: 1 1 45%;
+    min-width: 140px;
+  }
+
+  .maint-philosophy__team-card--count {
+    flex: 0 0 auto;
   }
 
   .maint-facility__gallery {
@@ -3873,21 +3934,9 @@ const styles = `
     display: none;
   }
 
-  .maint-comparison__card--highlight {
-    transform: none;
-  }
-
-  .maint-rebuilds__process {
-    flex-direction: column;
-  }
-
-  .maint-rebuilds__arrow {
-    transform: rotate(90deg);
-    padding: 0;
-  }
-
   .maint-certs__grid--two {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
   }
 
   .maint-scroll-progress {
@@ -4199,75 +4248,6 @@ const styles = `
   color: #666;
   font-size: 0.9rem;
   line-height: 1.6;
-}
-
-/* ========== SECTION 24: AOG SUPPORT ========== */
-.maint-aog {
-  background: #1a1a1a;
-  color: #faf9f6;
-  padding: 5rem 2rem;
-  text-align: center;
-}
-
-.maint-aog__container {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.maint-aog__headline {
-  font-size: clamp(2rem, 5vw, 3rem);
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.maint-aog__body {
-  color: rgba(250,249,246,0.7);
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-
-.maint-aog__phone {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: clamp(1.5rem, 4vw, 2rem);
-  color: #faf9f6;
-  text-decoration: none;
-  display: block;
-  margin-bottom: 2rem;
-  transition: opacity 0.2s;
-}
-
-.maint-aog__phone:hover {
-  opacity: 0.8;
-}
-
-.maint-aog__btn {
-  display: inline-block;
-  padding: 1rem 2rem;
-  background: #faf9f6;
-  color: #1a1a1a;
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 500;
-  border-radius: 4px;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.maint-aog__btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-}
-
-.maint-aog__features {
-  display: flex;
-  justify-content: center;
-  gap: 2rem;
-  margin-top: 3rem;
-  flex-wrap: wrap;
-}
-
-.maint-aog__feature {
-  font-size: 0.8rem;
-  color: rgba(250,249,246,0.6);
 }
 
 /* ========== SECTION 25: REFURBISHMENT ========== */
@@ -4663,6 +4643,34 @@ const styles = `
   border: 1px solid rgba(250,249,246,0.3);
 }
 
+.maint-cta__aog {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(250,249,246,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.maint-cta__aog-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(250,249,246,0.5);
+}
+
+.maint-cta__aog-phone {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 1.1rem;
+  color: #faf9f6;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.maint-cta__aog-phone:hover {
+  opacity: 0.7;
+}
+
 @media (max-width: 900px) {
   .maint-cta__container {
     grid-template-columns: 1fr;
@@ -4674,8 +4682,284 @@ const styles = `
   .maint-cta__buttons {
     justify-content: center;
   }
+  .maint-cta__aog {
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: center;
+  }
 }
 `;
+
+// ============================================
+// TURNAROUND & CERTIFICATIONS SECTION
+// ============================================
+
+function TurnaroundTimes() {
+  const times = [
+    { service: '50-Hour Inspection', time: '1-2 days' },
+    { service: '100-Hour Inspection', time: '2-3 days' },
+    { service: 'Annual Inspection', time: '3-5 days' },
+    { service: '2200-Hour Overhaul', time: '4-6 weeks' },
+    { service: 'AOG Response', time: 'Same day' },
+  ];
+
+  const certs = [
+    { logo: '/assets/images/logos/easa-logo.png', title: 'EASA Part 145', desc: 'European approved maintenance organisation' },
+    { logo: '/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg', title: 'Robinson Authorized', desc: 'Factory-authorized since 1990' },
+    { logo: '/assets/images/logos/guimbal-logo.png', title: 'Guimbal Certified', desc: 'UK service centre for Cabri G2' },
+  ];
+
+  return (
+    <section className="maint-turnaround">
+      <div className="maint-turnaround__container">
+        {/* Left: Turnaround Times */}
+        <div className="maint-turnaround__left">
+          <h3 className="maint-turnaround__title">Typical Turnaround</h3>
+          <div className="maint-turnaround__list">
+            {times.map((item) => (
+              <div key={item.service} className="maint-turnaround__item">
+                <span className="maint-turnaround__service">{item.service}</span>
+                <span className="maint-turnaround__time">{item.time}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Vertical Divider */}
+        <div className="maint-turnaround__divider"></div>
+
+        {/* Right: Certifications */}
+        <div className="maint-turnaround__right">
+          <h3 className="maint-turnaround__title">Approved & Certified</h3>
+          <div className="maint-turnaround__certs">
+            {certs.map((cert) => (
+              <div key={cert.title} className="maint-turnaround__cert">
+                <img src={cert.logo} alt={cert.title} />
+                <div className="maint-turnaround__cert-text">
+                  <h4>{cert.title}</h4>
+                  <p>{cert.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <style>{`
+        .maint-turnaround {
+          background: #f0efec;
+          padding: 2rem 2rem;
+        }
+        .maint-turnaround__container {
+          max-width: 1000px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1px 1fr;
+          gap: 2rem;
+          align-items: stretch;
+        }
+        .maint-turnaround__divider {
+          background: #ddd;
+        }
+        .maint-turnaround__left,
+        .maint-turnaround__right {
+          display: flex;
+          flex-direction: column;
+        }
+        .maint-turnaround__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #1a1a1a;
+          margin: 0 0 0.75rem;
+          flex-shrink: 0;
+        }
+        .maint-turnaround__list,
+        .maint-turnaround__certs {
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          flex: 1;
+          min-height: 0;
+        }
+        .maint-turnaround__item,
+        .maint-turnaround__cert {
+          display: flex;
+          align-items: center;
+          padding: 0.5rem 0.75rem;
+          background: #fff;
+          border-radius: 4px;
+          box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+          flex: 1;
+          min-height: 0;
+        }
+        .maint-turnaround__item {
+          justify-content: space-between;
+        }
+        .maint-turnaround__cert {
+          gap: 0.75rem;
+        }
+        .maint-turnaround__service {
+          font-size: 0.8rem;
+          font-weight: 500;
+          color: #1a1a1a;
+        }
+        .maint-turnaround__time {
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: #888;
+          font-family: 'Share Tech Mono', monospace;
+        }
+        .maint-turnaround__cert img {
+          width: 160px;
+          height: 90px;
+          object-fit: contain;
+        }
+        .maint-turnaround__cert-text h4 {
+          font-size: 0.8rem;
+          font-weight: 600;
+          margin: 0 0 0.1rem;
+          color: #1a1a1a;
+        }
+        .maint-turnaround__cert-text p {
+          font-size: 0.7rem;
+          color: #666;
+          margin: 0;
+        }
+        @media (max-width: 768px) {
+          .maint-turnaround__container {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+          .maint-turnaround__divider {
+            display: none;
+          }
+          .maint-turnaround__item,
+          .maint-turnaround__cert {
+            flex: none;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
+
+// ============================================
+// SUPPORTED AIRCRAFT SECTION
+// ============================================
+
+function SupportedAircraft() {
+  const aircraft = [
+    { model: 'Robinson R22', image: '/assets/images/new-aircraft/r22-beta.webp', notes: 'Beta II, all variants' },
+    { model: 'Robinson R44', image: '/assets/images/new-aircraft/r44-raven.webp', notes: 'Raven, Cadet, Clipper' },
+    { model: 'Robinson R66', image: '/assets/images/new-aircraft/r66-turbine.webp', notes: 'Turbine expertise' },
+    { model: 'Guimbal Cabri G2', image: '/assets/images/new-aircraft/cabri-g2.webp', notes: 'Certified centre' },
+  ];
+
+  return (
+    <section className="maint-supported">
+      <div className="maint-supported__inner">
+        <div className="maint-container maint-container--narrow" style={{ textAlign: 'center' }}>
+          <Reveal>
+            <span className="maint-pre-text">Supported Aircraft</span>
+            <h2 className="maint-headline">
+              <span className="maint-text--dark">Robinson </span>
+              <span className="maint-text--mid">& </span>
+              <span className="maint-text--light">Guimbal</span>
+            </h2>
+            <p className="maint-body" style={{ margin: '0 auto' }}>
+              We provide full maintenance support for the complete Robinson range
+              and Guimbal Cabri G2.
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="maint-supported__grid">
+          {aircraft.map((a, i) => (
+            <Reveal key={a.model} delay={i * 0.1}>
+              <div className="maint-supported__card">
+                <div className="maint-supported__image">
+                  <img src={a.image} alt={a.model} />
+                </div>
+                <div className="maint-supported__model">{a.model}</div>
+                <div className="maint-supported__notes">{a.notes}</div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        .maint-supported {
+          background: #f0efec;
+          padding: 4rem 0;
+          position: relative;
+        }
+        .maint-supported::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, #bbb, transparent);
+        }
+        .maint-supported__inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
+        .maint-supported__grid {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 1.5rem;
+          margin-top: 3rem;
+        }
+        .maint-supported__card {
+          background: #fff;
+          border-radius: 8px;
+          overflow: hidden;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .maint-supported__card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+        .maint-supported__image {
+          aspect-ratio: 16/10;
+          overflow: hidden;
+          background: #f5f5f5;
+        }
+        .maint-supported__image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .maint-supported__model {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          padding: 1rem 1rem 0.25rem;
+        }
+        .maint-supported__notes {
+          font-size: 0.8rem;
+          color: #666;
+          padding: 0 1rem 1rem;
+        }
+        @media (max-width: 900px) {
+          .maint-supported__grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+          }
+        }
+      `}</style>
+    </section>
+  );
+}
 
 // ============================================
 // MAIN COMPONENT
@@ -4685,22 +4969,12 @@ function FinalMaintenance() {
   const [activeInspection, setActiveInspection] = useState(0);
   const [openAccordion, setOpenAccordion] = useState(null);
   const [activeRefurb, setActiveRefurb] = useState('interior');
-  const [openFaq, setOpenFaq] = useState(null);
 
   const refurbOptions = [
     { id: 'interior', title: 'Interior Refurbishment', desc: 'Complete interior overhaul including seats, carpets, panels, and headliners. We source premium materials to match or exceed original specifications.', image: '/assets/images/facility/interior-refurb.jpg' },
     { id: 'paint', title: 'Exterior Paint', desc: 'Custom paint schemes, touch-ups, or full repaints. Our paint facility delivers showroom finishes with industry-leading durability.', image: '/assets/images/facility/paint-booth.jpg' },
     { id: 'avionics', title: 'Avionics Upgrades', desc: 'Modern glass cockpits, upgraded navigation systems, and the latest safety equipment. We handle everything from basic radio swaps to complete panel overhauls.', image: '/assets/images/facility/avionics-panel.jpg' },
     { id: 'corrosion', title: 'Corrosion Treatment', desc: 'Comprehensive corrosion prevention and repair services. We identify, treat, and protect against corrosion to extend your aircraft\'s service life.', image: '/assets/images/facility/corrosion-treatment.jpg' },
-  ];
-
-  const faqs = [
-    { id: '01', q: 'How long does a 100-hour inspection take?', a: 'Typically 2-3 working days, depending on any additional work required. We\'ll provide a detailed timeline with your quote.' },
-    { id: '02', q: 'Do you provide loan aircraft?', a: 'We can arrange loan aircraft through our network of partners. Contact us to discuss availability and terms.' },
-    { id: '03', q: 'Can you collect my aircraft?', a: 'Yes, we offer ferry services throughout the UK and Europe. Our experienced pilots can collect and deliver your aircraft.' },
-    { id: '04', q: 'What\'s included in an annual?', a: 'A complete airworthiness review including all scheduled maintenance items, AD compliance check, and full documentation.' },
-    { id: '05', q: 'Do you work on other helicopter types?', a: 'We specialize in Robinson and Guimbal aircraft. For other types, please contact us to discuss your requirements.' },
-    { id: '06', q: 'What about warranty work?', a: 'As an authorized service centre, we handle all warranty claims directly with the manufacturers.' },
   ];
 
   const inspections = [
@@ -4760,17 +5034,11 @@ function FinalMaintenance() {
       <MaintenanceHeader />
 
       {/* 01 */ } <HeroSection />
-      {/* 02 */ } <ScrollProgress />
-      {/* 03 */ } <StatsStrip />
+      {/* 02 */ } <StatsStrip />
       {/* 04 */ } <PhilosophySection />
 
-      {/* ========== SECTION 5: PARALLAX - HANGAR ========== */}
-      <ParallaxSection
-        image="/assets/images/facility/maintenance-hangar.jpg"
-        number="01"
-        label="Factory Trained"
-        largeText="MAINTENANCE"
-      />
+      {/* ========== SECTION 5: SUPPORTED AIRCRAFT ========== */}
+      <SupportedAircraft />
 
       {/* ========== SECTION 6-7: CORE SERVICES ========== */}
       <section className="maint-core-services">
@@ -4812,565 +5080,20 @@ function FinalMaintenance() {
             </Reveal>
           ))}
         </div>
+
       </section>
 
-      {/* ========== SECTION 8: PARTS BADGE ========== */}
-      <div className="maint-badge">
-        <Reveal>
-          <div className="maint-badge__inner">
-            <span className="maint-badge__label">All Services Include</span>
-            <span className="maint-badge__tag">GENUINE PARTS</span>
-          </div>
-        </Reveal>
-      </div>
+      {/* ========== SECTION 7: TURNAROUND & CERTIFICATIONS ========== */}
+      <TurnaroundTimes />
 
-      {/* ========== SECTION 9: PARALLAX - EXPERTISE ========== */}
-      <ParallaxSection
-        image="/assets/images/facility/engineer-working.jpg"
-        number="02"
-        label="Expert Team"
-        largeText="EXPERTISE"
-      />
+      {/* ========== SECTION 22: 12-YEAR / 2200-HOUR OVERHAUL ========== */}
+      <RebuildsSection />
 
-      {/* ========== SECTION 10: CERTIFICATIONS HEADER ========== */}
-      <section className="maint-section">
-        <div className="maint-container maint-container--narrow" style={{ textAlign: 'center' }}>
-          <Reveal>
-            <span className="maint-pre-text">Approved & Certified</span>
-            <h2 className="maint-headline">
-              <span className="maint-text--dark">Industry </span>
-              <span className="maint-text--mid">Leading </span>
-              <span className="maint-text--light">Standards</span>
-            </h2>
-          </Reveal>
-        </div>
-      </section>
+      {/* ========== SECTION 25: FACILITY GALLERY ========== */}
+      <FacilityGallery />
 
-      {/* ========== SECTION 11: EASA PART 145 ========== */}
-      <section className="maint-cert">
-        <div className="maint-cert__grid">
-          <Reveal direction="left">
-            <div className="maint-cert__image">
-              <img src="/assets/images/logos/easa-logo.png" alt="EASA Part 145" />
-            </div>
-          </Reveal>
-          <Reveal direction="right">
-            <div className="maint-cert__content">
-              <h3>EASA Part 145 Maintenance Organisation</h3>
-              <p>
-                HQ Aviation operates a fully EASA Part 145 approved maintenance facility
-                at Denham Aerodrome. This certification represents the highest European
-                standard for aircraft maintenance.
-              </p>
-              <ul className="maint-cert__list">
-                <li>Approved maintenance procedures</li>
-                <li>Quality management system</li>
-                <li>Continuous airworthiness management</li>
-                <li>Trained and qualified personnel</li>
-              </ul>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 12: ROBINSON AUTHORIZED ========== */}
-      <section className="maint-cert maint-section--alt">
-        <div className="maint-cert__grid" style={{ direction: 'rtl' }}>
-          <Reveal direction="right">
-            <div className="maint-cert__content" style={{ direction: 'ltr' }}>
-              <span className="maint-pre-text">Factory Authorized</span>
-              <h3>Robinson Helicopter Company Service Centre</h3>
-              <p>
-                As a Robinson Authorized Service Centre, we are approved to perform
-                all maintenance, repairs, and overhauls on R22, R44, and R66 helicopters.
-                Our technicians complete regular factory training at Robinson's California facility.
-              </p>
-            </div>
-          </Reveal>
-          <Reveal direction="left">
-            <div className="maint-cert__image" style={{ direction: 'ltr' }}>
-              <img src="/assets/images/logos/robinson-authorized.png" alt="Robinson Authorized" />
-              <span className="maint-pre-text" style={{ marginTop: '1rem' }}>Since 1990</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 13: GUIMBAL CERTIFIED ========== */}
-      <section className="maint-cert">
-        <div className="maint-cert__grid">
-          <Reveal direction="left">
-            <div className="maint-cert__image">
-              <img src="/assets/images/logos/guimbal-logo.png" alt="Guimbal" />
-            </div>
-          </Reveal>
-          <Reveal direction="right">
-            <div className="maint-cert__content">
-              <span className="maint-pre-text">Certified Centre</span>
-              <h3>Guimbal Cabri G2 Service Centre</h3>
-              <p>
-                We are proud to be one of the UK's certified Guimbal Cabri G2 service
-                centres. The Cabri G2 has become increasingly popular for training,
-                and our technicians have completed comprehensive factory training.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 14: LOGOS STRIP ========== */}
-      <section className="maint-logos">
-        <div className="maint-logos__container">
-          {['easa', 'robinson', 'guimbal', 'caa'].map((logo, i) => (
-            <Reveal key={logo} delay={i * 0.1}>
-              <div className="maint-logos__item">
-                <img src={`/assets/images/logos/${logo}-logo.png`} alt={logo.toUpperCase()} />
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 15: PARALLAX - FLEET ========== */}
-      <ParallaxSection
-        image="/assets/images/facility/hq-aviation-robinsons.jpg"
-        number="03"
-        label="Supported Models"
-        largeText="FLEET"
-      />
-
-      {/* ========== SECTION 16: AIRCRAFT HEADER ========== */}
-      <section className="maint-section">
-        <div className="maint-container maint-container--narrow" style={{ textAlign: 'center' }}>
-          <Reveal>
-            <span className="maint-pre-text">Supported Aircraft</span>
-            <h2 className="maint-headline">
-              <span className="maint-text--dark">Robinson </span>
-              <span className="maint-text--mid">& </span>
-              <span className="maint-text--light">Guimbal</span>
-            </h2>
-            <p className="maint-body" style={{ margin: '0 auto' }}>
-              We provide full maintenance support for the complete Robinson range
-              and Guimbal Cabri G2.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 17: AIRCRAFT CARDS ========== */}
-      <section className="maint-aircraft">
-        <div className="maint-aircraft__grid">
-          {[
-            { model: 'Robinson R22', image: '/assets/images/new-aircraft/r22-beta.webp', notes: 'Beta II, all variants' },
-            { model: 'Robinson R44', image: '/assets/images/new-aircraft/r44-raven.webp', notes: 'Raven, Cadet, Clipper' },
-            { model: 'Robinson R66', image: '/assets/images/new-aircraft/r66-turbine.webp', notes: 'Turbine expertise' },
-            { model: 'Guimbal Cabri G2', image: '/assets/images/new-aircraft/cabri-g2.webp', notes: 'Certified centre' },
-          ].map((a, i) => (
-            <Reveal key={a.model} delay={i * 0.1}>
-              <div className="maint-aircraft__card">
-                <div className="maint-aircraft__image">
-                  <img src={a.image} alt={a.model} />
-                </div>
-                <div className="maint-aircraft__model">{a.model}</div>
-                <div className="maint-aircraft__notes">{a.notes}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 18: CHIEF ENGINEER ========== */}
-      <section className="maint-team">
-        <Reveal>
-          <div className="maint-profile">
-            <div className="maint-profile__image">
-              <img src="/assets/images/team/engineer-chief.jpg" alt="Chief Engineer" />
-            </div>
-            <div className="maint-profile__content">
-              <h3 className="maint-profile__name">David Cross</h3>
-              <span className="maint-profile__title">Chief Engineer</span>
-              <div className="maint-profile__stats">
-                <div>
-                  <span className="maint-profile__stat-value"><AnimatedNumber value={30} />+</span>
-                  <span className="maint-profile__stat-label">Years Experience</span>
-                </div>
-                <div>
-                  <span className="maint-profile__stat-value"><AnimatedNumber value={500} />+</span>
-                  <span className="maint-profile__stat-label">Overhauls Completed</span>
-                </div>
-              </div>
-              <p className="maint-profile__bio">
-                David has been with HQ Aviation since 1995 and leads our team of factory-trained
-                engineers. His expertise spans the complete Robinson range and Guimbal aircraft.
-              </p>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* ========== SECTION 19: TEAM GRID ========== */}
-        <div className="maint-team-grid">
-          {[
-            { name: 'James Mitchell', role: 'Licensed Engineer' },
-            { name: 'Robert Taylor', role: 'Licensed Engineer' },
-            { name: 'Sarah Williams', role: 'Avionics Specialist' },
-            { name: 'Tom Anderson', role: 'Engineering Apprentice' },
-          ].map((member, i) => (
-            <Reveal key={member.name} delay={i * 0.1}>
-              <div className="maint-team-member">
-                <div className="maint-team-member__name">{member.name}</div>
-                <div className="maint-team-member__role">{member.role}</div>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 20: PARALLAX - PRECISION ========== */}
-      <ParallaxSection
-        image="/assets/images/facility/precision-tooling.jpg"
-        number="04"
-        label="Attention to Detail"
-        largeText="PRECISION"
-      />
-
-      {/* ========== SECTION 21: INSPECTION STICKY SCROLL ========== */}
-      <section className="maint-inspect">
-        <div className="maint-inspect__left">
-          <span className="maint-inspect__number">{inspections[activeInspection].id}</span>
-          <span className="maint-inspect__title">INSPECTIONS</span>
-          <span className="maint-inspect__current">{inspections[activeInspection].title}</span>
-          <div className="maint-inspect__dots">
-            {inspections.map((_, i) => (
-              <span
-                key={i}
-                className={`maint-inspect__dot ${i === activeInspection ? 'maint-inspect__dot--active' : ''}`}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="maint-inspect__right">
-          {inspections.map((insp) => (
-            <div key={insp.id} className="maint-inspect__item">
-              <div className="maint-inspect__content">
-                <h3>{insp.title}</h3>
-                <p>{insp.desc}</p>
-                <div className="maint-inspect__details">
-                  <div>
-                    <span className="maint-inspect__detail-label">Duration</span>
-                    <span className="maint-inspect__detail-value">{insp.duration}</span>
-                  </div>
-                  <div>
-                    <span className="maint-inspect__detail-label">Checks</span>
-                    <span className="maint-inspect__detail-value">{insp.checks}</span>
-                  </div>
-                  <div>
-                    <span className="maint-inspect__detail-label">Documentation</span>
-                    <span className="maint-inspect__detail-value">{insp.docs}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 22: OVERHAUL ========== */}
-      <section className="maint-overhaul">
-        <div className="maint-overhaul__grid">
-          <Reveal direction="left">
-            <div className="maint-overhaul__content">
-              <span className="maint-pre-text">Major Service</span>
-              <h2 className="maint-headline">
-                <span className="maint-text--dark">2200-Hour </span>
-                <span className="maint-text--light">Overhaul</span>
-              </h2>
-              <p className="maint-body">
-                At 2200 hours, Robinson helicopters require a complete overhaul.
-                This is a comprehensive process involving disassembly, inspection,
-                repair, and reassembly of major components.
-              </p>
-              <div className="maint-overhaul__timeline">
-                <span className="maint-overhaul__timeline-icon">⏱</span>
-                <span className="maint-overhaul__timeline-text">Typically 4-6 weeks</span>
-              </div>
-              <ul className="maint-overhaul__features">
-                <li>Engine overhaul</li>
-                <li>Transmission rebuild</li>
-                <li>Rotor system inspection</li>
-                <li>Complete documentation</li>
-              </ul>
-            </div>
-          </Reveal>
-          <Reveal direction="right">
-            <div className="maint-overhaul__image">
-              <img src="/assets/images/facility/overhaul-process.jpg" alt="Overhaul" />
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 23: COMPONENT ACCORDION ========== */}
-      <section className="maint-accordion">
-        <div className="maint-accordion__container">
-          <div className="maint-accordion__header">
-            <Reveal>
-              <span className="maint-pre-text">Comprehensive Coverage</span>
-              <h2 className="maint-headline">
-                <span className="maint-text--dark">Component </span>
-                <span className="maint-text--light">Services</span>
-              </h2>
-            </Reveal>
-          </div>
-          {[
-            { id: '01', title: 'Engine Components', details: 'Pistons, cylinders, crankshaft, bearings, camshafts, and valve assemblies.' },
-            { id: '02', title: 'Gearbox & Transmission', details: 'Main rotor gearbox, tail rotor gearbox, freewheeling units, and driveshafts.' },
-            { id: '03', title: 'Rotor Systems', details: 'Main rotor blades, tail rotor blades, hub assemblies, pitch links, and grips.' },
-            { id: '04', title: 'Avionics', details: 'GPS units, radios, transponders, EFDs, autopilots, and weather radar.' },
-            { id: '05', title: 'Electrical Systems', details: 'Wiring harnesses, alternators, batteries, lighting, and circuit breakers.' },
-          ].map((comp) => (
-            <div
-              key={comp.id}
-              className={`maint-accordion__item ${openAccordion === comp.id ? 'maint-accordion__item--open' : ''}`}
-            >
-              <button
-                className="maint-accordion__trigger"
-                onClick={() => setOpenAccordion(openAccordion === comp.id ? null : comp.id)}
-              >
-                <span className="maint-accordion__num">{comp.id}</span>
-                <span className="maint-accordion__title">{comp.title}</span>
-                <span className="maint-accordion__icon" />
-              </button>
-              <div className="maint-accordion__content">
-                <p className="maint-accordion__text">{comp.details}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 24: AOG SUPPORT ========== */}
-      <section className="maint-aog">
-        <div className="maint-aog__container">
-          <Reveal>
-            <span className="maint-pre-text" style={{ color: 'rgba(250,249,246,0.5)' }}>24/7 Support</span>
-            <h2 className="maint-aog__headline">Aircraft On Ground</h2>
-            <p className="maint-aog__body">
-              When you need us most, we're here. Our AOG support ensures minimal
-              downtime for your aircraft with rapid response and expert diagnosis.
-            </p>
-            <a href="tel:+441234567890" className="maint-aog__phone">
-              +44 (0) 1234 567 890
-            </a>
-            <Link to="/contact" className="maint-aog__btn">Emergency Contact</Link>
-            <div className="maint-aog__features">
-              <span className="maint-aog__feature">Rapid Response</span>
-              <span className="maint-aog__feature">Mobile Service</span>
-              <span className="maint-aog__feature">Parts Network</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 25: REFURBISHMENT ========== */}
-      <section className="maint-refurb">
-        <div className="maint-refurb__container">
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <Reveal>
-              <span className="maint-pre-text">Restoration Services</span>
-              <h2 className="maint-headline">
-                <span className="maint-text--dark">Aircraft </span>
-                <span className="maint-text--light">Refurbishment</span>
-              </h2>
-            </Reveal>
-          </div>
-
-          <div className="maint-refurb__tabs">
-            {refurbOptions.map((opt) => (
-              <button
-                key={opt.id}
-                className={`maint-refurb__tab ${activeRefurb === opt.id ? 'maint-refurb__tab--active' : ''}`}
-                onClick={() => setActiveRefurb(opt.id)}
-              >
-                {opt.title}
-              </button>
-            ))}
-          </div>
-
-          <div className="maint-refurb__content">
-            <div className="maint-refurb__image">
-              <img src={refurbOptions.find(r => r.id === activeRefurb).image} alt={refurbOptions.find(r => r.id === activeRefurb).title} />
-            </div>
-            <div className="maint-refurb__text">
-              <h3>{refurbOptions.find(r => r.id === activeRefurb).title}</h3>
-              <p>{refurbOptions.find(r => r.id === activeRefurb).desc}</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 26: TURNAROUND & PRICING ========== */}
-      <section className="maint-pricing">
-        <div className="maint-pricing__grid">
-          <div className="maint-pricing__col">
-            <Reveal>
-              <h3>Typical Turnaround</h3>
-              <ul className="maint-pricing__list">
-                <li><span>50-Hour Inspection</span><span>1-2 days</span></li>
-                <li><span>100-Hour Inspection</span><span>2-3 days</span></li>
-                <li><span>Annual Inspection</span><span>3-5 days</span></li>
-                <li><span>2200-Hour Overhaul</span><span>4-6 weeks</span></li>
-                <li><span>AOG Response</span><span>Same day</span></li>
-              </ul>
-            </Reveal>
-          </div>
-          <div className="maint-pricing__divider" />
-          <div className="maint-pricing__col">
-            <Reveal delay={0.2}>
-              <h3>Transparent Pricing</h3>
-              <p className="maint-pricing__text">
-                We provide detailed quotes for all work before commencement.
-                No hidden fees, no surprises. Just honest, professional service.
-              </p>
-              <Link to="/contact" className="maint-pricing__btn">Request a Quote</Link>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 27: LOCATION ========== */}
-      <section className="maint-location">
-        <div className="maint-location__container">
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <Reveal>
-              <span className="maint-pre-text">Visit Us</span>
-              <h2 className="maint-headline">
-                <span className="maint-text--dark">Denham </span>
-                <span className="maint-text--light">Aerodrome</span>
-              </h2>
-            </Reveal>
-          </div>
-
-          <Reveal>
-            <div className="maint-location__map">
-              <span className="maint-location__map-text">51.5751°N • 0.5059°W</span>
-            </div>
-          </Reveal>
-
-          <p className="maint-body" style={{ textAlign: 'center', margin: '0 auto 2rem' }}>
-            Our purpose-built maintenance facility offers modern workshops,
-            climate-controlled storage, and easy access from London.
-          </p>
-
-          <div className="maint-location__grid">
-            <Reveal>
-              <div className="maint-location__col">
-                <h4>Address</h4>
-                <p>
-                  HQ Aviation<br />
-                  Tilehouse Lane<br />
-                  Denham, UB9 5DF
-                </p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <div className="maint-location__col">
-                <h4>Getting Here</h4>
-                <p>
-                  5 min from M40 J1<br />
-                  20 min from M25 J16<br />
-                  On-site parking available
-                </p>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 28: FAQ ========== */}
-      <section className="maint-accordion maint-section--alt">
-        <div className="maint-accordion__container">
-          <div className="maint-accordion__header">
-            <Reveal>
-              <span className="maint-pre-text">Common Questions</span>
-              <h2 className="maint-headline">
-                <span className="maint-text--dark">Frequently </span>
-                <span className="maint-text--light">Asked</span>
-              </h2>
-            </Reveal>
-          </div>
-          {faqs.map((faq) => (
-            <div
-              key={faq.id}
-              className={`maint-accordion__item ${openFaq === faq.id ? 'maint-accordion__item--open' : ''}`}
-            >
-              <button
-                className="maint-accordion__trigger"
-                onClick={() => setOpenFaq(openFaq === faq.id ? null : faq.id)}
-              >
-                <span className="maint-accordion__num">{faq.id}</span>
-                <span className="maint-accordion__title">{faq.q}</span>
-                <span className="maint-accordion__icon" />
-              </button>
-              <div className="maint-accordion__content">
-                <p className="maint-accordion__text">{faq.a}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* ========== SECTION 29: CTA ========== */}
-      <section className="maint-cta">
-        <div className="maint-cta__container">
-          <Reveal direction="left">
-            <div className="maint-ticket">
-              <div className="maint-ticket__header">
-                <img src="/assets/images/logos/hq/hq-aviation-logo-black.png" alt="HQ" className="maint-ticket__logo" />
-                <span className="maint-ticket__type">SERVICE TICKET</span>
-                <span className="maint-ticket__class">MAINT</span>
-              </div>
-              <div className="maint-ticket__route">
-                <div className="maint-ticket__point">
-                  <span className="maint-ticket__code">AIRCRAFT</span>
-                  <span className="maint-ticket__city">Current</span>
-                </div>
-                <div className="maint-ticket__arrow">
-                  <svg width="24" height="8" viewBox="0 0 24 8" fill="none">
-                    <path d="M0 4H22M22 4L18 1M22 4L18 7" stroke="currentColor" strokeWidth="1"/>
-                  </svg>
-                </div>
-                <div className="maint-ticket__point">
-                  <span className="maint-ticket__code">AIRWORTHY</span>
-                  <span className="maint-ticket__city">Certified</span>
-                </div>
-              </div>
-              <div className="maint-ticket__perf" />
-              <div className="maint-ticket__stub">
-                <div className="maint-ticket__stub-row">
-                  <div><span className="maint-ticket__lbl">TYPE</span><span>Inspection</span></div>
-                  <div><span className="maint-ticket__lbl">BAY</span><span>01</span></div>
-                  <div><span className="maint-ticket__lbl">ETA</span><span>TBD</span></div>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-
-          <Reveal direction="right">
-            <div className="maint-cta__content">
-              <span className="maint-pre-text" style={{ color: 'rgba(250,249,246,0.5)' }}>Ready to Schedule?</span>
-              <h2 className="maint-cta__headline">Book Your Service</h2>
-              <p className="maint-cta__body">
-                Contact our maintenance team to discuss your requirements and schedule
-                your next inspection or service.
-              </p>
-              <div className="maint-cta__buttons">
-                <Link to="/contact" className="maint-cta__btn maint-cta__btn--primary">Contact Maintenance</Link>
-                <Link to="/contact" className="maint-cta__btn maint-cta__btn--outline">Request Quote</Link>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
+      {/* ========== SECTION 29: WE BUY ANY ROBINSON ========== */}
+      <WeBuySection />
 
       {/* ========== SECTION 30: FOOTER ========== */}
       <FooterMinimal />

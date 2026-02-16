@@ -164,7 +164,7 @@ export const EditorialGrid = () => {
         <div className="editorial-grid__ticker-content">
           <span>Robinson Approved Service Centre</span>
           <span>•</span>
-          <span>35+ Years Experience</span>
+          <span>15+ Years Experience</span>
           <span>•</span>
           <span>PPL to ATPL Training</span>
           <span>•</span>

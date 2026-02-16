@@ -8,7 +8,6 @@
  */
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
@@ -175,466 +174,8 @@ function Reveal({ children, delay = 0, direction = 'up' }) {
   );
 }
 
-// ============================================
-// SECTION METADATA REGISTRY
-// ============================================
-// Each section has: id, name, category, desc
-const sectionRegistry = [
-  { id: 'sales-hero', name: 'Hero Banner', category: 'Hero', desc: 'Full-screen flagship R88 hero with stats and CTAs' },
-  { id: 'sales-lineup', name: 'Model Lineup', category: 'Fleet', desc: 'Interactive Robinson aircraft selector with specs' },
-  { id: 'sales-dealer', name: 'Authorized Dealer', category: 'Trust', desc: 'Robinson dealer credentials and certifications' },
-  { id: 'sales-process', name: 'Buying Process', category: 'Process', desc: 'Step-by-step purchase journey timeline' },
-  { id: 'sales-used', name: 'Used Aircraft', category: 'Fleet', desc: 'Pre-owned helicopter inventory grid' },
-  { id: 'sales-why', name: 'Why HQ Aviation', category: 'Trust', desc: 'Key differentiators and value propositions' },
-  { id: 'sales-r88', name: 'R88 Spotlight', category: 'Fleet', desc: 'Dedicated R88 feature section with specs' },
-  { id: 'sales-finance', name: 'Financing Options', category: 'Finance', desc: 'Aviation finance packages and rates' },
-  { id: 'sales-tradein', name: 'Trade-In Program', category: 'Finance', desc: 'Aircraft trade-in valuation and process' },
-  { id: 'sales-compare', name: 'Model Comparison', category: 'Fleet', desc: 'Side-by-side aircraft specification table' },
-  { id: 'sales-testimonials', name: 'Customer Testimonials', category: 'Trust', desc: 'Owner reviews and success stories' },
-  { id: 'sales-config', name: 'Configuration Options', category: 'Customization', desc: 'Aircraft personalization and options' },
-  { id: 'sales-gallery', name: 'Photo Gallery', category: 'Media', desc: 'Helicopter image showcase grid' },
-  { id: 'sales-safety', name: 'Safety Features', category: 'Technical', desc: 'Robinson safety systems and training' },
-  { id: 'sales-accessories', name: 'Accessories', category: 'Customization', desc: 'Optional equipment and add-ons' },
-  { id: 'sales-training', name: 'Owner Training', category: 'Training', desc: 'New owner training programs' },
-  { id: 'sales-maintenance', name: 'Maintenance Support', category: 'Services', desc: 'Service plans and support packages' },
-  { id: 'sales-deliveries', name: 'Recent Deliveries', category: 'Trust', desc: 'Latest customer handover gallery' },
-  { id: 'sales-international', name: 'International Sales', category: 'Global', desc: 'Worldwide delivery and support network' },
-  { id: 'sales-insurance', name: 'Insurance Partners', category: 'Finance', desc: 'Aviation insurance options and partners' },
-  { id: 'sales-faq', name: 'FAQ Section', category: 'Info', desc: 'Frequently asked questions accordion' },
-  { id: 'sales-fleet', name: 'Demo Fleet', category: 'Fleet', desc: 'Available demonstration aircraft' },
-  { id: 'sales-timeline', name: 'Company Timeline', category: 'Trust', desc: 'HQ Aviation history and milestones' },
-  { id: 'sales-valuation', name: 'Aircraft Valuation', category: 'Finance', desc: 'Free valuation request form' },
-  { id: 'sales-events', name: 'Events Calendar', category: 'Info', desc: 'Upcoming shows and open days' },
-  { id: 'sales-leaseback', name: 'Leaseback Program', category: 'Finance', desc: 'Revenue generation through leaseback' },
-  { id: 'sales-heritage', name: 'Robinson Heritage', category: 'Trust', desc: 'Brand history and legacy' },
-  { id: 'sales-paint', name: 'Paint Schemes', category: 'Customization', desc: 'Custom paint and livery options' },
-  { id: 'sales-interior', name: 'Interior Options', category: 'Customization', desc: 'Cabin trim and seating choices' },
-  { id: 'sales-missions', name: 'Mission Profiles', category: 'Technical', desc: 'Use case scenarios for each model' },
-  { id: 'sales-calculator', name: 'Cost Calculator', category: 'Finance', desc: 'Operating cost estimation tool' },
-  { id: 'sales-resale', name: 'Resale Values', category: 'Finance', desc: 'Value retention and market trends' },
-  { id: 'sales-awards', name: 'Awards & Recognition', category: 'Trust', desc: 'Industry awards and certifications' },
-  { id: 'sales-requirements', name: 'Buyer Requirements', category: 'Info', desc: 'License and documentation checklist' },
-  { id: 'sales-vs', name: 'Helicopter vs Fixed-Wing', category: 'Info', desc: 'Comparison with other aircraft types' },
-  { id: 'sales-environmental', name: 'Environmental', category: 'Technical', desc: 'Emissions and sustainability info' },
-  { id: 'sales-video', name: 'Video Showcase', category: 'Media', desc: 'Promotional and walkthrough videos' },
-  { id: 'sales-proof', name: 'Social Proof', category: 'Trust', desc: 'Statistics and credentials strip' },
-  { id: 'sales-specs', name: 'Technical Specs', category: 'Technical', desc: 'Detailed specification tables' },
-  { id: 'sales-network', name: 'Service Network', category: 'Services', desc: 'Authorized service center map' },
-  { id: 'sales-hangarage', name: 'Hangarage Options', category: 'Services', desc: 'Storage facilities and pricing' },
-  { id: 'sales-inspection', name: 'Pre-Purchase Inspection', category: 'Services', desc: 'Inspection and survey services' },
-  { id: 'sales-demo', name: 'Demo Flights', category: 'Experience', desc: 'Test flight booking section' },
-  { id: 'sales-customermap', name: 'Customer Map', category: 'Trust', desc: 'Global customer distribution' },
-  { id: 'sales-factory', name: 'Factory Tours', category: 'Experience', desc: 'Robinson factory visit information' },
-  { id: 'sales-newsletter', name: 'Newsletter Signup', category: 'Engagement', desc: 'Email subscription form' },
-  { id: 'sales-avionics', name: 'Avionics Packages', category: 'Technical', desc: 'Glass cockpit and navigation options' },
-  { id: 'sales-warranty', name: 'Warranty Options', category: 'Services', desc: 'Extended warranty packages' },
-  { id: 'sales-delivery', name: 'Delivery Methods', category: 'Services', desc: 'Collection and ferry options' },
-  { id: 'sales-tools', name: 'Flight Planning Tools', category: 'Technical', desc: 'Recommended apps and resources' },
-  { id: 'sales-membership', name: 'Owner Membership', category: 'Engagement', desc: 'HQ owner club benefits' },
-  { id: 'sales-techsupport', name: 'Technical Support', category: 'Services', desc: 'Support channels and availability' },
-  { id: 'sales-exchange', name: 'Component Exchange', category: 'Services', desc: 'Parts exchange program savings' },
-  { id: 'sales-schools', name: 'Flight Schools', category: 'Training', desc: 'Partner training organizations' },
-  { id: 'sales-upgrade', name: 'Upgrade Paths', category: 'Fleet', desc: 'Aircraft progression recommendations' },
-  { id: 'sales-regulatory', name: 'Regulatory Support', category: 'Services', desc: 'Compliance and certification help' },
-  { id: 'sales-stories', name: 'Owner Stories', category: 'Trust', desc: 'Customer success case studies' },
-  { id: 'sales-consignment', name: 'Consignment Sales', category: 'Finance', desc: 'Sell your aircraft through HQ' },
-  { id: 'sales-editions', name: 'Special Editions', category: 'Fleet', desc: 'Limited and special model variants' },
-  { id: 'sales-bases', name: 'Operating Bases', category: 'Info', desc: 'Recommended UK airfields' },
-  { id: 'sales-carbon', name: 'Carbon Offset', category: 'Technical', desc: 'Environmental offset program' },
-  { id: 'sales-management', name: 'Aircraft Management', category: 'Services', desc: 'Full management service options' },
-  { id: 'sales-contacts', name: 'Department Contacts', category: 'Info', desc: 'Direct team contact details' },
-  { id: 'sales-quickcompare', name: 'Quick Comparison', category: 'Fleet', desc: 'At-a-glance model suitability' },
-  { id: 'sales-chat', name: 'Live Chat', category: 'Engagement', desc: 'Instant messaging support' },
-  { id: 'sales-app', name: 'HQ Owner App', category: 'Engagement', desc: 'Mobile app preview and signup' },
-  { id: 'sales-contact', name: 'Contact CTA', category: 'Conversion', desc: 'Final call-to-action section' },
-];
-
-// Section categories with colors for the picker
-const sectionCategories = [
-  { key: 'all', label: 'All Sections', color: 'default' },
-  { key: 'Hero', label: 'Hero', color: 'purple' },
-  { key: 'Fleet', label: 'Fleet', color: 'blue' },
-  { key: 'Trust', label: 'Trust', color: 'green' },
-  { key: 'Finance', label: 'Finance', color: 'orange' },
-  { key: 'Customization', label: 'Customization', color: 'purple' },
-  { key: 'Technical', label: 'Technical', color: 'blue' },
-  { key: 'Services', label: 'Services', color: 'green' },
-  { key: 'Training', label: 'Training', color: 'orange' },
-  { key: 'Experience', label: 'Experience', color: 'purple' },
-  { key: 'Media', label: 'Media', color: 'blue' },
-  { key: 'Info', label: 'Info', color: 'default' },
-  { key: 'Engagement', label: 'Engagement', color: 'green' },
-  { key: 'Conversion', label: 'Conversion', color: 'orange' },
-  { key: 'Global', label: 'Global', color: 'purple' },
-];
-
-// ============================================
-// SECTION FAVORITE BUTTON COMPONENT
-// ============================================
-// Rendered via portal into each section
-function SectionFavoriteButton({ sectionId, favorites, onToggleFavorite }) {
-  const sectionData = sectionRegistry.find(s => s.id === sectionId);
-  const isFavorite = favorites.some(f => f.id === sectionId);
-  const favoriteData = favorites.find(f => f.id === sectionId);
-
-  return (
-    <button
-      className={`sales-section-fav ${isFavorite ? 'active' : ''} ${favoriteData?.note ? 'has-note' : ''}`}
-      onClick={(e) => {
-        e.stopPropagation();
-        onToggleFavorite(sectionId, sectionData?.name);
-      }}
-      title={favoriteData?.note ? `Note: ${favoriteData.note}` : (isFavorite ? 'Remove from shortlist' : 'Add to shortlist')}
-    >
-      <span className="sales-section-fav__star">{isFavorite ? '★' : '☆'}</span>
-      <span className="sales-section-fav__id">{sectionId}</span>
-    </button>
-  );
-}
-
-// ============================================
-// SECTION PICKER COMPONENT
-// ============================================
-function SectionPicker({
-  favorites,
-  setFavorites,
-  showFavoritesOnly,
-  setShowFavoritesOnly,
-  showNoteModal,
-  setShowNoteModal
-}) {
-  const [isMinimized, setIsMinimized] = useState(false);
-  const [showFavsPanel, setShowFavsPanel] = useState(false);
-  const [showGridView, setShowGridView] = useState(false);
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [copyFeedback, setCopyFeedback] = useState(null);
-  const noteInputRef = useRef(null);
-
-  // Get filtered sections
-  const filteredSections = activeCategory === 'all'
-    ? sectionRegistry
-    : sectionRegistry.filter(s => s.category === activeCategory);
-
-  // Get favorited count by category
-  const getCategoryCount = (cat) => {
-    if (cat === 'all') return sectionRegistry.length;
-    return sectionRegistry.filter(s => s.category === cat).length;
-  };
-
-  const getFavCount = () => favorites.length;
-
-  // Save note for favorite
-  const handleSaveNote = (note) => {
-    if (!showNoteModal) return;
-    setFavorites(prev => [...prev, {
-      id: showNoteModal.id,
-      name: showNoteModal.name,
-      note: note || ''
-    }]);
-    setShowNoteModal(null);
-  };
-
-  // Edit existing note
-  const handleEditNote = (idx) => {
-    const fav = favorites[idx];
-    const newNote = prompt('Edit note:', fav.note || '');
-    if (newNote !== null) {
-      setFavorites(prev => prev.map((f, i) =>
-        i === idx ? { ...f, note: newNote } : f
-      ));
-    }
-  };
-
-  // Delete favorite
-  const handleDeleteFavorite = (idx) => {
-    setFavorites(prev => prev.filter((_, i) => i !== idx));
-  };
-
-  // Navigate to section
-  const scrollToSection = (id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setShowGridView(false);
-      setShowFavsPanel(false);
-    }
-  };
-
-  // Copy favorites to clipboard
-  const handleCopyFavorites = () => {
-    if (favorites.length === 0) {
-      setCopyFeedback({ message: 'No favorites!', success: false });
-      setTimeout(() => setCopyFeedback(null), 2000);
-      return;
-    }
-
-    const lines = favorites.map(f => {
-      let line = f.id;
-      if (f.name) line += ` (${f.name})`;
-      if (f.note) line += `\n   → ${f.note}`;
-      return line;
-    });
-    const text = 'SHORTLISTED SECTIONS\n' + '='.repeat(40) + '\n\n' + lines.join('\n\n');
-
-    navigator.clipboard.writeText(text).then(() => {
-      setCopyFeedback({ message: `Copied ${favorites.length}!`, success: true });
-    }).catch(() => {
-      setCopyFeedback({ message: 'Copy failed', success: false });
-    });
-    setTimeout(() => setCopyFeedback(null), 2000);
-  };
-
-  // Clear all favorites
-  const handleClearFavorites = () => {
-    if (confirm('Remove all shortlisted sections?')) {
-      setFavorites([]);
-      setShowFavsPanel(false);
-      setShowFavoritesOnly(false);
-    }
-  };
-
-  // Focus note input when modal opens
-  useEffect(() => {
-    if (showNoteModal && noteInputRef.current) {
-      setTimeout(() => noteInputRef.current?.focus(), 100);
-    }
-  }, [showNoteModal]);
-
-  // Keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
-
-      if (e.key === 'm' || e.key === 'M') {
-        e.preventDefault();
-        setIsMinimized(prev => !prev);
-      }
-      if (e.key === 'Escape') {
-        if (showGridView) setShowGridView(false);
-        else if (showNoteModal) setShowNoteModal(null);
-        else if (showFavsPanel) setShowFavsPanel(false);
-        else setIsMinimized(true);
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [showGridView, showNoteModal, showFavsPanel, setShowNoteModal]);
-
-  return (
-    <>
-      {/* Main Picker Panel */}
-      <div className={`section-picker ${isMinimized ? 'minimized' : ''}`}>
-        {/* Minimized Bar */}
-        <div className="section-picker__collapsed" onClick={() => setIsMinimized(false)}>
-          <span className="section-picker__collapsed-title">Section Picker</span>
-          <span className="section-picker__collapsed-count">★ {getFavCount()}</span>
-          <button
-            className="section-picker__collapsed-btn"
-            onClick={(e) => { e.stopPropagation(); setIsMinimized(false); }}
-          >↑</button>
-        </div>
-
-        {/* Main Content */}
-        <div className="section-picker__main">
-          {/* Header */}
-          <div className="section-picker__header">
-            <div className="section-picker__title">
-              <h3>Section Picker</h3>
-              <span className="section-picker__badge">{sectionRegistry.length} sections</span>
-            </div>
-            <button className="section-picker__minimize" onClick={() => setIsMinimized(true)}>−</button>
-          </div>
-
-          {/* Category Tabs */}
-          <div className="section-picker__tabs">
-            {sectionCategories.slice(0, 8).map(cat => (
-              <button
-                key={cat.key}
-                className={`section-picker__tab section-picker__tab--${cat.color} ${activeCategory === cat.key ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.key)}
-              >
-                {cat.label} ({getCategoryCount(cat.key)})
-              </button>
-            ))}
-          </div>
-
-          {/* Filter Toggle */}
-          <div className="section-picker__filter">
-            <label className="section-picker__toggle">
-              <input
-                type="checkbox"
-                checked={showFavoritesOnly}
-                onChange={(e) => setShowFavoritesOnly(e.target.checked)}
-              />
-              <span className="section-picker__toggle-slider"></span>
-              <span className="section-picker__toggle-label">Show only shortlisted ({getFavCount()})</span>
-            </label>
-          </div>
-
-          {/* Actions */}
-          <div className="section-picker__actions">
-            <button
-              className="section-picker__btn"
-              onClick={() => setShowGridView(true)}
-            >
-              📋 Browse All
-            </button>
-            <button
-              className={`section-picker__btn section-picker__btn--favs ${getFavCount() > 0 ? 'has-items' : ''}`}
-              onClick={() => setShowFavsPanel(!showFavsPanel)}
-            >
-              ★ Shortlist ({getFavCount()})
-            </button>
-            <button
-              className={`section-picker__btn section-picker__btn--copy ${copyFeedback ? (copyFeedback.success ? 'success' : 'error') : ''}`}
-              onClick={handleCopyFavorites}
-            >
-              {copyFeedback ? copyFeedback.message : '📋 Copy'}
-            </button>
-          </div>
-
-          {/* Hints */}
-          <div className="section-picker__hints">
-            <span>Click <kbd>★</kbd> on sections to shortlist</span>
-            <span><kbd>M</kbd> minimize</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Grid View Overlay */}
-      {showGridView && (
-        <div className="section-picker__grid-overlay">
-          <div className="section-picker__grid-header">
-            <h2>All Sections ({filteredSections.length})</h2>
-            <button onClick={() => setShowGridView(false)}>×</button>
-          </div>
-          <div className="section-picker__grid-tabs">
-            {sectionCategories.map(cat => (
-              <button
-                key={cat.key}
-                className={`section-picker__grid-tab ${activeCategory === cat.key ? 'active' : ''}`}
-                onClick={() => setActiveCategory(cat.key)}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-          <div className="section-picker__grid-content">
-            {filteredSections.map(section => {
-              const isFav = favorites.some(f => f.id === section.id);
-              return (
-                <div
-                  key={section.id}
-                  className={`section-picker__grid-item ${isFav ? 'is-favorite' : ''}`}
-                  onClick={() => scrollToSection(section.id)}
-                >
-                  <div className="section-picker__grid-item-header">
-                    <span className="section-picker__grid-item-category">{section.category}</span>
-                    {isFav && <span className="section-picker__grid-item-star">★</span>}
-                  </div>
-                  <h4>{section.name}</h4>
-                  <p>{section.desc}</p>
-                  <code>{section.id}</code>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* Favorites Panel */}
-      {showFavsPanel && favorites.length > 0 && (
-        <div className="section-picker__favs-panel">
-          <div className="section-picker__favs-header">
-            <strong>★ Shortlist ({favorites.length})</strong>
-            <button onClick={() => setShowFavsPanel(false)}>×</button>
-          </div>
-          <div className="section-picker__favs-list">
-            {favorites.map((fav, idx) => (
-              <div key={fav.id} className="section-picker__favs-item">
-                <div
-                  className="section-picker__favs-item-main"
-                  onClick={() => scrollToSection(fav.id)}
-                >
-                  <span className="section-picker__favs-item-name">{fav.name}</span>
-                  <code className="section-picker__favs-item-id">{fav.id}</code>
-                </div>
-                <div className={`section-picker__favs-item-note ${!fav.note ? 'empty' : ''}`}>
-                  {fav.note ? `→ ${fav.note}` : 'No note'}
-                </div>
-                <div className="section-picker__favs-item-actions">
-                  <button onClick={() => handleEditNote(idx)}>✏️</button>
-                  <button onClick={() => handleDeleteFavorite(idx)}>🗑️</button>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="section-picker__favs-footer">
-            <button onClick={handleCopyFavorites}>📋 Copy All</button>
-            <button onClick={handleClearFavorites}>🗑️ Clear All</button>
-          </div>
-        </div>
-      )}
-
-      {/* Note Modal */}
-      {showNoteModal && (
-        <div className="section-picker__note-modal" onClick={() => setShowNoteModal(null)}>
-          <div className="section-picker__note-content" onClick={e => e.stopPropagation()}>
-            <div className="section-picker__note-header">
-              <span className="section-picker__note-icon">★</span>
-              <span>Add to Shortlist</span>
-            </div>
-            <div className="section-picker__note-name">{showNoteModal.name}</div>
-            <code className="section-picker__note-id">{showNoteModal.id}</code>
-            <textarea
-              ref={noteInputRef}
-              className="section-picker__note-input"
-              placeholder="Add a note (optional)... e.g., 'Great for homepage'"
-              rows={3}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                  e.preventDefault();
-                  handleSaveNote(e.target.value.trim());
-                }
-                if (e.key === 'Escape') {
-                  setShowNoteModal(null);
-                }
-              }}
-            />
-            <div className="section-picker__note-actions">
-              <button onClick={() => setShowNoteModal(null)}>Cancel</button>
-              <button
-                className="section-picker__note-save"
-                onClick={() => handleSaveNote(noteInputRef.current?.value.trim())}
-              >
-                Add to Shortlist
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-    </>
-  );
-}
-
 // Aircraft models data
 const aircraftModels = [
-  {
-    id: 'r88',
-    name: 'R88',
-    tagline: 'The Future of Rotorcraft',
-    description: 'Revolutionary 8-seat turbine helicopter with unmatched capability.',
-    seats: 8,
-    speed: '140',
-    range: '400',
-    engine: 'Safran Arriel',
-    price: 'POA',
-    image: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg',
-    cutout: '/assets/images/new-aircraft/r88/r88-jellybean-left.png',
-    featured: true,
-    badge: 'NEW',
-  },
   {
     id: 'r66',
     name: 'R66',
@@ -649,6 +190,12 @@ const aircraftModels = [
     cutout: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
     featured: false,
     badge: null,
+    subtypes: [
+      { id: 'standard', name: 'Standard', description: 'Five-seat turbine helicopter with Robinson reliability.' },
+      { id: 'turbine-marine', name: 'Turbine Marine', description: 'Equipped with pop-out floats for overwater operations.' },
+      { id: 'newscopter', name: 'Newscopter', description: 'ENG-configured with nose-mounted camera and microwave system.' },
+      { id: 'southwood', name: 'Southwood', description: 'Premium leather interior with bespoke finishing by Southwood Aviation.' },
+    ],
   },
   {
     id: 'r44',
@@ -664,6 +211,11 @@ const aircraftModels = [
     cutout: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
     featured: false,
     badge: null,
+    subtypes: [
+      { id: 'raven-i', name: 'Raven I', description: 'Carbureted engine. Ideal for lower altitude operations.' },
+      { id: 'raven-ii', name: 'Raven II', description: 'Fuel-injected engine. Enhanced high-altitude performance.' },
+      { id: 'cadet', name: 'Cadet', description: 'Two-seat training variant with extended range.' },
+    ],
   },
   {
     id: 'r22',
@@ -679,6 +231,28 @@ const aircraftModels = [
     cutout: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png',
     featured: false,
     badge: null,
+    subtypes: [
+      { id: 'beta-ii', name: 'Beta II', description: 'Standard two-seat trainer with proven reliability.' },
+      { id: 'mariner', name: 'Mariner', description: 'Float-equipped variant for water operations.' },
+    ],
+  },
+  {
+    id: 'r88',
+    name: 'R88',
+    tagline: 'The Future of Rotorcraft',
+    description: 'Revolutionary 8-seat turbine helicopter with unmatched capability.',
+    seats: 8,
+    speed: '140',
+    range: '400',
+    engine: 'Safran Arriel',
+    price: 'POA',
+    image: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg',
+    cutout: '/assets/images/new-aircraft/r88/r88-jellybean-left.png',
+    featured: true,
+    badge: 'NEW',
+    subtypes: [
+      { id: 'standard', name: 'Standard', description: 'Base configuration with premium features.' },
+    ],
   },
 ];
 
@@ -720,7 +294,7 @@ const buyingSteps = [
   { num: '03', title: 'Factory Order', desc: 'We place your order with Robinson' },
   { num: '04', title: 'Production', desc: 'Your aircraft is built in Torrance, California' },
   { num: '05', title: 'Delivery', desc: 'Factory-direct or assembled at HQ Aviation' },
-  { num: '06', title: 'Handover', desc: 'Full training and ongoing support' },
+  { num: '06', title: 'Handover', desc: 'Aircraft handover and ongoing support' },
 ];
 
 // R88 features
@@ -772,6 +346,60 @@ const comparisonSpecs = [
   { spec: 'Hover Ceiling IGE (ft)', r88: '10,000', r66: '10,000', r44: '8,950', r22: '6,400' },
   { spec: 'Fuel Capacity (gal)', r88: '120', r66: '73.3', r44: '50.5', r22: '19.2' },
   { spec: 'Price From', r88: 'POA', r66: '$1.29M', r44: '$535K', r22: '$345K' },
+];
+
+// Aircraft specs for comparison tool
+const aircraftSpecsForCompare = [
+  {
+    model: 'R66 Turbine',
+    seats: 5,
+    engine: 'RR300 Turbine',
+    maxSpeed: '140 kts',
+    cruiseSpeed: '120 kts',
+    range: '350 nm',
+    endurance: '3.0 hrs',
+    usefulLoad: '1,270 lbs',
+    fuelCapacity: '73.3 gal',
+    hasAuxTank: true,
+    auxTankSpecs: {
+      range: '400 nm',
+      endurance: '3.5 hrs',
+      fuelCapacity: '91.5 gal'
+    }
+  },
+  {
+    model: 'R44 Raven II',
+    seats: 4,
+    engine: 'IO-540 Piston',
+    maxSpeed: '130 kts',
+    cruiseSpeed: '113 kts',
+    range: '300 nm',
+    endurance: '3.0 hrs',
+    usefulLoad: '1,025 lbs',
+    fuelCapacity: '50.5 gal'
+  },
+  {
+    model: 'R44 Cadet',
+    seats: 2,
+    engine: 'IO-540 Piston',
+    maxSpeed: '130 kts',
+    cruiseSpeed: '113 kts',
+    range: '350 nm',
+    endurance: '3.5 hrs',
+    usefulLoad: '838 lbs',
+    fuelCapacity: '50.5 gal'
+  },
+  {
+    model: 'R22 Beta II',
+    seats: 2,
+    engine: 'O-360 Piston',
+    maxSpeed: '102 kts',
+    cruiseSpeed: '96 kts',
+    range: '200 nm',
+    endurance: '2.5 hrs',
+    usefulLoad: '407 lbs',
+    fuelCapacity: '19.2 gal'
+  },
 ];
 
 // Owner testimonials
@@ -871,12 +499,14 @@ const maintenancePackages = [
   },
 ];
 
-// Recent deliveries
-const recentDeliveries = [
-  { model: 'R66 NXG', owner: 'Private Owner', location: 'Kent', date: 'Jan 2024', image: '/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg' },
-  { model: 'R44 Raven II', owner: 'Flight School', location: 'Manchester', date: 'Dec 2023', image: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
-  { model: 'R66 Turbine', owner: 'Charter Company', location: 'Scotland', date: 'Nov 2023', image: '/assets/images/used-aircraft/r66/chris-r66-alps.jpg' },
-  { model: 'R22 Beta II', owner: 'Training Academy', location: 'Wales', date: 'Oct 2023', image: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
+// Example deliveries
+const exampleDeliveries = [
+  { model: 'R66 NXG', image: '/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg', spec: '5-seat turbine' },
+  { model: 'R44 Raven II', image: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png', spec: '4-seat piston' },
+  { model: 'R66 Turbine', image: '/assets/images/used-aircraft/r66/chris-r66-alps.jpg', spec: 'Turbine reliability' },
+  { model: 'R22 Beta II', image: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png', spec: '2-seat trainer' },
+  { model: 'R44 Cadet', image: '/assets/images/new-aircraft/r44/r44blueprint.jpg', spec: 'Training variant' },
+  { model: 'R88', image: '/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg', spec: '8-seat flagship' },
 ];
 
 // FAQ items
@@ -887,7 +517,7 @@ const faqItems = [
   },
   {
     q: 'Can I trade in my current aircraft?',
-    a: 'Yes! We accept trade-ins on all Robinson helicopters and many other makes. Our team will provide a fair market valuation and apply the value directly to your new aircraft purchase.',
+    a: 'Yes! We accept trade-ins on all Robinson helicopters. Our team will provide a fair market valuation and apply the value directly to your new aircraft purchase.',
   },
   {
     q: 'What financing options are available?',
@@ -924,7 +554,7 @@ const upcomingEvents = [
 
 // Heritage timeline
 const heritageTimeline = [
-  { year: '1990', event: 'HQ Aviation founded at Denham Aerodrome' },
+  { year: '2010', event: 'HQ Aviation founded at Denham Aerodrome' },
   { year: '1995', event: 'Appointed Robinson Authorized Dealer' },
   { year: '2000', event: '100th helicopter delivered' },
   { year: '2005', event: 'Part 145 maintenance approval granted' },
@@ -1069,15 +699,15 @@ const inspectionPackages = [
 
 // Video content
 const videoContent = [
-  { id: 1, title: 'R88 World Premiere', duration: '4:32', thumbnail: '/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg' },
-  { id: 2, title: 'Factory Tour: Torrance', duration: '12:15', thumbnail: '/assets/images/facility/hq-aviation-robinsons.jpg' },
-  { id: 3, title: 'Owner Stories', duration: '8:45', thumbnail: '/assets/images/expeditions/channel.jpg' },
-  { id: 4, title: 'R66 NXG Reveal', duration: '3:22', thumbnail: '/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg' },
+  { id: 1, title: 'R88', duration: '12:30', thumbnail: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg' },
+  { id: 2, title: 'R66 Turbine', duration: '8:45', thumbnail: '/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg' },
+  { id: 3, title: 'R44 Raven II', duration: '7:30', thumbnail: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
+  { id: 4, title: 'R22 Beta II', duration: '6:15', thumbnail: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
 ];
 
 // Social proof stats
 const socialProofStats = [
-  { value: '35', suffix: '+', label: 'Years in Business' },
+  { value: '15', suffix: '+', label: 'Years in Business' },
   { value: '500', suffix: '+', label: 'Aircraft Delivered' },
   { value: '98', suffix: '%', label: 'Customer Satisfaction' },
   { value: '24', suffix: '/7', label: 'Support Available' },
@@ -1147,11 +777,9 @@ const flightTools = [
 // Membership benefits
 const membershipBenefits = [
   { title: 'Owner Events', desc: 'Exclusive fly-ins, dinners, and expeditions', icon: '✈' },
-  { title: 'Priority Service', desc: 'Front of queue for maintenance slots', icon: '⚡' },
-  { title: 'Parts Discount', desc: '15% off genuine Robinson parts', icon: '%' },
   { title: 'Community Access', desc: 'Private owner WhatsApp group', icon: '💬' },
-  { title: 'Free Hangarage', desc: 'First month free at Denham', icon: '🏠' },
-  { title: 'Insurance Savings', desc: 'Preferred rates with partners', icon: '🛡' },
+  { title: 'Expedition Invites', desc: 'First access to group flying adventures', icon: '◈' },
+  { title: 'Owner Newsletter', desc: 'Monthly updates and industry insights', icon: '◎' },
 ];
 
 // Technical support
@@ -1279,87 +907,70 @@ const quickComparison = [
 
 function Sales() {
   const [activeModel, setActiveModel] = useState(aircraftModels[0]);
+  const [activeSubtype, setActiveSubtype] = useState(aircraftModels[0].subtypes[0]);
   const [hoveredModel, setHoveredModel] = useState(null);
+  const [slideDirection, setSlideDirection] = useState(0); // -1 = left, 1 = right
+  const [compareSelected, setCompareSelected] = useState([]);
+  const [auxTankEnabled, setAuxTankEnabled] = useState(false);
   const heroRef = useRef(null);
+  const galleryRef = useRef(null);
 
-  // Favorites/shortlist state
-  const [favorites, setFavorites] = useState(() => {
-    const stored = localStorage.getItem('hq-sales-section-favorites');
-    if (stored) {
-      try {
-        return JSON.parse(stored);
-      } catch (e) {
-        return [];
-      }
+  // Comparison tool functions
+  const toggleCompareSelect = (model) => {
+    if (compareSelected.includes(model)) {
+      setCompareSelected(compareSelected.filter(s => s !== model));
+      if (model === 'R66 Turbine') setAuxTankEnabled(false);
+    } else if (compareSelected.length < 3) {
+      setCompareSelected([...compareSelected, model]);
     }
-    return [];
-  });
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
-  const [showNoteModal, setShowNoteModal] = useState(null);
+  };
 
-  // Save favorites to localStorage
-  useEffect(() => {
-    localStorage.setItem('hq-sales-section-favorites', JSON.stringify(favorites));
-  }, [favorites]);
-
-  // Toggle favorite handler
-  const handleToggleFavorite = useCallback((id, name) => {
-    const isFavorite = favorites.some(f => f.id === id);
-    if (isFavorite) {
-      setFavorites(prev => prev.filter(f => f.id !== id));
-    } else {
-      setShowNoteModal({ id, name });
+  const getCompareValue = (aircraft, field) => {
+    if (auxTankEnabled && aircraft.model === 'R66 Turbine' && aircraft.auxTankSpecs?.[field]) {
+      return aircraft.auxTankSpecs[field];
     }
-  }, [favorites]);
+    return aircraft[field];
+  };
 
-  // State for mounted section containers
-  const [sectionContainers, setSectionContainers] = useState([]);
+  const selectedCompareSpecs = aircraftSpecsForCompare.filter(a => compareSelected.includes(a.model));
+  const r66CompareSelected = compareSelected.includes('R66 Turbine');
 
-  // Find all section containers on mount and when DOM updates
-  useEffect(() => {
-    const findSections = () => {
-      const containers = [];
-      sectionRegistry.forEach(section => {
-        // Find sections by className pattern (e.g., section.sales-hero)
-        const el = document.querySelector(`section.${section.id}`);
-        if (el) {
-          // Ensure section has position relative for absolute button positioning
-          el.style.position = 'relative';
-          // Add data attribute for identification
-          el.dataset.sectionId = section.id;
-          // Create container for the button if not exists
-          let btnContainer = el.querySelector('.sales-section-fav-container');
-          if (!btnContainer) {
-            btnContainer = document.createElement('div');
-            btnContainer.className = 'sales-section-fav-container';
-            btnContainer.dataset.sectionId = section.id;
-            el.insertBefore(btnContainer, el.firstChild);
-          }
-          containers.push({ id: section.id, container: btnContainer });
-        }
+  const scrollGallery = useCallback((direction) => {
+    if (galleryRef.current) {
+      const scrollAmount = 400;
+      galleryRef.current.scrollBy({
+        left: direction * scrollAmount,
+        behavior: 'smooth'
       });
-      setSectionContainers(containers);
-    };
-
-    // Initial find with delay to ensure DOM is ready
-    const timer = setTimeout(findSections, 200);
-    return () => clearTimeout(timer);
+    }
   }, []);
 
-  // Handle visibility filtering
-  useEffect(() => {
-    sectionRegistry.forEach(section => {
-      const sectionEl = document.querySelector(`section.${section.id}`);
-      if (sectionEl) {
-        const isFavorite = favorites.some(f => f.id === section.id);
-        if (showFavoritesOnly && !isFavorite) {
-          sectionEl.style.display = 'none';
-        } else {
-          sectionEl.style.display = '';
-        }
-      }
-    });
-  }, [showFavoritesOnly, favorites]);
+  // Handle model change with direction tracking
+  const handleModelChange = useCallback((newModel) => {
+    const currentIndex = aircraftModels.findIndex(m => m.id === activeModel.id);
+    const newIndex = aircraftModels.findIndex(m => m.id === newModel.id);
+    setSlideDirection(newIndex > currentIndex ? 1 : -1);
+    setActiveModel(newModel);
+    setActiveSubtype(newModel.subtypes[0]); // Reset to first subtype
+  }, [activeModel.id]);
+
+  const handlePrevModel = useCallback(() => {
+    const currentIndex = aircraftModels.findIndex(m => m.id === activeModel.id);
+    const prevIndex = currentIndex === 0 ? aircraftModels.length - 1 : currentIndex - 1;
+    const newModel = aircraftModels[prevIndex];
+    setSlideDirection(-1);
+    setActiveModel(newModel);
+    setActiveSubtype(newModel.subtypes[0]);
+  }, [activeModel.id]);
+
+  const handleNextModel = useCallback(() => {
+    const currentIndex = aircraftModels.findIndex(m => m.id === activeModel.id);
+    const nextIndex = currentIndex === aircraftModels.length - 1 ? 0 : currentIndex + 1;
+    const newModel = aircraftModels[nextIndex];
+    setSlideDirection(1);
+    setActiveModel(newModel);
+    setActiveSubtype(newModel.subtypes[0]);
+  }, [activeModel.id]);
 
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -1373,29 +984,6 @@ function Sales() {
   return (
     <div className="sales-page">
       <SalesHeader />
-
-      {/* Section Picker */}
-      <SectionPicker
-        favorites={favorites}
-        setFavorites={setFavorites}
-        showFavoritesOnly={showFavoritesOnly}
-        setShowFavoritesOnly={setShowFavoritesOnly}
-        showNoteModal={showNoteModal}
-        setShowNoteModal={setShowNoteModal}
-      />
-
-      {/* Render favorite buttons into each section via portals */}
-      {sectionContainers.map(({ id, container }) =>
-        createPortal(
-          <SectionFavoriteButton
-            key={id}
-            sectionId={id}
-            favorites={favorites}
-            onToggleFavorite={handleToggleFavorite}
-          />,
-          container
-        )
-      )}
 
       {/* ========== HERO: Flagship R88 ========== */}
       <section ref={heroRef} className="sales-hero">
@@ -1414,19 +1002,6 @@ function Sales() {
           style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
         >
           <div className="sales-hero__left">
-            <motion.div
-              className="sales-hero__badge"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-            >
-              <img
-                src="/assets/images/robinson-assets/logos/rhc-authorized-dealer-logo-logo-yellow-rotor-black-type.svg"
-                alt="Robinson Authorized Dealer"
-                className="sales-hero__dealer-logo"
-              />
-            </motion.div>
-
             <motion.span
               className="sales-hero__label"
               initial={{ opacity: 0, y: 20 }}
@@ -1468,7 +1043,7 @@ function Sales() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.1 }}
             >
-              The UK's leading Robinson dealer since 1990. New and pre-owned helicopters, factory support, and lifetime partnership.
+              The UK's leading Robinson dealer since 2010. New and pre-owned helicopters, factory support, and lifetime partnership.
             </motion.p>
 
             <motion.div
@@ -1483,7 +1058,7 @@ function Sales() {
               </div>
               <div className="sales-hero__stat-divider" />
               <div className="sales-hero__stat">
-                <span className="sales-hero__stat-num">35</span>
+                <span className="sales-hero__stat-num">15</span>
                 <span className="sales-hero__stat-label">Years Experience</span>
               </div>
               <div className="sales-hero__stat-divider" />
@@ -1513,6 +1088,20 @@ function Sales() {
         </div>
       </section>
 
+      {/* ========== INTRO TEXT ========== */}
+      <section className="sales-intro">
+        <div className="sales-intro__container">
+          <Reveal>
+            <p className="sales-intro__text">
+              Robinson helicopters offer exceptional value compared to other light helicopter
+              manufacturers. With significantly lower purchase prices and operating costs than
+              competitors, Robinson provides better economics without compromising on quality.
+              Parts availability is excellent globally, and maintenance is designed to be owner-friendly.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
       {/* ========== NEW AIRCRAFT LINEUP ========== */}
       <section id="models" className="sales-lineup">
         <div className="sales-lineup__container">
@@ -1537,7 +1126,7 @@ function Sales() {
               <Reveal key={model.id} delay={i * 0.1}>
                 <button
                   className={`sales-lineup__tab ${activeModel.id === model.id ? 'sales-lineup__tab--active' : ''}`}
-                  onClick={() => setActiveModel(model)}
+                  onClick={() => handleModelChange(model)}
                   onMouseEnter={() => setHoveredModel(model.id)}
                   onMouseLeave={() => setHoveredModel(null)}
                 >
@@ -1550,69 +1139,235 @@ function Sales() {
           </div>
 
           {/* Active Model Display */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeModel.id}
-              className="sales-lineup__display"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -20 }}
-              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <div className="sales-lineup__image">
-                <motion.img
-                  src={activeModel.cutout}
-                  alt={activeModel.name}
-                  initial={{ x: 50, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.2, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                />
+          <div key={activeModel.id} className="sales-lineup__display">
+            <div className="sales-lineup__image-wrapper">
+              <div className="sales-lineup__image-row">
+                <button className="sales-lineup__chevron sales-lineup__chevron--prev" onClick={handlePrevModel} aria-label="Previous model">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+
+                <div className="sales-lineup__image">
+                  <AnimatePresence mode="wait" custom={slideDirection}>
+                    <motion.img
+                      key={activeModel.id}
+                      src={activeModel.cutout}
+                      alt={activeModel.name}
+                      custom={slideDirection}
+                      initial={{ x: slideDirection * 100, opacity: 0 }}
+                      animate={{ x: 0, opacity: 1 }}
+                      exit={{ x: slideDirection * -100, opacity: 0 }}
+                      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    />
+                  </AnimatePresence>
+                </div>
+
+                <button className="sales-lineup__chevron sales-lineup__chevron--next" onClick={handleNextModel} aria-label="Next model">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
               </div>
 
-              <div className="sales-lineup__info">
+              <div className="sales-lineup__divider" />
+
+              <div className="sales-lineup__actions">
+                <Link to={`/aircraft-sales/new/${activeModel.id}`} className="sales-btn sales-btn--primary">
+                  View Details
+                </Link>
+                <Link to="/contact?subject=new-aircraft" className="sales-btn sales-btn--outline">
+                  Request Quote
+                </Link>
+              </div>
+            </div>
+
+            <div className="sales-lineup__divider-vertical"></div>
+
+            <div className="sales-lineup__info">
                 <div className="sales-lineup__model-header">
                   <h3>{activeModel.name}</h3>
                   <span className="sales-lineup__tagline">{activeModel.tagline}</span>
+                  <div className="sales-lineup__header-divider" />
+                  {activeModel.subtypes.length > 1 && (
+                    <div className="sales-lineup__subtypes">
+                      {activeModel.subtypes.map((subtype) => (
+                        <button
+                          key={subtype.id}
+                          className={`sales-lineup__subtype ${activeSubtype.id === subtype.id ? 'sales-lineup__subtype--active' : ''}`}
+                          onClick={() => setActiveSubtype(subtype)}
+                        >
+                          {subtype.name}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <p className="sales-lineup__desc">{activeModel.description}</p>
+                <div className="sales-lineup__middle">
+                  <p className="sales-lineup__desc">{activeSubtype.description}</p>
 
-                <div className="sales-lineup__specs">
-                  <div className="sales-lineup__spec">
-                    <span className="sales-lineup__spec-value">{activeModel.seats}</span>
-                    <span className="sales-lineup__spec-label">Seats</span>
-                  </div>
-                  <div className="sales-lineup__spec">
-                    <span className="sales-lineup__spec-value">{activeModel.speed}</span>
-                    <span className="sales-lineup__spec-label">Knots</span>
-                  </div>
-                  <div className="sales-lineup__spec">
-                    <span className="sales-lineup__spec-value">{activeModel.range}</span>
-                    <span className="sales-lineup__spec-label">NM Range</span>
-                  </div>
-                  <div className="sales-lineup__spec">
-                    <span className="sales-lineup__spec-value">{activeModel.engine}</span>
-                    <span className="sales-lineup__spec-label">Engine</span>
+                  <div className="sales-lineup__specs">
+                    <div className="sales-lineup__spec">
+                      <span className="sales-lineup__spec-value">{activeModel.seats}</span>
+                      <span className="sales-lineup__spec-label">Seats</span>
+                    </div>
+                    <div className="sales-lineup__spec">
+                      <span className="sales-lineup__spec-value">{activeModel.speed}</span>
+                      <span className="sales-lineup__spec-label">Knots</span>
+                    </div>
+                    <div className="sales-lineup__spec">
+                      <span className="sales-lineup__spec-value">{activeModel.range}</span>
+                      <span className="sales-lineup__spec-label">NM Range</span>
+                    </div>
+                    <div className="sales-lineup__spec">
+                      <span className="sales-lineup__spec-value">{activeModel.engine}</span>
+                      <span className="sales-lineup__spec-label">Engine</span>
+                    </div>
                   </div>
                 </div>
 
                 <div className="sales-lineup__price">
                   <span className="sales-lineup__price-label">From</span>
                   <span className="sales-lineup__price-value">{activeModel.price}</span>
-                  <span className="sales-lineup__price-note">ex-factory</span>
-                </div>
-
-                <div className="sales-lineup__actions">
-                  <Link to={`/aircraft-sales/new/${activeModel.id}`} className="sales-btn sales-btn--primary">
-                    View Details
-                  </Link>
-                  <Link to="/contact?subject=new-aircraft" className="sales-btn sales-btn--outline">
-                    Request Quote
-                  </Link>
                 </div>
               </div>
+            </div>
+        </div>
+      </section>
+
+      {/* ========== COMPARE AIRCRAFT ========== */}
+      <section className="sales-compare">
+        <div className="sales-compare__container">
+          <Reveal>
+            <div className="sales-section-header">
+              <span className="sales-pre-text">Decision Tool</span>
+              <h2><span className="sales-text--dark">Compare </span><span className="sales-text--mid">Aircraft</span></h2>
+              <p>Select up to 3 aircraft models to compare specifications</p>
+            </div>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <div className="sales-compare__selector">
+              {aircraftSpecsForCompare.map(aircraft => (
+                <div key={aircraft.model} className="sales-compare__chip-wrapper">
+                  <button
+                    className={`sales-compare__chip ${compareSelected.includes(aircraft.model) ? 'selected' : ''}`}
+                    onClick={() => toggleCompareSelect(aircraft.model)}
+                    disabled={!compareSelected.includes(aircraft.model) && compareSelected.length >= 3}
+                  >
+                    {aircraft.model}
+                    {compareSelected.includes(aircraft.model) && <span className="sales-compare__check">✓</span>}
+                  </button>
+                  {aircraft.model === 'R66 Turbine' && r66CompareSelected && (
+                    <motion.div
+                      className="sales-compare__aux-dropdown"
+                      initial={{ opacity: 0, height: 0, marginTop: 0 }}
+                      animate={{ opacity: 1, height: 'auto', marginTop: 8 }}
+                      exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <label className="sales-compare__aux-label">
+                        <input
+                          type="checkbox"
+                          checked={auxTankEnabled}
+                          onChange={(e) => setAuxTankEnabled(e.target.checked)}
+                          className="sales-compare__aux-checkbox"
+                        />
+                        <span className="sales-compare__aux-check">
+                          {auxTankEnabled && <span>✓</span>}
+                        </span>
+                        <span className="sales-compare__aux-text">+ Auxiliary Tank</span>
+                      </label>
+                    </motion.div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </Reveal>
+          {selectedCompareSpecs.length > 0 && (
+            <motion.div className="sales-compare__table" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+              <div className="sales-compare__row sales-compare__row--header">
+                <div className="sales-compare__cell">Specification</div>
+                {selectedCompareSpecs.map(a => (
+                  <div key={a.model} className="sales-compare__cell">
+                    {a.model}
+                    {a.model === 'R66 Turbine' && auxTankEnabled && <span className="sales-compare__aux-badge">+ AUX</span>}
+                  </div>
+                ))}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Seats</div>
+                {selectedCompareSpecs.map(a => <div key={a.model} className="sales-compare__cell">{a.seats}</div>)}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Engine</div>
+                {selectedCompareSpecs.map(a => <div key={a.model} className="sales-compare__cell">{a.engine}</div>)}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Max Speed</div>
+                {selectedCompareSpecs.map(a => <div key={a.model} className="sales-compare__cell">{a.maxSpeed}</div>)}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Cruise Speed</div>
+                {selectedCompareSpecs.map(a => <div key={a.model} className="sales-compare__cell">{a.cruiseSpeed}</div>)}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Range</div>
+                {selectedCompareSpecs.map(a => (
+                  <div key={a.model} className={`sales-compare__cell ${a.model === 'R66 Turbine' && auxTankEnabled ? 'sales-compare__cell--highlighted' : ''}`}>
+                    {getCompareValue(a, 'range')}
+                  </div>
+                ))}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Endurance</div>
+                {selectedCompareSpecs.map(a => (
+                  <div key={a.model} className={`sales-compare__cell ${a.model === 'R66 Turbine' && auxTankEnabled ? 'sales-compare__cell--highlighted' : ''}`}>
+                    {getCompareValue(a, 'endurance')}
+                  </div>
+                ))}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Useful Load</div>
+                {selectedCompareSpecs.map(a => <div key={a.model} className="sales-compare__cell">{a.usefulLoad}</div>)}
+              </div>
+              <div className="sales-compare__row">
+                <div className="sales-compare__cell sales-compare__cell--label">Fuel Capacity</div>
+                {selectedCompareSpecs.map(a => (
+                  <div key={a.model} className={`sales-compare__cell ${a.model === 'R66 Turbine' && auxTankEnabled ? 'sales-compare__cell--highlighted' : ''}`}>
+                    {getCompareValue(a, 'fuelCapacity')}
+                  </div>
+                ))}
+              </div>
             </motion.div>
-          </AnimatePresence>
+          )}
+        </div>
+      </section>
+
+      {/* ========== VIDEO WALKTHROUGHS ========== */}
+      <section className="sales-video sales-video--compact">
+        <div className="sales-video__container">
+          <div className="sales-video__divider" />
+          <h3 className="sales-video__label">See our Aircraft Walkthroughs</h3>
+          <div className="sales-video__grid">
+            {videoContent.map((video, i) => (
+              <motion.div
+                key={i}
+                className="sales-video__card"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="sales-video__thumbnail">
+                  <img src={video.thumbnail} alt={video.title} />
+                  <div className="sales-video__play">
+                    <span>▶</span>
+                  </div>
+                  <span className="sales-video__duration">{video.duration}</span>
+                </div>
+                <h4>{video.title}</h4>
+              </motion.div>
+            ))}
+          </div>
+          <div className="sales-video__divider" />
         </div>
       </section>
 
@@ -1626,17 +1381,19 @@ function Sales() {
                   src="/assets/images/robinson-assets/logos/rhc-authorized-dealer-logo-logo-yellow-rotor-white-type.svg"
                   alt="Robinson Authorized Dealer"
                 />
+                <span className="sales-dealer__dot">•</span>
                 <img
                   src="/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-white-type.svg"
                   alt="Robinson Authorized Service Center"
                 />
               </div>
-              <h2>Official Robinson Partner</h2>
-              <p>
-                As an Authorized Robinson Dealer and Service Centre, we provide factory-direct sales,
-                genuine parts, certified maintenance, and the expertise that comes from three decades
-                of exclusive Robinson focus.
-              </p>
+              <div className="sales-dealer__text">
+                <h2>Official Robinson Partner</h2>
+                <p>
+                  As an Authorized Robinson Dealer and Service Centre, we provide factory-direct sales,
+                  certified maintenance, and three decades of exclusive Robinson expertise.
+                </p>
+              </div>
               <div className="sales-dealer__features">
                 <div className="sales-dealer__feature">
                   <span className="sales-dealer__feature-icon">✓</span>
@@ -1645,14 +1402,6 @@ function Sales() {
                 <div className="sales-dealer__feature">
                   <span className="sales-dealer__feature-icon">✓</span>
                   <span>Full Warranty Support</span>
-                </div>
-                <div className="sales-dealer__feature">
-                  <span className="sales-dealer__feature-icon">✓</span>
-                  <span>Genuine Parts</span>
-                </div>
-                <div className="sales-dealer__feature">
-                  <span className="sales-dealer__feature-icon">✓</span>
-                  <span>Factory Training</span>
                 </div>
               </div>
             </div>
@@ -1674,78 +1423,83 @@ function Sales() {
             </div>
           </Reveal>
 
-          <div className="sales-process__grid">
+          <div className="sales-process__timeline">
+            <div className="sales-process__line" />
             {buyingSteps.map((step, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-process__step"
-                  whileHover={{ y: -4 }}
-                  transition={{ type: 'spring', stiffness: 400 }}
-                >
-                  <span className="sales-process__num">{step.num}</span>
-                  <div className="sales-process__text">
+              <Reveal key={i} delay={i * 0.1}>
+                <div className="sales-process__item">
+                  <div className="sales-process__marker">
+                    <span className="sales-process__num">{step.num}</span>
+                  </div>
+                  <div className="sales-process__content">
                     <h4>{step.title}</h4>
                     <p>{step.desc}</p>
                   </div>
-                </motion.div>
+                </div>
               </Reveal>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ========== USED AIRCRAFT ========== */}
-      <section className="sales-used">
-        <div className="sales-used__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Pre-Owned</span>
-              <h2>
-                <span className="sales-text--dark">Used</span>{' '}
-                <span className="sales-text--mid">Aircraft</span>
-              </h2>
-              <p>Carefully inspected, fully serviced, and ready to fly.</p>
-            </div>
-          </Reveal>
+      {/* ========== TRADE-IN & LEASEBACK ========== */}
+      <section className="sales-tradein">
+        <div className="sales-tradein__inner">
+          <div className="sales-tradein__grid">
+            <Reveal>
+              <div className="sales-tradein__card">
+                <span className="sales-pre-text">Free Aircraft Valuation</span>
+                <h3>Trade In Your Aircraft</h3>
+                <p>
+                  Ready for an upgrade? Get a complimentary market valuation and apply it directly to your new purchase.
+                </p>
+                <div className="sales-tradein__features">
+                  <div className="sales-tradein__feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>No obligation valuation</span>
+                  </div>
+                  <div className="sales-tradein__feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Fair market pricing</span>
+                  </div>
+                </div>
+                <a href="/contact?subject=valuation" className="sales-btn sales-btn--white">
+                  Get Free Valuation
+                </a>
+              </div>
+            </Reveal>
 
-          <div className="sales-used__grid">
-            {usedAircraft.map((aircraft, i) => (
-              <Reveal key={aircraft.id} delay={i * 0.1}>
-                <motion.div
-                  className="sales-used__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="sales-used__image">
-                    <img src={aircraft.image} alt={aircraft.model} />
-                    <span className={`sales-used__status sales-used__status--${aircraft.status.toLowerCase().replace(' ', '-')}`}>
-                      {aircraft.status}
-                    </span>
+            <Reveal delay={0.1}>
+              <div className="sales-tradein__card">
+                <span className="sales-pre-text">Earn While You Own</span>
+                <h3>Leaseback Program</h3>
+                <p>
+                  Put your aircraft to work when you're not flying. Earn revenue through charter and training operations.
+                </p>
+                <div className="sales-tradein__features">
+                  <div className="sales-tradein__feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Offset ownership costs</span>
                   </div>
-                  <div className="sales-used__info">
-                    <div className="sales-used__header">
-                      <h4>{aircraft.model}</h4>
-                      <span className="sales-used__year">{aircraft.year}</span>
-                    </div>
-                    <div className="sales-used__details">
-                      <span className="sales-used__hours">{aircraft.hours.toLocaleString()} hrs</span>
-                      <span className="sales-used__price">{aircraft.price}</span>
-                    </div>
-                    <a href={`/contact?subject=used-${aircraft.id}`} className="sales-btn sales-btn--outline sales-btn--small">
-                      Enquire
-                    </a>
+                  <div className="sales-tradein__feature">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    <span>Professional management</span>
                   </div>
-                </motion.div>
-              </Reveal>
-            ))}
+                </div>
+                <a href="/contact?subject=leaseback" className="sales-btn sales-btn--white">
+                  Learn More
+                </a>
+              </div>
+            </Reveal>
           </div>
-
-          <Reveal delay={0.3}>
-            <div className="sales-used__cta">
-              <Link to="/aircraft-sales/used" className="sales-btn sales-btn--outline">
-                View All Used Aircraft
-              </Link>
-            </div>
-          </Reveal>
         </div>
       </section>
 
@@ -1769,8 +1523,8 @@ function Sales() {
                 <span className="sales-why__num">01</span>
                 <h4>Lifetime Partnership</h4>
                 <p>
-                  Your purchase is just the beginning. We provide ongoing training,
-                  maintenance, and support throughout your ownership journey.
+                  Your purchase is just the beginning. We provide maintenance
+                  and support throughout your ownership journey.
                 </p>
               </div>
             </Reveal>
@@ -1780,7 +1534,7 @@ function Sales() {
                 <span className="sales-why__num">02</span>
                 <h4>Expert Knowledge</h4>
                 <p>
-                  35 years of exclusive Robinson focus. Our team knows these aircraft
+                  15 years of exclusive Robinson focus. Our team knows these aircraft
                   better than anyone in the UK.
                 </p>
               </div>
@@ -1808,294 +1562,25 @@ function Sales() {
               </div>
             </Reveal>
           </div>
-        </div>
-      </section>
 
-      {/* ========== SECTION 8: R88 SPOTLIGHT ========== */}
-      <section className="sales-r88">
-        <div className="sales-r88__container">
-          <div className="sales-r88__grid">
-            <div className="sales-r88__content">
-              <Reveal>
-                <span className="sales-pre-text">Now Taking Orders</span>
-                <h2 className="sales-r88__title">
-                  <span className="sales-text--dark">The</span>{' '}
-                  <span className="sales-text--mid">All-New</span>{' '}
-                  <span className="sales-text--accent">R88</span>
-                </h2>
-                <p className="sales-r88__intro">
-                  Robinson's revolutionary 8-seat turbine helicopter represents the future of
-                  rotorcraft. Purpose-built for utility, charter, and private operations.
-                </p>
-              </Reveal>
-
-              <div className="sales-r88__features">
-                {r88Features.map((feature, i) => (
-                  <Reveal key={i} delay={i * 0.08}>
-                    <motion.div
-                      className="sales-r88__feature"
-                      whileHover={{ x: 4 }}
-                    >
-                      <span className="sales-r88__feature-icon">{feature.icon}</span>
-                      <div>
-                        <span className="sales-r88__feature-title">{feature.title}</span>
-                        <span className="sales-r88__feature-desc">{feature.desc}</span>
-                      </div>
-                    </motion.div>
-                  </Reveal>
-                ))}
-              </div>
-
-              <Reveal delay={0.4}>
-                <div className="sales-r88__cta">
-                  <Link to="/aircraft-sales/new/r88" className="sales-btn sales-btn--primary">
-                    R88 Details
-                  </Link>
-                  <Link to="/contact?subject=r88-interest" className="sales-btn sales-btn--outline">
-                    Register Interest
-                  </Link>
-                </div>
-              </Reveal>
-            </div>
-
-            <div className="sales-r88__visual">
-              <Reveal direction="right">
-                <motion.div
-                  className="sales-r88__image"
-                  whileHover={{ scale: 1.02 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
-                >
-                  <img
-                    src="/assets/images/new-aircraft/r88/rhc-r88-left-side-three-quarter-front-view-21797.jpg"
-                    alt="Robinson R88"
-                  />
-                  <div className="sales-r88__badge">
-                    <span>2024</span>
-                    <span>LAUNCH</span>
-                  </div>
-                </motion.div>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 9: FINANCING OPTIONS ========== */}
-      <section className="sales-finance">
-        <div className="sales-finance__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Flexible Solutions</span>
-              <h2>
-                <span className="sales-text--dark">Financing</span>{' '}
-                <span className="sales-text--mid">Options</span>
-              </h2>
-              <p>Tailored financial solutions to get you flying sooner.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-finance__grid">
-            {financingOptions.map((option, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className={`sales-finance__card ${option.featured ? 'sales-finance__card--featured' : ''}`}
-                  whileHover={{ y: -8 }}
-                  transition={{ type: 'spring', stiffness: 400 }}
-                >
-                  {option.featured && <div className="sales-finance__ribbon">Most Popular</div>}
-                  <span className="sales-finance__icon">{option.icon}</span>
-                  <h4>{option.type}</h4>
-                  <ul>
-                    {option.benefits.map((benefit, j) => (
-                      <li key={j}>{benefit}</li>
-                    ))}
-                  </ul>
-                  <span className="sales-finance__note">{option.note}</span>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="sales-finance__cta">
-              <p>Speak with our finance partners for a no-obligation quote.</p>
-              <a href="/contact?subject=financing" className="sales-btn sales-btn--primary">
-                Get Finance Quote
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 10: TRADE-IN PROGRAM ========== */}
-      <section className="sales-tradein">
-        <div className="sales-tradein__inner">
-          <Reveal>
-            <div className="sales-tradein__content">
-              <span className="sales-pre-text">Upgrade Today</span>
-              <h2>
-                <span className="sales-text--white">Trade In</span>{' '}
-                <span className="sales-text--light">Your Aircraft</span>
-              </h2>
-              <p>
-                Ready for an upgrade? We accept trade-ins on Robinson helicopters
-                and many other makes. Get a fair market valuation and apply it
-                directly to your new purchase.
-              </p>
-              <div className="sales-tradein__steps">
-                <div className="sales-tradein__step">
-                  <span className="sales-tradein__step-num">1</span>
-                  <span>Submit Details</span>
-                </div>
-                <div className="sales-tradein__step-arrow">→</div>
-                <div className="sales-tradein__step">
-                  <span className="sales-tradein__step-num">2</span>
-                  <span>Receive Valuation</span>
-                </div>
-                <div className="sales-tradein__step-arrow">→</div>
-                <div className="sales-tradein__step">
-                  <span className="sales-tradein__step-num">3</span>
-                  <span>Apply to Purchase</span>
-                </div>
-              </div>
-              <a href="/contact?subject=trade-in" className="sales-btn sales-btn--white">
-                Get Valuation
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 11: COMPARISON CHART ========== */}
-      <section className="sales-compare">
-        <div className="sales-compare__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Side by Side</span>
-              <h2>
-                <span className="sales-text--dark">Compare</span>{' '}
-                <span className="sales-text--mid">Models</span>
-              </h2>
-              <p>Find the perfect Robinson for your mission profile.</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sales-compare__table-wrapper">
-              <table className="sales-compare__table">
-                <thead>
-                  <tr>
-                    <th>Specification</th>
-                    <th className="sales-compare__featured">R88 <span>NEW</span></th>
-                    <th>R66</th>
-                    <th>R44</th>
-                    <th>R22</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {comparisonSpecs.map((row, i) => (
-                    <tr key={i}>
-                      <td>{row.spec}</td>
-                      <td className="sales-compare__featured">{row.r88}</td>
-                      <td>{row.r66}</td>
-                      <td>{row.r44}</td>
-                      <td>{row.r22}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.3}>
-            <div className="sales-compare__note">
-              <span>*</span> Specifications are typical values. Contact us for detailed performance data.
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 12: TESTIMONIALS ========== */}
-      <section className="sales-testimonials">
-        <div className="sales-testimonials__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Owner Stories</span>
-              <h2>
-                <span className="sales-text--dark">What Our</span>{' '}
-                <span className="sales-text--mid">Customers Say</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-testimonials__grid">
-            {testimonials.map((testimonial, i) => (
-              <Reveal key={i} delay={i * 0.15}>
-                <motion.div
-                  className="sales-testimonials__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="sales-testimonials__quote">
-                    <span className="sales-testimonials__mark">"</span>
-                    <p>{testimonial.quote}</p>
-                  </div>
-                  <div className="sales-testimonials__author">
-                    <div className="sales-testimonials__avatar">
-                      {testimonial.author.charAt(0)}
-                    </div>
-                    <div className="sales-testimonials__info">
-                      <span className="sales-testimonials__name">{testimonial.author}</span>
-                      <span className="sales-testimonials__role">{testimonial.role}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 13: CONFIGURATION OPTIONS ========== */}
-      <section className="sales-config">
-        <div className="sales-config__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Personalization</span>
-              <h2>
-                <span className="sales-text--dark">Custom</span>{' '}
-                <span className="sales-text--mid">Configuration</span>
-              </h2>
-              <p>Make it uniquely yours with factory and aftermarket options.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-config__grid">
-            {configOptions.map((category, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sales-config__category">
-                  <h4>{category.category}</h4>
-                  <ul>
-                    {category.options.map((option, j) => (
-                      <li key={j}>
-                        <span className="sales-config__check">✓</span>
-                        {option}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="sales-config__image">
+          <Reveal delay={0.5}>
+            <div className="sales-insurance__compact">
               <img
-                src="/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-front-cockpit-wide-view-13425.jpg"
-                alt="Custom R66 Interior"
+                alt="Hayward Aviation"
+                className="sales-insurance__logo"
+                src="/assets/images/logos/partners/hayward-fleet-insurance-copy.png"
               />
-              <div className="sales-config__caption">
-                R66 NXG Riviera Edition — Alcantara interior with custom stitching
+              <div className="sales-insurance__content">
+                <h4>Aviation Insurance</h4>
+                <p>
+                  Due to our fleet size and existing relationship with Hayward Aviation,
+                  we secure competitive insurance pricing for our customers. Hayward specialises
+                  in helicopter insurance and understands the unique needs of Robinson owners.
+                </p>
               </div>
+              <a href="/contact?subject=insurance" className="sales-btn sales-btn--primary">
+                Get a Quote
+              </a>
             </div>
           </Reveal>
         </div>
@@ -2108,2206 +1593,70 @@ function Sales() {
             <div className="sales-section-header">
               <span className="sales-pre-text">Visual Excellence</span>
               <h2>
-                <span className="sales-text--white">Aircraft</span>{' '}
-                <span className="sales-text--light">Gallery</span>
+                <span className="sales-text--white">Recent</span>{' '}
+                <span className="sales-text--light">Deliveries</span>
               </h2>
             </div>
           </Reveal>
 
-          <div className="sales-gallery__grid">
-            <motion.div
-              className="sales-gallery__item sales-gallery__item--large"
-              whileHover={{ scale: 1.02 }}
-            >
-              <img src="/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg" alt="R88" />
-              <span className="sales-gallery__label">R88 — The Future</span>
-            </motion.div>
-            <motion.div
-              className="sales-gallery__item"
-              whileHover={{ scale: 1.02 }}
-            >
-              <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-pv-left-side-wide-view-13611.jpg" alt="R66" />
-              <span className="sales-gallery__label">R66 Palo Verde</span>
-            </motion.div>
-            <motion.div
-              className="sales-gallery__item"
-              whileHover={{ scale: 1.02 }}
-            >
-              <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-dramatic-overhead-13365.jpg" alt="R66 Interior" />
-              <span className="sales-gallery__label">R66 Interior</span>
-            </motion.div>
-            <motion.div
-              className="sales-gallery__item"
-              whileHover={{ scale: 1.02 }}
-            >
-              <img src="/assets/images/new-aircraft/r88/rhc-r88-left-pilot-seat-full-frame-13570.jpg" alt="R88 Cockpit" />
-              <span className="sales-gallery__label">R88 Cockpit</span>
-            </motion.div>
-            <motion.div
-              className="sales-gallery__item"
-              whileHover={{ scale: 1.02 }}
-            >
-              <img src="/assets/images/new-aircraft/r88/rhc-r88-glass-flight-displays-right-side-cyclic-13216.jpg" alt="Avionics" />
-              <span className="sales-gallery__label">Glass Cockpit</span>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+          <div className="sales-gallery__wrapper">
+            <button className="sales-gallery__chevron sales-gallery__chevron--prev" onClick={() => scrollGallery(-1)} aria-label="Previous images">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
 
-      {/* ========== SECTION 15: SAFETY FEATURES ========== */}
-      <section className="sales-safety">
-        <div className="sales-safety__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Built to Protect</span>
-              <h2>
-                <span className="sales-text--dark">Robinson</span>{' '}
-                <span className="sales-text--mid">Safety</span>
-              </h2>
-              <p>Decades of engineering focused on pilot and passenger protection.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-safety__grid">
-            {safetyFeatures.map((feature, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-safety__item"
-                  whileHover={{ backgroundColor: '#1a1a1a', color: '#fff' }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <span className="sales-safety__icon">{feature.icon}</span>
-                  <div className="sales-safety__text">
-                    <h4>{feature.title}</h4>
-                    <p>{feature.desc}</p>
-                  </div>
+            <div className="sales-gallery__scroll" ref={galleryRef}>
+              <motion.div className="sales-gallery__item sales-gallery__item--tall" whileHover={{ scale: 1.02 }}>
+                <img src="/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg" alt="R88" />
+                <span className="sales-gallery__label">R88 — The Future</span>
+              </motion.div>
+              <div className="sales-gallery__stack">
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-pv-left-side-wide-view-13611.jpg" alt="R66" />
+                  <span className="sales-gallery__label">R66 Palo Verde</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.5}>
-            <div className="sales-safety__cta">
-              <p>Robinson helicopters meet or exceed all FAA and EASA safety requirements.</p>
-              <a href="/training/safety" className="sales-btn sales-btn--outline">
-                Safety Training
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 16: ACCESSORIES ========== */}
-      <section className="sales-accessories">
-        <div className="sales-accessories__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Essential Add-Ons</span>
-              <h2>
-                <span className="sales-text--dark">Accessories</span>{' '}
-                <span className="sales-text--mid">& Equipment</span>
-              </h2>
-              <p>Complete your purchase with genuine Robinson accessories.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-accessories__grid">
-            {accessories.map((item, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <motion.div
-                  className="sales-accessories__item"
-                  whileHover={{ y: -4, borderColor: '#1a1a1a' }}
-                >
-                  <span className="sales-accessories__category">{item.category}</span>
-                  <h4>{item.name}</h4>
-                  <span className="sales-accessories__price">{item.price}</span>
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-dramatic-overhead-13365.jpg" alt="R66 Interior" />
+                  <span className="sales-gallery__label">R66 Overhead</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="sales-accessories__cta">
-              <Link to="/store" className="sales-btn sales-btn--primary">
-                View Full Catalog
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 17: TRAINING PACKAGES ========== */}
-      <section className="sales-training">
-        <div className="sales-training__container">
-          <div className="sales-training__grid">
-            <div className="sales-training__content">
-              <Reveal>
-                <span className="sales-pre-text">Learn to Fly</span>
-                <h2>
-                  <span className="sales-text--dark">Training</span>{' '}
-                  <span className="sales-text--mid">Packages</span>
-                </h2>
-                <p>
-                  Every new aircraft purchase includes transition training.
-                  Need more? We offer comprehensive packages for new pilots.
-                </p>
-              </Reveal>
-
-              <div className="sales-training__packages">
-                {trainingPackages.map((pkg, i) => (
-                  <Reveal key={i} delay={i * 0.1}>
-                    <motion.div
-                      className="sales-training__package"
-                      whileHover={{ x: 8 }}
-                    >
-                      <div className="sales-training__package-header">
-                        <h4>{pkg.name}</h4>
-                        <span className="sales-training__hours">{pkg.hours} hrs</span>
-                      </div>
-                      <ul>
-                        {pkg.includes.map((item, j) => (
-                          <li key={j}>{item}</li>
-                        ))}
-                      </ul>
-                      <span className="sales-training__price">{pkg.price}</span>
-                    </motion.div>
-                  </Reveal>
-                ))}
               </div>
-            </div>
-
-            <div className="sales-training__visual">
-              <Reveal direction="right">
-                <img
-                  src="/assets/images/training/instructor-student.jpg"
-                  alt="Flight Training"
-                />
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 18: MAINTENANCE PLANS ========== */}
-      <section className="sales-maintenance">
-        <div className="sales-maintenance__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Worry-Free Ownership</span>
-              <h2>
-                <span className="sales-text--dark">Maintenance</span>{' '}
-                <span className="sales-text--mid">Plans</span>
-              </h2>
-              <p>Predictable costs and expert care for your investment.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-maintenance__grid">
-            {maintenancePackages.map((pkg, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className={`sales-maintenance__card ${pkg.featured ? 'sales-maintenance__card--featured' : ''}`}
-                  whileHover={{ y: -8 }}
-                >
-                  {pkg.featured && <div className="sales-maintenance__badge">Recommended</div>}
-                  <h4>{pkg.name}</h4>
-                  <span className="sales-maintenance__coverage">{pkg.coverage}</span>
-                  <div className="sales-maintenance__price">
-                    <span className="sales-maintenance__amount">{pkg.price}</span>
-                  </div>
-                  <ul>
-                    {pkg.features.map((feature, j) => (
-                      <li key={j}>
-                        <span className="sales-maintenance__check">✓</span>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="/contact?subject=maintenance" className="sales-btn sales-btn--outline sales-btn--full">
-                    Learn More
-                  </a>
+              <motion.div className="sales-gallery__item sales-gallery__item--wide" whileHover={{ scale: 1.02 }}>
+                <img src="/assets/images/new-aircraft/r88/rhc-r88-left-pilot-seat-full-frame-13570.jpg" alt="R88 Cockpit" />
+                <span className="sales-gallery__label">R88 Cockpit</span>
+              </motion.div>
+              <div className="sales-gallery__stack">
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r88/rhc-r88-glass-flight-displays-right-side-cyclic-13216.jpg" alt="Avionics" />
+                  <span className="sales-gallery__label">Glass Cockpit</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 19: RECENT DELIVERIES ========== */}
-      <section className="sales-deliveries">
-        <div className="sales-deliveries__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Happy Owners</span>
-              <h2>
-                <span className="sales-text--dark">Recent</span>{' '}
-                <span className="sales-text--mid">Deliveries</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-deliveries__grid">
-            {recentDeliveries.map((delivery, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-deliveries__card"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="sales-deliveries__image">
-                    <img src={delivery.image} alt={delivery.model} />
-                  </div>
-                  <div className="sales-deliveries__info">
-                    <h4>{delivery.model}</h4>
-                    <span className="sales-deliveries__owner">{delivery.owner}</span>
-                    <div className="sales-deliveries__meta">
-                      <span>{delivery.location}</span>
-                      <span>{delivery.date}</span>
-                    </div>
-                  </div>
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg" alt="R66 Riviera" />
+                  <span className="sales-gallery__label">R66 Riviera</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 20: INTERNATIONAL SALES ========== */}
-      <section className="sales-international">
-        <div className="sales-international__inner">
-          <Reveal>
-            <div className="sales-international__content">
-              <span className="sales-pre-text">Global Reach</span>
-              <h2>
-                <span className="sales-text--white">Worldwide</span>{' '}
-                <span className="sales-text--light">Delivery</span>
-              </h2>
-              <p>
-                From Denham to anywhere on the planet. We handle export documentation,
-                ferry flights, and coordinate with local aviation authorities for
-                seamless international delivery.
-              </p>
-              <div className="sales-international__stats">
-                <div className="sales-international__stat">
-                  <span className="sales-international__num">40+</span>
-                  <span>Countries</span>
-                </div>
-                <div className="sales-international__stat">
-                  <span className="sales-international__num">6</span>
-                  <span>Continents</span>
-                </div>
-                <div className="sales-international__stat">
-                  <span className="sales-international__num">500+</span>
-                  <span>Deliveries</span>
-                </div>
               </div>
-              <a href="/contact?subject=international" className="sales-btn sales-btn--white">
-                International Enquiry
-              </a>
-            </div>
-          </Reveal>
-          <div className="sales-international__map">
-            <svg viewBox="0 0 800 400" className="sales-international__globe">
-              <defs>
-                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse">
-                  <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.1)" />
-                </pattern>
-              </defs>
-              <rect width="800" height="400" fill="url(#grid)" />
-              <circle cx="400" cy="200" r="150" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-              <circle cx="400" cy="200" r="100" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" />
-              <circle cx="400" cy="200" r="50" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="1" />
-              <circle cx="320" cy="180" r="6" fill="#fff" />
-              <text x="320" y="165" fill="rgba(255,255,255,0.7)" fontSize="10" textAnchor="middle">UK</text>
-              <circle cx="520" cy="220" r="4" fill="rgba(255,255,255,0.5)" />
-              <circle cx="280" cy="250" r="4" fill="rgba(255,255,255,0.5)" />
-              <circle cx="450" cy="140" r="4" fill="rgba(255,255,255,0.5)" />
-              <circle cx="600" cy="190" r="4" fill="rgba(255,255,255,0.5)" />
-            </svg>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 21: INSURANCE PARTNERS ========== */}
-      <section className="sales-insurance">
-        <div className="sales-insurance__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Protection Partners</span>
-              <h2>
-                <span className="sales-text--dark">Aviation</span>{' '}
-                <span className="sales-text--mid">Insurance</span>
-              </h2>
-              <p>Work with leading aviation insurers for competitive coverage.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-insurance__grid">
-            <Reveal delay={0.1}>
-              <div className="sales-insurance__card">
-                <div className="sales-insurance__icon">H</div>
-                <h4>Hayward Aviation</h4>
-                <span className="sales-insurance__specialty">Fleet & Training Specialists</span>
-                <p>Preferred partner for flight schools and fleet operators. Competitive rates for Robinson aircraft.</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <div className="sales-insurance__card">
-                <div className="sales-insurance__icon">G</div>
-                <h4>Global Aerospace</h4>
-                <span className="sales-insurance__specialty">Private & Commercial</span>
-                <p>Comprehensive coverage for private owners and commercial operators worldwide.</p>
-              </div>
-            </Reveal>
-            <Reveal delay={0.3}>
-              <div className="sales-insurance__card">
-                <div className="sales-insurance__icon">W</div>
-                <h4>Willis Towers Watson</h4>
-                <span className="sales-insurance__specialty">Corporate Solutions</span>
-                <p>Tailored programs for corporate flight departments and high-value operations.</p>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.4}>
-            <p className="sales-insurance__note">
-              We can introduce you to our insurance partners during the purchase process.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 22: FAQ ========== */}
-      <section className="sales-faq">
-        <div className="sales-faq__container">
-          <div className="sales-faq__grid">
-            <div className="sales-faq__header">
-              <Reveal>
-                <span className="sales-pre-text">Questions</span>
-                <h2>
-                  <span className="sales-text--dark">Frequently</span>{' '}
-                  <span className="sales-text--mid">Asked</span>
-                </h2>
-                <p>Everything you need to know about buying a helicopter.</p>
-                <div className="sales-faq__contact">
-                  <p>Can't find your answer?</p>
-                  <a href="/contact" className="sales-btn sales-btn--outline">
-                    Contact Us
-                  </a>
-                </div>
-              </Reveal>
-            </div>
-
-            <div className="sales-faq__list">
-              {faqItems.map((item, i) => (
-                <Reveal key={i} delay={i * 0.08}>
-                  <details className="sales-faq__item">
-                    <summary className="sales-faq__question">
-                      <span>{item.q}</span>
-                      <span className="sales-faq__toggle">+</span>
-                    </summary>
-                    <div className="sales-faq__answer">
-                      <p>{item.a}</p>
-                    </div>
-                  </details>
-                </Reveal>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 23: FLEET MANAGEMENT ========== */}
-      <section className="sales-fleet">
-        <div className="sales-fleet__container">
-          <div className="sales-fleet__grid">
-            <div className="sales-fleet__visual">
-              <Reveal direction="left">
-                <img
-                  src="/assets/images/facility/hq-aviation-robinsons.jpg"
-                  alt="HQ Aviation Fleet"
-                />
-              </Reveal>
-            </div>
-
-            <div className="sales-fleet__content">
-              <Reveal>
-                <span className="sales-pre-text">For Operators</span>
-                <h2>
-                  <span className="sales-text--dark">Fleet</span>{' '}
-                  <span className="sales-text--mid">Management</span>
-                </h2>
-                <p>
-                  Operating multiple helicopters? We offer comprehensive fleet solutions
-                  including volume purchasing, centralized maintenance, crew training,
-                  and operations support.
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.2}>
-                <ul className="sales-fleet__benefits">
-                  <li>Volume discounts on new aircraft</li>
-                  <li>Consolidated maintenance scheduling</li>
-                  <li>Dedicated account manager</li>
-                  <li>Priority parts availability</li>
-                  <li>Crew standardization training</li>
-                  <li>Regulatory compliance support</li>
-                </ul>
-              </Reveal>
-
-              <Reveal delay={0.3}>
-                <a href="/contact?subject=fleet" className="sales-btn sales-btn--primary">
-                  Fleet Enquiry
-                </a>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 24: DELIVERY TIMELINE ========== */}
-      <section className="sales-timeline">
-        <div className="sales-timeline__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Your Journey</span>
-              <h2>
-                <span className="sales-text--dark">Delivery</span>{' '}
-                <span className="sales-text--mid">Timeline</span>
-              </h2>
-              <p>From order to flight — here's what to expect.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-timeline__visual">
-            <div className="sales-timeline__line" />
-
-            <Reveal delay={0.1}>
-              <div className="sales-timeline__point">
-                <span className="sales-timeline__marker">●</span>
-                <div className="sales-timeline__content">
-                  <span className="sales-timeline__month">Month 0</span>
-                  <h4>Order Placed</h4>
-                  <p>Configuration finalized, deposit paid, factory slot secured</p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.2}>
-              <div className="sales-timeline__point">
-                <span className="sales-timeline__marker">●</span>
-                <div className="sales-timeline__content">
-                  <span className="sales-timeline__month">Month 3-6</span>
-                  <h4>Production</h4>
-                  <p>Aircraft enters production queue at Robinson factory, Torrance CA</p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.3}>
-              <div className="sales-timeline__point">
-                <span className="sales-timeline__marker">●</span>
-                <div className="sales-timeline__content">
-                  <span className="sales-timeline__month">Month 6-9</span>
-                  <h4>Completion</h4>
-                  <p>Paint, options, and factory flight testing completed</p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.4}>
-              <div className="sales-timeline__point">
-                <span className="sales-timeline__marker">●</span>
-                <div className="sales-timeline__content">
-                  <span className="sales-timeline__month">Month 9-12</span>
-                  <h4>Shipping</h4>
-                  <p>Sea freight to UK or ferry flight arranged</p>
-                </div>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.5}>
-              <div className="sales-timeline__point sales-timeline__point--final">
-                <span className="sales-timeline__marker">★</span>
-                <div className="sales-timeline__content">
-                  <span className="sales-timeline__month">Delivery Day</span>
-                  <h4>Handover</h4>
-                  <p>Registration, training, and first flight at HQ Aviation</p>
-                </div>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.6}>
-            <p className="sales-timeline__note">
-              Timelines vary by model and factory demand. Current lead times available on request.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 25: AIRCRAFT VALUATION ========== */}
-      <section className="sales-valuation">
-        <div className="sales-valuation__container">
-          <div className="sales-valuation__card">
-            <Reveal>
-              <div className="sales-valuation__icon">◈</div>
-              <h2>Free Aircraft Valuation</h2>
-              <p>
-                Thinking of selling or trading? Get a no-obligation market valuation
-                from our experienced team. We assess condition, hours, equipment,
-                and current market trends.
-              </p>
-              <div className="sales-valuation__form">
-                <div className="sales-valuation__inputs">
-                  <input type="text" placeholder="Aircraft Make/Model" />
-                  <input type="text" placeholder="Year" />
-                  <input type="text" placeholder="Hours" />
-                  <input type="email" placeholder="Email Address" />
-                </div>
-                <button type="button" className="sales-btn sales-btn--primary">
-                  Request Valuation
-                </button>
-              </div>
-              <span className="sales-valuation__note">Response within 24 hours</span>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 26: UPCOMING EVENTS ========== */}
-      <section className="sales-events">
-        <div className="sales-events__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Join Us</span>
-              <h2>
-                <span className="sales-text--dark">Upcoming</span>{' '}
-                <span className="sales-text--mid">Events</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-events__grid">
-            {upcomingEvents.map((event, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-events__card"
-                  whileHover={{ y: -4, borderColor: '#1a1a1a' }}
-                >
-                  <div className="sales-events__date">
-                    <span className="sales-events__day">{event.date}</span>
-                    <span className="sales-events__month">{event.month}</span>
-                  </div>
-                  <div className="sales-events__info">
-                    <span className="sales-events__type">{event.type}</span>
-                    <h4>{event.title}</h4>
-                    <span className="sales-events__location">{event.location}</span>
-                  </div>
-                  <a href="/contact?subject=event" className="sales-events__link">
-                    Register →
-                  </a>
+              <motion.div className="sales-gallery__item sales-gallery__item--tall" whileHover={{ scale: 1.02 }}>
+                <img src="/assets/images/new-aircraft/r44/raven-ii-front-alpha.png" alt="R44 Raven II" />
+                <span className="sales-gallery__label">R44 Raven II</span>
+              </motion.div>
+              <div className="sales-gallery__stack">
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22 Beta II" />
+                  <span className="sales-gallery__label">R22 Beta II</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 27: LEASEBACK OPPORTUNITY ========== */}
-      <section className="sales-leaseback">
-        <div className="sales-leaseback__inner">
-          <Reveal>
-            <div className="sales-leaseback__content">
-              <span className="sales-pre-text">Earn While You Own</span>
-              <h2>
-                <span className="sales-text--white">Leaseback</span>{' '}
-                <span className="sales-text--light">Program</span>
-              </h2>
-              <p>
-                Put your aircraft to work when you're not flying. Our leaseback program
-                allows owners to earn revenue through charter and training operations,
-                offsetting ownership costs significantly.
-              </p>
-              <div className="sales-leaseback__benefits">
-                <div className="sales-leaseback__benefit">
-                  <span className="sales-leaseback__benefit-icon">£</span>
-                  <div>
-                    <h5>Revenue Share</h5>
-                    <span>Up to 60% of hourly rates</span>
-                  </div>
-                </div>
-                <div className="sales-leaseback__benefit">
-                  <span className="sales-leaseback__benefit-icon">⟳</span>
-                  <div>
-                    <h5>Maintenance</h5>
-                    <span>Handled by our Part 145</span>
-                  </div>
-                </div>
-                <div className="sales-leaseback__benefit">
-                  <span className="sales-leaseback__benefit-icon">✓</span>
-                  <div>
-                    <h5>Insurance</h5>
-                    <span>Commercial coverage included</span>
-                  </div>
-                </div>
-              </div>
-              <a href="/services/leaseback" className="sales-btn sales-btn--white">
-                Learn More
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 28: HERITAGE TIMELINE ========== */}
-      <section className="sales-heritage">
-        <div className="sales-heritage__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Our Story</span>
-              <h2>
-                <span className="sales-text--dark">35 Years</span>{' '}
-                <span className="sales-text--mid">of Excellence</span>
-              </h2>
-              <p>A legacy of trust, expertise, and passion for rotorcraft.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-heritage__timeline">
-            {heritageTimeline.map((item, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-heritage__item"
-                  whileHover={{ x: 4 }}
-                >
-                  <span className="sales-heritage__year">{item.year}</span>
-                  <div className="sales-heritage__dot" />
-                  <span className="sales-heritage__event">{item.event}</span>
+                <motion.div className="sales-gallery__item sales-gallery__item--small" whileHover={{ scale: 1.02 }}>
+                  <img src="/assets/images/new-aircraft/r88/r88-jellybean-left.png" alt="R88 Profile" />
+                  <span className="sales-gallery__label">R88 Profile</span>
                 </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 29: PAINT SCHEMES ========== */}
-      <section className="sales-paint">
-        <div className="sales-paint__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Personalization</span>
-              <h2>
-                <span className="sales-text--dark">Paint</span>{' '}
-                <span className="sales-text--mid">Schemes</span>
-              </h2>
-              <p>From factory standards to full bespoke designs.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-paint__grid">
-            {paintSchemes.map((scheme, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-paint__card"
-                  whileHover={{ y: -8 }}
-                >
-                  <div className="sales-paint__image">
-                    <img src={scheme.image} alt={scheme.name} />
-                  </div>
-                  <div className="sales-paint__info">
-                    <span className="sales-paint__type">{scheme.type}</span>
-                    <h4>{scheme.name}</h4>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.5}>
-            <div className="sales-paint__cta">
-              <p>Work with our design team to create your perfect livery.</p>
-              <a href="/contact?subject=custom-paint" className="sales-btn sales-btn--outline">
-                Design Consultation
-              </a>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 30: INTERIOR OPTIONS ========== */}
-      <section className="sales-interior">
-        <div className="sales-interior__container">
-          <div className="sales-interior__grid">
-            <div className="sales-interior__visual">
-              <Reveal direction="left">
-                <img
-                  src="/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-front-cockpit-wide-view-13425.jpg"
-                  alt="R66 Interior"
-                />
-              </Reveal>
-            </div>
-
-            <div className="sales-interior__content">
-              <Reveal>
-                <span className="sales-pre-text">Cabin Refinement</span>
-                <h2>
-                  <span className="sales-text--dark">Interior</span>{' '}
-                  <span className="sales-text--mid">Options</span>
-                </h2>
-                <p>
-                  From practical durability to executive luxury, configure
-                  your cabin to match your lifestyle.
-                </p>
-              </Reveal>
-
-              <div className="sales-interior__options">
-                {interiorOptions.map((option, i) => (
-                  <Reveal key={i} delay={i * 0.08}>
-                    <div className="sales-interior__option">
-                      <span className="sales-interior__tier">{option.tier}</span>
-                      <h4>{option.name}</h4>
-                      <p>{option.desc}</p>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 31: MISSION PROFILES ========== */}
-      <section className="sales-missions">
-        <div className="sales-missions__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Find Your Fit</span>
-              <h2>
-                <span className="sales-text--dark">Mission</span>{' '}
-                <span className="sales-text--mid">Profiles</span>
-              </h2>
-              <p>What will you use your helicopter for?</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-missions__grid">
-            {missionProfiles.map((mission, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-missions__card"
-                  whileHover={{ y: -8, borderColor: '#1a1a1a' }}
-                >
-                  <span className="sales-missions__icon">{mission.icon}</span>
-                  <h4>{mission.title}</h4>
-                  <p className="sales-missions__desc">{mission.desc}</p>
-                  <ul>
-                    {mission.benefits.map((benefit, j) => (
-                      <li key={j}>{benefit}</li>
-                    ))}
-                  </ul>
-                  <div className="sales-missions__recommend">
-                    <span>Recommended:</span>
-                    <strong>{mission.recommended}</strong>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 32: OWNERSHIP CALCULATOR ========== */}
-      <section className="sales-calculator">
-        <div className="sales-calculator__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Know Your Costs</span>
-              <h2>
-                <span className="sales-text--dark">Cost of</span>{' '}
-                <span className="sales-text--mid">Ownership</span>
-              </h2>
-              <p>Transparent breakdown of what to expect.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-calculator__table-wrapper">
-            <Reveal delay={0.2}>
-              {ownershipCosts.map((section, i) => (
-                <div key={i} className="sales-calculator__section">
-                  <h4>{section.category}</h4>
-                  <table>
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th>R22</th>
-                        <th>R44</th>
-                        <th>R66</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {section.items.map((item, j) => (
-                        <tr key={j}>
-                          <td>{item.name}</td>
-                          <td>{item.r22}</td>
-                          <td>{item.r44}</td>
-                          <td>{item.r66}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ))}
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.4}>
-            <p className="sales-calculator__note">
-              * Estimates based on 100 hours annual flying. Actual costs vary by usage and location.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 33: RESALE VALUE ========== */}
-      <section className="sales-resale">
-        <div className="sales-resale__inner">
-          <Reveal>
-            <div className="sales-resale__content">
-              <span className="sales-pre-text">Investment Protection</span>
-              <h2>
-                <span className="sales-text--white">Industry-Leading</span>{' '}
-                <span className="sales-text--light">Resale Value</span>
-              </h2>
-              <p>
-                Robinson helicopters consistently hold their value better than
-                any other brand in the light helicopter market.
-              </p>
-
-              <div className="sales-resale__stats">
-                {resaleData.map((item, i) => (
-                  <div key={i} className="sales-resale__stat">
-                    <span className="sales-resale__retention">{item.retention}</span>
-                    <span className="sales-resale__model">{item.model}</span>
-                    <span className="sales-resale__age">After {item.age}</span>
-                  </div>
-                ))}
-              </div>
-
-              <p className="sales-resale__sub">
-                We also offer guaranteed buy-back programs for select purchases.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 34: AWARDS ========== */}
-      <section className="sales-awards">
-        <div className="sales-awards__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Recognition</span>
-              <h2>
-                <span className="sales-text--dark">Awards &</span>{' '}
-                <span className="sales-text--mid">Achievements</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-awards__grid">
-            {awards.map((award, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-awards__card"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <span className="sales-awards__year">{award.year}</span>
-                  <div className="sales-awards__trophy">★</div>
-                  <h4>{award.title}</h4>
-                  <span className="sales-awards__org">{award.org}</span>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 35: PILOT REQUIREMENTS ========== */}
-      <section className="sales-requirements">
-        <div className="sales-requirements__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Ready to Fly?</span>
-              <h2>
-                <span className="sales-text--dark">Pilot</span>{' '}
-                <span className="sales-text--mid">Requirements</span>
-              </h2>
-              <p>What you need to fly each Robinson model.</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sales-requirements__table-wrapper">
-              <table className="sales-requirements__table">
-                <thead>
-                  <tr>
-                    <th>Model</th>
-                    <th>License</th>
-                    <th>Type Rating</th>
-                    <th>Min Hours</th>
-                    <th>Medical</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pilotRequirements.map((req, i) => (
-                    <tr key={i}>
-                      <td><strong>{req.model}</strong></td>
-                      <td>{req.license}</td>
-                      <td>{req.rating}</td>
-                      <td>{req.minHours}</td>
-                      <td>{req.medical}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.3}>
-            <p className="sales-requirements__note">
-              * R88 requirements pending certification. Don't have a license? We offer complete training programs.
-            </p>
-            <div className="sales-requirements__cta">
-              <Link to="/training" className="sales-btn sales-btn--primary">
-                Training Programs
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 36: VS COMPETITION ========== */}
-      <section className="sales-vs">
-        <div className="sales-vs__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">The Smart Choice</span>
-              <h2>
-                <span className="sales-text--dark">Why</span>{' '}
-                <span className="sales-text--mid">Robinson?</span>
-              </h2>
-              <p>How Robinson compares to other light helicopters.</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sales-vs__table-wrapper">
-              <table className="sales-vs__table">
-                <thead>
-                  <tr>
-                    <th>Feature</th>
-                    <th className="sales-vs__robinson">Robinson</th>
-                    <th>Others</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {competitorComparison.map((row, i) => (
-                    <tr key={i}>
-                      <td>{row.feature}</td>
-                      <td className="sales-vs__robinson">
-                        <span className="sales-vs__check">✓</span> {row.robinson}
-                      </td>
-                      <td>{row.competitor}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 37: ENVIRONMENTAL ========== */}
-      <section className="sales-environmental">
-        <div className="sales-environmental__container">
-          <div className="sales-environmental__grid">
-            <div className="sales-environmental__content">
-              <Reveal>
-                <span className="sales-pre-text">Sustainability</span>
-                <h2>
-                  <span className="sales-text--dark">Environmental</span>{' '}
-                  <span className="sales-text--mid">Responsibility</span>
-                </h2>
-                <p>
-                  Robinson's efficient designs minimize environmental impact
-                  while maximizing performance and value.
-                </p>
-              </Reveal>
-
-              <div className="sales-environmental__metrics">
-                {environmentalData.map((item, i) => (
-                  <Reveal key={i} delay={i * 0.1}>
-                    <div className="sales-environmental__metric">
-                      <span className="sales-environmental__value">{item.value}</span>
-                      <div>
-                        <h4>{item.metric}</h4>
-                        <p>{item.desc}</p>
-                      </div>
-                    </div>
-                  </Reveal>
-                ))}
               </div>
             </div>
 
-            <div className="sales-environmental__visual">
-              <Reveal direction="right">
-                <div className="sales-environmental__icon-large">
-                  <svg viewBox="0 0 100 100" className="sales-environmental__leaf">
-                    <path
-                      d="M50 10 C20 30, 10 70, 50 90 C90 70, 80 30, 50 10"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                    <path
-                      d="M50 30 L50 75 M50 45 L35 35 M50 55 L65 45"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    />
-                  </svg>
-                </div>
-              </Reveal>
-            </div>
+            <button className="sales-gallery__chevron sales-gallery__chevron--next" onClick={() => scrollGallery(1)} aria-label="Next images">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
           </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 38: VIDEO SHOWCASE ========== */}
-      <section className="sales-video">
-        <div className="sales-video__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Watch</span>
-              <h2>
-                <span className="sales-text--white">Video</span>{' '}
-                <span className="sales-text--light">Gallery</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-video__grid">
-            {videoContent.map((video, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-video__card"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="sales-video__thumbnail">
-                    <img src={video.thumbnail} alt={video.title} />
-                    <div className="sales-video__play">
-                      <span>▶</span>
-                    </div>
-                    <span className="sales-video__duration">{video.duration}</span>
-                  </div>
-                  <h4>{video.title}</h4>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 39: SOCIAL PROOF STATS ========== */}
-      <section className="sales-proof">
-        <div className="sales-proof__container">
-          <div className="sales-proof__grid">
-            {socialProofStats.map((stat, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-proof__stat"
-                  whileHover={{ y: -4 }}
-                >
-                  <span className="sales-proof__value">
-                    {stat.value}<span className="sales-proof__suffix">{stat.suffix}</span>
-                  </span>
-                  <span className="sales-proof__label">{stat.label}</span>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 40: SPECIFICATION DEEP DIVE ========== */}
-      <section className="sales-specs">
-        <div className="sales-specs__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Technical Data</span>
-              <h2>
-                <span className="sales-text--dark">R66</span>{' '}
-                <span className="sales-text--mid">Specifications</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-specs__grid">
-            <Reveal delay={0.1}>
-              <div className="sales-specs__category">
-                <h4>Dimensions</h4>
-                <dl>
-                  <dt>Overall Length</dt><dd>{specificationDetails.r66.dimensions.length}</dd>
-                  <dt>Overall Height</dt><dd>{specificationDetails.r66.dimensions.height}</dd>
-                  <dt>Cabin Width</dt><dd>{specificationDetails.r66.dimensions.width}</dd>
-                </dl>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.2}>
-              <div className="sales-specs__category">
-                <h4>Weights</h4>
-                <dl>
-                  <dt>Empty Weight</dt><dd>{specificationDetails.r66.weights.empty}</dd>
-                  <dt>Max Gross</dt><dd>{specificationDetails.r66.weights.maxGross}</dd>
-                  <dt>Useful Load</dt><dd>{specificationDetails.r66.weights.useful}</dd>
-                </dl>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.3}>
-              <div className="sales-specs__category">
-                <h4>Performance</h4>
-                <dl>
-                  <dt>Cruise Speed</dt><dd>{specificationDetails.r66.performance.cruise}</dd>
-                  <dt>Max Speed</dt><dd>{specificationDetails.r66.performance.maxSpeed}</dd>
-                  <dt>Range</dt><dd>{specificationDetails.r66.performance.range}</dd>
-                  <dt>Endurance</dt><dd>{specificationDetails.r66.performance.endurance}</dd>
-                </dl>
-              </div>
-            </Reveal>
-
-            <Reveal delay={0.4}>
-              <div className="sales-specs__category">
-                <h4>Powerplant</h4>
-                <dl>
-                  <dt>Engine</dt><dd>{specificationDetails.r66.engine.type}</dd>
-                  <dt>Max Power</dt><dd>{specificationDetails.r66.engine.power}</dd>
-                  <dt>Fuel Type</dt><dd>{specificationDetails.r66.engine.fuel}</dd>
-                </dl>
-              </div>
-            </Reveal>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 41: PARTNER NETWORK ========== */}
-      <section className="sales-network">
-        <div className="sales-network__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Global Support</span>
-              <h2>
-                <span className="sales-text--dark">Worldwide</span>{' '}
-                <span className="sales-text--mid">Dealer Network</span>
-              </h2>
-              <p>Robinson's global network ensures support wherever you fly.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-network__grid">
-            {partnerLocations.map((region, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-network__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <span className="sales-network__count">{region.count}</span>
-                  <h4>{region.region}</h4>
-                  <p>{region.countries.join(' · ')}</p>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.5}>
-            <div className="sales-network__total">
-              <span className="sales-network__total-num">200+</span>
-              <span className="sales-network__total-label">Service Centers Worldwide</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 42: HANGARAGE ========== */}
-      <section className="sales-hangarage">
-        <div className="sales-hangarage__container">
-          <div className="sales-hangarage__grid">
-            <div className="sales-hangarage__content">
-              <Reveal>
-                <span className="sales-pre-text">Storage Solutions</span>
-                <h2>
-                  <span className="sales-text--dark">Hangarage</span>{' '}
-                  <span className="sales-text--mid">at HQ</span>
-                </h2>
-                <p>
-                  Keep your helicopter safe and ready at Denham Aerodrome.
-                  Multiple packages to suit your needs.
-                </p>
-              </Reveal>
-
-              <div className="sales-hangarage__tiers">
-                {hangarageOptions.map((tier, i) => (
-                  <Reveal key={i} delay={i * 0.1}>
-                    <div className="sales-hangarage__tier">
-                      <div className="sales-hangarage__tier-header">
-                        <h4>{tier.tier}</h4>
-                        <span className="sales-hangarage__price">{tier.price}</span>
-                      </div>
-                      <ul>
-                        {tier.features.map((feature, j) => (
-                          <li key={j}>{feature}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-
-            <div className="sales-hangarage__visual">
-              <Reveal direction="right">
-                <img
-                  src="/assets/images/facility/hq-aviation-robinsons.jpg"
-                  alt="HQ Aviation Hangar"
-                />
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 43: PRE-PURCHASE INSPECTION ========== */}
-      <section className="sales-inspection">
-        <div className="sales-inspection__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Buy with Confidence</span>
-              <h2>
-                <span className="sales-text--dark">Pre-Purchase</span>{' '}
-                <span className="sales-text--mid">Inspection</span>
-              </h2>
-              <p>Expert evaluation before you commit to a used aircraft.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-inspection__grid">
-            {inspectionPackages.map((pkg, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-inspection__card"
-                  whileHover={{ y: -8 }}
-                >
-                  <h4>{pkg.name}</h4>
-                  <div className="sales-inspection__meta">
-                    <span>{pkg.duration}</span>
-                    <span className="sales-inspection__price">{pkg.price}</span>
-                  </div>
-                  <ul>
-                    {pkg.includes.map((item, j) => (
-                      <li key={j}>
-                        <span className="sales-inspection__check">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="/contact?subject=inspection" className="sales-btn sales-btn--outline sales-btn--full">
-                    Book Inspection
-                  </a>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 44: DEMO FLIGHT BOOKING ========== */}
-      <section className="sales-demo">
-        <div className="sales-demo__inner">
-          <Reveal>
-            <div className="sales-demo__content">
-              <span className="sales-pre-text">Experience First</span>
-              <h2>
-                <span className="sales-text--white">Book a</span>{' '}
-                <span className="sales-text--light">Demo Flight</span>
-              </h2>
-              <p>
-                The best way to know if a helicopter is right for you is to fly it.
-                Schedule a demonstration flight at Denham Aerodrome.
-              </p>
-              <div className="sales-demo__form">
-                <select className="sales-demo__select">
-                  <option>Select Model</option>
-                  <option>R22 Beta II</option>
-                  <option>R44 Raven II</option>
-                  <option>R66 Turbine</option>
-                </select>
-                <input type="text" placeholder="Your Name" className="sales-demo__input" />
-                <input type="email" placeholder="Email Address" className="sales-demo__input" />
-                <input type="tel" placeholder="Phone Number" className="sales-demo__input" />
-                <button type="button" className="sales-btn sales-btn--white sales-btn--full">
-                  Request Demo
-                </button>
-              </div>
-              <span className="sales-demo__note">Demo flights are subject to availability and weather conditions.</span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 45: CUSTOMER MAP ========== */}
-      <section className="sales-customermap">
-        <div className="sales-customermap__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Our Community</span>
-              <h2>
-                <span className="sales-text--dark">Where Our</span>{' '}
-                <span className="sales-text--mid">Customers Fly</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-customermap__visual">
-            <Reveal delay={0.2}>
-              <div className="sales-customermap__map">
-                <svg viewBox="0 0 600 400" className="sales-customermap__svg">
-                  <defs>
-                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#e04a2f" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#e04a2f" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  {/* UK outline simplified */}
-                  <path
-                    d="M280 80 Q320 100 300 150 Q330 180 310 220 Q350 240 320 280 Q300 320 260 300 Q240 280 250 240 Q220 220 240 180 Q220 140 260 120 Q270 90 280 80"
-                    fill="none"
-                    stroke="#e8e6e2"
-                    strokeWidth="2"
-                  />
-                  {/* Customer location dots */}
-                  {customerLocations.map((loc, i) => (
-                    <g key={i}>
-                      <circle cx={280 + (i * 20 - 40)} cy={120 + i * 35} r="20" fill="url(#glow)" />
-                      <circle cx={280 + (i * 20 - 40)} cy={120 + i * 35} r="6" fill="#e04a2f" />
-                      <text x={280 + (i * 20 - 40)} y={100 + i * 35} textAnchor="middle" fontSize="10" fill="#666">
-                        {loc.city}
-                      </text>
-                    </g>
-                  ))}
-                </svg>
-              </div>
-            </Reveal>
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="sales-customermap__stats">
-              <div className="sales-customermap__stat">
-                <span className="sales-customermap__num">500+</span>
-                <span>Active Owners</span>
-              </div>
-              <div className="sales-customermap__stat">
-                <span className="sales-customermap__num">15</span>
-                <span>Countries</span>
-              </div>
-              <div className="sales-customermap__stat">
-                <span className="sales-customermap__num">35</span>
-                <span>Years of Community</span>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 46: FACTORY TOUR ========== */}
-      <section className="sales-factory">
-        <div className="sales-factory__container">
-          <div className="sales-factory__grid">
-            <div className="sales-factory__visual">
-              <Reveal direction="left">
-                <div className="sales-factory__image">
-                  <img
-                    src="/assets/images/facility/hq-aviation-robinsons.jpg"
-                    alt="Robinson Factory"
-                  />
-                  <div className="sales-factory__overlay">
-                    <span className="sales-factory__play">▶</span>
-                    <span className="sales-factory__text">Virtual Tour</span>
-                  </div>
-                </div>
-              </Reveal>
-            </div>
-
-            <div className="sales-factory__content">
-              <Reveal>
-                <span className="sales-pre-text">Behind the Scenes</span>
-                <h2>
-                  <span className="sales-text--dark">Visit the</span>{' '}
-                  <span className="sales-text--mid">Factory</span>
-                </h2>
-                <p>
-                  See where your helicopter is born. Robinson's Torrance, California
-                  facility welcomes prospective owners for exclusive factory tours.
-                </p>
-                <ul className="sales-factory__features">
-                  <li>Watch your aircraft being built</li>
-                  <li>Meet the engineering team</li>
-                  <li>Tour the R&D facility</li>
-                  <li>Complete Robinson safety course</li>
-                </ul>
-                <a href="/contact?subject=factory-tour" className="sales-btn sales-btn--primary">
-                  Arrange Factory Visit
-                </a>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 47: NEWSLETTER ========== */}
-      <section className="sales-newsletter">
-        <div className="sales-newsletter__container">
-          <Reveal>
-            <div className="sales-newsletter__content">
-              <h2>Stay Informed</h2>
-              <p>
-                Get the latest on new models, special offers, and aviation news
-                delivered to your inbox.
-              </p>
-              <div className="sales-newsletter__form">
-                <input type="email" placeholder="Enter your email" />
-                <button type="button" className="sales-btn sales-btn--primary">
-                  Subscribe
-                </button>
-              </div>
-              <span className="sales-newsletter__privacy">
-                We respect your privacy. Unsubscribe anytime.
-              </span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 48: AVIONICS PACKAGES ========== */}
-      <section className="sales-avionics">
-        <div className="sales-avionics__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Cockpit Technology</span>
-              <h2>
-                <span className="sales-text--dark">Avionics</span>{' '}
-                <span className="sales-text--mid">Packages</span>
-              </h2>
-              <p>State-of-the-art Garmin systems tailored to your mission.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-avionics__grid">
-            {avionicsPackages.map((pkg, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className={`sales-avionics__card ${pkg.featured ? 'sales-avionics__card--featured' : ''}`}
-                  whileHover={{ y: -8 }}
-                >
-                  {pkg.featured && <div className="sales-avionics__badge">Most Popular</div>}
-                  <h4>{pkg.name}</h4>
-                  <ul>
-                    {pkg.includes.map((item, j) => (
-                      <li key={j}>
-                        <span className="sales-avionics__check">✓</span>
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
-                  <div className="sales-avionics__price">{pkg.price}</div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 49: WARRANTY OPTIONS ========== */}
-      <section className="sales-warranty">
-        <div className="sales-warranty__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Peace of Mind</span>
-              <h2>
-                <span className="sales-text--dark">Extended</span>{' '}
-                <span className="sales-text--mid">Warranty</span>
-              </h2>
-              <p>Protect your investment with comprehensive coverage.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-warranty__grid">
-            {warrantyOptions.map((option, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-warranty__card"
-                  whileHover={{ borderColor: '#1a1a1a' }}
-                >
-                  <span className="sales-warranty__duration">{option.duration}</span>
-                  <h4>{option.type}</h4>
-                  <p>{option.coverage}</p>
-                  <span className="sales-warranty__price">{option.price}</span>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 50: DELIVERY OPTIONS ========== */}
-      <section className="sales-delivery">
-        <div className="sales-delivery__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Getting Your Aircraft</span>
-              <h2>
-                <span className="sales-text--dark">Delivery</span>{' '}
-                <span className="sales-text--mid">Methods</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-delivery__grid">
-            {deliveryOptions.map((option, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-delivery__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="sales-delivery__header">
-                    <h4>{option.method}</h4>
-                    <span className="sales-delivery__price">{option.price}</span>
-                  </div>
-                  <p className="sales-delivery__desc">{option.desc}</p>
-                  <div className="sales-delivery__meta">
-                    <span>📍 {option.location}</span>
-                    <span>⏱ {option.time}</span>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 51: FLIGHT PLANNING TOOLS ========== */}
-      <section className="sales-tools">
-        <div className="sales-tools__inner">
-          <Reveal>
-            <div className="sales-tools__content">
-              <span className="sales-pre-text">Mission Planning</span>
-              <h2>
-                <span className="sales-text--white">Flight</span>{' '}
-                <span className="sales-text--light">Planning Tools</span>
-              </h2>
-              <p>Essential apps and resources for helicopter operations.</p>
-
-              <div className="sales-tools__grid">
-                {flightTools.map((tool, i) => (
-                  <motion.div
-                    key={i}
-                    className="sales-tools__item"
-                    whileHover={{ x: 4 }}
-                  >
-                    <span className="sales-tools__logo">{tool.logo}</span>
-                    <div>
-                      <h4>{tool.name}</h4>
-                      <span className="sales-tools__type">{tool.type}</span>
-                      <p>{tool.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 52: MEMBERSHIP BENEFITS ========== */}
-      <section className="sales-membership">
-        <div className="sales-membership__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Owner Perks</span>
-              <h2>
-                <span className="sales-text--dark">HQ Owner</span>{' '}
-                <span className="sales-text--mid">Membership</span>
-              </h2>
-              <p>Exclusive benefits when you purchase from HQ Aviation.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-membership__grid">
-            {membershipBenefits.map((benefit, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-membership__card"
-                  whileHover={{ y: -4, background: '#1a1a1a', color: '#fff' }}
-                >
-                  <span className="sales-membership__icon">{benefit.icon}</span>
-                  <h4>{benefit.title}</h4>
-                  <p>{benefit.desc}</p>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 53: TECHNICAL SUPPORT ========== */}
-      <section className="sales-techsupport">
-        <div className="sales-techsupport__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Always Available</span>
-              <h2>
-                <span className="sales-text--dark">Technical</span>{' '}
-                <span className="sales-text--mid">Support</span>
-              </h2>
-              <p>Expert help when you need it, however you need it.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-techsupport__grid">
-            {techSupport.map((channel, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sales-techsupport__card">
-                  <h4>{channel.channel}</h4>
-                  <div className="sales-techsupport__details">
-                    <div>
-                      <span className="sales-techsupport__label">Availability</span>
-                      <span className="sales-techsupport__value">{channel.availability}</span>
-                    </div>
-                    <div>
-                      <span className="sales-techsupport__label">Response</span>
-                      <span className="sales-techsupport__value">{channel.response}</span>
-                    </div>
-                  </div>
-                  <span className="sales-techsupport__contact">{channel.number}</span>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 54: COMPONENT EXCHANGE ========== */}
-      <section className="sales-exchange">
-        <div className="sales-exchange__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Cost Savings</span>
-              <h2>
-                <span className="sales-text--dark">Component</span>{' '}
-                <span className="sales-text--mid">Exchange</span>
-              </h2>
-              <p>Save up to 47% on major components with our exchange program.</p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sales-exchange__table-wrapper">
-              <table className="sales-exchange__table">
-                <thead>
-                  <tr>
-                    <th>Component</th>
-                    <th>Exchange Price</th>
-                    <th>New Price</th>
-                    <th>Savings</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {componentExchange.map((item, i) => (
-                    <tr key={i}>
-                      <td>{item.component}</td>
-                      <td className="sales-exchange__highlight">{item.exchange}</td>
-                      <td>{item.new}</td>
-                      <td className="sales-exchange__savings">{item.savings}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 55: FLIGHT SCHOOL PARTNERSHIPS ========== */}
-      <section className="sales-schools">
-        <div className="sales-schools__container">
-          <div className="sales-schools__grid">
-            <div className="sales-schools__content">
-              <Reveal>
-                <span className="sales-pre-text">Learn to Fly</span>
-                <h2>
-                  <span className="sales-text--dark">Training</span>{' '}
-                  <span className="sales-text--mid">Partners</span>
-                </h2>
-                <p>
-                  Whether you're starting from zero or adding a type rating,
-                  our partner schools offer the highest quality instruction.
-                </p>
-              </Reveal>
-
-              <div className="sales-schools__list">
-                {flightSchools.map((school, i) => (
-                  <Reveal key={i} delay={i * 0.1}>
-                    <div className="sales-schools__item">
-                      <div className="sales-schools__info">
-                        <h4>{school.name}</h4>
-                        <span>{school.location}</span>
-                      </div>
-                      <span className="sales-schools__specialty">{school.specialty}</span>
-                    </div>
-                  </Reveal>
-                ))}
-              </div>
-            </div>
-
-            <div className="sales-schools__visual">
-              <Reveal direction="right">
-                <img
-                  src="/assets/images/training/instructor-student.jpg"
-                  alt="Flight Training"
-                />
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 56: UPGRADE PATHS ========== */}
-      <section className="sales-upgrade">
-        <div className="sales-upgrade__inner">
-          <Reveal>
-            <div className="sales-upgrade__content">
-              <span className="sales-pre-text">Grow With Us</span>
-              <h2>
-                <span className="sales-text--white">Upgrade</span>{' '}
-                <span className="sales-text--light">Paths</span>
-              </h2>
-              <p>Your next helicopter is always closer than you think.</p>
-
-              <div className="sales-upgrade__paths">
-                {upgradePaths.map((path, i) => (
-                  <motion.div
-                    key={i}
-                    className="sales-upgrade__path"
-                    whileHover={{ x: 8 }}
-                  >
-                    <div className="sales-upgrade__models">
-                      <span className="sales-upgrade__from">{path.from}</span>
-                      <span className="sales-upgrade__arrow">→</span>
-                      <span className="sales-upgrade__to">{path.to}</span>
-                    </div>
-                    <p>{path.benefit}</p>
-                    <span className="sales-upgrade__tradein">Trade-in: {path.tradein}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 57: REGULATORY INFO ========== */}
-      <section className="sales-regulatory">
-        <div className="sales-regulatory__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Compliance</span>
-              <h2>
-                <span className="sales-text--dark">Regulatory</span>{' '}
-                <span className="sales-text--mid">Information</span>
-              </h2>
-              <p>All Robinson helicopters meet international certification standards.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-regulatory__grid">
-            {regulatoryBodies.map((body, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="sales-regulatory__card">
-                  <span className="sales-regulatory__name">{body.name}</span>
-                  <span className="sales-regulatory__region">{body.region}</span>
-                  <p>{body.role}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 58: OWNER STORIES ========== */}
-      <section className="sales-stories">
-        <div className="sales-stories__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Real Owners</span>
-              <h2>
-                <span className="sales-text--dark">Owner</span>{' '}
-                <span className="sales-text--mid">Stories</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-stories__grid">
-            {ownerStories.map((story, i) => (
-              <Reveal key={i} delay={i * 0.15}>
-                <motion.div
-                  className="sales-stories__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="sales-stories__header">
-                    <span className="sales-stories__usecase">{story.useCase}</span>
-                    <span className="sales-stories__aircraft">{story.aircraft}</span>
-                  </div>
-                  <blockquote>{story.story}</blockquote>
-                  <div className="sales-stories__footer">
-                    <span className="sales-stories__name">{story.name}</span>
-                    <span className="sales-stories__meta">{story.hours} hours · Since {story.purchased}</span>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 59: CONSIGNMENT SALES ========== */}
-      <section className="sales-consignment">
-        <div className="sales-consignment__container">
-          <div className="sales-consignment__grid">
-            <div className="sales-consignment__content">
-              <Reveal>
-                <span className="sales-pre-text">Selling Your Aircraft?</span>
-                <h2>
-                  <span className="sales-text--dark">Consignment</span>{' '}
-                  <span className="sales-text--mid">Sales</span>
-                </h2>
-                <p>
-                  Let HQ Aviation sell your helicopter. We handle everything
-                  from marketing to transaction, ensuring you get the best price.
-                </p>
-              </Reveal>
-
-              <Reveal delay={0.2}>
-                <ul className="sales-consignment__benefits">
-                  {consignmentBenefits.map((benefit, i) => (
-                    <li key={i}>
-                      <span className="sales-consignment__check">✓</span>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </Reveal>
-
-              <Reveal delay={0.3}>
-                <a href="/contact?subject=consignment" className="sales-btn sales-btn--primary">
-                  Consign Your Aircraft
-                </a>
-              </Reveal>
-            </div>
-
-            <div className="sales-consignment__visual">
-              <Reveal direction="right">
-                <div className="sales-consignment__stat-box">
-                  <span className="sales-consignment__stat-num">92%</span>
-                  <span className="sales-consignment__stat-label">Sell within 90 days</span>
-                </div>
-              </Reveal>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 60: SPECIAL EDITIONS ========== */}
-      <section className="sales-editions">
-        <div className="sales-editions__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Limited Production</span>
-              <h2>
-                <span className="sales-text--dark">Special</span>{' '}
-                <span className="sales-text--mid">Editions</span>
-              </h2>
-              <p>Exclusive configurations with enhanced features.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-editions__grid">
-            {specialEditions.map((edition, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-editions__card"
-                  whileHover={{ scale: 1.02 }}
-                >
-                  <div className="sales-editions__limited">
-                    Limited to {edition.limited}
-                  </div>
-                  <h4>{edition.name}</h4>
-                  <span className="sales-editions__base">Based on {edition.base}</span>
-                  <ul>
-                    {edition.features.map((feature, j) => (
-                      <li key={j}>{feature}</li>
-                    ))}
-                  </ul>
-                  <a href={`/contact?subject=${edition.name.toLowerCase().replace(' ', '-')}`} className="sales-btn sales-btn--outline sales-btn--small">
-                    Enquire
-                  </a>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 61: OPERATING BASES ========== */}
-      <section className="sales-bases">
-        <div className="sales-bases__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Where We Operate</span>
-              <h2>
-                <span className="sales-text--dark">Operating</span>{' '}
-                <span className="sales-text--mid">Bases</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-bases__grid">
-            {operatingBases.map((base, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-bases__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <div className="sales-bases__header">
-                    <h4>{base.name}</h4>
-                    <span className="sales-bases__code">{base.code}</span>
-                  </div>
-                  <div className="sales-bases__details">
-                    <div>
-                      <span className="sales-bases__label">Runway</span>
-                      <span>{base.runway}</span>
-                    </div>
-                    <div>
-                      <span className="sales-bases__label">Fuel</span>
-                      <span>{base.fuel}</span>
-                    </div>
-                  </div>
-                  <p className="sales-bases__facilities">{base.facilities}</p>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 62: CARBON OFFSET ========== */}
-      <section className="sales-carbon">
-        <div className="sales-carbon__inner">
-          <Reveal>
-            <div className="sales-carbon__content">
-              <span className="sales-pre-text">Fly Responsibly</span>
-              <h2>
-                <span className="sales-text--white">Carbon</span>{' '}
-                <span className="sales-text--light">Offset Program</span>
-              </h2>
-              <p>Offset your flight emissions through verified programs.</p>
-
-              <div className="sales-carbon__details">
-                <div className="sales-carbon__price">
-                  <span className="sales-carbon__amount">{carbonProgram.cost}</span>
-                  <span>per flight hour</span>
-                </div>
-                <div className="sales-carbon__projects">
-                  <span className="sales-carbon__label">Projects Include:</span>
-                  <ul>
-                    {carbonProgram.projects.map((project, i) => (
-                      <li key={i}>{project}</li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-
-              <div className="sales-carbon__providers">
-                Verified by: {carbonProgram.providers.join(' · ')}
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 63: AIRCRAFT MANAGEMENT ========== */}
-      <section className="sales-management">
-        <div className="sales-management__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Full Service</span>
-              <h2>
-                <span className="sales-text--dark">Aircraft</span>{' '}
-                <span className="sales-text--mid">Management</span>
-              </h2>
-              <p>Let us handle the details while you focus on flying.</p>
-            </div>
-          </Reveal>
-
-          <div className="sales-management__grid">
-            {managementServices.map((service, i) => (
-              <Reveal key={i} delay={i * 0.08}>
-                <motion.div
-                  className="sales-management__item"
-                  whileHover={{ x: 4 }}
-                >
-                  <div className="sales-management__info">
-                    <h4>{service.service}</h4>
-                    <p>{service.desc}</p>
-                  </div>
-                  <span className="sales-management__price">{service.price}</span>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 64: QUICK CONTACTS ========== */}
-      <section className="sales-contacts">
-        <div className="sales-contacts__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">Direct Lines</span>
-              <h2>
-                <span className="sales-text--dark">Sales</span>{' '}
-                <span className="sales-text--mid">Team</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-contacts__grid">
-            {quickContacts.map((contact, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-contacts__card"
-                  whileHover={{ y: -4, borderColor: '#1a1a1a' }}
-                >
-                  <span className="sales-contacts__dept">{contact.dept}</span>
-                  <h4>{contact.name}</h4>
-                  <a href={`mailto:${contact.email}`} className="sales-contacts__email">
-                    {contact.email}
-                  </a>
-                  <a href={`tel:${contact.phone.replace(/\s/g, '')}`} className="sales-contacts__phone">
-                    {contact.phone}
-                  </a>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 65: QUICK COMPARISON ========== */}
-      <section className="sales-quickcompare">
-        <div className="sales-quickcompare__container">
-          <Reveal>
-            <div className="sales-section-header">
-              <span className="sales-pre-text">At a Glance</span>
-              <h2>
-                <span className="sales-text--dark">Which Model</span>{' '}
-                <span className="sales-text--mid">Is Right?</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sales-quickcompare__grid">
-            {quickComparison.map((item, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <motion.div
-                  className="sales-quickcompare__card"
-                  whileHover={{ y: -4 }}
-                >
-                  <h4>{item.model}</h4>
-                  <div className="sales-quickcompare__ideal">
-                    <span className="sales-quickcompare__label">Ideal For</span>
-                    <p>{item.ideal}</p>
-                  </div>
-                  <div className="sales-quickcompare__notideal">
-                    <span className="sales-quickcompare__label">Not Ideal For</span>
-                    <p>{item.notIdeal}</p>
-                  </div>
-                </motion.div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== SECTION 66: LIVE CHAT ========== */}
-      <section className="sales-chat">
-        <div className="sales-chat__container">
-          <Reveal>
-            <div className="sales-chat__content">
-              <div className="sales-chat__icon">
-                <span>💬</span>
-              </div>
-              <h2>Have Questions?</h2>
-              <p>Our sales team is online and ready to help.</p>
-              <button type="button" className="sales-btn sales-btn--primary">
-                Start Live Chat
-              </button>
-              <span className="sales-chat__status">
-                <span className="sales-chat__dot"></span>
-                3 team members online
-              </span>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SECTION 67: MOBILE APP ========== */}
-      <section className="sales-app">
-        <div className="sales-app__inner">
-          <Reveal>
-            <div className="sales-app__content">
-              <span className="sales-pre-text">Coming Soon</span>
-              <h2>
-                <span className="sales-text--white">HQ Aviation</span>{' '}
-                <span className="sales-text--light">App</span>
-              </h2>
-              <p>
-                Manage your aircraft, book maintenance, track flights,
-                and connect with the HQ community—all from your phone.
-              </p>
-              <div className="sales-app__features">
-                <span>Flight Logging</span>
-                <span>Maintenance Alerts</span>
-                <span>Community Events</span>
-                <span>Direct Support</span>
-              </div>
-              <div className="sales-app__notify">
-                <input type="email" placeholder="Enter email for launch notification" />
-                <button type="button" className="sales-btn sales-btn--white">
-                  Notify Me
-                </button>
-              </div>
-            </div>
-          </Reveal>
         </div>
       </section>
 
@@ -4497,7 +1846,7 @@ function Sales() {
         }
 
         .sales-hero__dealer-logo {
-          height: 50px;
+          height: 80px;
           width: auto;
         }
 
@@ -4652,15 +2001,35 @@ function Sales() {
           100% { top: 100%; }
         }
 
+        /* ===== INTRO ===== */
+        .sales-intro {
+          padding: 4rem 2rem;
+          background: #faf9f6;
+        }
+
+        .sales-intro__container {
+          max-width: 800px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .sales-intro__text {
+          font-size: 1.15rem;
+          line-height: 1.9;
+          color: #444;
+          margin: 0;
+        }
+
         /* ===== LINEUP ===== */
         .sales-lineup {
-          padding: 6rem 2rem;
+          padding: 6rem 2rem 10px;
           background: #fff;
         }
 
         .sales-lineup__container {
           max-width: 1200px;
           margin: 0 auto;
+          text-align: center;
         }
 
         .sales-lineup__header {
@@ -4684,18 +2053,17 @@ function Sales() {
         }
 
         .sales-lineup__selector {
-          display: flex;
+          display: inline-flex;
           justify-content: center;
           gap: 0;
-          margin-bottom: 3rem;
+          margin: 0 auto 1.5rem;
           border: 1px solid #e8e6e2;
-          border-radius: 8px;
+          border-radius: 6px;
           overflow: hidden;
         }
 
         .sales-lineup__tab {
-          flex: 1;
-          padding: 1.25rem 1.5rem;
+          padding: 0.75rem 1.25rem;
           background: #faf9f6;
           border: none;
           border-right: 1px solid #e8e6e2;
@@ -4740,14 +2108,14 @@ function Sales() {
 
         .sales-lineup__tab-name {
           display: block;
-          font-size: 1.5rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: #1a1a1a;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.15rem;
         }
 
         .sales-lineup__tab-tagline {
-          font-size: 0.65rem;
+          font-size: 0.55rem;
           color: #888;
           text-transform: uppercase;
           letter-spacing: 0.1em;
@@ -4755,16 +2123,59 @@ function Sales() {
 
         .sales-lineup__display {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
-          align-items: center;
-          padding: 2rem;
+          grid-template-columns: 1fr auto 1fr;
+          gap: 2rem;
+          align-items: start;
+          padding: 2rem 2rem 2.5rem;
           background: linear-gradient(135deg, #faf9f6 0%, #f0efe8 100%);
           border-radius: 12px;
+          height: 520px;
+          overflow: hidden;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+          border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        .sales-lineup__image-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1.5rem;
+          height: 100%;
+        }
+
+        .sales-lineup__image-row {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+        }
+
+        .sales-lineup__chevron {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 44px;
+          height: 44px;
+          border: 1px solid #ddd;
+          border-radius: 50%;
+          background: #fff;
+          color: #1a1a1a;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+
+        .sales-lineup__chevron:hover {
+          background: #1a1a1a;
+          color: #fff;
+          border-color: #1a1a1a;
         }
 
         .sales-lineup__image {
           position: relative;
+          flex: 1;
+          min-width: 0;
         }
 
         .sales-lineup__image img {
@@ -4776,10 +2187,29 @@ function Sales() {
 
         .sales-lineup__info {
           max-width: 450px;
+          position: relative;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
 
         .sales-lineup__model-header {
-          margin-bottom: 1rem;
+          margin-bottom: 0;
+          text-align: center;
+        }
+
+        .sales-lineup__header-divider {
+          width: 60px;
+          height: 1px;
+          background: rgba(0,0,0,0.15);
+          margin: 0.75rem auto 0;
+        }
+
+        .sales-lineup__middle {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
         }
 
         .sales-lineup__model-header h3 {
@@ -4793,6 +2223,38 @@ function Sales() {
         .sales-lineup__tagline {
           font-size: 0.9rem;
           color: #666;
+        }
+
+        .sales-lineup__subtypes {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+          margin: 1rem 0;
+        }
+
+        .sales-lineup__subtype {
+          padding: 0.5rem 1rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          background: transparent;
+          border: 1px solid #ddd;
+          color: #666;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .sales-lineup__subtype:hover {
+          border-color: #1a1a1a;
+          color: #1a1a1a;
+        }
+
+        .sales-lineup__subtype--active {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
         }
 
         .sales-lineup__desc {
@@ -4812,7 +2274,10 @@ function Sales() {
         }
 
         .sales-lineup__spec {
-          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
         }
 
         .sales-lineup__spec-value {
@@ -4835,8 +2300,10 @@ function Sales() {
         .sales-lineup__price {
           display: flex;
           align-items: baseline;
+          justify-content: flex-end;
           gap: 0.5rem;
-          margin-bottom: 1.5rem;
+          margin-top: auto;
+          text-align: right;
         }
 
         .sales-lineup__price-label {
@@ -4857,72 +2324,310 @@ function Sales() {
           color: #888;
         }
 
+        .sales-lineup__divider {
+          width: 100%;
+          max-width: 300px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(0,0,0,0.15), transparent);
+          margin: 1rem auto;
+        }
+
+        .sales-lineup__divider-vertical {
+          width: 1px;
+          align-self: stretch;
+          background: linear-gradient(180deg, transparent, rgba(0,0,0,0.1), transparent);
+        }
+
         .sales-lineup__actions {
           display: flex;
           gap: 1rem;
+          justify-content: center;
+        }
+
+        /* ===== COMPARE ===== */
+        .sales-compare {
+          padding: 3rem 1.5rem;
+          background: #f5f4f0;
+        }
+
+        .sales-compare__container {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+
+        .sales-compare__selector {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+          margin-bottom: 2rem;
+        }
+
+        .sales-compare__chip-wrapper {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .sales-compare__chip {
+          padding: 0.6rem 1.25rem;
+          background: #fff;
+          border: 1px solid #e0deda;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          border-radius: 4px;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .sales-compare__chip:hover:not(:disabled) {
+          border-color: #1a1a1a;
+        }
+
+        .sales-compare__chip.selected {
+          background: #1a1a1a;
+          color: #fff;
+          border-color: #1a1a1a;
+        }
+
+        .sales-compare__chip:disabled {
+          opacity: 0.4;
+          cursor: not-allowed;
+        }
+
+        .sales-compare__check {
+          font-size: 0.7rem;
+        }
+
+        .sales-compare__aux-dropdown {
+          overflow: hidden;
+        }
+
+        .sales-compare__aux-label {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.4rem 0.75rem;
+          background: #fff;
+          border: 1px solid #e0deda;
+          border-radius: 4px;
+          cursor: pointer;
+          font-size: 0.75rem;
+          transition: all 0.2s ease;
+        }
+
+        .sales-compare__aux-label:hover {
+          border-color: #1a1a1a;
+        }
+
+        .sales-compare__aux-checkbox {
+          display: none;
+        }
+
+        .sales-compare__aux-check {
+          width: 14px;
+          height: 14px;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.6rem;
+          transition: all 0.2s ease;
+        }
+
+        .sales-compare__aux-checkbox:checked + .sales-compare__aux-check {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
+        }
+
+        .sales-compare__aux-text {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #666;
+        }
+
+        .sales-compare__table {
+          background: #fff;
+          border-radius: 8px;
+          overflow: hidden;
+          border: 1px solid #e0deda;
+        }
+
+        .sales-compare__row {
+          display: grid;
+          grid-template-columns: 1fr repeat(3, 1fr);
+          border-bottom: 1px solid #f0efec;
+        }
+
+        .sales-compare__row:last-child {
+          border-bottom: none;
+        }
+
+        .sales-compare__row--header {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        .sales-compare__row--header .sales-compare__cell {
+          font-weight: 600;
+          font-size: 0.8rem;
+        }
+
+        .sales-compare__cell {
+          padding: 0.75rem 1rem;
+          font-size: 0.85rem;
+          display: flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+
+        .sales-compare__cell--label {
+          font-weight: 500;
+          color: #666;
+          font-size: 0.8rem;
+        }
+
+        .sales-compare__row:nth-child(even) .sales-compare__cell:not(.sales-compare__cell--label) {
+          background: #faf9f6;
+        }
+
+        .sales-compare__aux-badge {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          background: rgba(255,255,255,0.2);
+          padding: 0.15rem 0.35rem;
+          border-radius: 3px;
+          margin-left: 0.25rem;
+        }
+
+        .sales-compare__cell--highlighted {
+          position: relative;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+
+        .sales-compare__cell--highlighted::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: #1a1a1a;
+        }
+
+        @media (max-width: 700px) {
+          .sales-compare__row {
+            grid-template-columns: 1fr repeat(2, 1fr);
+          }
+
+          .sales-compare__cell {
+            padding: 0.5rem 0.75rem;
+            font-size: 0.75rem;
+          }
         }
 
         /* ===== DEALER ===== */
         .sales-dealer {
-          padding: 5rem 2rem;
+          padding: 2.5rem 2rem;
           background: #1a1a1a;
           color: #fff;
         }
 
         .sales-dealer__container {
-          max-width: 900px;
+          max-width: 1000px;
           margin: 0 auto;
         }
 
         .sales-dealer__content {
-          text-align: center;
+          display: flex;
+          align-items: center;
+          gap: 2rem;
         }
 
         .sales-dealer__logos {
           display: flex;
-          justify-content: center;
-          gap: 3rem;
-          margin-bottom: 2rem;
+          align-items: center;
+          gap: 1rem;
+          flex-shrink: 0;
         }
 
         .sales-dealer__logos img {
-          height: 70px;
+          height: 80px;
           width: auto;
         }
 
+        .sales-dealer__dot {
+          color: rgba(255,255,255,0.3);
+          font-size: 1rem;
+        }
+
+        .sales-dealer__text {
+          flex: 1;
+        }
+
         .sales-dealer__content h2 {
-          font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+          font-size: 1.25rem;
           font-weight: 700;
           text-transform: uppercase;
-          margin: 0 0 1.5rem;
+          margin: 0 0 0.5rem;
+          color: rgba(255,255,255,0.6);
         }
 
         .sales-dealer__content p {
           color: rgba(255,255,255,0.7);
-          font-size: 1.05rem;
-          line-height: 1.8;
-          max-width: 700px;
-          margin: 0 auto 2rem;
+          font-size: 0.9rem;
+          line-height: 1.6;
+          margin: 0;
         }
 
         .sales-dealer__features {
           display: flex;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 2rem;
+          flex-direction: column;
+          gap: 0.5rem;
+          flex-shrink: 0;
         }
 
         .sales-dealer__feature {
           display: flex;
           align-items: center;
           gap: 0.5rem;
-          font-size: 0.85rem;
+          font-size: 0.8rem;
           color: rgba(255,255,255,0.8);
         }
 
         .sales-dealer__feature-icon {
           color: #4ade80;
           font-weight: 700;
+        }
+
+        @media (max-width: 768px) {
+          .sales-dealer__content {
+            flex-direction: column;
+            text-align: center;
+            gap: 1.5rem;
+          }
+
+          .sales-dealer__logos {
+            justify-content: center;
+          }
+
+          .sales-dealer__logos img {
+            height: 65px;
+          }
+
+          .sales-dealer__features {
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+          }
         }
 
         /* ===== PROCESS ===== */
@@ -4936,22 +2641,35 @@ function Sales() {
           margin: 0 auto;
         }
 
-        .sales-process__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1px;
-          background: #e8e6e2;
-          border-radius: 8px;
-          overflow: hidden;
+        .sales-process__timeline {
+          position: relative;
+          display: flex;
+          justify-content: space-between;
+          padding-top: 3rem;
         }
 
-        .sales-process__step {
-          background: #fff;
-          padding: 1.5rem;
+        .sales-process__line {
+          position: absolute;
+          top: 3rem;
+          left: 5%;
+          right: 5%;
+          height: 2px;
+          background: linear-gradient(90deg, #e8e6e2 0%, #1a1a1a 20%, #1a1a1a 80%, #e8e6e2 100%);
+          transform: translateY(20px);
+        }
+
+        .sales-process__item {
+          flex: 1;
           display: flex;
-          gap: 1.25rem;
-          align-items: flex-start;
-          cursor: default;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          position: relative;
+          z-index: 1;
+        }
+
+        .sales-process__marker {
+          margin-bottom: 1rem;
         }
 
         .sales-process__num {
@@ -4964,19 +2682,25 @@ function Sales() {
           justify-content: center;
           font-family: 'Share Tech Mono', monospace;
           font-size: 0.85rem;
-          flex-shrink: 0;
+          border-radius: 50%;
+          border: 3px solid #faf9f6;
         }
 
-        .sales-process__text h4 {
-          margin: 0 0 0.25rem;
-          font-size: 0.95rem;
+        .sales-process__content {
+          max-width: 140px;
+        }
+
+        .sales-process__content h4 {
+          margin: 0 0 0.35rem;
+          font-size: 0.9rem;
           font-weight: 600;
         }
 
-        .sales-process__text p {
+        .sales-process__content p {
           margin: 0;
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           color: #888;
+          line-height: 1.4;
         }
 
         /* ===== USED AIRCRAFT ===== */
@@ -5110,12 +2834,20 @@ function Sales() {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1.5rem;
+          align-items: stretch;
+        }
+
+        .sales-why__grid > * {
+          height: 100%;
         }
 
         .sales-why__card {
           background: #fff;
           padding: 2rem;
           border-left: 3px solid #1a1a1a;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
         }
 
         .sales-why__num {
@@ -5196,10 +2928,20 @@ function Sales() {
           .sales-lineup__display {
             grid-template-columns: 1fr;
             gap: 2rem;
+            height: auto;
           }
 
-          .sales-lineup__image {
+          .sales-lineup__image-wrapper {
             order: -1;
+          }
+
+          .sales-lineup__divider {
+            display: none;
+          }
+
+          .sales-lineup__chevron {
+            width: 36px;
+            height: 36px;
           }
 
           .sales-lineup__info {
@@ -5219,8 +2961,18 @@ function Sales() {
             grid-template-columns: repeat(2, 1fr);
           }
 
-          .sales-process__grid {
-            grid-template-columns: repeat(2, 1fr);
+          .sales-process__timeline {
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+          }
+
+          .sales-process__item {
+            flex: 0 0 30%;
+          }
+
+          .sales-process__line {
+            display: none;
           }
         }
 
@@ -5263,18 +3015,22 @@ function Sales() {
             grid-template-columns: 1fr;
           }
 
-          .sales-process__grid {
-            grid-template-columns: 1fr;
+          .sales-process__item {
+            flex: 0 0 45%;
           }
 
           .sales-dealer__logos {
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1rem;
           }
 
           .sales-dealer__logos img {
-            height: 50px;
+            height: 60px;
+          }
+
+          .sales-dealer__dot {
+            display: none;
           }
         }
 
@@ -5515,80 +3271,97 @@ function Sales() {
           margin-bottom: 1rem;
         }
 
-        /* ===== SECTION 10: TRADE-IN ===== */
+        /* ===== SECTION 10: TRADE-IN & LEASEBACK ===== */
         .sales-tradein {
           background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-          padding: 5rem 2rem;
+          padding: 4rem 2rem;
         }
 
         .sales-tradein__inner {
-          max-width: 900px;
+          max-width: 1000px;
           margin: 0 auto;
         }
 
-        .sales-tradein__content {
-          text-align: center;
+        .sales-tradein__grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 2rem;
+        }
+
+        .sales-tradein__card {
+          background: rgba(255,255,255,0.05);
+          border: 1px solid rgba(255,255,255,0.1);
+          padding: 2rem;
           color: #fff;
         }
 
-        .sales-tradein__content .sales-pre-text {
+        .sales-tradein__card .sales-pre-text {
           color: rgba(255,255,255,0.5);
+          display: block;
+          margin-bottom: 0.5rem;
         }
 
-        .sales-tradein__content h2 {
-          font-size: clamp(2rem, 4vw, 3rem);
-          margin: 0.5rem 0 1.5rem;
+        .sales-tradein__card h3 {
+          font-size: 1.5rem;
+          margin: 0 0 1rem;
           text-transform: uppercase;
           font-weight: 700;
+          color: #fff;
         }
 
-        .sales-tradein__content p {
+        .sales-tradein__card p {
           color: rgba(255,255,255,0.7);
-          font-size: 1.1rem;
-          line-height: 1.8;
-          max-width: 600px;
-          margin: 0 auto 2rem;
+          font-size: 0.95rem;
+          line-height: 1.7;
+          margin: 0 0 1.5rem;
         }
 
-        .sales-tradein__steps {
+        .sales-tradein__features {
+          display: flex;
+          flex-direction: column;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .sales-tradein__feature {
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          color: rgba(255,255,255,0.9);
+          font-size: 0.85rem;
+        }
+
+        .sales-tradein__feature svg {
+          color: #4ade80;
+          flex-shrink: 0;
+        }
+
+        .sales-tradein__actions {
           display: flex;
           justify-content: center;
-          align-items: center;
           gap: 1rem;
-          margin-bottom: 2rem;
           flex-wrap: wrap;
         }
 
-        .sales-tradein__step {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          background: rgba(255,255,255,0.05);
-          padding: 0.75rem 1.25rem;
-          border-radius: 4px;
+        .sales-btn--outline-white {
+          background: transparent;
+          border: 1px solid rgba(255,255,255,0.4);
+          color: #fff;
         }
 
-        .sales-tradein__step-num {
-          width: 28px;
-          height: 28px;
-          background: #fff;
-          color: #1a1a1a;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 0.75rem;
-          font-weight: 700;
-          border-radius: 50%;
+        .sales-btn--outline-white:hover {
+          background: rgba(255,255,255,0.1);
+          border-color: rgba(255,255,255,0.6);
         }
 
-        .sales-tradein__step span:last-child {
-          font-size: 0.85rem;
-          font-weight: 500;
-        }
+        @media (max-width: 768px) {
+          .sales-tradein__grid {
+            grid-template-columns: 1fr;
+          }
 
-        .sales-tradein__step-arrow {
-          color: rgba(255,255,255,0.3);
-          font-size: 1.25rem;
+          .sales-tradein__card {
+            padding: 1.5rem;
+          }
         }
 
         /* ===== SECTION 11: COMPARISON ===== */
@@ -5817,11 +3590,55 @@ function Sales() {
           margin: 0 auto;
         }
 
-        .sales-gallery__grid {
-          display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          grid-template-rows: repeat(2, 200px);
+        .sales-gallery__wrapper {
+          display: flex;
+          align-items: center;
           gap: 1rem;
+        }
+
+        .sales-gallery__chevron {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 48px;
+          height: 48px;
+          border: 1px solid rgba(255,255,255,0.3);
+          border-radius: 50%;
+          background: transparent;
+          color: #fff;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+
+        .sales-gallery__chevron:hover {
+          background: #fff;
+          color: #1a1a1a;
+          border-color: #fff;
+        }
+
+        .sales-gallery__scroll {
+          display: flex;
+          gap: 1rem;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 0.5rem 0;
+          align-items: stretch;
+          height: 420px;
+        }
+
+        .sales-gallery__scroll::-webkit-scrollbar {
+          display: none;
+        }
+
+        .sales-gallery__stack {
+          display: flex;
+          flex-direction: column;
+          gap: 1rem;
+          flex-shrink: 0;
+          scroll-snap-align: start;
         }
 
         .sales-gallery__item {
@@ -5829,11 +3646,24 @@ function Sales() {
           overflow: hidden;
           border-radius: 6px;
           cursor: pointer;
+          flex-shrink: 0;
         }
 
-        .sales-gallery__item--large {
-          grid-column: span 2;
-          grid-row: span 2;
+        .sales-gallery__item--tall {
+          width: 280px;
+          height: 100%;
+          scroll-snap-align: start;
+        }
+
+        .sales-gallery__item--wide {
+          width: 400px;
+          height: 100%;
+          scroll-snap-align: start;
+        }
+
+        .sales-gallery__item--small {
+          width: 240px;
+          height: calc(50% - 0.5rem);
         }
 
         .sales-gallery__item img {
@@ -6302,71 +4132,147 @@ function Sales() {
 
         /* ===== SECTION 21: INSURANCE ===== */
         .sales-insurance {
-          padding: 6rem 2rem;
+          padding: 3rem 2rem;
           background: #faf9f6;
         }
 
         .sales-insurance__container {
-          max-width: 1000px;
+          max-width: 900px;
           margin: 0 auto;
         }
 
-        .sales-insurance__grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 1.5rem;
-          margin-bottom: 2rem;
-        }
-
-        .sales-insurance__card {
-          background: #fff;
-          padding: 2rem;
-          border: 1px solid #e8e6e2;
-          text-align: center;
-        }
-
-        .sales-insurance__icon {
-          width: 50px;
-          height: 50px;
-          background: #1a1a1a;
-          color: #fff;
+        .sales-insurance__compact {
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 1.25rem;
-          font-weight: 700;
-          margin: 0 auto 1.25rem;
+          gap: 2rem;
+          background: #fff;
+          padding: 1.5rem 2rem;
+          border: 1px solid #e8e6e2;
+          margin-top: 2rem;
         }
 
-        .sales-insurance__card h4 {
+        .sales-insurance__logo {
+          width: 120px;
+          height: auto;
+          flex-shrink: 0;
+        }
+
+        .sales-insurance__content {
+          flex: 1;
+        }
+
+        .sales-insurance__content h4 {
           font-size: 1rem;
           font-weight: 600;
-          margin: 0 0 0.5rem;
+          margin: 0 0 0.25rem;
         }
 
-        .sales-insurance__specialty {
-          display: block;
-          font-size: 0.7rem;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #888;
-          margin-bottom: 1rem;
-        }
-
-        .sales-insurance__card p {
+        .sales-insurance__content p {
           font-size: 0.85rem;
           color: #666;
-          line-height: 1.7;
+          line-height: 1.5;
           margin: 0;
         }
 
-        .sales-insurance__note {
-          text-align: center;
-          font-size: 0.85rem;
-          color: #888;
+        @media (max-width: 768px) {
+          .sales-insurance__compact {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+
+          .sales-insurance__logo {
+            width: 100px;
+          }
         }
 
-        /* ===== SECTION 22: FAQ ===== */
+        /* ===== SECTION 22: FINANCING & TAX ===== */
+        .sales-financetax {
+          padding: 6rem 2rem;
+          background: #fff;
+        }
+
+        .sales-financetax__container {
+          max-width: 1100px;
+          margin: 0 auto;
+        }
+
+        .sales-financetax__grid {
+          display: grid;
+          grid-template-columns: 1.5fr 1fr;
+          gap: 4rem;
+          align-items: center;
+        }
+
+        .sales-financetax__content h2 {
+          font-size: clamp(1.75rem, 3.5vw, 2.5rem);
+          margin: 0.5rem 0 2rem;
+          text-transform: uppercase;
+          font-weight: 700;
+        }
+
+        .sales-financetax__content h3 {
+          font-size: 1.25rem;
+          font-weight: 600;
+          margin: 2rem 0 1rem;
+          color: #1a1a1a;
+        }
+
+        .sales-financetax__content h3:first-of-type {
+          margin-top: 0;
+        }
+
+        .sales-financetax__content p {
+          color: #444;
+          line-height: 1.8;
+          margin-bottom: 1.5rem;
+        }
+
+        .sales-financetax__highlights {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+
+        .sales-financetax__highlight {
+          background: #faf9f6;
+          padding: 1.5rem 2rem;
+          border-left: 4px solid #1a1a1a;
+        }
+
+        .sales-financetax__highlight-num {
+          display: block;
+          font-size: 2rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 0.25rem;
+        }
+
+        .sales-financetax__highlight-label {
+          font-size: 0.8rem;
+          color: #666;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+
+        @media (max-width: 768px) {
+          .sales-financetax__grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+
+          .sales-financetax__highlights {
+            flex-direction: row;
+            flex-wrap: wrap;
+          }
+
+          .sales-financetax__highlight {
+            flex: 1;
+            min-width: 140px;
+          }
+        }
+
+        /* ===== SECTION 22: FAQ (legacy) ===== */
         .sales-faq {
           padding: 6rem 2rem;
           background: #fff;
@@ -7454,6 +5360,69 @@ function Sales() {
         .sales-video {
           padding: 6rem 2rem;
           background: #1a1a1a;
+        }
+
+        .sales-video--compact {
+          padding: 0.75rem 1.5rem;
+          background: #fff;
+        }
+
+        .sales-video--compact .sales-video__container {
+          max-width: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 0.5rem;
+        }
+
+        .sales-video--compact .sales-video__label {
+          font-size: 0.65rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #999;
+          margin: 0;
+          font-weight: 600;
+        }
+
+        .sales-video--compact .sales-video__grid {
+          display: flex;
+          gap: 0.75rem;
+        }
+
+        .sales-video--compact .sales-video__card {
+          width: 100px;
+        }
+
+        .sales-video--compact .sales-video__thumbnail {
+          aspect-ratio: 16/10;
+          margin-bottom: 0;
+          border-radius: 3px;
+        }
+
+        .sales-video--compact .sales-video__card h4 {
+          font-size: 0.55rem;
+          color: #666;
+          margin-top: 0.25rem;
+          text-align: center;
+          white-space: nowrap;
+        }
+
+        .sales-video--compact .sales-video__play {
+          width: 20px;
+          height: 20px;
+          font-size: 0.5rem;
+        }
+
+        .sales-video--compact .sales-video__duration {
+          font-size: 0.5rem;
+          padding: 0.15rem 0.3rem;
+        }
+
+        .sales-video--compact .sales-video__divider {
+          width: 100%;
+          max-width: 200px;
+          height: 1px;
+          background: linear-gradient(90deg, transparent, rgba(0,0,0,0.1), transparent);
         }
 
         .sales-video__container {
@@ -9559,13 +7528,25 @@ function Sales() {
             grid-template-columns: 1fr;
           }
 
-          .sales-gallery__grid {
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-rows: auto;
+          .sales-gallery__scroll {
+            height: 350px;
           }
 
-          .sales-gallery__item--large {
-            grid-column: span 2;
+          .sales-gallery__item--tall {
+            width: 220px;
+          }
+
+          .sales-gallery__item--wide {
+            width: 320px;
+          }
+
+          .sales-gallery__item--small {
+            width: 200px;
+          }
+
+          .sales-gallery__chevron {
+            width: 40px;
+            height: 40px;
           }
 
           .sales-safety__grid {
@@ -9628,12 +7609,24 @@ function Sales() {
             grid-template-columns: 1fr;
           }
 
-          .sales-gallery__grid {
-            grid-template-columns: 1fr;
+          .sales-gallery__scroll {
+            height: 300px;
           }
 
-          .sales-gallery__item--large {
-            grid-column: span 1;
+          .sales-gallery__item--tall {
+            width: 180px;
+          }
+
+          .sales-gallery__item--wide {
+            width: 260px;
+          }
+
+          .sales-gallery__item--small {
+            width: 160px;
+          }
+
+          .sales-gallery__chevron {
+            display: none;
           }
 
           .sales-safety__grid {
@@ -9668,708 +7661,6 @@ function Sales() {
           .sales-leaseback__benefits {
             flex-direction: column;
             gap: 1.5rem;
-          }
-        }
-
-        /* ============================================ */
-        /* SECTION PICKER STYLES */
-        /* ============================================ */
-
-        /* Section Favorite Container */
-        .sales-section-fav-container {
-          position: absolute;
-          top: 1rem;
-          right: 1rem;
-          z-index: 1000;
-        }
-
-        .sales-section-fav {
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.5rem 0.75rem;
-          background: rgba(255,255,255,0.95);
-          border: 2px solid #e5e5e5;
-          border-radius: 8px;
-          cursor: pointer;
-          font-family: 'Space Grotesk', sans-serif;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .sales-section-fav:hover {
-          border-color: #f59e0b;
-          transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-
-        .sales-section-fav.active {
-          background: #f59e0b;
-          border-color: #f59e0b;
-          color: #fff;
-        }
-
-        .sales-section-fav.has-note::after {
-          content: '📝';
-          position: absolute;
-          top: -6px;
-          right: -6px;
-          font-size: 10px;
-        }
-
-        .sales-section-fav__star {
-          font-size: 16px;
-        }
-
-        .sales-section-fav__id {
-          font-family: 'Share Tech Mono', monospace;
-          font-size: 10px;
-          opacity: 0.7;
-        }
-
-        /* Section Picker Panel */
-        .section-picker {
-          position: fixed;
-          bottom: 20px;
-          left: 20px;
-          width: 380px;
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-          z-index: 100000;
-          font-family: 'Space Grotesk', sans-serif;
-          transition: all 0.3s ease;
-        }
-
-        .section-picker.minimized {
-          transform: translateY(calc(100% - 44px));
-        }
-
-        .section-picker.minimized .section-picker__main {
-          visibility: hidden;
-          height: 0;
-          overflow: hidden;
-        }
-
-        /* Collapsed Bar */
-        .section-picker__collapsed {
-          display: none;
-          height: 44px;
-          background: #1a1a1a;
-          border-radius: 16px 16px 0 0;
-          padding: 0 16px;
-          align-items: center;
-          justify-content: space-between;
-          color: #fff;
-          cursor: pointer;
-        }
-
-        .section-picker.minimized .section-picker__collapsed {
-          display: flex;
-        }
-
-        .section-picker__collapsed-title {
-          font-weight: 600;
-          font-size: 13px;
-        }
-
-        .section-picker__collapsed-count {
-          background: #f59e0b;
-          padding: 2px 8px;
-          border-radius: 10px;
-          font-size: 11px;
-          font-weight: 600;
-        }
-
-        .section-picker__collapsed-btn {
-          width: 28px;
-          height: 28px;
-          border: none;
-          background: rgba(255,255,255,0.15);
-          color: #fff;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 14px;
-        }
-
-        /* Main Content */
-        .section-picker__main {
-          display: block;
-        }
-
-        .section-picker__header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 12px 16px;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .section-picker__title {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-        }
-
-        .section-picker__title h3 {
-          font-size: 14px;
-          font-weight: 700;
-          margin: 0;
-        }
-
-        .section-picker__badge {
-          background: #f0f0f0;
-          padding: 3px 8px;
-          border-radius: 10px;
-          font-size: 10px;
-          color: #666;
-        }
-
-        .section-picker__minimize {
-          width: 28px;
-          height: 28px;
-          border: 1px solid #e5e5e5;
-          background: #fff;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 16px;
-        }
-
-        /* Tabs */
-        .section-picker__tabs {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 4px;
-          padding: 10px;
-          background: #f8f8f8;
-          border-bottom: 1px solid #e5e5e5;
-          max-height: 100px;
-          overflow-y: auto;
-        }
-
-        .section-picker__tab {
-          padding: 5px 8px;
-          font-size: 10px;
-          font-weight: 500;
-          background: #fff;
-          border: 1px solid #e5e5e5;
-          border-radius: 5px;
-          cursor: pointer;
-          transition: all 0.15s;
-        }
-
-        .section-picker__tab:hover {
-          border-color: #333;
-        }
-
-        .section-picker__tab.active {
-          background: #1a1a1a;
-          color: #fff;
-          border-color: #1a1a1a;
-        }
-
-        .section-picker__tab--blue.active { background: #2196f3; border-color: #2196f3; }
-        .section-picker__tab--green.active { background: #4caf50; border-color: #4caf50; }
-        .section-picker__tab--purple.active { background: #9c27b0; border-color: #9c27b0; }
-        .section-picker__tab--orange.active { background: #ff9800; border-color: #ff9800; }
-
-        /* Filter Toggle */
-        .section-picker__filter {
-          padding: 10px 16px;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .section-picker__toggle {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          cursor: pointer;
-          font-size: 12px;
-        }
-
-        .section-picker__toggle input {
-          display: none;
-        }
-
-        .section-picker__toggle-slider {
-          width: 36px;
-          height: 20px;
-          background: #e5e5e5;
-          border-radius: 10px;
-          position: relative;
-          transition: background 0.2s;
-        }
-
-        .section-picker__toggle-slider::after {
-          content: '';
-          position: absolute;
-          top: 2px;
-          left: 2px;
-          width: 16px;
-          height: 16px;
-          background: #fff;
-          border-radius: 50%;
-          transition: transform 0.2s;
-        }
-
-        .section-picker__toggle input:checked + .section-picker__toggle-slider {
-          background: #f59e0b;
-        }
-
-        .section-picker__toggle input:checked + .section-picker__toggle-slider::after {
-          transform: translateX(16px);
-        }
-
-        /* Actions */
-        .section-picker__actions {
-          display: flex;
-          gap: 6px;
-          padding: 10px 16px;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .section-picker__btn {
-          flex: 1;
-          padding: 8px 10px;
-          font-size: 11px;
-          font-weight: 600;
-          background: #1a1a1a;
-          color: #fff;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-          transition: all 0.15s;
-        }
-
-        .section-picker__btn:hover {
-          opacity: 0.85;
-        }
-
-        .section-picker__btn--favs {
-          background: #444;
-        }
-
-        .section-picker__btn--favs.has-items {
-          background: #f59e0b;
-        }
-
-        .section-picker__btn--copy {
-          background: #6366f1;
-        }
-
-        .section-picker__btn--copy.success {
-          background: #22c55e;
-        }
-
-        .section-picker__btn--copy.error {
-          background: #ef4444;
-        }
-
-        /* Hints */
-        .section-picker__hints {
-          display: flex;
-          justify-content: space-between;
-          padding: 10px 16px;
-          font-size: 10px;
-          color: #999;
-          background: #f8f8f8;
-          border-radius: 0 0 16px 16px;
-        }
-
-        .section-picker__hints kbd {
-          background: #fff;
-          border: 1px solid #ddd;
-          border-radius: 3px;
-          padding: 1px 4px;
-          font-family: inherit;
-          font-size: 9px;
-        }
-
-        /* Grid Overlay */
-        .section-picker__grid-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.9);
-          z-index: 100002;
-          display: flex;
-          flex-direction: column;
-          animation: pickerFadeIn 0.2s ease;
-        }
-
-        @keyframes pickerFadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        .section-picker__grid-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 20px 30px;
-          background: #fff;
-        }
-
-        .section-picker__grid-header h2 {
-          margin: 0;
-          font-size: 20px;
-        }
-
-        .section-picker__grid-header button {
-          width: 40px;
-          height: 40px;
-          border: none;
-          background: #f5f5f5;
-          border-radius: 8px;
-          cursor: pointer;
-          font-size: 20px;
-        }
-
-        .section-picker__grid-tabs {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 6px;
-          padding: 15px 30px;
-          background: #fff;
-          border-bottom: 1px solid #e5e5e5;
-        }
-
-        .section-picker__grid-tab {
-          padding: 6px 12px;
-          font-size: 11px;
-          font-weight: 500;
-          background: #f0f0f0;
-          border: none;
-          border-radius: 20px;
-          cursor: pointer;
-        }
-
-        .section-picker__grid-tab.active {
-          background: #1a1a1a;
-          color: #fff;
-        }
-
-        .section-picker__grid-content {
-          flex: 1;
-          overflow-y: auto;
-          padding: 30px;
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 16px;
-          align-content: start;
-        }
-
-        .section-picker__grid-item {
-          background: #fff;
-          border-radius: 12px;
-          padding: 16px;
-          cursor: pointer;
-          transition: all 0.2s;
-        }
-
-        .section-picker__grid-item:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-
-        .section-picker__grid-item.is-favorite {
-          border: 2px solid #f59e0b;
-        }
-
-        .section-picker__grid-item-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 8px;
-        }
-
-        .section-picker__grid-item-category {
-          font-size: 10px;
-          text-transform: uppercase;
-          letter-spacing: 0.1em;
-          color: #666;
-          background: #f0f0f0;
-          padding: 3px 8px;
-          border-radius: 4px;
-        }
-
-        .section-picker__grid-item-star {
-          color: #f59e0b;
-          font-size: 16px;
-        }
-
-        .section-picker__grid-item h4 {
-          margin: 0 0 6px;
-          font-size: 14px;
-          font-weight: 600;
-        }
-
-        .section-picker__grid-item p {
-          margin: 0 0 10px;
-          font-size: 12px;
-          color: #666;
-          line-height: 1.4;
-        }
-
-        .section-picker__grid-item code {
-          display: block;
-          font-size: 10px;
-          color: #999;
-          font-family: 'Share Tech Mono', monospace;
-        }
-
-        /* Favorites Panel */
-        .section-picker__favs-panel {
-          position: fixed;
-          bottom: 300px;
-          left: 20px;
-          width: 360px;
-          max-height: 400px;
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.25);
-          z-index: 100003;
-          display: flex;
-          flex-direction: column;
-          animation: pickerSlideUp 0.2s ease;
-        }
-
-        @keyframes pickerSlideUp {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-
-        .section-picker__favs-header {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 14px 16px;
-          border-bottom: 1px solid #e5e5e5;
-          font-size: 14px;
-        }
-
-        .section-picker__favs-header button {
-          width: 26px;
-          height: 26px;
-          border: none;
-          background: #f5f5f5;
-          border-radius: 50%;
-          cursor: pointer;
-          font-size: 16px;
-        }
-
-        .section-picker__favs-list {
-          flex: 1;
-          overflow-y: auto;
-          max-height: 280px;
-        }
-
-        .section-picker__favs-item {
-          padding: 12px 16px;
-          border-bottom: 1px solid #f0f0f0;
-          cursor: pointer;
-          transition: background 0.15s;
-        }
-
-        .section-picker__favs-item:hover {
-          background: #f9f9f9;
-        }
-
-        .section-picker__favs-item-main {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 4px;
-        }
-
-        .section-picker__favs-item-name {
-          font-weight: 600;
-          font-size: 13px;
-        }
-
-        .section-picker__favs-item-id {
-          font-size: 10px;
-          color: #999;
-        }
-
-        .section-picker__favs-item-note {
-          font-size: 12px;
-          color: #666;
-          padding: 4px 8px;
-          background: #f5f5f5;
-          border-radius: 4px;
-          margin: 6px 0;
-        }
-
-        .section-picker__favs-item-note.empty {
-          color: #bbb;
-          font-style: italic;
-        }
-
-        .section-picker__favs-item-actions {
-          display: flex;
-          gap: 6px;
-          justify-content: flex-end;
-        }
-
-        .section-picker__favs-item-actions button {
-          width: 28px;
-          height: 28px;
-          border: 1px solid #e5e5e5;
-          background: #fff;
-          border-radius: 6px;
-          cursor: pointer;
-          font-size: 12px;
-          transition: all 0.15s;
-        }
-
-        .section-picker__favs-item-actions button:hover {
-          background: #f0f0f0;
-        }
-
-        .section-picker__favs-footer {
-          display: flex;
-          gap: 8px;
-          padding: 12px 16px;
-          border-top: 1px solid #e5e5e5;
-        }
-
-        .section-picker__favs-footer button {
-          flex: 1;
-          padding: 8px 12px;
-          border: none;
-          border-radius: 6px;
-          font-size: 12px;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        .section-picker__favs-footer button:first-child {
-          background: #6366f1;
-          color: #fff;
-        }
-
-        .section-picker__favs-footer button:last-child {
-          background: #f5f5f5;
-          color: #666;
-        }
-
-        /* Note Modal */
-        .section-picker__note-modal {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.5);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 100005;
-          animation: pickerFadeIn 0.15s ease;
-        }
-
-        .section-picker__note-content {
-          background: #fff;
-          border-radius: 16px;
-          padding: 24px;
-          width: 360px;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-          animation: pickerSlideUp 0.2s ease;
-        }
-
-        .section-picker__note-header {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-weight: 600;
-          font-size: 16px;
-          margin-bottom: 12px;
-        }
-
-        .section-picker__note-icon {
-          color: #f59e0b;
-          font-size: 20px;
-        }
-
-        .section-picker__note-name {
-          font-size: 14px;
-          font-weight: 500;
-          margin-bottom: 4px;
-        }
-
-        .section-picker__note-id {
-          display: block;
-          font-size: 11px;
-          color: #999;
-          margin-bottom: 16px;
-          padding: 6px 10px;
-          background: #f5f5f5;
-          border-radius: 6px;
-        }
-
-        .section-picker__note-input {
-          width: 100%;
-          padding: 12px 14px;
-          border: 2px solid #e5e5e5;
-          border-radius: 10px;
-          font-size: 13px;
-          font-family: inherit;
-          resize: none;
-          transition: border-color 0.15s;
-          box-sizing: border-box;
-        }
-
-        .section-picker__note-input:focus {
-          outline: none;
-          border-color: #f59e0b;
-        }
-
-        .section-picker__note-actions {
-          display: flex;
-          gap: 10px;
-          margin-top: 16px;
-        }
-
-        .section-picker__note-actions button {
-          flex: 1;
-          padding: 10px 16px;
-          border: none;
-          border-radius: 8px;
-          font-size: 13px;
-          font-weight: 600;
-          cursor: pointer;
-        }
-
-        .section-picker__note-actions button:first-child {
-          background: #f5f5f5;
-          color: #666;
-        }
-
-        .section-picker__note-save {
-          background: #f59e0b !important;
-          color: #fff !important;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-          .section-picker {
-            left: 10px;
-            right: 10px;
-            width: auto;
-          }
-
-          .section-picker__favs-panel {
-            left: 10px;
-            right: 10px;
-            width: auto;
-            bottom: 280px;
-          }
-
-          .sales-section-fav {
-            padding: 0.4rem 0.6rem;
-            font-size: 10px;
-          }
-
-          .sales-section-fav__id {
-            display: none;
           }
         }
       `}</style>

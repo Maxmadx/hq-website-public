@@ -62,11 +62,11 @@ export const Hero02_GlassCard = () => (
     <div className="hero-var__glass-orb hero-var__glass-orb--1"></div>
     <div className="hero-var__glass-orb hero-var__glass-orb--2"></div>
     <div className="hero-var__glass-card">
-      <span className="hero-var__glass-badge">Est. 1990</span>
+      <span className="hero-var__glass-badge">Est. 2010</span>
       <h1 className="hero-var__headline--glass">HQ Aviation</h1>
       <p className="hero-var__text--glass">Robinson Helicopter Specialists</p>
       <div className="hero-var__glass-stats">
-        <div><strong>35+</strong><span>Years</span></div>
+        <div><strong>15+</strong><span>Years</span></div>
         <div><strong>30+</strong><span>Fleet</span></div>
         <div><strong>1000+</strong><span>Pilots</span></div>
       </div>
@@ -141,7 +141,7 @@ export const Hero05_BentoGrid = () => (
         </div>
       </div>
       <div className="hero-var__bento-cell hero-var__bento-cell--stat">
-        <span className="hero-var__bento-number">35+</span>
+        <span className="hero-var__bento-number">15+</span>
         <span className="hero-var__bento-label">Years of Excellence</span>
       </div>
       <div className="hero-var__bento-cell hero-var__bento-cell--image">
@@ -193,7 +193,7 @@ export const Hero07_MinimalLuxury = () => (
     <div className="hero-var__minimal-container">
       <div className="hero-var__minimal-header">
         <span>HQ Aviation</span>
-        <span>Since 1990</span>
+        <span>Since 2010</span>
       </div>
       <h1 className="hero-var__headline--minimal">
         Elevate
@@ -300,7 +300,7 @@ export const Hero11_GradientMesh = () => (
       <h1 className="hero-var__headline--mesh">
         Elevate Your<br/>Journey
       </h1>
-      <p className="hero-var__mesh-subtitle">Robinson Helicopter Specialists Since 1990</p>
+      <p className="hero-var__mesh-subtitle">Robinson Helicopter Specialists Since 2010</p>
       <div className="hero-var__mesh-ctas">
         <Link to="/training" className="hero-var__btn--mesh-primary">Start Training</Link>
         <Link to="/aircraft-sales" className="hero-var__btn--mesh-secondary">View Fleet</Link>
@@ -323,7 +323,7 @@ export const Hero12_Brutalist = () => (
       <div className="hero-var__brutalist-info">
         <span>HQ AVIATION</span>
         <span>DENHAM UK</span>
-        <span>EST. 1990</span>
+        <span>EST. 2010</span>
       </div>
     </div>
     <div className="hero-var__brutalist-image">
@@ -377,7 +377,7 @@ export const Hero14_Duotone = () => (
       <h1 className="hero-var__headline--duotone">HQ Aviation</h1>
       <p className="hero-var__duotone-sub">The Robinson Specialists</p>
       <div className="hero-var__duotone-stats">
-        <div>35+ Years</div>
+        <div>15+ Years</div>
         <div>30+ Aircraft</div>
         <div>1000+ Pilots</div>
       </div>
@@ -398,7 +398,7 @@ export const Hero15_TextMask = () => (
     <div className="hero-var__mask-footer">
       <span>HQ Aviation</span>
       <span>Robinson Specialists</span>
-      <span>Since 1990</span>
+      <span>Since 2010</span>
     </div>
   </section>
 );
@@ -420,7 +420,7 @@ export const Hero16_FloatingCards = () => (
         <Link to="/contact">Contact Us →</Link>
       </div>
       <div className="hero-var__floating-card hero-var__floating-card--stat1">
-        <strong>35+</strong>
+        <strong>15+</strong>
         <span>Years</span>
       </div>
       <div className="hero-var__floating-card hero-var__floating-card--stat2">
@@ -498,7 +498,7 @@ export const Hero19_NoiseTexture = () => (
 export const Hero20_AsymmetricGrid = () => (
   <section className="hero-var hero-var--asymmetric">
     <div className="hero-var__asymmetric-left">
-      <span className="hero-var__asymmetric-tag">Est. 1990</span>
+      <span className="hero-var__asymmetric-tag">Est. 2010</span>
       <h1 className="hero-var__headline--asymmetric">
         The Robinson Specialists
       </h1>
@@ -537,7 +537,7 @@ export const Hero21_CounterAnimation = () => {
       const eased = 1 - Math.pow(1 - progress, 3);
 
       setCount({
-        years: Math.floor(35 * eased),
+        years: Math.floor(15 * eased),
         fleet: Math.floor(30 * eased),
         pilots: Math.floor(1000 * eased),
       });
@@ -910,7 +910,7 @@ export const Hero33_PerspectiveTilt = () => {
         style={{ transform: `perspective(1000px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
       >
         <div className="hero-var__perspective-shine" style={{ background: `radial-gradient(circle at ${50 + tilt.y * 2}% ${50 + tilt.x * 2}%, rgba(255,255,255,0.3), transparent 50%)` }}></div>
-        <span className="hero-var__perspective-badge">Est. 1990</span>
+        <span className="hero-var__perspective-badge">Est. 2010</span>
         <h1 className="hero-var__headline--perspective">HQ Aviation</h1>
         <p>The Robinson Specialists</p>
         <Link to="/contact" className="hero-var__btn--perspective">Get in Touch</Link>
@@ -999,7 +999,7 @@ export const Hero36_VintageFilm = () => (
         <span className="hero-var__vintage-corner hero-var__vintage-corner--tr"></span>
         <span className="hero-var__vintage-corner hero-var__vintage-corner--bl"></span>
         <span className="hero-var__vintage-corner hero-var__vintage-corner--br"></span>
-        <span className="hero-var__vintage-label">Since 1990</span>
+        <span className="hero-var__vintage-label">Since 2010</span>
         <h1 className="hero-var__headline--vintage">HQ Aviation</h1>
         <p className="hero-var__vintage-sub">A Legacy of Excellence</p>
       </div>
@@ -1021,7 +1021,7 @@ export const Hero37_Holographic = () => (
         <h1 className="hero-var__headline--holo">Aviation</h1>
         <p className="hero-var__holo-tagline">Robinson Helicopter Specialists</p>
         <div className="hero-var__holo-stats">
-          <div><strong>35+</strong><span>Years</span></div>
+          <div><strong>15+</strong><span>Years</span></div>
           <div><strong>30+</strong><span>Fleet</span></div>
           <div><strong>1000+</strong><span>Pilots</span></div>
         </div>
@@ -1050,7 +1050,7 @@ export const Hero38_ColorBlocks = () => (
         <Link to="/training">Start Training</Link>
       </div>
       <div className="hero-var__colorblock hero-var__colorblock--info">
-        <p>Robinson Helicopter Specialists since 1990</p>
+        <p>Robinson Helicopter Specialists since 2010</p>
       </div>
       <div className="hero-var__colorblock hero-var__colorblock--dark"></div>
     </div>
@@ -1068,7 +1068,7 @@ export const Hero39_LayeredPaper = () => (
       <div className="hero-var__paper-layer hero-var__paper-layer--2"></div>
       <div className="hero-var__paper-layer hero-var__paper-layer--1">
         <div className="hero-var__paper-content">
-          <div className="hero-var__paper-stamp">EST. 1990</div>
+          <div className="hero-var__paper-stamp">EST. 2010</div>
           <h1 className="hero-var__headline--paper">HQ Aviation</h1>
           <div className="hero-var__paper-divider"></div>
           <p className="hero-var__paper-tagline">The Robinson Specialists</p>
@@ -1200,7 +1200,7 @@ export const Hero43_MonoSans = () => (
         </div>
         <div className="hero-var__mono-info">
           <span>ESTABLISHED</span>
-          <span>1990</span>
+          <span>2010</span>
         </div>
         <Link to="/contact" className="hero-var__mono-cta">CONTACT →</Link>
       </div>
@@ -1271,7 +1271,7 @@ export const Hero46_RotatedGrid = () => (
     <div className="hero-var__rotated-overlay"></div>
     <div className="hero-var__rotated-content">
       <div className="hero-var__rotated-card">
-        <span className="hero-var__rotated-tag">Since 1990</span>
+        <span className="hero-var__rotated-tag">Since 2010</span>
         <h1 className="hero-var__headline--rotated">HQ Aviation</h1>
         <p>The Robinson Specialists</p>
         <Link to="/contact" className="hero-var__btn--rotated">Get Started</Link>
@@ -1292,7 +1292,7 @@ export const Hero47_FloatingElements = () => (
     <div className="hero-var__overlay hero-var__overlay--soft"></div>
     <div className="hero-var__floating-el hero-var__floating-el--1">Training</div>
     <div className="hero-var__floating-el hero-var__floating-el--2">Sales</div>
-    <div className="hero-var__floating-el hero-var__floating-el--3">35+ Years</div>
+    <div className="hero-var__floating-el hero-var__floating-el--3">15+ Years</div>
     <div className="hero-var__floating-el hero-var__floating-el--4">Denham</div>
     <div className="hero-var__floating-el hero-var__floating-el--5">Robinson</div>
     <div className="hero-var__floating-main">
@@ -1351,7 +1351,7 @@ export const Hero49_ParticleDots = () => (
       ))}
     </div>
     <div className="hero-var__particles-content">
-      <span className="hero-var__particles-tag">Est. 1990</span>
+      <span className="hero-var__particles-tag">Est. 2010</span>
       <h1 className="hero-var__headline--particles">HQ Aviation</h1>
       <p className="hero-var__particles-sub">Robinson Helicopter Specialists</p>
       <Link to="/training" className="hero-var__btn--particles">Start Training</Link>
@@ -1452,7 +1452,7 @@ export const Hero53_OutlineText = () => (
         <span className="hero-var__outline-stroke">HQ</span>
         <span className="hero-var__outline-fill">Aviation</span>
       </h1>
-      <p className="hero-var__outline-sub">Robinson Helicopter Specialists Since 1990</p>
+      <p className="hero-var__outline-sub">Robinson Helicopter Specialists Since 2010</p>
       <Link to="/contact" className="hero-var__btn--outline">Contact Us</Link>
     </div>
   </section>
@@ -1599,7 +1599,7 @@ export const Hero58_MagazineCover = () => (
         <h1>Helicopter Flight</h1>
       </div>
       <div className="hero-var__magazine-features">
-        <span>35+ Years of Excellence</span>
+        <span>15+ Years of Excellence</span>
         <span>Robinson Specialists</span>
         <span>World-Class Training</span>
       </div>
@@ -1684,7 +1684,7 @@ export const Hero60_LuxuryBrand = () => (
     <div className="hero-var__luxury-content">
       <div className="hero-var__luxury-crest">
         <span>EST.</span>
-        <span className="hero-var__luxury-year">1990</span>
+        <span className="hero-var__luxury-year">2010</span>
       </div>
       <h1 className="hero-var__headline--luxury">HQ Aviation</h1>
       <div className="hero-var__luxury-divider">
@@ -1744,7 +1744,7 @@ export const Hero61_ZenMinimal = () => (
     <div className="hero-var__zen-footer">
       <span>Denham Aerodrome</span>
       <span>•</span>
-      <span>Est. 1990</span>
+      <span>Est. 2010</span>
     </div>
   </section>
 );
@@ -1760,7 +1760,7 @@ export const Hero62_SwissPrecision = () => (
       <div className="hero-var__swiss-cell hero-var__swiss-cell--content">
         <div className="hero-var__swiss-header">
           <span className="hero-var__swiss-logo">HQ</span>
-          <span className="hero-var__swiss-year">1990</span>
+          <span className="hero-var__swiss-year">2010</span>
         </div>
         <h1 className="hero-var__headline--swiss">
           AVIATION
@@ -1984,7 +1984,7 @@ export const Hero65_OrganicBio = () => (
       <div className="hero-var__bio-features">
         <div className="hero-var__bio-feature">
           <span className="hero-var__bio-feature-icon">○</span>
-          <span>35+ Years of Excellence</span>
+          <span>15+ Years of Excellence</span>
         </div>
         <div className="hero-var__bio-feature">
           <span className="hero-var__bio-feature-icon">○</span>
@@ -2029,7 +2029,7 @@ export const Hero66_RefinedMono = () => (
     <div className="hero-var__refined-container">
       <div className="hero-var__refined-top">
         <span className="hero-var__refined-logo">HQ</span>
-        <span className="hero-var__refined-est">Est. 1990</span>
+        <span className="hero-var__refined-est">Est. 2010</span>
       </div>
 
       <div className="hero-var__refined-center">
@@ -2092,7 +2092,7 @@ export const Hero68_Luminous = () => (
     <div className="hero-var__luminous-orb hero-var__luminous-orb--2"></div>
 
     <div className="hero-var__luminous-content">
-      <div className="hero-var__luminous-badge">Since 1990</div>
+      <div className="hero-var__luminous-badge">Since 2010</div>
       <h1 className="hero-var__headline--luminous">
         Aspire<span className="hero-var__luminous-dot">.</span>
       </h1>
@@ -2107,7 +2107,7 @@ export const Hero68_Luminous = () => (
 
     <div className="hero-var__luminous-stats">
       <div className="hero-var__luminous-stat">
-        <span className="hero-var__luminous-stat-num">35+</span>
+        <span className="hero-var__luminous-stat-num">15+</span>
         <span className="hero-var__luminous-stat-label">Years</span>
       </div>
       <div className="hero-var__luminous-stat">
@@ -2146,7 +2146,7 @@ export const Hero69_Architectural = () => (
       <div className="hero-var__arch-info">
         <div className="hero-var__arch-info-item">
           <span className="hero-var__arch-info-label">Established</span>
-          <span className="hero-var__arch-info-value">1990</span>
+          <span className="hero-var__arch-info-value">2010</span>
         </div>
         <div className="hero-var__arch-info-item">
           <span className="hero-var__arch-info-label">Location</span>
@@ -2222,7 +2222,7 @@ export const Hero71_StatementSerif = () => (
       </h1>
 
       <div className="hero-var__statement-post">
-        <p>London's distinguished helicopter training academy, crafting exceptional pilots since 1990.</p>
+        <p>London's distinguished helicopter training academy, crafting exceptional pilots since 2010.</p>
         <Link to="/training" className="hero-var__btn--statement">
           Begin
         </Link>
@@ -2268,7 +2268,7 @@ export const Hero73_GoldenHour = () => (
     <div className="hero-var__golden-content">
       <div className="hero-var__golden-badge">
         <span>Est.</span>
-        <span className="hero-var__golden-badge-year">1990</span>
+        <span className="hero-var__golden-badge-year">2010</span>
       </div>
 
       <h1 className="hero-var__headline--golden">
@@ -2309,7 +2309,7 @@ export const Hero74_Whisper = () => (
       <div className="hero-var__whisper-footer">
         <div className="hero-var__whisper-info">
           <span>Robinson Specialists</span>
-          <span>Since 1990</span>
+          <span>Since 2010</span>
         </div>
         <Link to="/training" className="hero-var__btn--whisper">
           Learn More
@@ -2368,7 +2368,7 @@ export const Hero75_PrestigeDark = () => (
 
     <div className="hero-var__prestige-footer">
       <div className="hero-var__prestige-stat">
-        <span>35+</span>
+        <span>15+</span>
         <span>Years</span>
       </div>
       <div className="hero-var__prestige-stat">
@@ -2410,7 +2410,7 @@ export const Hero76_ArchDark = () => (
       </h1>
 
       <div className="hero-var__arch-dark-meta">
-        <div><span>Est.</span><strong>1990</strong></div>
+        <div><span>Est.</span><strong>2010</strong></div>
         <div><span>Fleet</span><strong>30+</strong></div>
         <div><span>Robinson</span><strong>Approved</strong></div>
       </div>
@@ -2570,7 +2570,7 @@ export const Hero80_ArchAsymmetric = () => (
       <div className="hero-var__asym-header">
         <span>HQ Aviation</span>
         <span>—</span>
-        <span>Since 1990</span>
+        <span>Since 2010</span>
       </div>
 
       <h1 className="hero-var__headline--asym">
@@ -2741,7 +2741,7 @@ export const Hero84_ArchInverted = () => (
         </div>
         <div className="hero-var__inv-info-item">
           <span>Founded</span>
-          <strong>1990</strong>
+          <strong>2010</strong>
         </div>
         <div className="hero-var__inv-info-item">
           <span>Specialty</span>
@@ -2889,7 +2889,7 @@ export const Hero87_ArchMonochrome = () => (
 
     <div className="hero-var__mono-footer">
       <span>51.5751°N</span>
-      <span>Since 1990</span>
+      <span>Since 2010</span>
       <span>0.5059°W</span>
     </div>
   </section>
@@ -2919,7 +2919,7 @@ export const Hero88_GalleryAesthetic = () => (
       <div className="hero-var__gallery-bottom">
         <div className="hero-var__gallery-caption">
           <span>The Robinson Specialists</span>
-          <span>Since 1990</span>
+          <span>Since 2010</span>
         </div>
 
         <Link to="/contact" className="hero-var__btn--gallery">
@@ -3031,7 +3031,7 @@ export const Hero90_EditorialGrid = () => (
       <div className="hero-var__eg-ticker-content">
         <span>Robinson Approved Service Centre</span>
         <span>•</span>
-        <span>35+ Years Experience</span>
+        <span>15+ Years Experience</span>
         <span>•</span>
         <span>PPL to ATPL Training</span>
         <span>•</span>
@@ -3078,7 +3078,7 @@ export const Hero91_NeoBrutalism = () => (
           <span className="hero-var__nb-strike">REDEFINED</span>
         </h1>
         <div className="hero-var__nb-meta">
-          <span>[EST.1990]</span>
+          <span>[EST.2010]</span>
           <span>[ROBINSON_SPECIALISTS]</span>
         </div>
       </div>
@@ -3184,7 +3184,7 @@ export const Hero93_HeritageStorytelling = () => (
 
     <header className="hero-var__heritage-header">
       <div className="hero-var__heritage-crest">
-        <span className="hero-var__heritage-crest-year">1990</span>
+        <span className="hero-var__heritage-crest-year">2010</span>
         <span className="hero-var__heritage-crest-name">HQ Aviation</span>
         <span className="hero-var__heritage-crest-motto">Excellence in Flight</span>
       </div>
@@ -3208,7 +3208,7 @@ export const Hero93_HeritageStorytelling = () => (
 
       <div className="hero-var__heritage-timeline">
         <div className="hero-var__heritage-year">
-          <span>1990</span>
+          <span>2010</span>
           <span>Founded</span>
         </div>
         <div className="hero-var__heritage-timeline-line"></div>

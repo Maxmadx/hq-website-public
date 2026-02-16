@@ -63,6 +63,7 @@ const defaultSiteStructure = [
     children: [
       { id: 'self-fly-hire', title: 'Self-Fly Hire', path: '/self-fly-hire', description: 'Rent our aircraft', completed: false, featured: true, children: [] },
       { id: 'maintenance', title: 'Maintenance', path: '/maintenance', description: 'CAA Part-145 approved workshop', completed: false, children: [] },
+      { id: 'fleet', title: 'Fleet', path: '/fleet', description: 'Our helicopter fleet', completed: false, children: [] },
     ],
   },
   {
@@ -73,7 +74,8 @@ const defaultSiteStructure = [
     description: 'New & pre-owned helicopters',
     completed: false,
     children: [
-      { id: 'sales-portal', title: 'Sales Portal', path: '/sales', description: 'Browse available aircraft', completed: false, children: [] },
+      { id: 'sales-new', title: 'New Aircraft', path: '/sales/new', description: 'Factory new Robinson helicopters', completed: false, children: [] },
+      { id: 'sales-used', title: 'Used Aircraft', path: '/sales/used', description: 'Pre-owned helicopters', completed: false, children: [] },
     ],
   },
   {
@@ -94,6 +96,15 @@ const defaultSiteStructure = [
     completed: false,
     children: [],
   },
+  {
+    id: 'sitemap',
+    title: 'Sitemap',
+    path: '/sitemap',
+    icon: '☰',
+    description: 'Site structure & progress tracker',
+    completed: false,
+    children: [],
+  },
 ];
 
 const defaultDevPages = [
@@ -109,10 +120,57 @@ const defaultDevPages = [
   { id: 'dev-ownership', title: 'Ownership Picker', path: '/ownership-picker', completed: false },
   { id: 'dev-ppl', title: 'PPL Picker', path: '/ppl-picker', completed: false },
   { id: 'dev-journey', title: 'Journey Lines Picker', path: '/journey-lines-picker', completed: false },
+  { id: 'dev-journey-picker', title: 'Journey Picker', path: '/journey-picker', completed: false },
+  { id: 'dev-video-slider', title: 'Video Slider Picker', path: '/video-slider-picker', completed: false },
 ];
 
-// Storage key
+// Storage keys
 const STORAGE_KEY = 'hq-aviation-sitemap-state';
+const IDB_NAME = 'hq-aviation-db';
+const IDB_STORE = 'sitemap-state';
+
+// IndexedDB helpers for persistent storage
+const openDB = () => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(IDB_NAME, 1);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(IDB_STORE)) {
+        db.createObjectStore(IDB_STORE, { keyPath: 'id' });
+      }
+    };
+  });
+};
+
+const saveToIDB = async (data) => {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(IDB_STORE, 'readwrite');
+    const store = tx.objectStore(IDB_STORE);
+    store.put({ id: 'state', ...data });
+    await tx.complete;
+  } catch (e) {
+    console.warn('IndexedDB save failed:', e);
+  }
+};
+
+const loadFromIDB = async () => {
+  try {
+    const db = await openDB();
+    const tx = db.transaction(IDB_STORE, 'readonly');
+    const store = tx.objectStore(IDB_STORE);
+    return new Promise((resolve, reject) => {
+      const request = store.get('state');
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+  } catch (e) {
+    console.warn('IndexedDB load failed:', e);
+    return null;
+  }
+};
 
 function SitemapHeader() {
   const [scrolled, setScrolled] = useState(false);
@@ -212,23 +270,47 @@ function Sitemap() {
   const [devPages, setDevPages] = useState(defaultDevPages);
   const [showDev, setShowDev] = useState(false);
 
-  // Load from localStorage
+  // Load from localStorage and IndexedDB
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const { pages: savedPages, devPages: savedDevPages } = JSON.parse(saved);
-        if (savedPages) setPages(savedPages);
-        if (savedDevPages) setDevPages(savedDevPages);
-      } catch (e) {
-        console.error('Failed to load sitemap state:', e);
+    const loadState = async () => {
+      // Try localStorage first
+      let loaded = false;
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const { pages: savedPages, devPages: savedDevPages } = JSON.parse(saved);
+          if (savedPages) setPages(savedPages);
+          if (savedDevPages) setDevPages(savedDevPages);
+          loaded = true;
+        } catch (e) {
+          console.error('Failed to load from localStorage:', e);
+        }
       }
-    }
+
+      // If localStorage failed, try IndexedDB
+      if (!loaded) {
+        try {
+          const idbData = await loadFromIDB();
+          if (idbData) {
+            if (idbData.pages) setPages(idbData.pages);
+            if (idbData.devPages) setDevPages(idbData.devPages);
+          }
+        } catch (e) {
+          console.error('Failed to load from IndexedDB:', e);
+        }
+      }
+    };
+
+    loadState();
   }, []);
 
-  // Save to localStorage
+  // Save to localStorage and IndexedDB
   useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ pages, devPages }));
+    const data = { pages, devPages };
+    // Save to localStorage
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    // Also save to IndexedDB for persistence
+    saveToIDB(data);
   }, [pages, devPages]);
 
   // Scroll to top
