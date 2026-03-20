@@ -10,13 +10,16 @@
 import { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 
-// Custom curved SVG path - a compact horizontal flight path
+// Custom curved SVG path - short flat → long peak up → dip down → exit up-right
 const FLIGHT_PATH = `
-  M 50 320
-  C 150 280, 300 200, 450 180
-  S 700 160, 900 200
-  C 1100 240, 1300 180, 1500 140
-  S 1650 120, 1750 160
+  M 0 300
+  C 100 300, 200 298, 350 290
+  C 500 275, 650 220, 750 170
+  C 830 130, 900 110, 1000 90
+  C 1100 80, 1150 90, 1200 100
+  C 1300 110, 1400 140, 1480 150
+  C 1560 155, 1640 130, 1750 90
+  C 1820 60, 1900 30, 2000 0
 `;
 
 // Viewbox dimensions matching the path
@@ -34,13 +37,14 @@ function ScrollPathAnimation({
 }) {
   const containerRef = useRef(null);
   const pathRef = useRef(null);
-  const [pathLength, setPathLength] = useState(0);
-  const [iconPosition, setIconPosition] = useState({ x: 50, y: 320, angle: -20 });
+  const iconRef = useRef(null);
+  const pathLengthRef = useRef(0);
 
   // Get scroll progress within the container
+  // "start 0.7" means progress starts when top of section reaches 70% down the viewport
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start 0.7", "end start"]
   });
 
   // Smooth spring for the path drawing
@@ -51,49 +55,49 @@ function ScrollPathAnimation({
   });
 
   // Transform scroll progress to path length (0 to 1)
-  // Slow start, speed up, slow in middle, gradual re-acceleration, complete at 85%
+  // Fast start, steady through middle, burst at the end
   const pathDrawLength = useTransform(
     smoothProgress,
-    [0, 0.15, 0.3, 0.45, 0.55, 0.62, 0.7, 0.78, 0.85],
-    [0, 0.05, 0.25, 0.45, 0.55, 0.65, 0.78, 0.92, 1]
+    [0, 0.08, 0.16, 0.24, 0.32, 0.40, 0.55, 0.65, 0.75],
+    [0, 0.12, 0.25, 0.40, 0.55, 0.68, 0.82, 0.90, 1]
   );
 
   // Get total path length on mount
   useEffect(() => {
     if (pathRef.current) {
-      setPathLength(pathRef.current.getTotalLength());
+      pathLengthRef.current = pathRef.current.getTotalLength();
     }
   }, []);
 
-  // Update icon position based on scroll progress
+  // Update icon position directly on the DOM (no setState lag)
   useEffect(() => {
     const unsubscribe = pathDrawLength.on('change', (progress) => {
-      if (pathRef.current && pathLength > 0) {
-        const clampedProgress = Math.max(0, Math.min(1, progress));
-        const currentLength = clampedProgress * pathLength;
+      if (!pathRef.current || !iconRef.current || pathLengthRef.current === 0) return;
 
-        // Get current point on path
-        const point = pathRef.current.getPointAtLength(currentLength);
+      const totalLen = pathLengthRef.current;
+      const clampedProgress = Math.max(0, Math.min(1, progress));
+      const currentLength = clampedProgress * totalLen;
 
-        // Get a point slightly ahead for angle calculation
-        const aheadLength = Math.min(currentLength + 20, pathLength);
-        const aheadPoint = pathRef.current.getPointAtLength(aheadLength);
+      // Get exact point at the drawn path tip
+      const point = pathRef.current.getPointAtLength(currentLength);
 
-        // Calculate angle of travel (tangent to the path)
-        const dx = aheadPoint.x - point.x;
-        const dy = aheadPoint.y - point.y;
-        const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      // Get a point slightly ahead for angle calculation
+      const aheadLength = Math.min(currentLength + 20, totalLen);
+      const aheadPoint = pathRef.current.getPointAtLength(aheadLength);
 
-        setIconPosition({
-          x: point.x,
-          y: point.y,
-          angle: angle
-        });
-      }
+      // Calculate angle of travel
+      const dx = aheadPoint.x - point.x;
+      const dy = aheadPoint.y - point.y;
+      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+      // Update DOM directly — no React render cycle, perfectly in sync with path
+      iconRef.current.setAttribute('x', point.x - 90);
+      iconRef.current.setAttribute('y', point.y - 110);
+      iconRef.current.setAttribute('transform', `rotate(${angle} ${point.x} ${point.y})`);
     });
 
     return () => unsubscribe();
-  }, [pathDrawLength, pathLength]);
+  }, [pathDrawLength]);
 
   return (
     <section
@@ -103,13 +107,13 @@ function ScrollPathAnimation({
       <div className="scroll-path-content">
         {/* Left Column - Headline */}
         <div className="scroll-path-col scroll-path-col--left">
-          <span className="scroll-path-label">Journey</span>
+          <span className="scroll-path-pretitle">CAA Approved Training Organisation</span>
           <h2 className="scroll-path-headline">
-            <span>Follow the</span>
-            <span>Flight Path</span>
+            <span>Explore Our</span>
+            <span>Courses</span>
           </h2>
           <p className="scroll-path-description">
-            From training to expeditions, every journey begins with a single flight.
+            From your first discovery flight to advanced commercial ratings, our experienced instructors guide you every step of the way.
           </p>
         </div>
       </div>
@@ -184,15 +188,16 @@ function ScrollPathAnimation({
           }}
         />
 
-        {/* Helicopter icon inside SVG */}
+        {/* Helicopter icon — positioned directly via ref for zero-lag sync with path */}
         <image
+          ref={iconRef}
           href={iconSrc}
-          width="150"
-          height="150"
-          x={iconPosition.x - 75}
-          y={iconPosition.y - 75}
-          transform={`rotate(${iconPosition.angle} ${iconPosition.x} ${iconPosition.y})`}
-          style={{ width: '150px', height: '150px' }}
+          width="200"
+          height="200"
+          x={-90}
+          y={-110}
+          transform="rotate(0 0 0)"
+          style={{ width: '200px', height: '200px' }}
         />
       </svg>
 
@@ -200,27 +205,29 @@ function ScrollPathAnimation({
       <div className="scroll-path-waypoints">
         <Waypoint
           progress={smoothProgress}
-          threshold={0.15}
+          threshold={0.02}
           label="Training"
-          position={{ x: 32, y: 35 }}
+          position={{ x: 5, y: 72 }}
         />
         <Waypoint
           progress={smoothProgress}
-          threshold={0.35}
+          threshold={0.06}
           label="Certification"
-          position={{ x: 52, y: 55 }}
+          position={{ x: 28, y: 58 }}
+          className="waypoint--certification"
         />
         <Waypoint
           progress={smoothProgress}
-          threshold={0.55}
+          threshold={0.12}
           label="Freedom"
-          position={{ x: 72, y: 40 }}
+          position={{ x: 68, y: 30 }}
         />
         <Waypoint
           progress={smoothProgress}
-          threshold={0.9}
+          threshold={0.25}
           label="Mastery"
-          position={{ x: 95, y: 35 }}
+          position={{ x: 88, y: 22 }}
+          className="waypoint--mastery"
         />
       </div>
 
@@ -234,6 +241,7 @@ function ScrollPathAnimation({
           width: 100vw;
           margin-left: calc(-50vw + 50%);
           margin-right: calc(-50vw + 50%);
+          padding-bottom: 4rem;
         }
 
         .scroll-path-content {
@@ -242,7 +250,7 @@ function ScrollPathAnimation({
           height: 35vh;
           display: flex;
           flex-direction: row;
-          justify-content: space-between;
+          justify-content: center;
           align-items: center;
           padding: 1.5rem;
           z-index: 10;
@@ -258,8 +266,8 @@ function ScrollPathAnimation({
         }
 
         .scroll-path-col--left {
-          align-items: flex-start;
-          text-align: left;
+          align-items: center;
+          text-align: center;
         }
 
         .scroll-path-col--middle {
@@ -281,9 +289,21 @@ function ScrollPathAnimation({
           font-weight: 600;
         }
 
+        .scroll-path-pretitle {
+          display: block;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #888;
+          margin-top: 5rem;
+          margin-bottom: 1rem;
+          text-align: center;
+        }
+
         .scroll-path-headline {
           display: flex;
           flex-direction: column;
+          align-items: center;
           margin: 0 0 1.5rem;
         }
 
@@ -454,6 +474,14 @@ function ScrollPathAnimation({
           box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
+        /* Hide certification waypoint on smaller screens */
+        @media (max-width: 1024px) {
+          .waypoint--certification,
+          .waypoint--mastery {
+            display: none !important;
+          }
+        }
+
         /* Tablet responsiveness */
         @media (max-width: 1024px) {
           .scroll-path-content {
@@ -502,7 +530,7 @@ function ScrollPathAnimation({
 }
 
 // Waypoint component for markers along the path
-function Waypoint({ progress, threshold, label, position }) {
+function Waypoint({ progress, threshold, label, position, className: extraClass = '' }) {
   const opacity = useTransform(
     progress,
     [threshold - 0.1, threshold, threshold + 0.1],
@@ -517,7 +545,7 @@ function Waypoint({ progress, threshold, label, position }) {
 
   return (
     <motion.div
-      className="waypoint"
+      className={`waypoint ${extraClass}`}
       style={{
         left: `${position.x}%`,
         top: `${position.y}%`,

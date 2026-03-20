@@ -432,9 +432,12 @@ function PhilosophySection() {
           <Reveal delay={0.2}>
             <p className="maint-philosophy__body">
               At HQ Aviation, maintenance isn't just a service—it's a commitment to excellence.
-              Our team has the highest quality standards and we have enough engineers to ensure
-              a rapid turnaround time as well as holding a certain amount of parts in inventory
-              to minimise AOG. Every inspection, every repair, every overhaul is performed with
+              Our team lives and breathes rotary-wing aviation, investing in the latest tooling,
+              training, and techniques to deliver premium maintenance standards. With bays to work
+              on up to 8 aircraft simultaneously and a large team of engineers, we minimise your
+              downtime so your aircraft spends more time in the air, not in the hangar. We also
+              hold a large inventory of parts in stock, reducing AOG time and getting you back
+              flying sooner. Every inspection, every repair, every overhaul is performed with
               the same meticulous attention to detail that has defined us since 2010.
             </p>
           </Reveal>
@@ -443,24 +446,24 @@ function PhilosophySection() {
             <div className="maint-philosophy__pillars">
               <div className="maint-philosophy__pillar">
                 <div className="maint-philosophy__pillar-icon">
-                  <i className="fas fa-shield-alt"></i>
+                  <i className="fas fa-search-plus"></i>
                 </div>
-                <h4>Safety First</h4>
-                <p>Uncompromising standards that exceed regulatory requirements</p>
+                <h4>Proactive Care</h4>
+                <p>Identifying potential issues before they become problems, saving you time and money</p>
               </div>
               <div className="maint-philosophy__pillar">
                 <div className="maint-philosophy__pillar-icon">
-                  <i className="fas fa-microscope"></i>
+                  <i className="fas fa-clock"></i>
                 </div>
-                <h4>Meticulous Detail</h4>
-                <p>Every component inspected, every system verified</p>
+                <h4>Rapid Turnaround</h4>
+                <p>Up to 8 bays and a large engineering team to get you back in the air fast</p>
               </div>
               <div className="maint-philosophy__pillar">
                 <div className="maint-philosophy__pillar-icon">
                   <i className="fas fa-handshake"></i>
                 </div>
-                <h4>Client Partnership</h4>
-                <p>Transparent communication throughout every service</p>
+                <h4>Trusted Partnership</h4>
+                <p>Building long-term relationships with owners who depend on our expertise</p>
               </div>
             </div>
           </Reveal>
@@ -983,7 +986,7 @@ function TeamProfiles() {
 
         <Reveal delay={0.5}>
           <div className="maint-team__cta">
-            <p>Our entire team is factory-trained and maintains continuous education certifications</p>
+            <p>A team that lives and breathes rotary-wing aviation — factory-trained, continuously developing, and always investing in the latest techniques</p>
           </div>
         </Reveal>
       </div>
@@ -999,7 +1002,7 @@ function FacilityShowcase() {
   const facilities = [
     { img: '/assets/images/facility/hq-0035.jpg', title: 'Main Hangar', desc: 'Climate controlled, 12,000 sq ft' },
     { img: '/assets/images/facility/hq-0089.jpg', title: 'Paint Shop', desc: 'Professional finishing facility' },
-    { img: '/assets/images/facility/busy-hangar.jpg', title: 'Service Bays', desc: 'Multiple aircraft capacity' },
+    { img: '/assets/images/facility/busy-hangar.jpg', title: 'Service Bays', desc: 'Up to 8 aircraft simultaneously' },
   ];
 
   return (
@@ -5051,8 +5054,8 @@ function FinalMaintenance() {
               <span className="maint-text--light">Services</span>
             </h2>
             <p className="maint-body" style={{ margin: '0 auto' }}>
-              Comprehensive maintenance solutions for Robinson and Guimbal helicopters,
-              delivered by factory-trained engineers using genuine parts.
+              Premium maintenance standards for Robinson and Guimbal helicopters,
+              delivered by a team that lives and breathes rotary-wing aviation using the latest tooling and genuine parts.
             </p>
           </Reveal>
         </div>

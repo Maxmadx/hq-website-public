@@ -1526,8 +1526,7 @@ function FinalExpeditions() {
       {/* ========== VIDEO SLIDER ========== */}
       <ExpeditionVideoSlider title="Expedition Footage" />
 
-      {/* ========== NEW: ITINERARY SAMPLE ========== */}
-      <ItinerarySection />
+      {/* ========== ITINERARY REMOVED ========== */}
 
       {/* ========== NEW: BOOKING STEPS ========== */}
       <BookingSteps />

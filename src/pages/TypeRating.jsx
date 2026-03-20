@@ -11,7 +11,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useInView, useScroll, useTransform } from 'framer-motion';
+import { motion, useInView, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 
 // Import styles for Header/Navigation
 import '../assets/css/main.css';
@@ -235,32 +235,94 @@ function AnimatedNumber({ value, suffix = '' }) {
   return <span ref={ref}>{count}{suffix}</span>;
 }
 
-// Aircraft card for fleet section
-function AircraftCard({ model, image, specs, isActive, onClick }) {
+// Aircraft card for fleet section - transforms into expanded view when selected
+function AircraftCard({ aircraft, isActive, onClick }) {
   return (
     <motion.div
       className={`tr-aircraft-card ${isActive ? 'tr-aircraft-card--active' : ''}`}
       onClick={onClick}
-      whileHover={{ y: -4 }}
-      transition={{ type: 'spring', stiffness: 400 }}
+      layout
+      transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="tr-aircraft-card__image">
-        <img src={image} alt={model} />
-        <div className="tr-aircraft-card__overlay">
-          <span className="tr-aircraft-card__select">Select Type</span>
-        </div>
-      </div>
-      <div className="tr-aircraft-card__content">
-        <h4 className="tr-aircraft-card__model">{model}</h4>
-        <div className="tr-aircraft-card__specs">
-          {specs.map((spec, i) => (
-            <div key={i} className="tr-aircraft-card__spec">
-              <span className="tr-aircraft-card__spec-value">{spec.value}</span>
-              <span className="tr-aircraft-card__spec-label">{spec.label}</span>
+      <AnimatePresence mode="wait">
+        {!isActive ? (
+          // Collapsed State
+          <motion.div
+            key="collapsed"
+            className="tr-aircraft-card__collapsed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="tr-aircraft-card__image">
+              <img src={aircraft.image} alt={aircraft.model} />
+              <div className="tr-aircraft-card__overlay">
+                <span className="tr-aircraft-card__select">Select Type</span>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
+            <div className="tr-aircraft-card__content">
+              <h4 className="tr-aircraft-card__model">{aircraft.model}</h4>
+              <div className="tr-aircraft-card__specs">
+                {aircraft.specs.map((spec, i) => (
+                  <div key={i} className="tr-aircraft-card__spec">
+                    <span className="tr-aircraft-card__spec-value">{spec.value}</span>
+                    <span className="tr-aircraft-card__spec-label">{spec.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        ) : (
+          // Expanded State
+          <motion.div
+            key="expanded"
+            className="tr-aircraft-card__expanded"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <div className="tr-aircraft-card__expanded-header">
+              <div className="tr-aircraft-card__expanded-title">
+                <h4>{aircraft.model} Type Rating</h4>
+                <button
+                  className="tr-aircraft-card__close"
+                  onClick={(e) => { e.stopPropagation(); onClick(); }}
+                >
+                  ✕
+                </button>
+              </div>
+              <span className="tr-aircraft-card__expanded-price">{aircraft.price}</span>
+            </div>
+
+            <p className="tr-aircraft-card__expanded-desc">{aircraft.description}</p>
+
+            <div className="tr-aircraft-card__expanded-specs">
+              <div className="tr-aircraft-card__expanded-spec">
+                <span className="tr-aircraft-card__expanded-value">{aircraft.groundHours}</span>
+                <span className="tr-aircraft-card__expanded-label">Ground Hours</span>
+              </div>
+              <div className="tr-aircraft-card__expanded-spec">
+                <span className="tr-aircraft-card__expanded-value">{aircraft.flightHours}</span>
+                <span className="tr-aircraft-card__expanded-label">Flight Hours</span>
+              </div>
+              <div className="tr-aircraft-card__expanded-spec">
+                <span className="tr-aircraft-card__expanded-value">1</span>
+                <span className="tr-aircraft-card__expanded-label">Skill Test</span>
+              </div>
+            </div>
+
+            <a
+              href={`/contact?subject=type-rating-${aircraft.model.toLowerCase().replace(' ', '-')}`}
+              className="tr-btn tr-btn--primary tr-btn--full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              Enquire Now
+            </a>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
@@ -547,55 +609,13 @@ function TypeRating() {
         <div className="tr-fleet__container">
           <div className="tr-fleet__grid">
             {fleet.map((aircraft, i) => (
-              <div key={i} className="tr-fleet__card-wrapper">
-                <Reveal delay={i * 0.1}>
-                  <AircraftCard
-                    model={aircraft.model}
-                    image={aircraft.image}
-                    specs={aircraft.specs}
-                    isActive={selectedAircraft === i}
-                    onClick={() => setSelectedAircraft(selectedAircraft === i ? null : i)}
-                  />
-                </Reveal>
-
-                {/* Dropdown Details */}
-                <AnimatePresence>
-                  {selectedAircraft === i && (
-                    <motion.div
-                      className="tr-fleet__dropdown"
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: 'auto' }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <div className="tr-fleet__dropdown-inner">
-                        <div className="tr-fleet__dropdown-header">
-                          <h4>{aircraft.model} Type Rating</h4>
-                          <span className="tr-fleet__dropdown-price">{aircraft.price}</span>
-                        </div>
-                        <p className="tr-fleet__dropdown-desc">{aircraft.description}</p>
-                        <div className="tr-fleet__dropdown-specs">
-                          <div className="tr-fleet__dropdown-spec">
-                            <span className="tr-fleet__dropdown-value">{aircraft.groundHours}</span>
-                            <span className="tr-fleet__dropdown-label">Ground Hours</span>
-                          </div>
-                          <div className="tr-fleet__dropdown-spec">
-                            <span className="tr-fleet__dropdown-value">{aircraft.flightHours}</span>
-                            <span className="tr-fleet__dropdown-label">Flight Hours</span>
-                          </div>
-                          <div className="tr-fleet__dropdown-spec">
-                            <span className="tr-fleet__dropdown-value">1</span>
-                            <span className="tr-fleet__dropdown-label">Skill Test</span>
-                          </div>
-                        </div>
-                        <a href={`/contact?subject=type-rating-${aircraft.model.toLowerCase().replace(' ', '-')}`} className="tr-btn tr-btn--primary tr-btn--small">
-                          Enquire Now
-                        </a>
-                      </div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <Reveal key={i} delay={i * 0.1}>
+                <AircraftCard
+                  aircraft={aircraft}
+                  isActive={selectedAircraft === i}
+                  onClick={() => setSelectedAircraft(selectedAircraft === i ? null : i)}
+                />
+              </Reveal>
             ))}
           </div>
         </div>
@@ -1129,14 +1149,14 @@ function TypeRating() {
           gap: 1.5rem;
         }
 
-        /* Aircraft Card */
+        /* Aircraft Card - Transforms when selected */
         .tr-aircraft-card {
           background: var(--hq-background, #faf9f6);
           border: 2px solid transparent;
           border-radius: 8px;
           overflow: hidden;
           cursor: pointer;
-          transition: all 0.3s ease;
+          transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .tr-aircraft-card:hover {
@@ -1144,7 +1164,15 @@ function TypeRating() {
         }
 
         .tr-aircraft-card--active {
+          background: #1a1a1a;
           border-color: #1a1a1a;
+          box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        /* Collapsed State */
+        .tr-aircraft-card__collapsed {
+          display: flex;
+          flex-direction: column;
         }
 
         .tr-aircraft-card__image {
@@ -1223,77 +1251,90 @@ function TypeRating() {
           letter-spacing: 0.1em;
         }
 
-        /* Fleet Card Wrapper */
-        .tr-fleet__card-wrapper {
-          display: flex;
-          flex-direction: column;
-        }
-
-        /* Fleet Dropdown */
-        .tr-fleet__dropdown {
-          overflow: hidden;
-        }
-
-        .tr-fleet__dropdown-inner {
-          background: #1a1a1a;
+        /* Expanded State */
+        .tr-aircraft-card__expanded {
           padding: 1.5rem;
-          margin-top: 0.5rem;
-          border-radius: 0 0 8px 8px;
         }
 
-        .tr-fleet__dropdown-header {
+        .tr-aircraft-card__expanded-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-          margin-bottom: 0.75rem;
+          align-items: flex-start;
+          margin-bottom: 1rem;
         }
 
-        .tr-fleet__dropdown-header h4 {
-          font-size: 1rem;
+        .tr-aircraft-card__expanded-title {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+
+        .tr-aircraft-card__expanded-title h4 {
+          font-size: 1.1rem;
           font-weight: 600;
           margin: 0;
           color: #fff;
           text-transform: uppercase;
         }
 
-        .tr-fleet__dropdown-price {
+        .tr-aircraft-card__close {
+          background: rgba(255,255,255,0.1);
+          border: none;
+          color: rgba(255,255,255,0.6);
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 0.8rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+        }
+
+        .tr-aircraft-card__close:hover {
+          background: rgba(255,255,255,0.2);
+          color: #fff;
+        }
+
+        .tr-aircraft-card__expanded-price {
           font-family: 'Share Tech Mono', monospace;
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           font-weight: 700;
           color: #fff;
         }
 
-        .tr-fleet__dropdown-desc {
-          font-size: 0.85rem;
+        .tr-aircraft-card__expanded-desc {
+          font-size: 0.9rem;
           color: rgba(255,255,255,0.7);
           line-height: 1.6;
-          margin: 0 0 1rem;
+          margin: 0 0 1.25rem;
         }
 
-        .tr-fleet__dropdown-specs {
+        .tr-aircraft-card__expanded-specs {
           display: flex;
-          gap: 1.5rem;
-          margin-bottom: 1rem;
-          padding: 1rem 0;
+          gap: 2rem;
+          margin-bottom: 1.5rem;
+          padding: 1.25rem 0;
           border-top: 1px solid rgba(255,255,255,0.15);
           border-bottom: 1px solid rgba(255,255,255,0.15);
         }
 
-        .tr-fleet__dropdown-spec {
+        .tr-aircraft-card__expanded-spec {
           text-align: center;
         }
 
-        .tr-fleet__dropdown-value {
+        .tr-aircraft-card__expanded-value {
           display: block;
           font-family: 'Share Tech Mono', monospace;
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           font-weight: 700;
           color: #fff;
           line-height: 1;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.35rem;
         }
 
-        .tr-fleet__dropdown-label {
+        .tr-aircraft-card__expanded-label {
           font-size: 0.6rem;
           color: rgba(255,255,255,0.5);
           text-transform: uppercase;

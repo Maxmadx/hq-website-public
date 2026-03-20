@@ -46,6 +46,12 @@ import AircraftH500 from './pages/AircraftH500';
 import AircraftR88 from './pages/AircraftR88';
 import HelicopterTourOfLondon from './pages/HelicopterTourOfLondon';
 import HQAccount from './pages/HQAccount';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import DiscoveryFlight from './pages/DiscoveryFlight';
+import Experimentation from './pages/Experimentation';
+import SFHTests from './pages/sfhtests/SFHTests';
+import AuthorisedServiceCenterCard from './pages/AuthorisedServiceCenterCard';
 
 // Import styles
 import './assets/css/main.css';
@@ -58,6 +64,9 @@ function App() {
         {/* Test Pages - Outside layout for full-screen testing */}
         <Route path="/hero-test" element={<HeroTest />} />
         <Route path="/final-draft" element={<FinalDraft />} />
+        <Route path="/experimentation" element={<Experimentation />} />
+        <Route path="/sfhtests" element={<SFHTests />} />
+        <Route path="/authorisedservicecentercard" element={<AuthorisedServiceCenterCard />} />
         <Route path="/scroll-path-test" element={<ScrollPathTest />} />
         <Route path="/carousel-picker" element={<CarouselPicker />} />
         <Route path="/carousel-picker-v2" element={<CarouselPickerV2 />} />
@@ -72,6 +81,7 @@ function App() {
         <Route path="/final-why-fly-a-helicopter" element={<FinalWhyFlyAHelicopter />} />
         <Route path="/type-rating" element={<TypeRating />} />
         <Route path="/training/type-rating" element={<TypeRating />} />
+        <Route path="/training/trial-lessons" element={<DiscoveryFlight />} />
         <Route path="/sales/new" element={<Sales />} />
         <Route path="/sales/used" element={<UsedSales />} />
         <Route path="/self-fly-hire" element={<SelfFlyHire />} />
@@ -117,6 +127,10 @@ function App() {
 
           {/* Contact */}
           <Route path="contact" element={<Contact />} />
+
+          {/* Blog Routes */}
+          <Route path="blog" element={<Blog />} />
+          <Route path="blog/:postId" element={<BlogPost />} />
         </Route>
       </Routes>
     </Router>

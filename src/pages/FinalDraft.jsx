@@ -478,6 +478,7 @@ function FinalDraft() {
   const [linesVisible, setLinesVisible] = useState(false);
   const [activeNavSection, setActiveNavSection] = useState(null);
   const [navCompact, setNavCompact] = useState(false);
+  const [navFixed, setNavFixed] = useState(false);
   const [scrollPromptHidden, setScrollPromptHidden] = useState(false);
   const [heroCollapsed, setHeroCollapsed] = useState(false);
   const [aboutLabelStatic, setAboutLabelStatic] = useState(false);
@@ -1028,6 +1029,7 @@ function FinalDraft() {
   const containerRef = useRef(null);
   const heroRef = useRef(null);
   const navRef = useRef(null);
+  const navSentinelRef = useRef(null);
   const aboutBtnRef = useRef(null);
   const aboutLabelRef = useRef(null);
   const videoLinesRef = useRef(null);
@@ -1062,7 +1064,7 @@ function FinalDraft() {
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Having achieved your PPL(H), you may wish to fly different types of helicopter. A type specific ground training course followed by a minimum of 5 Hrs of flight training will suffice to put you to the Type Rating test.',
       cta: 'Learn More',
-      link: '/training'
+      link: '/training/type-rating'
     },
     {
       title: 'Night Rating',
@@ -1279,26 +1281,25 @@ function FinalDraft() {
     };
   }, []);
 
-  // Intersection Observer to switch nav to compact mode
-  // Triggers when about button scrolls 500px OFF the top of the viewport
+  // Self-contained two-step sticky nav
+  // Step 1: Nav sticks below header (full nav visible with "Explore" header)
+  // Step 2: After scrolling 200px more, "Explore" slides behind header, only tabs remain
+  // Resilient to any DOM changes above the nav
   useEffect(() => {
-    if (!aboutBtnRef.current) {
-      console.log('ERROR: About button ref not found');
-      return;
-    }
+    if (!navSentinelRef.current) return;
+    const HEADER_HEIGHT = 49; // site header height when scrolled
+    const COMPACT_SCROLL_DISTANCE = 200; // px after sticking before going compact
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setNavCompact(!entry.isIntersecting);
-      },
-      {
-        rootMargin: '180px 0px 0px 0px', // Extend detection 180px ABOVE viewport
-        threshold: 0
-      }
-    );
+    const handleScroll = () => {
+      const sentinelTop = navSentinelRef.current.getBoundingClientRect().top;
+      const pastHeader = sentinelTop < HEADER_HEIGHT;
+      setNavFixed(pastHeader);
+      setNavCompact(pastHeader && sentinelTop < HEADER_HEIGHT - COMPACT_SCROLL_DISTANCE);
+    };
 
-    observer.observe(aboutBtnRef.current);
-    return () => observer.disconnect();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Scroll reveal effect - elements fade in when scrolling into view, reset when leaving
@@ -1493,8 +1494,169 @@ function FinalDraft() {
         </div>
       </section>
 
+      {/* ===== WHY FLY A HELICOPTER ===== */}
+      <div className="fd-why-fly-dropdown">
+        {!whyFlyOpen && (
+        <button
+          ref={whyFlyTriggerRef}
+          className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--filmstrip-v19`}
+          onClick={() => setWhyFlyOpen(true)}
+        >
+          <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--left">
+            {[
+              '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
+              '/assets/images/expeditions/north-pole.jpg',
+              '/assets/images/facility/hq-0089.jpg',
+              '/assets/images/expeditions/antartica.jpg',
+              '/assets/images/expeditions/channel.jpg',
+              '/assets/images/facility/hq-0035.jpg',
+              '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
+              '/assets/images/facility/busy-hangar.jpg'
+            ].slice(0, visibleImages).map((src, idx) => (
+              <div
+                key={idx}
+                className="fd-why-fly-dropdown__thumb"
+                style={{ backgroundImage: `url(${src})` }}
+              />
+            ))}
+          </div>
+          <div className="fd-why-fly-dropdown__trigger-center">
+            <span className="fd-why-fly-dropdown__title">
+              Why We Fly Helicopters?
+            </span>
+            <div className="fd-why-fly-dropdown__click-hint">
+              <span className="fd-why-fly-dropdown__click-text">click here</span>
+              <span className="fd-why-fly-dropdown__pulse-dot"></span>
+            </div>
+          </div>
+          <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--right">
+            {[
+              '/assets/images/facility/hq-0035.jpg',
+              '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
+              '/assets/images/gallery/carousel/rotating-4.jpg',
+              '/assets/images/facility/hq-0053.jpg',
+              '/assets/images/facility/hq-0007.jpg',
+              '/assets/images/facility/hq-0129.jpg',
+              '/assets/images/facility/hq-0075.jpg',
+              '/assets/images/lifestyle/q-dubai.jpg'
+            ].slice(0, visibleImages).map((src, idx) => (
+              <div
+                key={idx}
+                className="fd-why-fly-dropdown__thumb"
+                style={{ backgroundImage: `url(${src})` }}
+              />
+            ))}
+          </div>
+        </button>
+        )}
+
+        {whyFlyOpen && (
+          <div className="fd-why-fly-dropdown__card">
+            <button className="fd-why-fly-dropdown__close" onClick={() => setWhyFlyOpen(false)} aria-label="Close">
+              ✕
+            </button>
+            <div className="fd-why-fly-dropdown__body">
+              <div className="fd-why-fly-dropdown__text">
+                <h3>
+                  <span style={{ color: '#1a1a1a' }}>
+                    {['Join', 'Save', 'Land', 'Gain', 'Create', 'Experience', 'Access', 'Achieve', 'Build', 'Break', 'Protect', 'Fly', 'Explore', 'Build'][whyFlySlide]}
+                  </span>{' '}
+                  <span style={{ color: '#5a5a5a' }}>
+                    {['a Community', 'Precious Time', 'Anywhere', 'Business Edge', 'Family Memories', 'True Freedom', 'VIP Moments', 'Your Dreams', 'Your Network', 'Free from Traffic', 'Your Investment', 'All Year', 'The World', 'Your Legacy'][whyFlySlide]}
+                  </span>
+                </h3>
+                <p>
+                  {[
+                    'A community of adventurers, business people, positive and successful people who share your passion for aviation.',
+                    'What takes hours by car takes minutes by helicopter. Reclaim your most valuable asset - time.',
+                    'No runways needed. Land at private estates, yachts, remote locations, and city centres.',
+                    'Arrive fresh, prepared, and on time. Make multiple meetings across the country in a single day.',
+                    'Create unforgettable experiences with loved ones. Weekend trips become extraordinary adventures.',
+                    'Go where you want, when you want. The ultimate expression of personal freedom and independence.',
+                    'Private helipads at exclusive venues, VIP access to events, and experiences unavailable to others.',
+                    'Join an elite group who have mastered one of aviation\'s most challenging and rewarding skills.',
+                    'Connect with fellow pilots, business leaders, and adventurers at exclusive flying events.',
+                    'Rise above congestion and constraints. Your journey becomes part of the adventure.',
+                    'Helicopters hold value well. A quality aircraft is both a lifestyle asset and sound investment.',
+                    'Unlike fixed-wing, helicopters operate from almost anywhere in nearly any weather conditions.',
+                    'From Alpine peaks to Mediterranean coasts, the helicopter opens a world of expedition possibilities.',
+                    'Pass on the gift of flight. Many pilots share this passion across generations.'
+                  ][whyFlySlide]}
+                </p>
+              </div>
+              <div className="fd-why-fly-dropdown__image">
+                {[
+                  '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
+                  '/assets/images/facility/hq-0035.jpg',
+                  '/assets/images/expeditions/channel.jpg',
+                  '/assets/images/facility/hq-0089.jpg',
+                  '/assets/images/expeditions/north-pole.jpg',
+                  '/assets/images/expeditions/antartica.jpg',
+                  '/assets/images/facility/busy-hangar.jpg',
+                  '/assets/images/facility/hq-0053.jpg',
+                  '/assets/images/facility/hq-0075.jpg',
+                  '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
+                  '/assets/images/facility/hq-0129.jpg',
+                  '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
+                  '/assets/images/facility/hq-0167.jpg',
+                  '/assets/images/facility/hq-0209.jpg'
+                ].map((src, idx) => (
+                  <div
+                    key={idx}
+                    className={`fd-why-fly-dropdown__image-slide ${idx === whyFlySlide ? 'active' : ''}`}
+                    style={{ backgroundImage: `url(${src})` }}
+                  />
+                ))}
+                <div className="fd-why-fly-dropdown__image-label">Lifestyle</div>
+              </div>
+            </div>
+
+            <div className="fd-why-fly-dropdown__footer">
+              <div className="fd-why-fly-dropdown__footer-left">
+                <div className="fd-why-fly-dropdown__dots">
+                  {Array.from({ length: 14 }).map((_, idx) => (
+                    <div
+                      key={idx}
+                      className={`fd-why-fly-dropdown__dot ${idx === whyFlySlide ? 'active' : ''}`}
+                      onClick={() => setWhyFlySlide(idx)}
+                    />
+                  ))}
+                </div>
+                <div className="fd-why-fly-dropdown__counter">
+                  {String(whyFlySlide + 1).padStart(2, '0')} / 14
+                </div>
+              </div>
+              <div className="fd-why-fly-dropdown__arrows">
+                <button
+                  className="fd-why-fly-dropdown__arrow"
+                  onClick={() => setWhyFlySlide(prev => prev === 0 ? 13 : prev - 1)}
+                  aria-label="Previous benefit"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M15 18l-6-6 6-6" />
+                  </svg>
+                </button>
+                <button
+                  className="fd-why-fly-dropdown__arrow"
+                  onClick={() => setWhyFlySlide(prev => prev === 13 ? 0 : prev + 1)}
+                  aria-label="Next benefit"
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Sentinel for JS-based sticky nav */}
+      <div ref={navSentinelRef} style={{ height: 0, margin: 0, padding: 0 }} />
+      {navFixed && <div style={{ height: navRef.current ? navRef.current.offsetHeight : 0 }} />}
+
       {/* ===== HORIZONTAL ACCORDION NAVIGATION ===== */}
-      <nav className={`fd-nav ${navCompact ? 'fd-nav--compact' : ''}`} ref={navRef}>
+      <nav className={`fd-nav ${navCompact ? 'fd-nav--compact' : ''} ${navFixed ? 'fd-nav--fixed' : ''}`} ref={navRef}>
         <div className="fd-nav__header">
           <span className="fd-nav__line"></span>
           <span>Explore</span>
@@ -1553,163 +1715,6 @@ function FinalDraft() {
               colorMid="#5B9BD5"
               colorEnd="#1E3A5F"
             />
-          </div>
-
-          {/* ===== WHY FLY A HELICOPTER DROPDOWN ===== */}
-          <div className="fd-why-fly-dropdown">
-            <button
-              ref={whyFlyTriggerRef}
-              className={`fd-why-fly-dropdown__trigger fd-why-fly-dropdown__trigger--filmstrip-v19 ${whyFlyOpen ? 'open' : ''}`}
-              onClick={() => setWhyFlyOpen(!whyFlyOpen)}
-            >
-              {/* Left Images */}
-              <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--left">
-                {[
-                  '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
-                  '/assets/images/expeditions/north-pole.jpg',
-                  '/assets/images/facility/hq-0089.jpg',
-                  '/assets/images/expeditions/antartica.jpg',
-                  '/assets/images/expeditions/channel.jpg',
-                  '/assets/images/facility/hq-0035.jpg',
-                  '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
-                  '/assets/images/facility/busy-hangar.jpg'
-                ].slice(0, visibleImages).map((src, idx) => (
-                  <div
-                    key={idx}
-                    className="fd-why-fly-dropdown__thumb"
-                    style={{ backgroundImage: `url(${src})` }}
-                  />
-                ))}
-              </div>
-
-              {/* Center Content */}
-              <div className="fd-why-fly-dropdown__trigger-center">
-                <span className="fd-why-fly-dropdown__title">
-                  Why We Fly Helicopters?
-                </span>
-                <div className="fd-why-fly-dropdown__click-hint">
-                  <span className="fd-why-fly-dropdown__click-text">click here</span>
-                  <span className="fd-why-fly-dropdown__pulse-dot"></span>
-                </div>
-              </div>
-
-              {/* Right Images */}
-              <div className="fd-why-fly-dropdown__trigger-thumbs fd-why-fly-dropdown__trigger-thumbs--right">
-                {[
-                  '/assets/images/facility/hq-0035.jpg',
-                  '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-                  '/assets/images/gallery/carousel/rotating-4.jpg',
-                  '/assets/images/facility/hq-0053.jpg',
-                  '/assets/images/facility/hq-0007.jpg',
-                  '/assets/images/facility/hq-0129.jpg',
-                  '/assets/images/facility/hq-0075.jpg',
-                  '/assets/images/lifestyle/q-dubai.jpg'
-                ].slice(0, visibleImages).map((src, idx) => (
-                  <div
-                    key={idx}
-                    className="fd-why-fly-dropdown__thumb"
-                    style={{ backgroundImage: `url(${src})` }}
-                  />
-                ))}
-              </div>
-            </button>
-
-            <div className={`fd-why-fly-dropdown__content ${whyFlyOpen ? 'open' : ''}`}>
-              <div className="fd-why-fly-dropdown__card">
-                <div className="fd-why-fly-dropdown__body">
-                  <div className="fd-why-fly-dropdown__text">
-                    <h3>
-                      <span style={{ color: '#1a1a1a' }}>
-                        {['Join', 'Save', 'Land', 'Gain', 'Create', 'Experience', 'Access', 'Achieve', 'Build', 'Break', 'Protect', 'Fly', 'Explore', 'Build'][whyFlySlide]}
-                      </span>{' '}
-                      <span style={{ color: '#5a5a5a' }}>
-                        {['a Community', 'Precious Time', 'Anywhere', 'Business Edge', 'Family Memories', 'True Freedom', 'VIP Moments', 'Your Dreams', 'Your Network', 'Free from Traffic', 'Your Investment', 'All Year', 'The World', 'Your Legacy'][whyFlySlide]}
-                      </span>
-                    </h3>
-                    <p>
-                      {[
-                        'A community of adventurers, business people, positive and successful people who share your passion for aviation.',
-                        'What takes hours by car takes minutes by helicopter. Reclaim your most valuable asset - time.',
-                        'No runways needed. Land at private estates, yachts, remote locations, and city centres.',
-                        'Arrive fresh, prepared, and on time. Make multiple meetings across the country in a single day.',
-                        'Create unforgettable experiences with loved ones. Weekend trips become extraordinary adventures.',
-                        'Go where you want, when you want. The ultimate expression of personal freedom and independence.',
-                        'Private helipads at exclusive venues, VIP access to events, and experiences unavailable to others.',
-                        'Join an elite group who have mastered one of aviation\'s most challenging and rewarding skills.',
-                        'Connect with fellow pilots, business leaders, and adventurers at exclusive flying events.',
-                        'Rise above congestion and constraints. Your journey becomes part of the adventure.',
-                        'Helicopters hold value well. A quality aircraft is both a lifestyle asset and sound investment.',
-                        'Unlike fixed-wing, helicopters operate from almost anywhere in nearly any weather conditions.',
-                        'From Alpine peaks to Mediterranean coasts, the helicopter opens a world of expedition possibilities.',
-                        'Pass on the gift of flight. Many pilots share this passion across generations.'
-                      ][whyFlySlide]}
-                    </p>
-                  </div>
-                  <div className="fd-why-fly-dropdown__image">
-                    {[
-                      '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
-                      '/assets/images/facility/hq-0035.jpg',
-                      '/assets/images/expeditions/channel.jpg',
-                      '/assets/images/facility/hq-0089.jpg',
-                      '/assets/images/expeditions/north-pole.jpg',
-                      '/assets/images/expeditions/antartica.jpg',
-                      '/assets/images/facility/busy-hangar.jpg',
-                      '/assets/images/facility/hq-0053.jpg',
-                      '/assets/images/facility/hq-0075.jpg',
-                      '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-                      '/assets/images/facility/hq-0129.jpg',
-                      '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
-                      '/assets/images/facility/hq-0167.jpg',
-                      '/assets/images/facility/hq-0209.jpg'
-                    ].map((src, idx) => (
-                      <div
-                        key={idx}
-                        className={`fd-why-fly-dropdown__image-slide ${idx === whyFlySlide ? 'active' : ''}`}
-                        style={{ backgroundImage: `url(${src})` }}
-                      />
-                    ))}
-                    <div className="fd-why-fly-dropdown__image-label">Lifestyle</div>
-                  </div>
-                </div>
-
-                <div className="fd-why-fly-dropdown__footer">
-                  <div className="fd-why-fly-dropdown__footer-left">
-                    <div className="fd-why-fly-dropdown__dots">
-                      {Array.from({ length: 14 }).map((_, idx) => (
-                        <div
-                          key={idx}
-                          className={`fd-why-fly-dropdown__dot ${idx === whyFlySlide ? 'active' : ''}`}
-                          onClick={() => setWhyFlySlide(idx)}
-                        />
-                      ))}
-                    </div>
-                    <div className="fd-why-fly-dropdown__counter">
-                      {String(whyFlySlide + 1).padStart(2, '0')} / 14
-                    </div>
-                  </div>
-                  <div className="fd-why-fly-dropdown__arrows">
-                    <button
-                      className="fd-why-fly-dropdown__arrow"
-                      onClick={() => setWhyFlySlide(prev => prev === 0 ? 13 : prev - 1)}
-                      aria-label="Previous benefit"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <path d="M15 18l-6-6 6-6" />
-                      </svg>
-                    </button>
-                    <button
-                      className="fd-why-fly-dropdown__arrow"
-                      onClick={() => setWhyFlySlide(prev => prev === 13 ? 0 : prev + 1)}
-                      aria-label="Next benefit"
-                    >
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                        <path d="M9 18l6-6-6-6" />
-                      </svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
           </div>
 
           {/* ===== TRAINING CAROUSEL ===== */}
@@ -3091,8 +3096,7 @@ function FinalDraft() {
 
         /* ===== HORIZONTAL ACCORDION NAV ===== */
         .fd-nav {
-          position: sticky;
-          top: 49px;
+          position: relative;
           z-index: 100;
           background: #fff;
           border-top: 1px solid #e8e6e2;
@@ -3101,7 +3105,14 @@ function FinalDraft() {
           transition: top 0.3s ease;
         }
 
-        .fd-nav--compact {
+        .fd-nav--fixed {
+          position: fixed;
+          top: 49px;
+          left: 0;
+          right: 0;
+        }
+
+        .fd-nav--fixed.fd-nav--compact {
           top: 20px;
         }
 
@@ -4258,6 +4269,23 @@ function FinalDraft() {
         .fd-why-fly-dropdown__card {
           background: #faf9f6;
           box-shadow: 0 4px 40px rgba(0, 0, 0, 0.06);
+          position: relative;
+        }
+        .fd-why-fly-dropdown__close {
+          position: absolute;
+          top: 12px;
+          right: 12px;
+          background: none;
+          border: none;
+          font-size: 18px;
+          color: #999;
+          cursor: pointer;
+          z-index: 2;
+          padding: 4px 8px;
+          line-height: 1;
+        }
+        .fd-why-fly-dropdown__close:hover {
+          color: #333;
         }
 
         .fd-why-fly-dropdown__header {
