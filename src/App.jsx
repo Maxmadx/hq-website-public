@@ -152,8 +152,9 @@ function App() {
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:postId" element={<BlogPost />} />
 
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
+        <Route path="/" element={<Experimentation />} />
+        <Route element={<Layout />}>
+          <Route path="/home" element={<Home />} />
 
           {/* About Us Routes */}
           <Route path="about-us" element={<AboutUs />} />
