@@ -1114,6 +1114,7 @@ function AircraftR22() {
 
         .r22-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .r22-btn--outline {

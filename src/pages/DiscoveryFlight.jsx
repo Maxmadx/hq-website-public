@@ -482,6 +482,12 @@ function ValueProposition() {
               of our expert instructors, you will take the controls and discover the unmatched freedom of piloting
               a helicopter yourself.
             </p>
+            <p className="df-value__intro">
+              Experience the thrill of controlling a helicopter, even if you don't plan on pursuing a full license immediately. Your perspective will shift the moment you take flight.
+            </p>
+            <p className="df-value__intro">
+              If you appreciate mechanical mastery, the helicopter offers total freedom in three dimensions and is unlike anything else you can experience. We enjoyed it so much that our mission is to share this unique sensation with anyone inclined to try.
+            </p>
           </Reveal>
         </div>
 
@@ -833,7 +839,7 @@ function DiscoveryTestimonials() {
             <span className="df-pre-text df-pre-text--light">Reviews</span>
             <h2>
               <span className="df-text--white">What Our</span>{' '}
-              <span className="df-text--mid-inv">Guests Say</span>
+              <span className="df-text--mid-inv">Pilots Say</span>
             </h2>
           </div>
         </Reveal>
@@ -1130,6 +1136,7 @@ function DiscoveryFlight() {
 
         .df-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .df-btn--outline {

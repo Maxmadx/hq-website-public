@@ -90,7 +90,7 @@ function H500Header() {
               <li><Link to="/aircraft/r44" onClick={closeMenu}>R44</Link></li>
               <li><Link to="/aircraft/r22" onClick={closeMenu}>R22</Link></li>
               <li><Link to="/aircraft/h500" onClick={closeMenu}>Hughes 500</Link></li>
-              <li><Link to="/sales/used" onClick={closeMenu}>Used Aircraft</Link></li>
+              <li><Link to="/sales/pre-owned" onClick={closeMenu}>Pre-Owned Aircraft</Link></li>
             </ul>
           </div>
           <div className="hq-menu-section">
@@ -1145,6 +1145,7 @@ const H500Styles = () => (
 
     .h500-btn--primary:hover {
       background: #333;
+      color: #fff;
       transform: translateY(-2px);
     }
 

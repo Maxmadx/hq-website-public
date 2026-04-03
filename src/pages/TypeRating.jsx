@@ -349,7 +349,7 @@ function TypeRating() {
   const fleet = [
     {
       model: 'Robinson R22',
-      image: '/assets/images/fleet/r22-beta-ii.jpg',
+      image: '/assets/images/fleet/r22-g-ulze.png',
       specs: [
         { value: '2', label: 'Seats' },
         { value: '102', label: 'Knots' },
@@ -362,7 +362,7 @@ function TypeRating() {
     },
     {
       model: 'Robinson R44',
-      image: '/assets/images/fleet/r44-raven-ii.jpg',
+      image: '/assets/images/fleet/r44-g-mxpi.png',
       specs: [
         { value: '4', label: 'Seats' },
         { value: '130', label: 'Knots' },
@@ -375,7 +375,7 @@ function TypeRating() {
     },
     {
       model: 'Robinson R66',
-      image: '/assets/images/fleet/r66-turbine.jpg',
+      image: '/assets/images/fleet/r66-g-tlmi.png',
       specs: [
         { value: '5', label: 'Seats' },
         { value: '140', label: 'Knots' },
@@ -792,6 +792,7 @@ function TypeRating() {
 
         .tr-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .tr-btn--white {

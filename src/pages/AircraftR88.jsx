@@ -88,7 +88,7 @@ function R88Header() {
               <li><Link to="/aircraft/r44" onClick={closeMenu}>R44</Link></li>
               <li><Link to="/aircraft/r22" onClick={closeMenu}>R22</Link></li>
               <li><Link to="/aircraft/r88" onClick={closeMenu}>R88 (Coming Soon)</Link></li>
-              <li><Link to="/sales/used" onClick={closeMenu}>Used Aircraft</Link></li>
+              <li><Link to="/sales/pre-owned" onClick={closeMenu}>Pre-Owned Aircraft</Link></li>
             </ul>
           </div>
           <div className="hq-menu-section">
@@ -349,15 +349,6 @@ function R88Hero() {
         className="r88-hero__content"
         style={{ opacity: heroOpacity, scale: heroScale, y: heroY }}
       >
-        <motion.div
-          className="r88-hero__announcement"
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
-        >
-          <span className="r88-hero__badge-new">WORLD EXCLUSIVE</span>
-        </motion.div>
-
         <motion.span
           className="r88-hero__label"
           initial={{ opacity: 0, y: 20 }}
@@ -437,29 +428,6 @@ function R88Hero() {
           ))}
         </motion.div>
 
-        <motion.div
-          className="r88-hero__cta"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.9 }}
-        >
-          <a href="#register" className="r88-btn r88-btn--glow">
-            Register Your Interest
-            <i className="fas fa-arrow-right"></i>
-          </a>
-        </motion.div>
-      </motion.div>
-
-      <motion.div
-        className="r88-hero__scroll"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.2 }}
-      >
-        <span>Discover the R88</span>
-        <div className="r88-hero__scroll-line">
-          <div className="r88-hero__scroll-dot" />
-        </div>
       </motion.div>
     </section>
   );
@@ -634,65 +602,71 @@ function R88Engine() {
   return (
     <section className="r88-engine">
       <div className="r88-engine__container">
-        <div className="r88-engine__content">
-          <Reveal>
-            <div className="r88-section-header">
-              <span className="r88-pre-text">POWERTRAIN</span>
-              <h2>
-                <span className="r88-text--dark">Safran</span>{' '}
-                <span className="r88-text--mid">Partnership</span>
-              </h2>
-            </div>
-          </Reveal>
+        <div className="r88-engine__layout">
+          {/* Left column — text */}
+          <div className="r88-engine__text">
+            <Reveal>
+              <div className="r88-section-header">
+                <span className="r88-pre-text">POWERTRAIN</span>
+                <h2>
+                  <span className="r88-text--dark">Safran</span>{' '}
+                  <span className="r88-text--mid">Partnership</span>
+                </h2>
+              </div>
+            </Reveal>
 
-          <Reveal delay={0.2}>
-            <div className="r88-engine__intro">
-              <p className="r88-engine__lead">
-                The R88 marks Robinson's historic first partnership with Safran Helicopter
-                Engines, selecting the proven Arriel 2W turboshaft to power their most
-                ambitious helicopter yet.
-              </p>
-              <p>
-                The Safran Arriel family represents one of the most successful turboshaft
-                engine programs in aviation history, with over 30 million flight hours
-                accumulated across the global fleet. This partnership signals Robinson's
-                commitment to delivering a world-class utility helicopter.
-              </p>
-            </div>
-          </Reveal>
+            <Reveal delay={0.2}>
+              <div className="r88-engine__intro">
+                <p className="r88-engine__lead">
+                  The R88 marks Robinson's historic first partnership with Safran Helicopter
+                  Engines, selecting the proven Arriel 2W turboshaft to power their most
+                  ambitious helicopter yet.
+                </p>
+                <p>
+                  The Safran Arriel family represents one of the most successful turboshaft
+                  engine programs in aviation history, with over 30 million flight hours
+                  accumulated across the global fleet. This partnership signals Robinson's
+                  commitment to delivering a world-class utility helicopter.
+                </p>
+              </div>
+            </Reveal>
+          </div>
 
-          <div className="r88-engine__grid">
-            {engineFeatures.map((feature, i) => (
-              <Reveal key={i} delay={0.3 + i * 0.1}>
-                <motion.div
-                  className="r88-engine__card"
-                  whileHover={{ y: -8 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="r88-engine__stat">
-                    <span className="r88-engine__stat-value">{feature.stat}</span>
-                    <span className="r88-engine__stat-label">{feature.statLabel}</span>
+          {/* Right column — cards + badge */}
+          <div className="r88-engine__right">
+            <div className="r88-engine__grid">
+              {engineFeatures.map((feature, i) => (
+                <Reveal key={i} delay={0.3 + i * 0.1}>
+                  <motion.div
+                    className="r88-engine__card"
+                    whileHover={{ y: -4 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="r88-engine__stat">
+                      <span className="r88-engine__stat-value">{feature.stat}</span>
+                      <span className="r88-engine__stat-label">{feature.statLabel}</span>
+                    </div>
+                    <h3>{feature.title}</h3>
+                    <p>{feature.description}</p>
+                  </motion.div>
+                </Reveal>
+              ))}
+            </div>
+
+            <Reveal delay={0.6}>
+              <div className="r88-engine__partner">
+                <div className="r88-engine__partner-badge">
+                  <span className="r88-engine__partner-text">Official Engine Partner</span>
+                  <div className="r88-engine__partner-logos">
+                    <span className="r88-engine__partner-logo">SAFRAN</span>
+                    <span className="r88-engine__partner-x">+</span>
+                    <span className="r88-engine__partner-logo">ROBINSON</span>
                   </div>
-                  <h3>{feature.title}</h3>
-                  <p>{feature.description}</p>
-                </motion.div>
-              </Reveal>
-            ))}
+                </div>
+              </div>
+            </Reveal>
           </div>
         </div>
-
-        <Reveal delay={0.6}>
-          <div className="r88-engine__partner">
-            <div className="r88-engine__partner-badge">
-              <span className="r88-engine__partner-text">Official Engine Partner</span>
-              <div className="r88-engine__partner-logos">
-                <span className="r88-engine__partner-logo">SAFRAN</span>
-                <span className="r88-engine__partner-x">+</span>
-                <span className="r88-engine__partner-logo">ROBINSON</span>
-              </div>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );
@@ -733,24 +707,108 @@ function R88Avionics() {
           ))}
         </div>
 
-        <Reveal delay={0.6}>
-          <div className="r88-avionics__highlight">
-            <div className="r88-avionics__highlight-content">
-              <h3>Conventional Dual Controls</h3>
-              <p>
-                A significant departure from the R22, R44, and R66's teetering bar design,
-                the R88 features conventional dual pilot controls. This design choice
-                enhances training capabilities and enables smoother multi-pilot operations
-                in the utility sector.
-              </p>
-            </div>
-            <div className="r88-avionics__highlight-badge">
-              <span>Industry Standard</span>
-              <span>Dual Control Design</span>
-            </div>
+
+      </div>
+    </section>
+  );
+}
+
+// ============================================================================
+// SECTION 5B: Gallery - R88 Up Close
+// ============================================================================
+const galleryImages = [
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg', alt: 'R88 dramatic side view with spotlights', label: 'Exterior', span: 'wide' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-glass-flight-displays-right-side-cyclic-13216.jpg', alt: 'R88 Garmin glass cockpit displays', label: 'Glass Cockpit' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-seat-logo-emboss-angle-shot-13559.jpg', alt: 'R88 embossed seat logo detail', label: 'Seat Detail' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-2-plus-eight-seats.jpg', alt: 'R88 full cabin with 2+8 seating', label: 'Cabin', span: 'wide' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-left-side-three-quarter-front-view-21797.jpg', alt: 'R88 three-quarter front view', label: 'Front Quarter' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-rear-cargo-door-open-acute-view-13595.jpg', alt: 'R88 rear cargo door open', label: 'Cargo Door' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-left-and-right-pilot-seats-13528.jpg', alt: 'R88 pilot seats', label: 'Pilot Seats' },
+  { src: '/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg', alt: 'R88 dramatic front view', label: 'Front View', span: 'wide' },
+];
+
+function R88Gallery() {
+  const [lightboxIdx, setLightboxIdx] = useState(null);
+
+  return (
+    <section className="r88-gallery">
+      <div className="r88-gallery__container">
+        <Reveal>
+          <div className="r88-section-header">
+            <span className="r88-pre-text">GALLERY</span>
+            <h2>
+              <span className="r88-text--dark">Up Close</span>{' '}
+              <span className="r88-text--mid">with the R88</span>
+            </h2>
           </div>
         </Reveal>
+
+        <div className="r88-gallery__grid">
+          {galleryImages.map((img, i) => (
+            <Reveal key={i} delay={i * 0.05}>
+              <motion.div
+                className={`r88-gallery__item ${img.span === 'wide' ? 'r88-gallery__item--wide' : ''}`}
+                whileHover={{ scale: 1.02 }}
+                transition={{ duration: 0.3 }}
+                onClick={() => setLightboxIdx(i)}
+              >
+                <img src={img.src} alt={img.alt} loading="lazy" />
+                <div className="r88-gallery__overlay">
+                  <span className="r88-gallery__label">{img.label}</span>
+                </div>
+              </motion.div>
+            </Reveal>
+          ))}
+        </div>
       </div>
+
+      {/* Lightbox */}
+      <AnimatePresence>
+        {lightboxIdx !== null && (
+          <motion.div
+            className="r88-gallery__lightbox"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setLightboxIdx(null)}
+          >
+            <motion.img
+              key={lightboxIdx}
+              src={galleryImages[lightboxIdx].src}
+              alt={galleryImages[lightboxIdx].alt}
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <button
+              className="r88-gallery__lightbox-close"
+              onClick={() => setLightboxIdx(null)}
+            >
+              <i className="fas fa-times"></i>
+            </button>
+            {lightboxIdx > 0 && (
+              <button
+                className="r88-gallery__lightbox-nav r88-gallery__lightbox-nav--prev"
+                onClick={(e) => { e.stopPropagation(); setLightboxIdx(lightboxIdx - 1); }}
+              >
+                <i className="fas fa-chevron-left"></i>
+              </button>
+            )}
+            {lightboxIdx < galleryImages.length - 1 && (
+              <button
+                className="r88-gallery__lightbox-nav r88-gallery__lightbox-nav--next"
+                onClick={(e) => { e.stopPropagation(); setLightboxIdx(lightboxIdx + 1); }}
+              >
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            )}
+            <span className="r88-gallery__lightbox-count">
+              {lightboxIdx + 1} / {galleryImages.length}
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
@@ -1028,6 +1086,7 @@ const R88Styles = () => (
 
     .r88-btn--primary:hover {
       background: #333;
+      color: #fff;
       transform: translateY(-2px);
     }
 
@@ -1076,12 +1135,13 @@ const R88Styles = () => (
       position: absolute;
       inset: 0;
       z-index: 0;
+      background: url('/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg') center center / cover no-repeat;
     }
 
     .r88-hero__gradient {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse at center, #2a2a2a 0%, #1a1a1a 70%);
+      background: rgba(26, 26, 26, 0.7);
     }
 
     .r88-hero__grid-overlay {
@@ -1100,7 +1160,7 @@ const R88Styles = () => (
       text-align: center;
       color: #fff;
       max-width: 1000px;
-      padding: 0 2rem;
+      padding: 6rem 2rem 0;
     }
 
     .r88-hero__announcement {
@@ -1268,7 +1328,7 @@ const R88Styles = () => (
        INTRODUCTION SECTION
        ==================================================================== */
     .r88-intro {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #faf9f6;
     }
 
@@ -1298,8 +1358,8 @@ const R88Styles = () => (
     }
 
     .r88-intro__text--lead {
-      font-size: 1.25rem;
-      color: #1a1a1a;
+      font-size: 1.1rem;
+      color: #4a4a4a;
     }
 
     .r88-intro__visual {
@@ -1359,7 +1419,7 @@ const R88Styles = () => (
        SPECIFICATIONS SECTION
        ==================================================================== */
     .r88-specs {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #fff;
     }
 
@@ -1510,7 +1570,7 @@ const R88Styles = () => (
        ENGINE PARTNERSHIP SECTION
        ==================================================================== */
     .r88-engine {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #faf9f6;
     }
 
@@ -1519,9 +1579,20 @@ const R88Styles = () => (
       margin: 0 auto;
     }
 
+    .r88-engine__layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .r88-engine__text {
+      position: sticky;
+      top: 6rem;
+    }
+
     .r88-engine__intro {
-      max-width: 800px;
-      margin-bottom: 4rem;
+      margin-bottom: 0;
     }
 
     .r88-engine__lead {
@@ -1541,8 +1612,8 @@ const R88Styles = () => (
 
     .r88-engine__grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1.5rem;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
     }
 
     .r88-engine__card {
@@ -1600,13 +1671,13 @@ const R88Styles = () => (
     }
 
     .r88-engine__partner {
-      margin-top: 4rem;
+      margin-top: 1.25rem;
       text-align: center;
     }
 
     .r88-engine__partner-badge {
-      display: inline-block;
-      padding: 2rem 4rem;
+      display: block;
+      padding: 1.5rem 2rem;
       background: #1a1a1a;
       border-radius: 8px;
     }
@@ -1646,7 +1717,7 @@ const R88Styles = () => (
        AVIONICS SECTION
        ==================================================================== */
     .r88-avionics {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #fff;
     }
 
@@ -1762,10 +1833,162 @@ const R88Styles = () => (
     }
 
     /* ====================================================================
+       GALLERY SECTION
+       ==================================================================== */
+    .r88-gallery {
+      padding: 0 2rem 6rem;
+      background: #fff;
+    }
+
+    .r88-gallery__container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .r88-gallery__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.75rem;
+      margin-top: 3rem;
+    }
+
+    .r88-gallery__item {
+      position: relative;
+      overflow: hidden;
+      border-radius: 4px;
+      cursor: pointer;
+      aspect-ratio: 4 / 3;
+    }
+    .r88-gallery__item--wide {
+      grid-column: span 2;
+    }
+
+    .r88-gallery__item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+    .r88-gallery__item:hover img {
+      transform: scale(1.05);
+    }
+
+    .r88-gallery__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.5) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+    }
+    .r88-gallery__item:hover .r88-gallery__overlay {
+      opacity: 1;
+    }
+
+    .r88-gallery__label {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    /* Lightbox */
+    .r88-gallery__lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .r88-gallery__lightbox img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 4px;
+    }
+    .r88-gallery__lightbox-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      width: 40px;
+      height: 40px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      background: transparent;
+      color: #fff;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .r88-gallery__lightbox-close:hover {
+      border-color: #fff;
+    }
+    .r88-gallery__lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 50%;
+      background: transparent;
+      color: #fff;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.2s;
+    }
+    .r88-gallery__lightbox-nav:hover {
+      border-color: #fff;
+    }
+    .r88-gallery__lightbox-nav--prev { left: 1.5rem; }
+    .r88-gallery__lightbox-nav--next { right: 1.5rem; }
+    .r88-gallery__lightbox-count {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.5);
+    }
+
+    @media (max-width: 768px) {
+      .r88-gallery__grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .r88-gallery__item--wide {
+        grid-column: span 2;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .r88-gallery__grid {
+        grid-template-columns: 1fr;
+      }
+      .r88-gallery__item--wide {
+        grid-column: span 1;
+      }
+    }
+
+    /* ====================================================================
        TIMELINE SECTION
        ==================================================================== */
     .r88-timeline {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #faf9f6;
     }
 
@@ -1925,7 +2148,7 @@ const R88Styles = () => (
        CTA SECTION
        ==================================================================== */
     .r88-cta {
-      padding: 8rem 2rem;
+      padding: 4rem 2rem;
       background: #1a1a1a;
     }
 
@@ -2092,6 +2315,15 @@ const R88Styles = () => (
         grid-template-columns: 1fr;
       }
 
+      .r88-engine__layout {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+      }
+
+      .r88-engine__text {
+        position: static;
+      }
+
       .r88-engine__grid,
       .r88-avionics__grid {
         grid-template-columns: repeat(2, 1fr);
@@ -2158,7 +2390,7 @@ const R88Styles = () => (
       .r88-avionics,
       .r88-timeline,
       .r88-cta {
-        padding: 5rem 1.5rem;
+        padding: 3rem 1.5rem;
       }
     }
   `}</style>
@@ -2182,6 +2414,7 @@ function AircraftR88() {
         <R88Specifications />
         <R88Engine />
         <R88Avionics />
+        <R88Gallery />
         <R88Timeline />
         <R88CTA />
       </main>

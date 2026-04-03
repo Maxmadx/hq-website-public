@@ -595,6 +595,7 @@ function HelicopterTourOfLondon() {
 
         .ltour-btn--primary:hover {
           background: #333;
+          color: #fff;
           transform: translateY(-2px);
         }
 

@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
 import Layout from './layouts/Layout';
 import Home from './pages/Home';
 import AboutUs from './pages/AboutUs';
@@ -39,6 +39,9 @@ import TestimonialsPicker from './pages/TestimonialsPicker';
 import Testimonials from './pages/Testimonials';
 import Fleet from './pages/Fleet';
 import UsedSales from './pages/UsedSales';
+import UsedSales2 from './pages/UsedSales2';
+import UsedSalesVariations from './pages/UsedSalesVariations';
+import UsedAircraftDetail from './pages/UsedAircraftDetail';
 import AircraftR66 from './pages/AircraftR66';
 import AircraftR44 from './pages/AircraftR44';
 import AircraftR22 from './pages/AircraftR22';
@@ -50,21 +53,55 @@ import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import DiscoveryFlight from './pages/DiscoveryFlight';
 import Experimentation from './pages/Experimentation';
+import Experimentation2 from './pages/Experimentation2';
+import EndOfMarchVersion from './pages/EndOfMarchVersion';
 import SFHTests from './pages/sfhtests/SFHTests';
 import AuthorisedServiceCenterCard from './pages/AuthorisedServiceCenterCard';
+import SlidingGalleryVariations from './pages/SlidingGalleryVariations';
+import Rebuilds from './pages/Rebuilds';
+import HeroSectionTest from './pages/HeroSectionTest';
+import FlyingVariations from './pages/FlyingVariations';
+import NightRating from './pages/NightRating';
+import HeroSectionFinal from './pages/HeroSectionFinal';
+import HeroSectionFinalTesting from './pages/HeroSectionFinalTesting';
+import AboutUsVariations from './pages/AboutUsVariations';
+import PartSales from './pages/PartSales';
+import AwardVariations from './pages/AwardVariations';
 
 // Import styles
 import './assets/css/main.css';
 import './assets/css/components.css';
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  const navigationType = useNavigationType();
+
+  useEffect(() => {
+    if (navigationType !== 'POP') {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, navigationType]);
+
+  return null;
+}
+
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         {/* Test Pages - Outside layout for full-screen testing */}
         <Route path="/hero-test" element={<HeroTest />} />
+        <Route path="/hero-section-test" element={<HeroSectionTest />} />
+        <Route path="/hero-section-final" element={<HeroSectionFinal />} />
+        <Route path="/hero-section-final-testing" element={<HeroSectionFinalTesting />} />
+        <Route path="/award-variations" element={<AwardVariations />} />
+        <Route path="/about-us-variations" element={<AboutUsVariations />} />
+        <Route path="/flying-variations" element={<FlyingVariations />} />
         <Route path="/final-draft" element={<FinalDraft />} />
         <Route path="/experimentation" element={<Experimentation />} />
+        <Route path="/experimentation-2" element={<Experimentation2 />} />
+        <Route path="/endofmarchversion" element={<EndOfMarchVersion />} />
         <Route path="/sfhtests" element={<SFHTests />} />
         <Route path="/authorisedservicecentercard" element={<AuthorisedServiceCenterCard />} />
         <Route path="/scroll-path-test" element={<ScrollPathTest />} />
@@ -81,10 +118,17 @@ function App() {
         <Route path="/final-why-fly-a-helicopter" element={<FinalWhyFlyAHelicopter />} />
         <Route path="/type-rating" element={<TypeRating />} />
         <Route path="/training/type-rating" element={<TypeRating />} />
+        <Route path="/training/night-rating" element={<NightRating />} />
         <Route path="/training/trial-lessons" element={<DiscoveryFlight />} />
         <Route path="/sales/new" element={<Sales />} />
-        <Route path="/sales/used" element={<UsedSales />} />
+        <Route path="/sales/sliding-gallery-variations" element={<SlidingGalleryVariations />} />
+        <Route path="/sales/pre-owned" element={<UsedSales />} />
+        <Route path="/sales/rebuilds" element={<Rebuilds />} />
+        <Route path="/sales/pre-owned-2" element={<UsedSales2 />} />
+        <Route path="/sales/pre-owned-variations" element={<UsedSalesVariations />} />
+        <Route path="/sales/pre-owned/:id" element={<UsedAircraftDetail />} />
         <Route path="/self-fly-hire" element={<SelfFlyHire />} />
+        <Route path="/parts" element={<PartSales />} />
         <Route path="/maintenance" element={<FinalMaintenance />} />
         <Route path="/expeditions" element={<FinalExpeditions />} />
         <Route path="/journey-lines-picker" element={<JourneyLinesPicker />} />
@@ -95,14 +139,18 @@ function App() {
         <Route path="/testimonials" element={<Testimonials />} />
         <Route path="/fleet" element={<Fleet />} />
         <Route path="/aircraft/r66" element={<AircraftR66 />} />
+        <Route path="/aircraft-sales/new/r66" element={<AircraftR66 />} />
         <Route path="/aircraft/r44" element={<AircraftR44 />} />
         <Route path="/aircraft-sales/new/r44" element={<AircraftR44 />} />
         <Route path="/aircraft/r22" element={<AircraftR22 />} />
         <Route path="/aircraft-sales/new/r22" element={<AircraftR22 />} />
         <Route path="/aircraft/h500" element={<AircraftH500 />} />
         <Route path="/aircraft/r88" element={<AircraftR88 />} />
+        <Route path="/aircraft-sales/new/r88" element={<AircraftR88 />} />
         <Route path="/helicopter-tour-of-london" element={<HelicopterTourOfLondon />} />
         <Route path="/hq-account" element={<HQAccount />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:postId" element={<BlogPost />} />
 
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -128,9 +176,6 @@ function App() {
           {/* Contact */}
           <Route path="contact" element={<Contact />} />
 
-          {/* Blog Routes */}
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog/:postId" element={<BlogPost />} />
         </Route>
       </Routes>
     </Router>

@@ -33,6 +33,7 @@ import '../assets/css/main.css';
 import '../assets/css/components.css';
 import FooterMinimal from '../components/FooterMinimal';
 import FacilityGallery from '../components/Maintenance/FacilityGallery';
+import PartsEnquiry from '../components/Maintenance/PartsEnquiry';
 
 // ============================================
 // UTILITY COMPONENTS
@@ -409,39 +410,38 @@ function StatsStrip() {
 // ============================================
 
 function PhilosophySection() {
-  const team = [
-    { name: 'David Cross', role: 'Chief Engineer', exp: '25 years', certs: ['EASA Part 66', 'Robinson Certified'] },
-    { name: 'Michael Fowler', role: 'Senior Engineer', exp: '18 years', certs: ['EASA Part 66', 'Avionics Specialist'] },
-    { name: 'David Clarke', role: 'Engine Specialist', exp: '15 years', certs: ['Lycoming Certified', 'Robinson Certified'] },
-  ];
-  const teamCount = 12;
+  const [partsForm, setPartsForm] = useState({ aircraft: '', part: '', urgency: 'standard', email: '' });
+  const [partsSubmitted, setPartsSubmitted] = useState(false);
+  const [partsOpen, setPartsOpen] = useState(false);
+
+  const handlePartsSubmit = (e) => {
+    e.preventDefault();
+    if (!partsForm.email || !partsForm.part) return;
+    setPartsSubmitted(true);
+    setTimeout(() => setPartsSubmitted(false), 4000);
+  };
 
   return (
     <section className="maint-philosophy">
       <div className="maint-philosophy__container">
-        <div className="maint-philosophy__content">
+        {/* LEFT — Maintenance */}
+        <div className="maint-philosophy__left">
           <Reveal>
-            <span className="maint-pre-text">Our Philosophy</span>
+            <span className="maint-pre-text">Maintenance Services</span>
             <h2 className="maint-philosophy__headline">
-              <span className="maint-text--dark">Where </span>
-              <span className="maint-text--mid">Precision </span>
-              <span className="maint-text--light">Meets Care</span>
+              <span className="maint-text--dark">We'll </span>
+              <span className="maint-text--mid">Maintain </span>
+              <span className="maint-text--light">Your Aircraft</span>
             </h2>
           </Reveal>
-
           <Reveal delay={0.2}>
             <p className="maint-philosophy__body">
-              At HQ Aviation, maintenance isn't just a service—it's a commitment to excellence.
               Our team lives and breathes rotary-wing aviation, investing in the latest tooling,
               training, and techniques to deliver premium maintenance standards. With bays to work
               on up to 8 aircraft simultaneously and a large team of engineers, we minimise your
-              downtime so your aircraft spends more time in the air, not in the hangar. We also
-              hold a large inventory of parts in stock, reducing AOG time and getting you back
-              flying sooner. Every inspection, every repair, every overhaul is performed with
-              the same meticulous attention to detail that has defined us since 2010.
+              downtime so your aircraft spends more time in the air, not in the hangar.
             </p>
           </Reveal>
-
           <Reveal delay={0.3}>
             <div className="maint-philosophy__pillars">
               <div className="maint-philosophy__pillar">
@@ -449,56 +449,151 @@ function PhilosophySection() {
                   <i className="fas fa-search-plus"></i>
                 </div>
                 <h4>Proactive Care</h4>
-                <p>Identifying potential issues before they become problems, saving you time and money</p>
+                <p>Identifying issues before they become problems</p>
               </div>
               <div className="maint-philosophy__pillar">
                 <div className="maint-philosophy__pillar-icon">
                   <i className="fas fa-clock"></i>
                 </div>
                 <h4>Rapid Turnaround</h4>
-                <p>Up to 8 bays and a large engineering team to get you back in the air fast</p>
+                <p>Up to 8 bays to get you back in the air fast</p>
               </div>
               <div className="maint-philosophy__pillar">
                 <div className="maint-philosophy__pillar-icon">
                   <i className="fas fa-handshake"></i>
                 </div>
                 <h4>Trusted Partnership</h4>
-                <p>Building long-term relationships with owners who depend on our expertise</p>
+                <p>Long-term relationships built on expertise</p>
               </div>
             </div>
+          </Reveal>
+          <Reveal delay={0.4}>
+            <Link to="/contact?subject=maintenance" className="maint-btn maint-btn--primary" style={{ marginTop: '1.5rem' }}>
+              Book Maintenance <i className="fas fa-arrow-right" style={{ fontSize: '0.65rem' }}></i>
+            </Link>
           </Reveal>
         </div>
 
-        {/* Meet the Team */}
-        <div className="maint-philosophy__team">
+        {/* DIVIDER */}
+        <div className="maint-philosophy__divider" />
+
+        {/* RIGHT — Parts */}
+        <div className="maint-philosophy__right">
           <Reveal>
-            <div className="maint-philosophy__team-header">
-              <span className="maint-pre-text">Our Engineers</span>
-              <h3>Meet the Team</h3>
+            <span className="maint-pre-text">Robinson Parts Specialists</span>
+            <h2 className="maint-philosophy__headline">
+              <span className="maint-text--dark">Need </span>
+              <span className="maint-text--mid">a </span>
+              <span className="maint-text--light">Part?</span>
+            </h2>
+          </Reveal>
+          <Reveal delay={0.2}>
+            <p className="maint-philosophy__body">
+              As one of the biggest Robinson service centres in Europe, we hold a £500K+ genuine
+              parts inventory — engine components, airframe parts, consumables, avionics, and
+              accessories. Same-day dispatch available for AOG situations.
+            </p>
+          </Reveal>
+          <Reveal delay={0.3}>
+            <p className="maint-philosophy__parts-quote">
+              Fill in the details and we'll get back to you within 24hrs.
+            </p>
+            <div className="maint-philosophy__parts-form">
+              <button
+                type="button"
+                className="maint-philosophy__parts-form-toggle"
+                onClick={() => setPartsOpen(prev => !prev)}
+              >
+                <span>Parts Enquiry Form</span>
+                <i className={`fas fa-chevron-down maint-philosophy__parts-chevron ${partsOpen ? 'maint-philosophy__parts-chevron--open' : ''}`}></i>
+              </button>
+              <div className={`maint-philosophy__parts-collapse ${partsOpen ? 'maint-philosophy__parts-collapse--open' : ''}`}>
+                <form onSubmit={handlePartsSubmit}>
+                  <div className="maint-philosophy__parts-field">
+                    <label className="maint-philosophy__parts-field-label">Aircraft Type</label>
+                    <div className="maint-philosophy__parts-toggles">
+                      {['R22', 'R44', 'R66'].map(type => (
+                        <button
+                          key={type}
+                          type="button"
+                          className={`maint-philosophy__parts-toggle ${partsForm.aircraft === type ? 'maint-philosophy__parts-toggle--active' : ''}`}
+                          onClick={() => setPartsForm(prev => ({ ...prev, aircraft: type }))}
+                        >
+                          {type}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="maint-philosophy__parts-field">
+                    <label className="maint-philosophy__parts-field-label">Part Needed</label>
+                    <input
+                      type="text"
+                      className="maint-philosophy__parts-input"
+                      placeholder="Part number or description"
+                      value={partsForm.part}
+                      onChange={e => setPartsForm(prev => ({ ...prev, part: e.target.value }))}
+                    />
+                  </div>
+                  <div className="maint-philosophy__parts-field">
+                    <label className="maint-philosophy__parts-field-label">Urgency</label>
+                    <div className="maint-philosophy__parts-toggles">
+                      {[
+                        { value: 'standard', label: 'Standard' },
+                        { value: 'urgent', label: 'Urgent' },
+                        { value: 'aog', label: 'AOG' },
+                      ].map(u => (
+                        <button
+                          key={u.value}
+                          type="button"
+                          className={`maint-philosophy__parts-toggle ${partsForm.urgency === u.value ? 'maint-philosophy__parts-toggle--active' : ''} ${u.value === 'aog' ? 'maint-philosophy__parts-toggle--aog' : ''}`}
+                          onClick={() => setPartsForm(prev => ({ ...prev, urgency: u.value }))}
+                        >
+                          {u.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="maint-philosophy__parts-field">
+                    <label className="maint-philosophy__parts-field-label">Description <span style={{ fontWeight: 400, color: '#bbb' }}>(optional)</span></label>
+                    <textarea
+                      className="maint-philosophy__parts-textarea"
+                      placeholder="Any additional details — e.g. hit my tail rotor, need a new blade..."
+                      value={partsForm.description || ''}
+                      onChange={e => setPartsForm(prev => ({ ...prev, description: e.target.value }))}
+                      rows={3}
+                    />
+                  </div>
+                  <div className="maint-philosophy__parts-field">
+                    <label className="maint-philosophy__parts-field-label">Your Email</label>
+                    <input
+                      type="email"
+                      className="maint-philosophy__parts-input"
+                      placeholder="email@example.com"
+                      value={partsForm.email}
+                      onChange={e => setPartsForm(prev => ({ ...prev, email: e.target.value }))}
+                      required
+                    />
+                  </div>
+                  <div className="maint-philosophy__parts-submit">
+                    {partsSubmitted ? (
+                      <div className="maint-philosophy__parts-success">
+                        <i className="fas fa-check"></i> Enquiry sent — we'll be in touch shortly
+                      </div>
+                    ) : (
+                      <button type="submit" className="maint-btn maint-btn--primary" style={{ width: '100%', justifyContent: 'center' }}>
+                        Send Parts Enquiry <i className="fas fa-arrow-right" style={{ fontSize: '0.65rem' }}></i>
+                      </button>
+                    )}
+                  </div>
+                </form>
+              </div>
             </div>
           </Reveal>
-          <div className="maint-philosophy__team-grid">
-            {team.map((member, i) => (
-              <Reveal key={i} delay={i * 0.1}>
-                <div className="maint-philosophy__team-card">
-                  <div className="maint-philosophy__team-icon">
-                    <i className="fas fa-user"></i>
-                  </div>
-                  <div className="maint-philosophy__team-info">
-                    <h4>{member.name}</h4>
-                    <span className="maint-philosophy__team-role">{member.role}</span>
-                    <span className="maint-philosophy__team-exp">{member.exp}</span>
-                  </div>
-                </div>
-              </Reveal>
-            ))}
-            <Reveal delay={0.3}>
-              <div className="maint-philosophy__team-card maint-philosophy__team-card--count">
-                <span className="maint-philosophy__team-plus">+{teamCount}</span>
-                <span className="maint-philosophy__team-label">Engineers</span>
-              </div>
-            </Reveal>
-          </div>
+          <Reveal delay={0.4}>
+            <a href="tel:+441234567890" className="maint-philosophy__parts-phone">
+              <i className="fas fa-phone"></i> Or call our parts desk directly
+            </a>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -606,119 +701,87 @@ function ServicesGrid() {
 // ============================================
 
 function RebuildsSection() {
-  const steps = [
-    { num: '01', title: 'Strip Down', desc: 'Complete disassembly to bare airframe' },
-    { num: '02', title: 'Inspect', desc: 'Every component examined and tested' },
-    { num: '03', title: 'Rebuild', desc: 'Reassembly with new and certified parts' },
-    { num: '04', title: 'Test Flight', desc: 'Returned to service like new' },
+  const scrollRef = useRef(null);
+  const rebuilds = [
+    { model: 'R44 Raven II', reg: 'G-RROB', year: '2019', img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
+    { model: 'R22 Beta II', reg: 'G-BWZZ', year: '2016', img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
+    { model: 'R66 Turbine', reg: 'G-NXG1', year: '2018', img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png' },
+    { model: 'R44 Cadet', reg: 'G-CADB', year: '2020', img: '/assets/images/new-aircraft/r44/r44-cutout.png' },
+    { model: 'R44 Raven II', reg: 'G-HQAV', year: '2015', img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
   ];
 
-  const aircraft = [
-    { model: 'R44', images: [
-      '/assets/images/overhaul/r44-strip.jpg',
-      '/assets/images/overhaul/r44-inspect.jpg',
-      '/assets/images/overhaul/r44-rebuild.jpg',
-      '/assets/images/overhaul/r44-test.jpg',
-    ]},
-    { model: 'R66', images: [
-      '/assets/images/overhaul/r66-strip.jpg',
-      '/assets/images/overhaul/r66-inspect.jpg',
-      '/assets/images/overhaul/r66-rebuild.jpg',
-      '/assets/images/overhaul/r66-test.jpg',
-    ]},
-    { model: 'R22', images: [
-      '/assets/images/overhaul/r22-strip.jpg',
-      '/assets/images/overhaul/r22-inspect.jpg',
-      '/assets/images/overhaul/r22-rebuild.jpg',
-      '/assets/images/overhaul/r22-test.jpg',
-    ]},
-  ];
+  const scrollStrip = (dir) => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollBy({ left: dir * 280, behavior: 'smooth' });
+    }
+  };
 
   return (
-    <section className="maint-rebuilds">
-      <div className="maint-rebuilds__container">
-        <div className="maint-rebuilds__header">
+    <section className="maint-rb">
+      <div className="maint-rb__container">
+        <div className="maint-rb__header">
           <Reveal>
             <span className="maint-pre-text">Major Service</span>
-            <h2 className="maint-rebuilds__headline">
+            <h2 className="maint-rb__headline">
               <span className="maint-text--dark">12-Year / 2200-Hour </span>
               <span className="maint-text--light">Overhaul</span>
             </h2>
           </Reveal>
-
           <Reveal delay={0.2}>
-            <p className="maint-rebuilds__body">
-              At 2200 hours or 12 years—whichever comes first—Robinson helicopters require a complete
-              overhaul. We don't just check it, we transform it. Our comprehensive programme takes your
-              aircraft through complete disassembly, inspection of every component, replacement of what's
-              needed, and reassembly to factory-fresh condition.
+            <p className="maint-rb__body">
+              At 2200 hours or 12 years — whichever comes first — Robinson helicopters require a complete
+              overhaul. We don't just check it, we transform it. Complete disassembly, inspection of every
+              component, replacement of what's needed, and reassembly to factory-fresh condition.
             </p>
-            <div className="maint-rebuilds__timeline">
-              <span className="maint-rebuilds__timeline-icon">⏱</span>
-              <span className="maint-rebuilds__timeline-text">Typically 4–6 weeks</span>
-            </div>
           </Reveal>
         </div>
 
         <Reveal delay={0.3}>
-          <div className="maint-rebuilds__grid">
-            {/* Fixed Labels Column */}
-            <div className="maint-rebuilds__labels">
-              <div className="maint-rebuilds__label-header"></div>
-              {aircraft.map((craft) => (
-                <div key={craft.model} className="maint-rebuilds__model-label">
-                  <span>{craft.model}</span>
-                </div>
-              ))}
-            </div>
-
-            {/* Scrollable Content */}
-            <div className="maint-rebuilds__scroll-wrapper">
-              <div className="maint-rebuilds__scroll-content">
-                {/* Step Headers */}
-                <div className="maint-rebuilds__grid-header">
-                  {steps.map((step, i) => (
-                    <div key={step.num} className="maint-rebuilds__step-header">
-                      <span className="maint-rebuilds__step-num">{step.num}</span>
-                      <h4>{step.title}</h4>
-                      <p>{step.desc}</p>
-                      {i < steps.length - 1 && (
-                        <div className="maint-rebuilds__arrow">
-                          <i className="fas fa-chevron-right"></i>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-
-                {/* Aircraft Rows */}
-                {aircraft.map((craft, rowIndex) => (
-                  <motion.div
-                    key={craft.model}
-                    className="maint-rebuilds__grid-row"
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.5, delay: rowIndex * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    {craft.images.map((img, colIndex) => (
-                      <div key={colIndex} className="maint-rebuilds__cell">
-                        <div className="maint-rebuilds__cell-img">
-                          <img src={img} alt={`${craft.model} ${steps[colIndex].title}`} />
-                        </div>
-                      </div>
-                    ))}
-                  </motion.div>
-                ))}
+          <div className="maint-rb__strip-section">
+            <div className="maint-rb__strip-header">
+              <h4>Examples of Our Rebuilds</h4>
+              <div className="maint-rb__strip-nav">
+                <button onClick={() => scrollStrip(-1)} className="maint-rb__arrow-btn">
+                  <i className="fas fa-chevron-left"></i>
+                </button>
+                <button onClick={() => scrollStrip(1)} className="maint-rb__arrow-btn">
+                  <i className="fas fa-chevron-right"></i>
+                </button>
               </div>
+            </div>
+            <div className="maint-rb__strip" ref={scrollRef}>
+              {rebuilds.map((rb, i) => (
+                <Link key={i} to="/sales/rebuilds" className="maint-rb__card">
+                  <div className="maint-rb__card-img">
+                    <img src={rb.img} alt={rb.model} />
+                  </div>
+                  <div className="maint-rb__card-info">
+                    <strong>{rb.model}</strong>
+                    <span>{rb.reg} · {rb.year}</span>
+                  </div>
+                  <div className="maint-rb__card-cta">
+                    <span>View Rebuild</span>
+                    <i className="fas fa-arrow-right"></i>
+                  </div>
+                </Link>
+              ))}
             </div>
           </div>
         </Reveal>
 
+        <Reveal delay={0.35}>
+          <p className="maint-rb__tagline">
+            With 35+ rebuilds completed and 30 years of experience rebuilding R22, R44 and R66 types.
+          </p>
+        </Reveal>
+
         <Reveal delay={0.4}>
-          <div className="maint-rebuilds__cta">
-            <Link to="/contact" className="maint-btn maint-btn--primary">
-              Enquire About Overhauls
+          <div className="maint-rb__actions">
+            <Link to="/contact?subject=rebuild" className="maint-btn maint-btn--primary">
+              Book Your Aircraft into Our Rebuild Programme
+            </Link>
+            <Link to="/sales/rebuilds" className="maint-btn maint-btn--outline">
+              Browse Rebuilds
             </Link>
           </div>
         </Reveal>
@@ -1396,6 +1459,7 @@ const styles = `
 .maint-btn--primary:hover {
   background: #333;
   border-color: #333;
+  color: #fff;
 }
 
 .maint-btn--outline {
@@ -1718,169 +1782,243 @@ const styles = `
   display: block;
 }
 
-/* === 04. PHILOSOPHY === */
+/* === 04. PHILOSOPHY (SPLIT: MAINTENANCE | PARTS) === */
 .maint-philosophy {
   padding: 6rem 2rem;
   background: #faf9f6;
 }
-
 .maint-philosophy__container {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.4fr 0.6fr;
+  grid-template-columns: 1fr auto 1fr;
   gap: 3rem;
   align-items: start;
 }
-
+.maint-philosophy__divider {
+  width: 1px;
+  background: #e8e6e2;
+  align-self: stretch;
+}
 .maint-philosophy__headline {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
   font-weight: 700;
   line-height: 1.1;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
   text-transform: uppercase;
 }
-
 .maint-philosophy__body {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #666;
   line-height: 1.8;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
-
 .maint-philosophy__pillars {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  gap: 0.75rem;
 }
-
 .maint-philosophy__pillar {
   text-align: center;
-  padding: 1rem 0.75rem;
+  padding: 0.9rem 0.5rem;
   background: #fff;
   border: 1px solid #e8e6e2;
 }
-
 .maint-philosophy__pillar-icon {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   background: #1a1a1a;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 0.75rem;
-  font-size: 0.9rem;
+  margin: 0 auto 0.6rem;
+  font-size: 0.8rem;
 }
-
 .maint-philosophy__pillar h4 {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.3rem;
 }
-
 .maint-philosophy__pillar p {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   color: #666;
   margin: 0;
   line-height: 1.4;
 }
 
-/* Team Section within Philosophy */
-.maint-philosophy__team {
-  background: #1a1a1a;
-  padding: 1.25rem;
-  height: 100%;
-  border-radius: 8px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-}
-
-.maint-philosophy__team-header {
+/* Parts enquiry form */
+.maint-philosophy__parts-form {
+  background: #fff;
+  border: 1px solid #e8e6e2;
   margin-bottom: 1rem;
 }
-
-.maint-philosophy__team-header .maint-pre-text {
-  color: rgba(255,255,255,0.5);
-  font-size: 0.65rem;
+.maint-philosophy__parts-field {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #e8e6e2;
 }
-
-.maint-philosophy__team-header h3 {
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin: 0.25rem 0 0;
-}
-
-.maint-philosophy__team-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.maint-philosophy__team-card {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.6rem 0.75rem;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 6px;
-}
-
-.maint-philosophy__team-icon {
-  width: 32px;
-  height: 32px;
-  background: rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(255,255,255,0.5);
-  font-size: 0.8rem;
-  flex-shrink: 0;
-  border-radius: 50%;
-}
-
-.maint-philosophy__team-info h4 {
-  font-size: 0.8rem;
-  font-weight: 600;
-  color: #fff;
-  margin: 0 0 0.15rem;
-}
-
-.maint-philosophy__team-role {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.6);
+.maint-philosophy__parts-field-label {
   display: block;
-}
-
-.maint-philosophy__team-exp {
-  font-family: 'Share Tech Mono', monospace;
-  font-size: 0.6rem;
-  color: rgba(255,255,255,0.4);
-}
-
-.maint-philosophy__team-card--count {
-  justify-content: center;
-  flex-direction: column;
-  padding: 0.75rem;
-  text-align: center;
-}
-
-.maint-philosophy__team-plus {
-  font-size: 1.5rem;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.68rem;
   font-weight: 700;
-  color: #fff;
-  line-height: 1;
-}
-
-.maint-philosophy__team-label {
-  font-size: 0.65rem;
-  color: rgba(255,255,255,0.5);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+  margin-bottom: 0.45rem;
+}
+.maint-philosophy__parts-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #e8e6e2;
+  padding: 0.4rem 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.75rem;
+  color: #1a1a1a;
+  background: transparent;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+.maint-philosophy__parts-input::placeholder {
+  color: #ccc;
+}
+.maint-philosophy__parts-input:focus {
+  border-color: #1a1a1a;
+}
+.maint-philosophy__parts-textarea {
+  width: 100%;
+  border: 1px solid #e8e6e2;
+  padding: 0.5rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.72rem;
+  color: #1a1a1a;
+  background: transparent;
+  outline: none;
+  resize: vertical;
+  min-height: 60px;
+  transition: border-color 0.2s ease;
+}
+.maint-philosophy__parts-textarea::placeholder {
+  color: #ccc;
+}
+.maint-philosophy__parts-textarea:focus {
+  border-color: #1a1a1a;
+}
+.maint-philosophy__parts-toggles {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+.maint-philosophy__parts-toggle {
+  padding: 0.35rem 0.7rem;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid #e8e6e2;
+  background: transparent;
+  color: #999;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.maint-philosophy__parts-toggle:hover {
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+}
+.maint-philosophy__parts-toggle--active {
+  background: #1a1a1a;
+  border-color: #1a1a1a;
+  color: #fff;
+}
+.maint-philosophy__parts-toggle--aog.maint-philosophy__parts-toggle--active {
+  background: #8b0000;
+  border-color: #8b0000;
+}
+.maint-philosophy__parts-submit {
+  padding: 0.85rem 1rem;
+}
+.maint-philosophy__parts-success {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background: #f0faf0;
+  border: 1px solid #c8e6c8;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.75rem;
+  color: #2d6a2d;
+  font-weight: 500;
+}
+.maint-philosophy__parts-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.maint-philosophy__parts-phone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #1a1a1a;
+  text-decoration: none;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 0.15rem;
+  transition: border-color 0.3s ease;
+  align-self: flex-start;
+}
+.maint-philosophy__parts-phone:hover {
+  border-color: #1a1a1a;
+}
+.maint-philosophy__parts-phone i {
+  font-size: 0.6rem;
+}
+.maint-philosophy__parts-quote {
+  font-size: 0.78rem;
+  color: #888;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+  font-style: italic;
+}
+.maint-philosophy__parts-form-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: #f5f4f0;
+  border: 1px solid #e8e6e2;
+  cursor: pointer;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #1a1a1a;
+  transition: background 0.2s ease;
+}
+.maint-philosophy__parts-form-toggle:hover {
+  background: #eeedea;
+}
+.maint-philosophy__parts-chevron {
+  font-size: 0.6rem;
+  transition: transform 0.3s ease;
+}
+.maint-philosophy__parts-chevron--open {
+  transform: rotate(180deg);
+}
+.maint-philosophy__parts-collapse {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+}
+.maint-philosophy__parts-collapse--open {
+  max-height: 800px;
 }
 
 /* ========== PARALLAX SECTIONS ========== */
@@ -2554,381 +2692,227 @@ const styles = `
   transition: gap 0.3s ease;
 }
 
-/* === 05B. REBUILDS === */
-.maint-rebuilds {
+/* === 05B. REBUILDS (STRIP CARDS) === */
+.maint-rb {
   padding: 5rem 2rem;
   background: #faf9f6;
 }
-
-.maint-rebuilds__container {
-  max-width: 1400px;
+.maint-rb__container {
+  max-width: 1100px;
   margin: 0 auto;
 }
-
-@media (max-width: 1000px) {
-  .maint-rebuilds {
-    padding: 4rem 1rem;
-  }
-}
-
-@media (max-width: 800px) {
-  .maint-rebuilds {
-    padding: 3rem 0.5rem;
-  }
-}
-
-@media (max-width: 600px) {
-  .maint-rebuilds {
-    padding: 2.5rem 0.25rem;
-  }
-}
-
-.maint-rebuilds__header {
+.maint-rb__header {
   text-align: center;
   margin-bottom: 3rem;
 }
-
-.maint-rebuilds__headline {
+.maint-rb__headline {
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 700;
   line-height: 1.1;
   margin-bottom: 1.5rem;
   text-transform: uppercase;
 }
-
-.maint-rebuilds__body {
-  font-size: 1rem;
+.maint-rb__body {
+  font-size: 0.95rem;
   color: #666;
   line-height: 1.8;
-  margin-bottom: 1rem;
+  margin: 0 auto 1.25rem;
   max-width: 700px;
-  margin-left: auto;
-  margin-right: auto;
 }
-
-.maint-rebuilds__timeline {
+.maint-rb__meta {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.maint-rb__meta-item {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #f0efec;
-  border-radius: 4px;
-}
-
-.maint-rebuilds__timeline-icon {
-  font-size: 1rem;
-}
-
-.maint-rebuilds__timeline-text {
+  gap: 0.4rem;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   color: #1a1a1a;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
+  padding: 0.4rem 0.75rem;
+  background: #f0efec;
+  border-radius: 3px;
 }
-
-.maint-rebuilds__grid {
-  margin-bottom: 2rem;
-  display: flex;
-  position: relative;
-}
-
-.maint-rebuilds__labels {
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  width: 70px;
-  margin-right: 1rem;
-}
-
-.maint-rebuilds__scroll-wrapper {
-  flex: 1;
-  overflow: visible;
-}
-
-.maint-rebuilds__scroll-content {
-  display: flex;
-  flex-direction: column;
-}
-
-.maint-rebuilds__grid-header {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.maint-rebuilds__step-header {
-  text-align: center;
-  padding: 1rem;
-  background: #fff;
-  border: 1px solid #e8e6e2;
-  position: relative;
-}
-
-.maint-rebuilds__step-header .maint-rebuilds__arrow {
-  position: absolute;
-  right: -0.5rem;
-  top: 50%;
-  transform: translate(50%, -50%);
-  z-index: 2;
-}
-
-.maint-rebuilds__step-num {
-  font-family: 'Share Tech Mono', monospace;
+.maint-rb__meta-item i {
   font-size: 0.65rem;
-  color: #ccc;
-  display: block;
-  margin-bottom: 0.5rem;
+  color: #999;
 }
 
-.maint-rebuilds__step-header h4 {
-  font-size: 0.85rem;
+/* Strip cards */
+.maint-rb__strip-section {
+  margin-bottom: 1.5rem;
+}
+.maint-rb__strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+.maint-rb__strip-header h4 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
   text-transform: uppercase;
-  margin: 0 0 0.25rem;
-  font-weight: 700;
-}
-
-.maint-rebuilds__step-header p {
-  font-size: 0.7rem;
-  color: #888;
+  letter-spacing: 0.04em;
   margin: 0;
-  line-height: 1.3;
+  color: #1a1a1a;
 }
-
-.maint-rebuilds__arrow {
-  color: #bbb;
+.maint-rb__strip-nav {
+  display: flex;
+  gap: 0.35rem;
 }
-
-.maint-rebuilds__grid-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.maint-rebuilds__label-header {
-  height: 120px;
-  margin-bottom: 1rem;
-}
-
-.maint-rebuilds__model-label {
+.maint-rb__arrow-btn {
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 180px;
-  margin-bottom: 1rem;
-}
-
-.maint-rebuilds__model-label span {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #1a1a1a;
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  transform: rotate(180deg);
-  letter-spacing: 0.1em;
-}
-
-.maint-rebuilds__cell {
-  background: #fff;
   border: 1px solid #e8e6e2;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  color: #1a1a1a;
+  font-size: 0.7rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
-
-.maint-rebuilds__cell:hover {
+.maint-rb__arrow-btn:hover {
+  background: #1a1a1a;
+  color: #fff;
   border-color: #1a1a1a;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
-
-.maint-rebuilds__cell-img {
-  aspect-ratio: 4/3;
+.maint-rb__strip {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 0.5rem;
+}
+.maint-rb__strip::-webkit-scrollbar {
+  display: none;
+}
+.maint-rb__card {
+  flex: 0 0 calc((100% - 3.75rem) / 4);
+  min-width: 220px;
+  scroll-snap-align: start;
+  border: 1px solid #e8e6e2;
+  border-radius: 6px;
+  background: #fff;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
-
-.maint-rebuilds__cell-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.3s ease;
+.maint-rb__card:hover {
+  border-color: #1a1a1a;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
 }
-
-.maint-rebuilds__cell:hover .maint-rebuilds__cell-img img {
-  transform: scale(1.05);
+.maint-rb__card-img {
+  aspect-ratio: 16 / 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: #f5f4f1;
 }
-
-.maint-rebuilds__cta {
+.maint-rb__card-img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+.maint-rb__card-info {
+  padding: 0.75rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.maint-rb__card-info strong {
+  display: block;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #1a1a1a;
+}
+.maint-rb__card-info span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.6rem;
+  color: #7a7a7a;
+  letter-spacing: 0.05em;
+}
+.maint-rb__card-cta {
+  padding: 0.6rem 1rem;
+  border-top: 1px solid #e8e6e2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  background: #faf9f6;
+  transition: all 0.25s ease;
+}
+.maint-rb__card-cta span {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #999;
+}
+.maint-rb__card-cta i {
+  font-size: 0.5rem;
+  color: #999;
+  transition: transform 0.25s ease;
+}
+.maint-rb__card:hover .maint-rb__card-cta {
+  background: #1a1a1a;
+  color: #fff;
+  border-color: #1a1a1a;
+}
+.maint-rb__card:hover .maint-rb__card-cta span {
+  color: #fff;
+}
+.maint-rb__card:hover .maint-rb__card-cta i {
+  transform: translateX(3px);
+  color: #fff;
+}
+.maint-rb__tagline {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: #4a4a4a;
   text-align: center;
-  margin-top: 2rem;
+  margin: 0 0 1rem;
 }
 
-@media (max-width: 1000px) {
-  .maint-rebuilds__grid-header,
-  .maint-rebuilds__grid-row {
+/* Actions */
+.maint-rb__actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .maint-rb__meta {
+    flex-direction: column;
+    align-items: center;
     gap: 0.5rem;
-    margin-bottom: 0.5rem;
   }
-
-  .maint-rebuilds__step-header p {
-    display: none;
+  .maint-rb__card {
+    flex: 0 0 calc((100% - 1.25rem) / 2);
+    min-width: 200px;
   }
-
-  .maint-rebuilds__step-header .maint-rebuilds__arrow {
-    display: none;
-  }
-
-  .maint-rebuilds__labels {
-    width: 50px;
-  }
-
-  .maint-rebuilds__model-label span {
-    font-size: 0.95rem;
-    font-weight: 700;
-  }
-}
-
-@media (max-width: 800px) {
-  .maint-rebuilds__labels {
-    position: sticky;
-    left: 0;
-    z-index: 10;
-    background: #faf9f6;
-    width: 35px;
-    margin-right: 15px;
-    overflow: visible;
-  }
-
-  .maint-rebuilds__model-label span {
-    font-size: 0.9rem;
-    font-weight: 700;
-  }
-
-  .maint-rebuilds__labels::after {
-    content: '';
-    position: absolute;
-    right: -20px;
-    top: 0;
-    bottom: 0;
-    width: 20px;
-    background: linear-gradient(to right, rgba(250,249,246,1) 0%, rgba(250,249,246,0) 100%);
-    pointer-events: none;
-    z-index: 100;
-  }
-
-  .maint-rebuilds__label-header {
-    height: 68px;
-    margin-bottom: 0.3rem;
-  }
-
-  .maint-rebuilds__labels .maint-rebuilds__model-label {
-    flex: 0 0 auto;
-    height: calc(120px + 2px);
-    margin-bottom: 0.3rem;
-    background: #faf9f6;
-    position: relative;
-    display: flex;
+  .maint-rb__actions {
+    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-  }
-
-  .maint-rebuilds__scroll-wrapper {
-    overflow-x: auto;
-    overflow-y: visible;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .maint-rebuilds__scroll-wrapper::-webkit-scrollbar {
-    display: none;
-  }
-
-  .maint-rebuilds__scroll-content {
-    min-width: max-content;
-  }
-
-  .maint-rebuilds__grid-header,
-  .maint-rebuilds__grid-row {
-    display: flex;
-    gap: 0.3rem;
-    margin-bottom: 0.3rem;
-  }
-
-  .maint-rebuilds__step-header {
-    flex: 0 0 140px;
-    min-width: 140px;
-  }
-
-  .maint-rebuilds__cell {
-    flex: 0 0 140px;
-    min-width: 140px;
-  }
-
-  .maint-rebuilds__cell-img {
-    height: 120px;
-    aspect-ratio: auto;
-  }
-}
-
-@media (max-width: 600px) {
-  .maint-rebuilds__labels {
-    width: 28px;
-    margin-right: 10px;
-  }
-
-  .maint-rebuilds__labels::after {
-    right: -10px;
-    width: 10px;
-  }
-
-  .maint-rebuilds__label-header {
-    height: 52px;
-    margin-bottom: 0.2rem;
-  }
-
-  .maint-rebuilds__labels .maint-rebuilds__model-label {
-    height: calc(100px + 2px);
-    margin-bottom: 0.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .maint-rebuilds__step-header {
-    flex: 0 0 120px;
-    min-width: 120px;
-    padding: 0.5rem 0.25rem;
-  }
-
-  .maint-rebuilds__step-header h4 {
-    font-size: 0.65rem;
-  }
-
-  .maint-rebuilds__step-num {
-    font-size: 0.5rem;
-  }
-
-  .maint-rebuilds__cell {
-    flex: 0 0 120px;
-    min-width: 120px;
-  }
-
-  .maint-rebuilds__cell-img {
-    height: 100px;
-  }
-
-  .maint-rebuilds__model-label span {
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-  }
-
-  .maint-rebuilds__grid-header,
-  .maint-rebuilds__grid-row {
-    gap: 0.2rem;
-    margin-bottom: 0.2rem;
   }
 }
 
@@ -3901,22 +3885,17 @@ const styles = `
     display: none;
   }
 
+  .maint-philosophy__container {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .maint-philosophy__divider {
+    width: 100%;
+    height: 1px;
+    margin: 1rem 0;
+  }
   .maint-philosophy__pillars {
     grid-template-columns: 1fr;
-  }
-
-  .maint-philosophy__team-grid {
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-
-  .maint-philosophy__team-card {
-    flex: 1 1 45%;
-    min-width: 140px;
-  }
-
-  .maint-philosophy__team-card--count {
-    flex: 0 0 auto;
   }
 
   .maint-facility__gallery {
@@ -5040,9 +5019,6 @@ function FinalMaintenance() {
       {/* 02 */ } <StatsStrip />
       {/* 04 */ } <PhilosophySection />
 
-      {/* ========== SECTION 5: SUPPORTED AIRCRAFT ========== */}
-      <SupportedAircraft />
-
       {/* ========== SECTION 6-7: CORE SERVICES ========== */}
       <section className="maint-core-services">
         <div className="maint-core-services__header">
@@ -5089,7 +5065,7 @@ function FinalMaintenance() {
       {/* ========== SECTION 7: TURNAROUND & CERTIFICATIONS ========== */}
       <TurnaroundTimes />
 
-      {/* ========== SECTION 22: 12-YEAR / 2200-HOUR OVERHAUL ========== */}
+      {/* ========== SECTION 22: REBUILDS ========== */}
       <RebuildsSection />
 
       {/* ========== SECTION 25: FACILITY GALLERY ========== */}

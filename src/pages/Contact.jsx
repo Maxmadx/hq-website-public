@@ -143,9 +143,7 @@ function Contact() {
               <div style={{ marginBottom: 'var(--space-8)' }}>
                 <h4><i className="fas fa-clock text-accent"></i> Opening Hours</h4>
                 <p>
-                  Monday - Friday: 09:00 - 17:00<br />
-                  Saturday: 09:00 - 13:00<br />
-                  Sunday: Closed
+                  Monday - Sunday: 08:30 - 17:00
                 </p>
               </div>
 

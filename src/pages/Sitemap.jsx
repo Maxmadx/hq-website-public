@@ -75,7 +75,7 @@ const defaultSiteStructure = [
     completed: false,
     children: [
       { id: 'sales-new', title: 'New Aircraft', path: '/sales/new', description: 'Factory new Robinson helicopters', completed: false, children: [] },
-      { id: 'sales-used', title: 'Used Aircraft', path: '/sales/used', description: 'Pre-owned helicopters', completed: false, children: [] },
+      { id: 'sales-pre-owned', title: 'Pre-Owned Aircraft', path: '/sales/pre-owned', description: 'Pre-owned helicopters', completed: false, children: [] },
     ],
   },
   {

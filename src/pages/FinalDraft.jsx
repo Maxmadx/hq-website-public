@@ -2312,7 +2312,7 @@ function FinalDraft() {
 
         <div className="fd-sales__actions">
           <Link to="/sales/new" className="fd-sales__btn fd-sales__btn--primary">New Aircraft</Link>
-          <Link to="/sales/used" className="fd-sales__btn fd-sales__btn--outline">Pre-Owned</Link>
+          <Link to="/sales/pre-owned" className="fd-sales__btn fd-sales__btn--outline">Pre-Owned</Link>
         </div>
       </section>
 

@@ -13,9 +13,10 @@
  * - hero-74: Varying font colors (luxury feel)
  */
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, Fragment } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
+import { motion, useScroll, useTransform, useInView } from 'framer-motion';
+import HeroSectionFinalTesting from './HeroSectionFinalTesting';
 
 // Import all styles - Header/Navigation styles included via main.css
 import '../assets/css/main.css';
@@ -23,9 +24,15 @@ import '../assets/css/components.css';
 
 // Scroll path animation component
 import ScrollPathAnimation from '../components/ScrollPathAnimation';
+import FacilityGallery from '../components/Maintenance/FacilityGallery';
+import FacilityServicesCarousel from '../components/Maintenance/FacilityServicesCarousel';
+import FacilityServicesDetail from '../components/Maintenance/FacilityServicesDetail';
 
 // Footer component
 import FooterMinimal from '../components/FooterMinimal';
+
+// Combined Location + Testimonials
+import ArrivalSection from '../components/ArrivalSection';
 
 // Union Jack component - black and white version
 const UnionJack = ({ size = 20, className = '', id = '' }) => (
@@ -44,18 +51,49 @@ const UnionJack = ({ size = 20, className = '', id = '' }) => (
 
 // Awesome Components
 import EditorialGrid from '../components/AwesomeComponents/EditorialGrid';
-import { ScrollingStrips } from '../components';
-
-// Blog Section
-import BlogSection from '../components/BlogSection';
+// Blog posts data
+import blogPosts from '../blog/posts.json';
 import ExpeditionBarcode from '../components/Expeditions/ExpeditionBarcode';
+
+// ============================================
+// Blog Section Constants
+// ============================================
+const BLOG_PERSONAS = [
+  { id: 'press', headline: 'In the Press', subtitle: 'Publications & media features', categories: ['Press'], icon: '01' },
+  { id: 'learner', headline: 'Learn to Fly', subtitle: 'Training & safety fundamentals', categories: ['Training', 'Safety'], icon: '02' },
+  { id: 'owner', headline: 'Own an Aircraft', subtitle: 'Purchase, maintain & manage', categories: ['Ownership', 'Aircraft', 'Maintenance'], icon: '03' },
+  { id: 'pilot', headline: 'Fly Somewhere', subtitle: 'Routes, airspace & operations', categories: ['Operations', 'Safety', 'Training'], icon: '04' },
+  { id: 'adventurer', headline: 'Go Further', subtitle: 'Lifestyle, travel & exploration', categories: ['Lifestyle', 'Operations', 'Aircraft'], icon: '05' },
+];
+
+// Curated popularity ranking (simulated engagement order)
+const POPULAR_POST_IDS = [
+  'ppl-guide', 'london-heli-lanes', 'flyer-magazine-feature', 'ownership-vs-hire',
+  'fly-to-lunch', 'autorotations', 'r44-buyers-guide', 'pilot-mag-r66-review',
+  'mastering-the-hover', 'cross-channel', 'weather-decisions', 'night-rating',
+  'heli-ops-training-spotlight', 'leaseback-program', 'maintenance-check',
+  'superyacht-operations', 'pre-flight-walkaround', 'turbine-flight', 'winter-flying',
+  'vertical-mag-leaseback', 'lte-awareness', 'r22-first-solo', 'fuel-management',
+  'radio-telephony', 'medical-certificates', 'hangarage-guide', 'flight-instructor',
+  'confined-areas', 'rr300-engine', 'annual-inspection', 'why-we-fly',
+];
+
+const formatBlogDate = (dateStr) => {
+  const d = new Date(dateStr + 'T00:00:00');
+  return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+};
 
 
 // ============================================
 // Service Center Card — Cloud Frost (cert-114 style)
 // ============================================
-function ServiceSplitDots() {
+function ServiceSplitDots({ autoExpand = false }) {
   const [expanded, setExpanded] = useState(false);
+
+  useEffect(() => {
+    setExpanded(autoExpand);
+  }, [autoExpand]);
+
   return (
     <div className="cert-cloud">
       <div className={`cert-cloud__card ${expanded ? 'cert-cloud__card--expanded' : ''}`} onClick={() => setExpanded(!expanded)}>
@@ -64,44 +102,7 @@ function ServiceSplitDots() {
           <div className="cert-cloud__upper">
             <img src="/assets/images/robinson-assets/logos/rhc_authorized-service-center-logo-logo-yellow-rotor-black-type.svg" alt="Robinson Authorized Service Center" className="cert-cloud__logo" />
           </div>
-          <div className="cert-cloud__lower">
-            <span className="cert-cloud__guimbal-name">GUIMBAL</span>
-            <span className="cert-cloud__guimbal-sub">Cabri G2</span>
-          </div>
         </div>
-        <span className="cert-cloud__hint">{expanded ? 'Click to collapse' : 'See details \u2192'}</span>
-        {expanded && (
-          <div className="cert-cloud__expanded">
-            <div className="cert-cloud__body">
-              <h3 className="cert-cloud__title">Authorized Dealer &amp; Service Center</h3>
-              <p className="cert-cloud__desc">Factory distributor, authorised dealer, and designated service centre for the full Robinson range — R22, R44, R66.</p>
-              <span className="cert-cloud__label-tag">The Robinson Specialists</span>
-              <div className="cert-cloud__stats">
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">85+</span>
-                  <span className="cert-cloud__stat-label">Aircraft</span>
-                </div>
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">2,500+</span>
-                  <span className="cert-cloud__stat-label">Services</span>
-                </div>
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">Part 145</span>
-                  <span className="cert-cloud__stat-label">EASA</span>
-                </div>
-              </div>
-            </div>
-            <div className="cert-cloud__footer">
-              <span className="cert-cloud__footer-label">Certified for</span>
-              <div className="cert-cloud__pills">
-                <span className="cert-cloud__pill">Robinson R22</span>
-                <span className="cert-cloud__pill">Robinson R44</span>
-                <span className="cert-cloud__pill">Robinson R66</span>
-                <span className="cert-cloud__pill">Guimbal Cabri G2</span>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -110,10 +111,16 @@ function ServiceSplitDots() {
 // ============================================
 // Dealer Card — Cloud Frost (cert-114 style)
 // ============================================
-function DealerSplitDots() {
+function DealerSplitDots({ autoExpand = false }) {
   const [expanded, setExpanded] = useState(false);
+  const dealerRef = useRef(null);
+
+  useEffect(() => {
+    setExpanded(autoExpand);
+  }, [autoExpand]);
+
   return (
-    <div className="cert-cloud cert-cloud--dealer">
+    <div className="cert-cloud cert-cloud--dealer" ref={dealerRef}>
       <div className={`cert-cloud__card ${expanded ? 'cert-cloud__card--expanded' : ''}`} onClick={() => setExpanded(!expanded)}>
         <div className="cert-cloud__dots"></div>
         <div className="cert-cloud__split">
@@ -121,27 +128,12 @@ function DealerSplitDots() {
             <img src="/assets/images/robinson-assets/logos/rhc-authorized-dealer-logo-logo-yellow-rotor-black-type.svg" alt="Robinson Authorized Dealer" className="cert-cloud__logo" />
           </div>
         </div>
-        <span className="cert-cloud__hint">{expanded ? 'Click to collapse' : 'See details \u2192'}</span>
         {expanded && (
           <div className="cert-cloud__expanded">
             <div className="cert-cloud__body">
               <span className="cert-cloud__label-tag">Official</span>
               <h3 className="cert-cloud__title">Robinson Authorized Dealer</h3>
-              <p className="cert-cloud__desc">The UK's premier Robinson dealership since 1990. Factory-direct pricing, full warranty support, and expert guidance from purchase to delivery.</p>
-              <div className="cert-cloud__stats">
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">35+</span>
-                  <span className="cert-cloud__stat-label">Years</span>
-                </div>
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">500+</span>
-                  <span className="cert-cloud__stat-label">Aircraft Sold</span>
-                </div>
-                <div className="cert-cloud__stat">
-                  <span className="cert-cloud__stat-value">UK</span>
-                  <span className="cert-cloud__stat-label">Exclusive</span>
-                </div>
-              </div>
+              <p className="cert-cloud__desc">The UK's premier Robinson dealership since 2011. Factory-direct pricing, full warranty support, and expert guidance from purchase to delivery.</p>
             </div>
           </div>
         )}
@@ -200,96 +192,6 @@ function ParallaxSection({ image, alt, children, className = '', waves = false }
   );
 }
 
-// Hero scroll path - Triple Wave (path-19) - centered
-const HERO_PATHS_BOTTOM = [
-  { d: 'M -50 100 L 2050 100', stroke: '#a0a0a0', width: 2, offset: 0 },
-  { d: 'M -50 250 L 2050 250', stroke: '#b0b0b0', width: 1.5, offset: 0.03 },
-  { d: 'M -50 400 L 2050 400', stroke: '#c0c0c0', width: 1, offset: 0.06 }
-];
-
-const HERO_PATHS_TOP = [
-  { d: 'M -50 100 L 2050 100', stroke: '#c0c0c0', width: 1, offset: 0 },
-  { d: 'M -50 250 L 2050 250', stroke: '#b0b0b0', width: 1.5, offset: 0.03 },
-  { d: 'M -50 400 L 2050 400', stroke: '#a0a0a0', width: 2, offset: 0.06 }
-];
-
-function HeroScrollPath({ containerRef, hidden }) {
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"]
-  });
-
-  // Transform scroll progress: start at 25%, end at 100%
-  const pathProgress = useTransform(scrollYProgress, [0, 1], [0.20, 1]);
-
-  return (
-    <>
-      {/* Top SVG */}
-      <svg
-        className={`fd-hero__path-svg fd-hero__path-svg--top ${hidden ? 'fd-hero__path-svg--hidden' : ''}`}
-        viewBox="0 0 2000 500"
-        preserveAspectRatio="none"
-        fill="none"
-      >
-        {HERO_PATHS_TOP.map((path, idx) => (
-          <g key={idx}>
-            <path
-              d={path.d}
-              stroke="rgba(180, 180, 180, 0.15)"
-              strokeWidth={path.width}
-              strokeLinecap="round"
-              strokeDasharray="6 10"
-              fill="none"
-            />
-            <motion.path
-              d={path.d}
-              stroke={path.stroke}
-              strokeWidth={path.width}
-              strokeLinecap="round"
-              fill="none"
-              style={{
-                opacity: 0.5,
-                pathLength: useTransform(pathProgress, v => Math.min(1, v + path.offset))
-              }}
-            />
-          </g>
-        ))}
-      </svg>
-
-      {/* Bottom SVG */}
-      <svg
-        className={`fd-hero__path-svg fd-hero__path-svg--bottom ${hidden ? 'fd-hero__path-svg--hidden' : ''}`}
-        viewBox="0 0 2000 500"
-        preserveAspectRatio="none"
-        fill="none"
-      >
-        {HERO_PATHS_BOTTOM.map((path, idx) => (
-          <g key={idx}>
-            <path
-              d={path.d}
-              stroke="rgba(180, 180, 180, 0.15)"
-              strokeWidth={path.width}
-              strokeLinecap="round"
-              strokeDasharray="6 10"
-              fill="none"
-            />
-            <motion.path
-              d={path.d}
-              stroke={path.stroke}
-              strokeWidth={path.width}
-              strokeLinecap="round"
-              fill="none"
-              style={{
-                opacity: 0.5,
-                pathLength: useTransform(pathProgress, v => Math.min(1, v + path.offset))
-              }}
-            />
-          </g>
-        ))}
-      </svg>
-    </>
-  );
-}
 
 /**
  * CUSTOM HEADER COMPONENT FOR FINAL DRAFT
@@ -298,36 +200,72 @@ function HeroScrollPath({ containerRef, hidden }) {
  */
 function FinalDraftHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [colorDark, setColorDark] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [verticalProgress, setVerticalProgress] = useState(0);
-  const [horizontalProgress, setHorizontalProgress] = useState(0);
+  const fdHeaderRef = useRef(null);
+  const fdMenuBtnRef = useRef(null);
+  const fdRafId = useRef(0);
 
-  // Scroll handler for spotlight animation
   useEffect(() => {
-    const handleScroll = () => {
+    let prevScrolled = false;
+    let prevVisible = false;
+
+    let settled = false;
+
+    const update = () => {
       const scrollY = window.scrollY;
+      const ih = window.innerHeight;
+      const headerEl = fdHeaderRef.current;
+      const btnEl = fdMenuBtnRef.current;
+      if (!headerEl) return;
 
-      // Vertical completes FIRST (0 to 1 over first 150px)
-      const vProgress = Math.min(scrollY / 150, 1);
-      setVerticalProgress(vProgress);
+      const heroEndPx = ih * 1.45;
 
-      // Horizontal completes SECOND (0 to 1 over full 300px)
-      const hProgress = Math.min(scrollY / 300, 1);
-      setHorizontalProgress(hProgress);
+      if (settled) {
+        if (scrollY < ih * 1.6) { settled = false; }
+        else return;
+      }
 
-      // Color changes at 300px
-      setColorDark(scrollY > 300);
-      // Position/size changes at 300px
-      setScrolled(scrollY > 300);
+      const visible = scrollY > heroEndPx;
+      const adjustedScroll = Math.max(0, scrollY - heroEndPx);
+      const vProgress = Math.min(adjustedScroll / 150, 1);
+      const hProgress = Math.min(adjustedScroll / 300, 1);
+      const isScrolled = adjustedScroll > 300;
+
+      const spotlightHeight = 95 + Math.round(vProgress * 405);
+      const spotlightWidth = 214 + Math.round(hProgress * 1786);
+
+      headerEl.style.setProperty('--spotlight-width', `${spotlightWidth}px`);
+      headerEl.style.setProperty('--spotlight-height', `${spotlightHeight}px`);
+      headerEl.style.opacity = visible ? 1 : 0;
+      headerEl.style.pointerEvents = visible ? 'auto' : 'none';
+
+      if (isScrolled !== prevScrolled) {
+        prevScrolled = isScrolled;
+        headerEl.classList.toggle('Header--scrolled', isScrolled);
+        if (btnEl) {
+          btnEl.classList.toggle('color-dark', isScrolled);
+          btnEl.classList.toggle('scrolled', isScrolled);
+        }
+      }
+      prevVisible = visible;
+
+      if (isScrolled && vProgress === 1 && hProgress === 1) {
+        settled = true;
+      }
+    };
+
+    const handleScroll = () => {
+      cancelAnimationFrame(fdRafId.current);
+      fdRafId.current = requestAnimationFrame(update);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    update();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(fdRafId.current);
+    };
   }, []);
 
-  // Close on Escape key
   useEffect(() => {
     const handleEscape = (e) => {
       if (e.key === 'Escape') setMenuOpen(false);
@@ -338,10 +276,6 @@ function FinalDraftHeader() {
 
   const toggleMenu = () => setMenuOpen(!menuOpen);
   const closeMenu = () => setMenuOpen(false);
-
-  // Spotlight dimensions
-  const spotlightHeight = 95 + Math.round(verticalProgress * 405);
-  const spotlightWidth = 214 + Math.round(horizontalProgress * 1786);
 
   return (
     <>
@@ -402,26 +336,27 @@ function FinalDraftHeader() {
         </div>
       </div>
 
-      {/* Menu Button */}
-      <button
-        className={`hq-menu-btn ${colorDark ? 'color-dark' : ''} ${scrolled ? 'scrolled' : ''} ${menuOpen ? 'open' : ''}`}
-        onClick={toggleMenu}
-        aria-label="Toggle menu"
-        aria-expanded={menuOpen}
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      {/* Header with Spotlight */}
+      {/* Header with Spotlight — hidden during hero, fades in after */}
       <header
-        className={`Header Header--top ${scrolled ? 'Header--scrolled' : ''}`}
+        ref={fdHeaderRef}
+        className="Header Header--top"
         style={{
-          '--spotlight-width': `${spotlightWidth}px`,
-          '--spotlight-height': `${spotlightHeight}px`
+          opacity: 0,
+          pointerEvents: 'none',
+          transition: 'opacity 0.4s ease',
         }}
       >
+        <button
+          ref={fdMenuBtnRef}
+          className={`hq-menu-btn ${menuOpen ? 'open' : ''}`}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
         <div className="Header-inner Header-inner--top" data-nc-group="top">
           <div data-nc-container="top-left"></div>
           <div data-nc-container="top-center">
@@ -441,7 +376,7 @@ function FinalDraftHeader() {
                 <span className="Header-nav-item Header-nav-item--folder">
                   <Link to="/expeditions" className="Header-nav-folder-title">Exploration</Link>
                   <span className="Header-nav-folder">
-                    <Link to="/expeditions" className="Header-nav-folder-item">Worldwide Expeditions</Link>
+                    <Link to="/expeditions#worldwide" className="Header-nav-folder-item">Worldwide Expeditions</Link>
                     <Link to="/expeditions/calendar" className="Header-nav-folder-item">HQ Trips</Link>
                     <Link to="/services" className="Header-nav-folder-item">Ferry Flights</Link>
                   </span>
@@ -475,7 +410,140 @@ const rightImages = [
 const aboutImage = '/assets/images/facility/hangar-main.jpg';
 
 // ============================================================
-// SELF-FLY HIRE — Dark Map + Journey Timeline (from V41)
+// EDITORIAL STRIPS — V42 (replaces ScrollingStrips)
+// Sticky scroll-driven horizontal strips with brand gradient headlines
+// ============================================================
+
+const EDITORIAL_IMAGES_ROW1 = [
+  '/assets/images/expeditions/antartica.jpg',
+  '/assets/images/gallery/flying/flying-.jpg',
+  '/assets/images/expeditions/channel.jpg',
+  '/assets/images/facility/hq-aviation-robinsons.jpg',
+  '/assets/images/expeditions/north-pole.jpg',
+  '/assets/images/gallery/flying/foggy-evening-flying.jpg',
+  '/assets/images/facility/main-sales-pic.jpg',
+  '/assets/images/facility/busy-hangar.jpg',
+  '/assets/images/new-aircraft/r88/rhc-r88-left-side-three-quarter-front-view-21797.jpg',
+  '/assets/images/facility/hq-0696.jpg',
+  '/assets/images/new-aircraft/r88/rhc-r88-atmospheric-effect-front-view-218022.jpg',
+  '/assets/images/facility/hq-0345.jpg',
+  '/assets/images/facility/hq-0153.jpg',
+  '/assets/images/facility/hq-0254.jpg',
+  '/assets/images/gallery/flying/flying--1.jpg',
+  '/assets/images/facility/hq-0391.jpg',
+  '/assets/images/facility/hq-0502.jpg',
+  '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
+  '/assets/images/facility/hq-0209.jpg',
+  '/assets/images/facility/okey-paint-quality.jpg',
+];
+
+const EDITORIAL_IMAGES_ROW2 = [
+  '/assets/images/facility/hq-0035.jpg',
+  '/assets/images/facility/hq-0294.jpg',
+  '/assets/images/gallery/flying/james-shadow-night.jpg',
+  '/assets/images/facility/hq-0409.jpg',
+  '/assets/images/facility/sales-rebuild.jpg',
+  '/assets/images/facility/hq-0477.jpg',
+  '/assets/images/gallery/flying/foggy-evening-flying.jpg',
+  '/assets/images/facility/hq-0745.jpg',
+  '/assets/images/facility/hq-0089.jpg',
+  '/assets/images/facility/hq-0354.jpg',
+  '/assets/images/facility/hq-0153-1.jpg',
+  '/assets/images/facility/hq-0300.jpg',
+  '/assets/images/facility/maintenance-.jpg',
+  '/assets/images/facility/hq-0075.jpg',
+  '/assets/images/facility/hq-img_1340.jpg',
+  '/assets/images/facility/hq-0698.jpg',
+  '/assets/images/facility/hq-0129.jpg',
+  '/assets/images/facility/hq-0167.jpg',
+  '/assets/images/facility/hq-0053.jpg',
+  '/assets/images/facility/hq-0388.jpg',
+];
+
+const EDITORIAL_DESTINATIONS = [
+  { name: 'The Cotswolds', time: '1hr' },
+  { name: 'Goodwood Racecourse', time: '35min' },
+  { name: 'St Andrews Golf', time: '3.5hrs' },
+  { name: 'Le Touquet, France', time: '1hr' },
+  { name: 'Cowes, Isle of Wight', time: '45min' },
+  { name: 'Cheltenham Races', time: '50min' },
+  { name: 'Soho Farmhouse', time: '40min' },
+  { name: 'Padstow, Cornwall', time: '2.5hrs' },
+  { name: 'Lake District', time: '2hrs' },
+  { name: 'Scottish Highlands', time: '3hrs' },
+  { name: 'Blenheim Palace', time: '30min' },
+  { name: 'Channel Islands', time: '1.5hrs' },
+];
+
+const EditorialStrips = ({ wrapperRef = null }) => {
+  const containerRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: wrapperRef || containerRef,
+    offset: ['start end', 'end start'],
+  });
+
+  const xL = useTransform(scrollYProgress, [0, 1], ['15%', '-120%']);
+  const xR = useTransform(scrollYProgress, [0, 1], ['5%', '-100%']);
+  const xM = useTransform(scrollYProgress, [0, 1], ['15%', '-130%']);
+  const xR2 = useTransform(scrollYProgress, [0, 1], ['-100%', '5%']);
+
+  return (
+    <section
+      className="editorial-strips"
+      ref={containerRef}
+      style={{ position: 'sticky', top: '90px', zIndex: 50 }}
+    >
+      <style>{`
+        .editorial-strips { background: transparent; padding: 4rem 0; overflow: hidden; display: flex; flex-direction: column; gap: 1.25rem; position: relative; }
+        .editorial-strips::before, .editorial-strips::after { content: ''; position: absolute; top: 0; bottom: 0; width: 160px; z-index: 10; pointer-events: none; }
+        .editorial-strips::before { left: 0; background: linear-gradient(to right, rgba(250,249,246,0.95), transparent); }
+        .editorial-strips::after { right: 0; background: linear-gradient(to left, rgba(250,249,246,0.95), transparent); }
+        .editorial-strips__headline-row { display: flex; align-items: baseline; gap: 3rem; white-space: nowrap; padding: 0.75rem 0; }
+        .editorial-strips__word { flex-shrink: 0; font-family: 'Space Grotesk', sans-serif; font-size: clamp(2.5rem, 5vw, 4.2rem); font-weight: 700; text-transform: uppercase; letter-spacing: -0.02em; line-height: 1; text-shadow: -6px -6px 0 #faf9f6, 6px -6px 0 #faf9f6, -6px 6px 0 #faf9f6, 6px 6px 0 #faf9f6, 0 -6px 0 #faf9f6, 0 6px 0 #faf9f6, -6px 0 0 #faf9f6, 6px 0 0 #faf9f6; }
+        .editorial-strips__word--1 { color: #1a1a1a; }
+        .editorial-strips__word--2 { color: #4a4a4a; }
+        .editorial-strips__word--3 { color: #7a7a7a; }
+        .editorial-strips__word--4 { color: #b0b0b0; }
+        .editorial-strips__img-row { display: flex; gap: 1.25rem; white-space: nowrap; }
+        .editorial-strips__img { flex-shrink: 0; width: 260px; height: 165px; border-radius: 6px; overflow: hidden; }
+        .editorial-strips__img img { width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease; }
+        .editorial-strips__img:hover img { transform: scale(1.04); }
+        .editorial-strips__dest-row { display: flex; gap: 2.5rem; white-space: nowrap; padding: 0.25rem 0; align-items: center; }
+        .editorial-strips__dest { flex-shrink: 0; display: flex; align-items: center; gap: 0.75rem; }
+        .editorial-strips__dest-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: #1a1a1a; text-shadow: -4px -4px 0 #faf9f6, 4px -4px 0 #faf9f6, -4px 4px 0 #faf9f6, 4px 4px 0 #faf9f6, 0 -4px 0 #faf9f6, 0 4px 0 #faf9f6, -4px 0 0 #faf9f6, 4px 0 0 #faf9f6; }
+        .editorial-strips__dest-time { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #4a4a4a; background: #dcfce7; border: 1px solid #4ade80; padding: 3px 10px; border-radius: 2px; }
+        .editorial-strips__dest-accent { font-family: 'Share Tech Mono', monospace; font-size: 0.5rem; letter-spacing: 0.15em; text-transform: uppercase; color: #4ade80; }
+      `}</style>
+      <motion.div className="editorial-strips__headline-row" style={{ x: xL }}>
+        {['Your', 'Sky.', 'Your', 'Schedule.', 'Your', 'Freedom.', 'No', 'Limits.', 'No', 'Queues.', 'Just', 'Fly.'].map((w, i) => (
+          <span key={i} className={`editorial-strips__word editorial-strips__word--${(i % 4) + 1}`}>{w}</span>
+        ))}
+      </motion.div>
+      <motion.div className="editorial-strips__img-row" style={{ x: xR }}>
+        {EDITORIAL_IMAGES_ROW1.map((src, i) => (
+          <div key={i} className="editorial-strips__img"><img src={src} alt="" loading="lazy" /></div>
+        ))}
+      </motion.div>
+      <motion.div className="editorial-strips__dest-row" style={{ x: xM }}>
+        {[...EDITORIAL_DESTINATIONS, ...EDITORIAL_DESTINATIONS].map((d, i) => (
+          <span key={i} className="editorial-strips__dest">
+            <span className="editorial-strips__dest-name">{d.name}</span>
+            <span className="editorial-strips__dest-time">{d.time}</span>
+          </span>
+        ))}
+      </motion.div>
+      <motion.div className="editorial-strips__img-row" style={{ x: xR2 }}>
+        {EDITORIAL_IMAGES_ROW2.map((src, i) => (
+          <div key={i} className="editorial-strips__img"><img src={src} alt="" loading="lazy" /></div>
+        ))}
+      </motion.div>
+    </section>
+  );
+};
+
+// ============================================================
+// SELF-FLY HIRE — Light Map + Journey Timeline (from V42)
 // ============================================================
 const sfhUkPath = "M224.5 476.8 L199.8 492.6 L189.1 490.9 L176.2 478.9 L162.5 480.4 L168.2 474.2 L156.5 468.8 L136.2 476.6 L122.0 459.4 L165.9 429.1 L172.6 414.4 L168.6 410.0 L167.8 389.1 L144.9 396.6 L161.2 373.6 L194.4 360.3 L207.5 365.9 L204.8 356.7 L208.8 354.6 L221.3 362.4 L208.8 348.7 L214.3 333.7 L210.1 331.0 L210.4 322.1 L215.3 318.3 L216.6 303.6 L204.8 307.0 L188.0 277.4 L193.0 263.3 L209.9 251.0 L189.6 251.5 L173.5 262.8 L139.5 258.3 L135.8 268.9 L126.9 257.5 L125.5 248.9 L130.1 248.7 L145.0 214.0 L136.6 200.6 L139.2 184.9 L148.7 184.3 L138.5 176.7 L140.2 169.4 L123.8 187.6 L123.5 175.6 L132.3 164.3 L117.1 178.8 L110.3 221.5 L101.9 223.3 L112.3 193.5 L107.7 192.8 L111.1 163.2 L124.8 128.8 L106.4 144.1 L87.5 131.5 L103.4 122.3 L98.2 118.9 L110.1 96.6 L99.9 82.8 L109.3 75.3 L102.9 67.0 L108.3 52.7 L126.1 52.7 L116.0 39.9 L119.0 28.5 L131.9 26.8 L128.8 18.6 L133.2 5.3 L154.7 9.9 L209.2 1.6 L203.0 22.8 L172.2 47.4 L170.5 54.7 L177.5 56.9 L166.5 73.3 L199.7 64.2 L247.9 64.8 L256.2 70.9 L259.6 80.2 L231.1 137.0 L199.1 155.5 L215.9 153.2 L224.3 162.9 L197.1 178.2 L180.2 173.7 L209.5 183.4 L227.2 178.3 L245.1 186.7 L264.6 209.3 L281.3 268.0 L303.5 281.5 L326.7 307.6 L321.8 314.2 L334.6 342.2 L303.9 334.3 L318.4 336.6 L340.8 360.7 L344.0 372.6 L331.8 389.9 L341.0 396.4 L352.1 385.7 L380.3 388.6 L395.6 400.1 L399.0 412.0 L393.0 443.1 L378.8 453.1 L380.5 461.7 L359.7 469.5 L365.5 472.2 L365.2 480.2 L346.7 487.4 L386.0 494.3 L385.3 506.7 L367.9 524.0 L338.1 535.0 L298.9 534.9 L274.0 526.0 L277.3 531.1 L249.6 537.6 L252.4 544.2 L249.5 545.8 L211.4 538.2 L195.4 543.8 L184.4 570.4 L164.1 560.1 L143.0 567.0 L127.6 584.1 L106.4 581.5 L136.5 550.5 L148.7 534.1 L151.1 520.6 L160.1 517.1 L164.4 506.2 L205.9 505.0 L233.8 468.8 L224.5 476.8 Z";
 
@@ -494,9 +562,9 @@ const sfhFormatTime = (nm, kts) => {
 };
 
 const sfhFleet = [
-  { model: 'R22', seats: '2 Seats', rate: '£275/hr', img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
+  { model: 'R66 Turbine', seats: '5 Seats', rate: '£595/hr', img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png' },
   { model: 'R44', seats: '4 Seats', rate: '£395/hr', img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
-  { model: 'R66 Turbine', seats: '5 Seats', rate: '£595/hr', img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png' },
+  { model: 'R22', seats: '2 Seats', rate: '£275/hr', img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
 ];
 
 const sfhDestCoords = [
@@ -506,132 +574,282 @@ const sfhDestCoords = [
   { name: 'Cornwall', x: 145, y: 560, nm: 180, carTime: '4h 30min', desc: 'Skip the M5 entirely. Land near the coast for a weekend of surfing, cream teas and dramatic clifftop walks.' },
 ];
 
+const maintGalleryRow1 = [
+  '/assets/images/facility/maintenance-.jpg',
+  '/assets/images/facility/hq-0391.jpg',
+  '/assets/images/facility/hq-0477.jpg',
+  '/assets/images/facility/hq-0354.jpg',
+  '/assets/images/facility/hq-0035.jpg',
+  '/assets/images/facility/hq-0089.jpg',
+  '/assets/images/facility/hq-0745.jpg',
+];
+const maintGalleryRow2 = [
+  '/assets/images/facility/sales-rebuild.jpg',
+  '/assets/images/facility/hq-0167.jpg',
+  '/assets/images/facility/okey-paint-quality.jpg',
+  '/assets/images/facility/hq-0345.jpg',
+  '/assets/images/facility/hq-0053.jpg',
+  '/assets/images/facility/hq-0300.jpg',
+  '/assets/images/facility/hq-0696.jpg',
+];
+
+function MaintScrollGallery() {
+  return (
+    <div className="fd-maint__scroll-gallery">
+      <div className="fd-maint__scroll-sticky">
+        <div className="fd-maint__scroll-col fd-maint__scroll-col--up">
+          {maintGalleryRow1.slice(0, 4).map((src, i) => (
+            <div key={i} className="fd-maint__scroll-img">
+              <img src={src} alt="" loading="lazy" />
+            </div>
+          ))}
+        </div>
+        <div className="fd-maint__scroll-col fd-maint__scroll-col--down">
+          {maintGalleryRow2.slice(0, 4).map((src, i) => (
+            <div key={i} className="fd-maint__scroll-img">
+              <img src={src} alt="" loading="lazy" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 const SelfFlyHireSection = () => {
   const [hoveredDest, setHoveredDest] = useState(null);
   const [lockedDest, setLockedDest] = useState(null);
-  const [selectedAircraft, setSelectedAircraft] = useState('R44');
-  const activeDest = hoveredDest !== null ? hoveredDest : lockedDest;
+  const [scrollDest, setScrollDest] = useState(null);
+  const [selectedAircraft, setSelectedAircraft] = useState('R66 Turbine');
+  const [scrollAircraft, setScrollAircraft] = useState(null);
+  const sfhSectionRef = useRef(null);
+  const sfhJourneyRef = useRef(null);
+  const sfhGridRef = useRef(null);
+  const isHoveringDest = useRef(false);
+  const isHoveringFleet = useRef(false);
+  const [tlProgress, setTlProgress] = useState(0);
+  const [mapExpanded, setMapExpanded] = useState(false);
+
+  // Scroll-based destination cycling + timeline progress — starts once grid top scrolls past viewport
+  useEffect(() => {
+    const grid = sfhGridRef.current;
+    const section = sfhSectionRef.current;
+    if (!grid || !section) return;
+    let sfhRaf = 0;
+    const handleScrollRaw = () => {
+      const gridRect = grid.getBoundingClientRect();
+      // Skip if section is far from viewport
+      if (gridRect.bottom < -500 || gridRect.top > window.innerHeight + 500) return;
+      const stickyOffset = window.innerHeight * 0.15; // 15vh
+      // pixels scrolled past the point where the map becomes sticky
+      const pastSticky = stickyOffset - gridRect.top;
+
+      if (pastSticky <= 0) {
+        setTlProgress(0);
+        if (sfhJourneyRef.current) sfhJourneyRef.current.style.setProperty('--tl-progress', 0);
+        if (!isHoveringDest.current && lockedDest === null) setScrollDest(null);
+        return;
+      }
+
+      // total scrollable distance — complete animation at 60% of grid height
+      const scrollableDistance = gridRect.height * 0.6;
+      const progress = Math.max(0, Math.min(1, pastSticky / Math.max(scrollableDistance, 1)));
+
+      setTlProgress(progress);
+      if (sfhJourneyRef.current) {
+        sfhJourneyRef.current.style.setProperty('--tl-progress', progress);
+      }
+
+      // Step 1: Destination cycling (0–0.33)
+      if (!isHoveringDest.current && lockedDest === null) {
+        if (progress < 0.02 || progress > 0.33) {
+          setScrollDest(null);
+        } else {
+          const normalized = progress / 0.33;
+          const idx = Math.min(Math.floor(normalized * sfhDestCoords.length), sfhDestCoords.length - 1);
+          setScrollDest(idx);
+        }
+      }
+
+      // Step 2: Aircraft cycling (0.33–0.66)
+      if (!isHoveringFleet.current) {
+        if (progress < 0.33 || progress > 0.66) {
+          setScrollAircraft(null);
+        } else {
+          const normalized = (progress - 0.33) / 0.33;
+          const aIdx = Math.min(Math.floor(normalized * sfhFleet.length), sfhFleet.length - 1);
+          setScrollAircraft(sfhFleet[aIdx].model);
+        }
+      }
+    };
+    const handleScroll = () => { cancelAnimationFrame(sfhRaf); sfhRaf = requestAnimationFrame(handleScrollRaw); };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScrollRaw();
+    return () => { window.removeEventListener('scroll', handleScroll); cancelAnimationFrame(sfhRaf); };
+  }, [lockedDest]);
+
+  const activeDest = hoveredDest !== null ? hoveredDest : lockedDest !== null ? lockedDest : scrollDest;
+  const activeAircraft = scrollAircraft !== null && !isHoveringFleet.current ? scrollAircraft : selectedAircraft;
   const denham = { x: 310, y: 480 };
-  const range = sfhAircraftRanges[selectedAircraft];
+  const range = sfhAircraftRanges[activeAircraft];
 
   return (
-    <section className="sfh-map" id="fleet">
+    <section className="sfh-map" id="fleet" ref={sfhSectionRef}>
       <style>{`
-        .sfh-map { background: #0e0e0e; color: #fff; }
-        .sfh-map__intro { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem 0; }
-        .sfh-map__pre-title { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3em; color: #444; margin-bottom: 1.5rem; }
+        .sfh-map { background: #fff; color: #1a1a1a; border-bottom: 1px solid rgba(0, 0, 0, 0.12); overflow-x: clip; }
+        .sfh-map__inner { max-width: 1200px; margin: 0 auto; padding: 1.5rem 0 5rem 0; }
+        .sfh-map__intro { margin-bottom: 1rem; display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
+        .sfh-map__intro-bg { grid-column: 1; grid-row: 1; background: rgba(214, 210, 204, 0.12); border-radius: 0 8px 8px 0; pointer-events: none; align-self: stretch; margin: 0 0 0 -50vw; }
+        .sfh-map__intro-border { grid-column: 1; grid-row: 1; border: 1px solid rgba(0,0,0,0.12); border-left: none; border-radius: 0 8px 8px 0; pointer-events: none; align-self: stretch; margin: 0 0 0 -50vw; z-index: 2; }
+        .sfh-map__intro-img { grid-column: 1; grid-row: 1; z-index: 1; padding: 1.5rem 3rem 1.5rem; display: flex; align-items: center; justify-content: center; align-self: stretch; }
+        .sfh-map__intro-img img { width: 100%; display: block; border-radius: 3px; }
+        .sfh-map__intro-text { grid-column: 2; grid-row: 1; min-width: 0; padding: 0 2rem 0 48px; }
+        @media (max-width: 768px) {
+          .sfh-map__intro { grid-template-columns: 1fr; }
+          .sfh-map__intro-text { grid-column: 1; padding: 2rem 0; max-width: none; }
+          .sfh-map__intro-img { padding: 1rem; }
+          .sfh-map__intro-bg { display: none; }
+          .sfh-map__intro-border { display: none; }
+        }
+        .sfh-map__pre-title { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3em; color: #777; margin-bottom: 1.5rem; }
         .sfh-map__title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(2rem, 4vw, 3.5rem); font-weight: 700; text-transform: uppercase; line-height: 1.1; margin-bottom: 1.5rem; }
         .sfh-map__title-line { display: block; }
-        .sfh-map__title-line--2 { color: #666; }
-        .sfh-map__tagline { font-size: 0.9rem; color: #888; line-height: 1.7; max-width: 600px; }
+        .sfh-map__title-line--2 { color: #999; }
+        .sfh-map__tagline { font-size: 0.9rem; color: #555; line-height: 1.7; }
 
-        .sfh-map__layout { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem 5rem; display: grid; grid-template-columns: 1fr 380px; gap: 3rem; align-items: start; }
+        .sfh-map__grid { display: grid; grid-template-columns: 1fr 1fr; align-items: start; }
 
         /* ── Map ── */
-        .sfh-map__map-box { background: #0a0a0a; border: 1px solid #1e1e1e; padding: 1.5rem; }
+        .sfh-map__map-box { background: #f2efea; border: 1px solid #ccc8c1; border-radius: 8px; padding: 1.5rem; position: sticky; top: 15vh; box-shadow: 0 4px 20px rgba(0,0,0,0.06); max-height: 82.5vh; display: flex; flex-direction: column; overflow: hidden; width: 100%; }
         .sfh-map__map-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
-        .sfh-map__map-header span { font-family: 'Share Tech Mono', monospace; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.12em; color: #444; }
-        .sfh-map__map-aircraft-label { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.55rem; text-transform: uppercase; letter-spacing: 0.1em; color: #333; margin-bottom: 1rem; }
-        .sfh-map__map-aircraft-label strong { color: #888; }
-        .sfh-map__map svg { width: 100%; height: auto; display: block; }
+        .sfh-map__map-header span { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.12em; color: #777; }
+        .sfh-map__map-aircraft-label { display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: #777; margin-bottom: 1rem; }
+        .sfh-map__map-aircraft-label strong { color: #1a1a1a; }
+        .sfh-map__map { flex: 1; min-height: 0; overflow: hidden; }
+        .sfh-map__map svg { display: block; width: 100%; height: auto; max-height: 70vh; object-fit: contain; }
         .sfh-map__pin { cursor: pointer; }
-        .sfh-map__pin text { font-family: 'Space Grotesk', sans-serif; font-size: 9px; font-weight: 600; fill: #555; text-transform: uppercase; pointer-events: none; transition: fill 0.2s; }
-        .sfh-map__pin--active text { fill: #fff; }
-        .sfh-map__rlabel { font-family: 'Share Tech Mono', monospace; font-size: 7px; fill: #333; }
+        .sfh-map__pin text { font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; fill: #888; text-transform: uppercase; pointer-events: none; transition: fill 0.2s; }
+        .sfh-map__pin--active text { fill: #1a1a1a; }
+        .sfh-map__rlabel { font-family: 'Share Tech Mono', monospace; font-size: 9px; fill: #999; }
         .sfh-map__range-ring { transition: r 0.4s ease, stroke 0.3s; }
 
         /* ── Journey Timeline ── */
-        .sfh-map__journey { position: sticky; top: 2rem; }
-        .sfh-map__journey-label { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3em; color: #444; margin-bottom: 2rem; font-family: 'Share Tech Mono', monospace; }
+        .sfh-map__journey { padding: 2rem 32px 0 2rem; }\n
+        .sfh-map__journey-label { display: block; font-size: 0.6rem; text-transform: uppercase; letter-spacing: 0.3em; color: #777; margin-bottom: 1rem; font-family: 'Share Tech Mono', monospace; }
+        .sfh-map__journey-desc { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; line-height: 1.6; color: #555; margin: 0 0 2rem; }
 
         .sfh-map__tl-step { display: grid; grid-template-columns: 36px 1fr; gap: 1rem; position: relative; }
-        .sfh-map__tl-step::before { content: ''; position: absolute; left: 17px; top: 36px; bottom: 0; width: 1px; background: #222; }
-        .sfh-map__tl-num { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #444; display: flex; align-items: center; justify-content: center; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: #888; background: #0e0e0e; position: relative; z-index: 1; }
-        .sfh-map__tl-step--active .sfh-map__tl-num { border-color: #fff; color: #fff; }
-        .sfh-map__tl-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #888; padding-top: 0.5rem; }
-        .sfh-map__tl-step--active .sfh-map__tl-title { color: #fff; }
+        .sfh-map__tl-step::before { content: ''; position: absolute; left: 17px; top: 36px; bottom: 0; width: 2px; background: #ccc8c1; transition: none; }
+        .sfh-map__tl-step::after { content: ''; position: absolute; left: 17px; top: 36px; bottom: 0; width: 2px; background: #1a1a1a; transform-origin: top; transform: scaleY(0); }
+        .sfh-map__tl-step:nth-child(2)::after { transform: scaleY(clamp(0, calc(var(--tl-progress, 0) / 0.33), 1)); }
+        .sfh-map__tl-step:nth-child(3)::after { transform: scaleY(clamp(0, calc((var(--tl-progress, 0) - 0.33) / 0.33), 1)); }
+        .sfh-map__tl-num { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #aaa; display: flex; align-items: center; justify-content: center; font-family: 'Share Tech Mono', monospace; font-size: 0.65rem; color: #777; background: #e8e4df; position: relative; z-index: 1; transition: border-color 0.3s, color 0.3s, background 0.3s; }
+        .sfh-map__tl-step--active .sfh-map__tl-num { border-color: #1a1a1a; color: #fff; background: #1a1a1a; }
+        .sfh-map__tl-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #777; padding-top: 0.5rem; transition: color 0.3s; }
+        .sfh-map__tl-step--active .sfh-map__tl-title { color: #1a1a1a; }
 
         .sfh-map__dest-list { padding: 1rem 0 0 0; margin: 0; list-style: none; }
-        .sfh-map__dest-item { display: flex; justify-content: space-between; align-items: center; padding: 0.6rem 0.75rem; cursor: pointer; transition: all 0.2s; border-left: 2px solid transparent; margin-bottom: 2px; }
-        .sfh-map__dest-item:hover { background: rgba(255,255,255,0.03); }
-        .sfh-map__dest-item--active { border-left-color: #fff; background: rgba(255,255,255,0.05); }
+        .sfh-map__dest-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1rem; cursor: pointer; transition: all 0.2s; border-left: 2px solid transparent; margin-bottom: 10px; background: rgba(0,0,0,0.02); }
+        .sfh-map__dest-item:hover { background: rgba(0,0,0,0.04); }
+        .sfh-map__dest-item--active { border-left-color: #1a1a1a; background: rgba(0,0,0,0.06); }
         .sfh-map__dest-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; color: #666; transition: color 0.2s; }
-        .sfh-map__dest-item--active .sfh-map__dest-name { color: #fff; }
-        .sfh-map__dest-flight { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #444; }
-        .sfh-map__dest-item--active .sfh-map__dest-flight { color: #888; }
+        .sfh-map__dest-item--active .sfh-map__dest-name { color: #1a1a1a; }
+        .sfh-map__dest-flight { font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #999; }
+        .sfh-map__dest-item--active .sfh-map__dest-flight { color: #444; }
 
-        .sfh-map__dest-detail-wrap { display: grid; margin-top: 0.75rem; border: 1px solid #1e1e1e; background: rgba(255,255,255,0.02); }
+        .sfh-map__dest-detail-wrap { display: grid; margin-top: 0.75rem; border: 1px solid #ccc8c1; background: #f2efea; }
         .sfh-map__dest-detail-wrap > * { grid-area: 1 / 1; padding: 1.25rem; transition: opacity 0.25s; }
         .sfh-map__dest-detail { opacity: 0; pointer-events: none; }
         .sfh-map__dest-detail--active { opacity: 1; pointer-events: auto; }
         .sfh-map__dest-detail--empty { display: flex; align-items: center; justify-content: center; }
-        .sfh-map__dest-detail-hint { font-size: 0.7rem; color: #333; font-family: 'Share Tech Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
-        .sfh-map__dest-detail-endless { display: block; margin-top: 0.75rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; color: #666; }
-        .sfh-map__dest-detail-time { font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: #fff; margin-bottom: 0.15rem; }
-        .sfh-map__dest-detail-car { font-size: 0.65rem; color: #555; margin-bottom: 0.75rem; }
-        .sfh-map__dest-detail-desc { font-size: 0.85rem; color: #888; line-height: 1.6; }
-        .sfh-map__dest-detail-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #555; margin-bottom: 0.5rem; }
+        .sfh-map__dest-detail-hint { font-size: 0.7rem; color: #999; font-family: 'Share Tech Mono', monospace; text-transform: uppercase; letter-spacing: 0.1em; }
+        .sfh-map__dest-detail-endless { display: block; margin-top: 10px; padding: 1rem 1rem; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; color: #666; text-align: right; }
+        .sfh-map__dest-detail-time { font-family: 'Share Tech Mono', monospace; font-size: 1.8rem; color: #1a1a1a; margin-bottom: 0.15rem; }
+        .sfh-map__dest-detail-car { font-size: 0.65rem; color: #777; margin-bottom: 0.75rem; }
+        .sfh-map__dest-detail-desc { font-size: 0.85rem; color: #555; line-height: 1.6; }
+        .sfh-map__dest-detail-name { font-family: 'Space Grotesk', sans-serif; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: #777; margin-bottom: 0.5rem; }
 
         .sfh-map__tl-step-02 { margin-top: 2rem; }
         .sfh-map__tl-step-03 { margin-top: 2rem; }
-        .sfh-map__tl-step-03::before { display: none; }
-        .sfh-map__fly-text { font-size: 0.85rem; color: #888; line-height: 1.6; padding-top: 0.5rem; }
+        .sfh-map__tl-step-03::before, .sfh-map__tl-step-03::after { display: none; }
+        .sfh-map__fly-text { font-size: 0.85rem; color: #555; line-height: 1.6; padding-top: 0.5rem; }
 
-        .sfh-map__fleet-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; border: 1px solid #1e1e1e; color: #fff; transition: all 0.3s; margin-bottom: 0.5rem; cursor: pointer; text-decoration: none; }
-        .sfh-map__fleet-row:hover { border-color: #444; }
-        .sfh-map__fleet-row--active { border-color: #fff; background: rgba(255,255,255,0.04); }
-        .sfh-map__fleet-row img { height: 28px; object-fit: contain; width: 48px; }
-        .sfh-map__fleet-model { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 0.75rem; }
-        .sfh-map__fleet-info { font-size: 0.6rem; color: #555; }
-        .sfh-map__fleet-rate { margin-left: auto; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #888; }
+        .sfh-map__fleet-row { display: flex; align-items: center; gap: 1rem; padding: 1rem 1rem; border: 1px solid #ccc8c1; color: #1a1a1a; transition: all 0.3s; margin-bottom: 10px; cursor: pointer; text-decoration: none; }
+        .sfh-map__fleet-row:hover { border-color: #888; }
+        .sfh-map__fleet-row--active { border-color: #1a1a1a; background: rgba(0,0,0,0.04); }
+        .sfh-map__fleet-row img { height: 44px; object-fit: contain; width: 72px; }
+        .sfh-map__fleet-model { font-family: 'Space Grotesk', sans-serif; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; }
+        .sfh-map__fleet-info { font-size: 0.7rem; color: #777; }
+        .sfh-map__fleet-rate { margin-left: auto; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: #555; }
 
-        .sfh-map__cta { display: block; width: 100%; padding: 0.85rem; background: #fff; color: #0e0e0e; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; margin-top: 1.5rem; transition: background 0.3s; }
-        .sfh-map__cta:hover { background: #ddd; }
+        .sfh-map__cta { display: block; width: 100%; padding: 0.85rem; background: #1a1a1a; color: #fff; text-decoration: none; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; text-align: center; font-family: 'Space Grotesk', sans-serif; font-weight: 600; margin-top: 1.5rem; transition: background 0.3s; }
+        .sfh-map__cta:hover { background: #333; color: #fff; }
+
+        .sfh-map__collapse-card { margin-bottom: 0; }
+        .sfh-map__collapse-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 1rem 1.25rem; background: rgba(214, 210, 204, 0.12); border: 1px solid rgba(0,0,0,0.08); border-radius: 8px; cursor: pointer; font-family: 'Space Grotesk', sans-serif; font-size: 0.95rem; font-weight: 600; color: #1a1a1a; transition: background 0.2s; }
+        .sfh-map__collapse-toggle:hover { background: rgba(214, 210, 204, 0.2); }
+        .sfh-map__collapse-chevron { font-size: 0.7rem; transition: transform 0.3s; color: #777; }
+        .sfh-map__collapse-chevron--open { transform: rotate(180deg); }
+        .sfh-map__grid-wrapper { display: none; }
+        .sfh-map__grid-wrapper--open { display: block; width: 100vw; margin-left: calc(-50vw + 50%); }
 
         @media (max-width: 900px) {
-          .sfh-map__layout { grid-template-columns: 1fr; }
+          .sfh-map__grid { grid-template-columns: 1fr; }
         }
       `}</style>
 
-      {/* Intro */}
-      <div className="sfh-map__intro">
-        <span className="sfh-map__pre-title">Freedom to Fly Yourself Anywhere</span>
-        <h2 className="sfh-map__title">
-          <span className="sfh-map__title-line">Your Aircraft</span>
-          <span className="sfh-map__title-line sfh-map__title-line--2">Awaits</span>
-        </h2>
-        <p className="sfh-map__tagline">
-          You've earned your licence. Now use it. Hire from our fleet of R22s, R44s and R66s — fuelled, washed and waiting on the pad for you, ready to go. Fly yourself to lunch in France, a weekend in the Cotswolds, a business meeting across the country, or just flying around for the beauty and fun of it. Available by the hour, day or week. No crew, no waiting, no compromise.
-        </p>
-      </div>
-
-      {/* Map + Timeline */}
-      <div className="sfh-map__layout">
-        <div className="sfh-map__map-box">
+      <div className="sfh-map__inner">
+        <div className="sfh-map__intro">
+          <div className="sfh-map__intro-bg" />
+          <div className="sfh-map__intro-border" />
+          <div className="sfh-map__intro-img">
+            <img src="/assets/images/facility/hq-0167.jpg" alt="Helicopter on the pad" loading="lazy" />
+          </div>
+          <div className="sfh-map__intro-text">
+            <span className="sfh-map__pre-title">Freedom to Fly Yourself Anywhere</span>
+            <h2 className="sfh-map__title">
+              <span className="sfh-map__title-line">Self-Fly Hire:</span>
+              <span className="sfh-map__title-line">Your Aircraft</span>
+              <span className="sfh-map__title-line sfh-map__title-line--2">Awaits</span>
+            </h2>
+            <p className="sfh-map__tagline">
+              You've earned your licence. Now use it. Hire from our fleet of R22s, R44s and R66s — fuelled, washed and waiting on the pad for you, ready to go. Fly yourself to lunch in France, a weekend in the Cotswolds, a business meeting across the country, or just flying around for the beauty and fun of it. Available by the hour, day or week. No crew, no waiting, no compromise.
+            </p>
+            <div className="sfh-map__collapse-card">
+              <button className="sfh-map__collapse-toggle" onClick={() => setMapExpanded(!mapExpanded)}>
+                <span>See What It Can Do For You</span>
+                <span className={`sfh-map__collapse-chevron ${mapExpanded ? 'sfh-map__collapse-chevron--open' : ''}`}>&#9660;</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className={`sfh-map__grid-wrapper ${mapExpanded ? 'sfh-map__grid-wrapper--open' : ''}`}>
+        <div className="sfh-map__grid" ref={sfhGridRef}>
+          <div className="sfh-map__map-box">
           <div className="sfh-map__map-header">
             <span>Range Map — Denham (EGLD)</span>
           </div>
           <div className="sfh-map__map-aircraft-label">Showing range for: <strong>{range.label}</strong> at {range.cruise} cruise</div>
           <div className="sfh-map__map">
-            <svg viewBox="0 0 500 620" fill="none">
+            <svg viewBox="0 0 560 710" fill="none" overflow="hidden">
               <defs>
-                <radialGradient id="sfhglow30" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff" stopOpacity="0.04"/><stop offset="100%" stopColor="#fff" stopOpacity="0"/></radialGradient>
-                <radialGradient id="sfhglow60" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#fff" stopOpacity="0.02"/><stop offset="100%" stopColor="#fff" stopOpacity="0"/></radialGradient>
+                <radialGradient id="sfhglow30" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#1a1a1a" stopOpacity="0.03"/><stop offset="100%" stopColor="#1a1a1a" stopOpacity="0"/></radialGradient>
+                <radialGradient id="sfhglow60" cx="50%" cy="50%" r="50%"><stop offset="0%" stopColor="#1a1a1a" stopOpacity="0.015"/><stop offset="100%" stopColor="#1a1a1a" stopOpacity="0"/></radialGradient>
               </defs>
 
-              <path d={sfhUkPath} stroke="#222" strokeWidth="1.2" fill="#141414" />
+              <path d={sfhUkPath} stroke="#b5b0a8" strokeWidth="1.2" fill="#d6d1ca" />
 
-              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r30} fill="url(#sfhglow30)" stroke="#333" strokeWidth="1" strokeDasharray="4 3" />
-              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r60} fill="url(#sfhglow60)" stroke="#2a2a2a" strokeWidth="1" strokeDasharray="6 4" />
-              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r120} fill="none" stroke="#222" strokeWidth="1" strokeDasharray="8 5" />
+              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r30} fill="url(#sfhglow30)" stroke="#aaa" strokeWidth="1" strokeDasharray="4 3" />
+              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r60} fill="url(#sfhglow60)" stroke="#bbb" strokeWidth="1" strokeDasharray="6 4" />
+              <circle className="sfh-map__range-ring" cx={denham.x} cy={denham.y} r={range.r120} fill="none" stroke="#ccc8c1" strokeWidth="1" strokeDasharray="8 5" />
 
               <text x={denham.x + range.r30 + 4} y={denham.y - 4} className="sfh-map__rlabel">30 MIN</text>
               <text x={denham.x + range.r60 + 4} y={denham.y - 4} className="sfh-map__rlabel">1 HR</text>
               <text x={denham.x + range.r120 + 4} y={denham.y - 4} className="sfh-map__rlabel">2 HR</text>
 
-              <circle cx={denham.x} cy={denham.y} r="5" fill="#fff" />
-              <circle cx={denham.x} cy={denham.y} r="10" fill="none" stroke="#fff" strokeWidth="0.5" opacity="0.15" />
-              <text x={denham.x + 12} y={denham.y + 3} fontFamily="Share Tech Mono" fontSize="7" fill="#666" fontWeight="700">DENHAM</text>
+              <circle cx={denham.x} cy={denham.y} r="5" fill="#1a1a1a" />
+              <circle cx={denham.x} cy={denham.y} r="10" fill="none" stroke="#1a1a1a" strokeWidth="0.5" opacity="0.15" />
+              <text x={denham.x + 12} y={denham.y + 3} fontFamily="Share Tech Mono" fontSize="10" fill="#666" fontWeight="700">DENHAM</text>
 
               {sfhDestCoords.map((d, i) => {
                 if (!d.x) return null;
@@ -643,21 +861,24 @@ const SelfFlyHireSection = () => {
                 return (
                   <g key={d.name} className={`sfh-map__pin ${isActive ? 'sfh-map__pin--active' : ''}`} onMouseEnter={() => setHoveredDest(i)} onMouseLeave={() => setHoveredDest(null)} onClick={() => setLockedDest(lockedDest === i ? null : i)} style={{ cursor: 'pointer' }}>
                     <line x1={sx} y1={sy} x2={d.x} y2={d.y} stroke="transparent" strokeWidth="16" />
-                    <line x1={sx} y1={sy} x2={d.x} y2={d.y} stroke={isActive ? '#fff' : '#2a2a2a'} strokeWidth={isActive ? 1.5 : 0.75} strokeDasharray="4 3" style={{ transition: 'all 0.2s' }} />
-                    <circle cx={d.x} cy={d.y} r={isActive ? 7 : 4} fill={isActive ? '#fff' : '#555'} style={{ transition: 'all 0.2s' }} />
-                    {isActive && <circle cx={d.x} cy={d.y} r="14" fill="none" stroke="#fff" strokeWidth="0.5" opacity="0.25" />}
+                    <line x1={sx} y1={sy} x2={d.x} y2={d.y} stroke={isActive ? '#1a1a1a' : '#b5b0a8'} strokeWidth={isActive ? 1.5 : 0.75} strokeDasharray="4 3" style={{ transition: 'all 0.2s' }} />
+                    <circle cx={d.x} cy={d.y} r={isActive ? 7 : 4} fill={isActive ? '#1a1a1a' : '#999'} style={{ transition: 'all 0.2s' }} />
+                    {isActive && <circle cx={d.x} cy={d.y} r="14" fill="none" stroke="#1a1a1a" strokeWidth="0.5" opacity="0.25" />}
                     <text x={d.x + (d.x < denham.x ? -10 : 12)} y={d.y + (d.y < denham.y ? -10 : 16)} textAnchor={d.x < denham.x ? 'end' : 'start'}>{d.name}</text>
                   </g>
                 );
               })}
             </svg>
           </div>
-        </div>
+          </div>
 
-        <div className="sfh-map__journey">
+          {/* RIGHT: Journey Timeline */}
+        <div className="sfh-map__journey" ref={sfhJourneyRef}>
           <span className="sfh-map__journey-label">Self-Fly Hire</span>
+          <p className="sfh-map__journey-desc">In a helicopter you can land at a significant amount of spots in comparison to even a light airplane due to not needing a runway.</p>
+          <p className="sfh-map__journey-desc">Gardens, pubs, hotels, golf courses, race courses — it opens up a new world of possibilities and is a great tool to have in your arsenal of activities you are able to do.</p>
 
-          <div className={`sfh-map__tl-step ${activeDest !== null ? 'sfh-map__tl-step--active' : ''}`}>
+          <div className={`sfh-map__tl-step ${tlProgress > 0.02 ? 'sfh-map__tl-step--active' : ''}`}>
             <span className="sfh-map__tl-num">01</span>
             <div>
               <div className="sfh-map__tl-title">Select Destination</div>
@@ -666,8 +887,8 @@ const SelfFlyHireSection = () => {
                   <li
                     key={d.name}
                     className={`sfh-map__dest-item ${activeDest === i ? 'sfh-map__dest-item--active' : ''}`}
-                    onMouseEnter={() => setHoveredDest(i)}
-                    onMouseLeave={() => setHoveredDest(null)}
+                    onMouseEnter={() => { isHoveringDest.current = true; setHoveredDest(i); }}
+                    onMouseLeave={() => { isHoveringDest.current = false; setHoveredDest(null); }}
                     onClick={() => setLockedDest(lockedDest === i ? null : i)}
                   >
                     <span className="sfh-map__dest-name">{d.name}</span>
@@ -676,43 +897,29 @@ const SelfFlyHireSection = () => {
                 ))}
               </ul>
 
-              <div className="sfh-map__dest-detail-wrap">
-                <div className={`sfh-map__dest-detail sfh-map__dest-detail--empty ${activeDest === null ? 'sfh-map__dest-detail--active' : ''}`}>
-                  <span className="sfh-map__dest-detail-hint">Hover or click a destination to see details</span>
-                </div>
-                {sfhDestCoords.map((d, i) => (
-                  <div key={d.name} className={`sfh-map__dest-detail ${activeDest === i ? 'sfh-map__dest-detail--active' : ''}`}>
-                    <div className="sfh-map__dest-detail-name">{d.name}</div>
-                    {d.nm > 0 && <div className="sfh-map__dest-detail-time">{sfhFormatTime(d.nm, range.cruiseKts)}</div>}
-                    {d.carTime && <div className="sfh-map__dest-detail-car">vs {d.carTime} by car</div>}
-                    <div className="sfh-map__dest-detail-desc">{d.desc}</div>
-                  </div>
-                ))}
-              </div>
-              <span className="sfh-map__dest-detail-endless">Endless...</span>
+              <span className="sfh-map__dest-detail-endless">Endless Destinations...</span>
             </div>
           </div>
 
-          <div className="sfh-map__tl-step sfh-map__tl-step-02 sfh-map__tl-step--active">
+          <div className={`sfh-map__tl-step sfh-map__tl-step-02 ${tlProgress > 0.33 ? 'sfh-map__tl-step--active' : ''}`}>
             <span className="sfh-map__tl-num">02</span>
             <div>
               <div className="sfh-map__tl-title">Choose Your Aircraft</div>
               <div style={{ paddingTop: '1rem' }}>
                 {sfhFleet.map(f => (
-                  <div key={f.model} className={`sfh-map__fleet-row ${selectedAircraft === f.model ? 'sfh-map__fleet-row--active' : ''}`} onClick={() => setSelectedAircraft(f.model)}>
+                  <div key={f.model} className={`sfh-map__fleet-row ${activeAircraft === f.model ? 'sfh-map__fleet-row--active' : ''}`} onMouseEnter={() => { isHoveringFleet.current = true; setSelectedAircraft(f.model); }} onMouseLeave={() => { isHoveringFleet.current = false; }} onClick={() => setSelectedAircraft(f.model)}>
                     <img src={f.img} alt={f.model} />
                     <div>
                       <div className="sfh-map__fleet-model">{f.model}</div>
                       <div className="sfh-map__fleet-info">{f.seats} · {sfhAircraftRanges[f.model].cruise}</div>
                     </div>
-                    <span className="sfh-map__fleet-rate">From {f.rate}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          <div className="sfh-map__tl-step sfh-map__tl-step-03 sfh-map__tl-step--active">
+          <div className={`sfh-map__tl-step sfh-map__tl-step-03 ${tlProgress > 0.66 ? 'sfh-map__tl-step--active' : ''}`}>
             <span className="sfh-map__tl-num">03</span>
             <div>
               <div className="sfh-map__tl-title">Fly</div>
@@ -721,44 +928,67 @@ const SelfFlyHireSection = () => {
           </div>
 
           <Link to="/contact?subject=hire" className="sfh-map__cta">Enquire About Hire</Link>
+          </div>
+        </div>
         </div>
       </div>
     </section>
   );
 };
 
+function ZigzagTrainingItem({ slide, index, isEven }) {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+  return (
+    <motion.div
+      ref={ref}
+      className={`fd-zigzag__item ${isEven ? 'fd-zigzag__item--left' : 'fd-zigzag__item--right'}`}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="fd-zigzag__item-image">
+        <img src={slide.image} alt={slide.title} />
+        <span className="fd-zigzag__item-num">{String(index + 1).padStart(2, '0')}</span>
+      </div>
+      <div className="fd-zigzag__item-content">
+        <span className="fd-zigzag__item-tag">{slide.tag} · {slide.duration}</span>
+        <h3 className="fd-zigzag__item-title">{slide.title}</h3>
+        <p className="fd-zigzag__item-desc">{slide.description}</p>
+        <Link to={slide.link} className="fd-zigzag__card-btn">
+          <span>{slide.cta}</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+        </Link>
+      </div>
+    </motion.div>
+  );
+}
+
 function Experimentation() {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeSection, setActiveSection] = useState(0);
-  const [imagesExpanded, setImagesExpanded] = useState(false);
-  const [linesVisible, setLinesVisible] = useState(false);
+  const [aboutLayout, setAboutLayout] = useState(0); // 0=right, 1=above, 2=below, 3=above+below, 4=three-col
   const [activeNavSection, setActiveNavSection] = useState(null);
   const [rebuildStep, setRebuildStep] = useState(0);
-  const [navCompact, setNavCompact] = useState(false);
-  const [navFixed, setNavFixed] = useState(false);
-  const [scrollPromptHidden, setScrollPromptHidden] = useState(false);
-  const [heroCollapsed, setHeroCollapsed] = useState(false);
-  const [aboutLabelStatic, setAboutLabelStatic] = useState(false);
-  const [trainingSlide, setTrainingSlide] = useState(2); // Start on Commercial
-  const [whyFlyOpen, setWhyFlyOpen] = useState(false);
+  const [salesExpanded, setSalesExpanded] = useState({ new: true, preowned: false, rebuilt: false, unmanned: false });
+  const [rebuildView, setRebuildView] = useState('option1');
+  const [rebuildPortfolioIndex, setRebuildPortfolioIndex] = useState(0);
+  const [rebuildDetailOpen, setRebuildDetailOpen] = useState(null); // index of open portfolio item
+  const [stripImgIndex, setStripImgIndex] = useState({}); // { cardIndex: imageIndex }
+  const [preownedImgIndex, setPreownedImgIndex] = useState({}); // { cardIndex: imageIndex }
+  const [rebuildLightbox, setRebuildLightbox] = useState(null); // { src, alt } for full-screen image
+  // Team carousel state
   const [whyFlySlide, setWhyFlySlide] = useState(0);
 
-  // Shared why-fly data
   const whyFlyBenefits = [
-    { verb: 'Join', noun: 'a Community', desc: 'A community of adventurers, business people, positive and successful people who share your passion for aviation.' },
-    { verb: 'Save', noun: 'Precious Time', desc: 'What takes hours by car takes minutes by helicopter. Reclaim your most valuable asset - time.' },
+    { verb: 'Join', noun: 'a Community', desc: 'Connect with fellow pilots, business leaders, and adventurers who share your passion for aviation at exclusive flying events and beyond.' },
+    { verb: 'Enjoy', noun: 'the Journey', desc: "For a pilot, the journey is never just a means of getting somewhere — it is the experience itself. The best memories are made not at the destination, but somewhere above the clouds on the way there." },
     { verb: 'Land', noun: 'Anywhere', desc: 'No runways needed. Land at private estates, yachts, remote locations, and city centres.' },
-    { verb: 'Gain', noun: 'Business Edge', desc: 'Arrive fresh, prepared, and on time. Make multiple meetings across the country in a single day.' },
+    { verb: 'Gain', noun: 'Business Edge', desc: 'Multiple destinations in the same day is now possible, at great distances apart. People to see that are just too far to justify travelling by other methods — it can be done just like that.' },
     { verb: 'Create', noun: 'Family Memories', desc: 'Create unforgettable experiences with loved ones. Weekend trips become extraordinary adventures.' },
     { verb: 'Experience', noun: 'True Freedom', desc: 'Go where you want, when you want. The ultimate expression of personal freedom and independence.' },
-    { verb: 'Access', noun: 'VIP Moments', desc: 'Private helipads at exclusive venues, VIP access to events, and experiences unavailable to others.' },
+    { verb: 'Arrive', noun: 'Differently', desc: 'Fly directly into exclusive events — race courses, Goodwood festivals, and more. The kind of access that speaks for itself.' },
     { verb: 'Achieve', noun: 'Your Dreams', desc: "Join an elite group who have mastered one of aviation's most challenging and rewarding skills." },
-    { verb: 'Build', noun: 'Your Network', desc: 'Connect with fellow pilots, business leaders, and adventurers at exclusive flying events.' },
-    { verb: 'Break', noun: 'Free from Traffic', desc: 'Rise above congestion and constraints. Your journey becomes part of the adventure.' },
-    { verb: 'Protect', noun: 'Your Investment', desc: 'Helicopters hold value well. A quality aircraft is both a lifestyle asset and sound investment.' },
-    { verb: 'Fly', noun: 'All Year', desc: 'Unlike fixed-wing, helicopters operate from almost anywhere in nearly any weather conditions.' },
     { verb: 'Explore', noun: 'The World', desc: 'From Alpine peaks to Mediterranean coasts, the helicopter opens a world of expedition possibilities.' },
-    { verb: 'Build', noun: 'Your Legacy', desc: 'Pass on the gift of flight. Many pilots share this passion across generations.' },
   ];
 
   const whyFlyImages = [
@@ -770,92 +1000,674 @@ function Experimentation() {
     '/assets/images/expeditions/antartica.jpg',
     '/assets/images/facility/busy-hangar.jpg',
     '/assets/images/facility/hq-0053.jpg',
-    '/assets/images/facility/hq-0075.jpg',
-    '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-    '/assets/images/facility/hq-0129.jpg',
-    '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
     '/assets/images/facility/hq-0167.jpg',
-    '/assets/images/facility/hq-0209.jpg',
   ];
 
-
-  // Images for fullwidth staggered layout
-  const staggeredImages = [
-    '/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp',
-    '/assets/images/expeditions/north-pole.jpg',
-    '/assets/images/facility/hq-0089.jpg',
-    '/assets/images/expeditions/antartica.jpg',
-    '/assets/images/facility/hq-0035.jpg',
-    '/assets/images/expeditions/channel.jpg',
-    '/assets/images/facility/busy-hangar.jpg',
-    '/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp',
-    '/assets/images/facility/hq-0053.jpg',
-    '/assets/images/expeditions/six-helis-in-North-Pole.jpg',
+  const [teamSlide, setTeamSlide] = useState(0);
+  const [facilitySlide, setFacilitySlide] = useState(0);
+  const [partsAircraft, setPartsAircraft] = useState('');
+  const [galleryFullscreen, setGalleryFullscreen] = useState(false);
+  const [gallerySlide, setGallerySlide] = useState(0);
+  const [galleryShowClock, setGalleryShowClock] = useState(false);
+  const [clockTime, setClockTime] = useState('');
+  const galleryImages = [
+    { src: '/assets/images/facility/maintenance-.jpg', alt: 'Maintenance facility' },
+    { src: '/assets/images/facility/hq-0391.jpg', alt: 'Engineering workshop' },
+    { src: '/assets/images/facility/hq-0477.jpg', alt: 'Engine work' },
+    { src: '/assets/images/facility/hq-0354.jpg', alt: 'Rotor inspection' },
+    { src: '/assets/images/facility/hq-0035.jpg', alt: 'Hangar floor' },
+    { src: '/assets/images/facility/hq-0089.jpg', alt: 'Component detail' },
+    { src: '/assets/images/facility/hq-0745.jpg', alt: 'Aircraft on apron' },
+    { src: '/assets/images/facility/sales-rebuild.jpg', alt: 'Rebuild in progress' },
+    { src: '/assets/images/facility/hq-0167.jpg', alt: 'Avionics bench' },
+    { src: '/assets/images/facility/okey-paint-quality.jpg', alt: 'Paint shop' },
   ];
+  const facilityItems = [
+    { icon: 'fa-warehouse', label: 'Main Hangar · 12,000 sq ft', images: [null, null, null, null, null] },
+    { icon: 'fa-wrench', label: 'Service Bay · 8 Heated Bays', images: [null, null, null, null, null] },
+    { icon: 'fa-spray-can', label: 'Paint Shop · Custom Livery', images: [null, null, null, null, null] },
+    { icon: 'fa-microchip', label: 'Avionics Workshop', images: [null, null, null, null, null] },
+    { icon: 'fa-boxes', label: 'Parts Store · £500K+ Inventory', images: [null, null, null, null, null] },
+  ];
+  const additionalTeam = [
+    { initials: 'JB', name: 'James Barrett', desc: 'Airframe Specialist · 14 years · Robinson & Cabri certified' },
+    { initials: 'ST', name: 'Simon Turner', desc: 'Paint & Refurbishment Lead · 10 years · Custom livery specialist' },
+    { initials: 'RL', name: 'Richard Lloyd', desc: 'Avionics Technician · 8 years · Glass cockpit installations' },
+    { initials: 'AP', name: 'Andrew Parsons', desc: 'Engine Workshop Lead · 12 years · Lycoming & RR300' },
+    { initials: '+12', name: 'Supporting Team', desc: 'Workshop & support crew · Skilled technicians · Denham facility' },
+  ];
+  const [activeService, setActiveService] = useState(null);
+  const rebuildShowcaseRef = useRef(null);
+
+  useEffect(() => {
+    if (rebuildDetailOpen !== null) {
+      requestAnimationFrame(() => {
+        if (rebuildShowcaseRef.current) {
+          const top = rebuildShowcaseRef.current.getBoundingClientRect().top + window.scrollY - 120;
+          window.scrollTo({ top, behavior: 'smooth' });
+        }
+      });
+    }
+  }, [rebuildDetailOpen]);
+
+  // Blog state
+  const [blogPersona, setBlogPersona] = useState('press');
+  const [blogVisible, setBlogVisible] = useState(6);
+  const [blogSort, setBlogSort] = useState('popular');
+  const [blogSearch, setBlogSearch] = useState('');
+
+  // Sales three-phase sticky
+  const salesIntroRef = useRef(null);
+  const salesHeaderRef = useRef(null);
+  const salesPreTitleRef = useRef(null);
+  const salesDealerRef = useRef(null);
+  const salesTitleFadeRef = useRef(null);
+  const salesTextFadeRef = useRef(null);
+  const [dealerAutoExpand, setDealerAutoExpand] = useState(false);
+
+  useEffect(() => {
+    const dealerEl = salesDealerRef.current;
+    const introEl = salesIntroRef.current;
+    const headerEl = salesHeaderRef.current;
+    const ptEl = salesPreTitleRef.current;
+    const titleFadeEl = salesTitleFadeRef.current;
+    const textFadeEl = salesTextFadeRef.current;
+    if (!dealerEl || !introEl || !headerEl || !ptEl) return;
+
+    let headerHeight, ptHeight, phase1Offset, phase3Offset;
+    const measure = () => {
+      headerHeight = headerEl.offsetHeight;
+      ptHeight = ptEl.offsetHeight;
+      phase1Offset = headerHeight;
+      phase3Offset = 32 + ptHeight + 8;
+      dealerEl.style.transform = `translateY(${phase1Offset}px)`;
+    };
+
+    let currentPhase = 1;
+    let dealerRaf = 0;
+    const handleScrollRaw = () => {
+      const rect = introEl.getBoundingClientRect();
+      // Skip if section is far below viewport
+      if (rect.top > window.innerHeight + 500) return;
+      // If section scrolled well past, ensure end state
+      if (rect.bottom < -500) {
+        if (titleFadeEl) titleFadeEl.style.opacity = '0';
+        if (textFadeEl) textFadeEl.style.opacity = '0';
+        return;
+      }
+      const scrolled = -rect.top;
+      const vh = window.innerHeight;
+      const threshold = vh * 0.10;
+      const phase3Threshold = threshold + vh * 0.05;
+      const newPhase = scrolled >= phase3Threshold ? 3 : 1;
+      if (newPhase !== currentPhase) {
+        currentPhase = newPhase;
+        const offset = newPhase === 1 ? phase1Offset : phase3Offset;
+        dealerEl.style.transform = `translateY(${offset}px)`;
+      }
+      const expandThreshold = threshold + vh * 0.10;
+      if (scrolled >= expandThreshold) {
+        setDealerAutoExpand(true);
+      } else {
+        setDealerAutoExpand(false);
+      }
+      // Fade out title and text as dealer card approaches
+      const dealerRect = dealerEl.getBoundingClientRect();
+      if (textFadeEl) {
+        const elRect = textFadeEl.getBoundingClientRect();
+        const earlyStart = 200;
+        const overlap = elRect.bottom - dealerRect.top + earlyStart;
+        const fadeRange = elRect.height * 0.4;
+        if (overlap <= 0) textFadeEl.style.opacity = '1';
+        else textFadeEl.style.opacity = String(Math.max(0, 1 - overlap / fadeRange));
+      }
+      if (titleFadeEl) {
+        const elRect = titleFadeEl.getBoundingClientRect();
+        const earlyStart = 150;
+        const overlap = elRect.bottom - dealerRect.top + earlyStart;
+        const fadeRange = elRect.height;
+        if (overlap <= 0) titleFadeEl.style.opacity = '1';
+        else titleFadeEl.style.opacity = String(Math.max(0, 1 - overlap / fadeRange));
+      }
+    };
+    const handleScroll = () => { cancelAnimationFrame(dealerRaf); dealerRaf = requestAnimationFrame(handleScrollRaw); };
+
+    measure();
+    handleScrollRaw(); // Run immediately to handle restored scroll position
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    let dealerResizeTimer;
+    const onResize = () => { clearTimeout(dealerResizeTimer); dealerResizeTimer = setTimeout(() => { measure(); currentPhase = 0; handleScrollRaw(); }, 200); };
+    window.addEventListener('resize', onResize);
+    return () => { window.removeEventListener('scroll', handleScroll); window.removeEventListener('resize', onResize); cancelAnimationFrame(dealerRaf); clearTimeout(dealerResizeTimer); };
+  }, []);
+
+  // Maintenance three-phase sticky (same pattern as sales)
+  const maintIntroRef = useRef(null);
+  const maintHeaderRef = useRef(null);
+  const maintPreTitleRef = useRef(null);
+  const maintServiceRef = useRef(null);
+  const maintTextFadeRef = useRef(null);
+  const maintTitleFadeRef = useRef(null);
+  const maintServicesListRef = useRef(null);
+  const [serviceAutoExpand, setServiceAutoExpand] = useState(false);
+
+  useEffect(() => {
+    const serviceEl = maintServiceRef.current;
+    const introEl = maintIntroRef.current;
+    const headerEl = maintHeaderRef.current;
+    const ptEl = maintPreTitleRef.current;
+    const fadeEl = maintTextFadeRef.current;
+    const titleFadeEl = maintTitleFadeRef.current;
+    const servicesListEl = maintServicesListRef.current;
+    if (!serviceEl || !introEl || !headerEl || !ptEl) return;
+
+    let headerHeight, ptHeight, phase1Offset, phase3Offset;
+    const measure = () => {
+      headerHeight = headerEl.offsetHeight;
+      ptHeight = ptEl.offsetHeight;
+      phase1Offset = headerHeight;
+      phase3Offset = 32 + ptHeight + 8;
+      serviceEl.style.transform = `translateY(${phase1Offset}px)`;
+    };
+
+    let currentPhase = 1;
+    let maintRaf = 0;
+    const handleScrollRaw = () => {
+      const rect = introEl.getBoundingClientRect();
+      // Skip if section is far above viewport
+      if (rect.top > window.innerHeight + 500) return;
+      // If section scrolled well past, ensure end state
+      if (rect.bottom < -500) {
+        if (servicesListEl) servicesListEl.style.opacity = '1';
+        if (titleFadeEl) titleFadeEl.style.opacity = '0';
+        if (fadeEl) fadeEl.style.opacity = '0';
+        return;
+      }
+      const scrolled = -rect.top;
+      const vh = window.innerHeight;
+      const threshold = vh * 0.10;
+      const phase3Threshold = threshold + vh * 0.05;
+      const newPhase = scrolled >= phase3Threshold ? 3 : 1;
+      if (newPhase !== currentPhase) {
+        currentPhase = newPhase;
+        const offset = newPhase === 1 ? phase1Offset : phase3Offset;
+        serviceEl.style.transform = `translateY(${offset}px)`;
+      }
+      const expandThreshold = threshold + vh * 0.10;
+      if (scrolled >= expandThreshold) {
+        setServiceAutoExpand(true);
+      } else {
+        setServiceAutoExpand(false);
+      }
+      // Fade out paragraph/divider first, then title as card approaches
+      const serviceRect = serviceEl.getBoundingClientRect();
+      if (fadeEl) {
+        const elRect = fadeEl.getBoundingClientRect();
+        const earlyStart = 200;
+        const overlap = elRect.bottom - serviceRect.top + earlyStart;
+        const fadeRange = elRect.height * 0.4;
+        if (overlap <= 0) fadeEl.style.opacity = '1';
+        else fadeEl.style.opacity = String(Math.max(0, 1 - overlap / fadeRange));
+      }
+      if (titleFadeEl) {
+        const elRect = titleFadeEl.getBoundingClientRect();
+        const earlyStart = 150;
+        const overlap = elRect.bottom - serviceRect.top + earlyStart;
+        const fadeRange = elRect.height;
+        let titleOpacity;
+        if (overlap <= 0) titleOpacity = 1;
+        else titleOpacity = Math.max(0, 1 - overlap / fadeRange);
+        titleFadeEl.style.opacity = String(titleOpacity);
+        // Services list fades in as title fades out
+        if (servicesListEl) {
+          servicesListEl.style.opacity = String(1 - titleOpacity);
+        }
+      }
+    };
+    const handleScroll = () => { cancelAnimationFrame(maintRaf); maintRaf = requestAnimationFrame(handleScrollRaw); };
+
+    measure();
+    handleScrollRaw(); // Run immediately to handle restored scroll position
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    let maintResizeTimer;
+    const onResize = () => { clearTimeout(maintResizeTimer); maintResizeTimer = setTimeout(() => { measure(); currentPhase = 0; handleScrollRaw(); }, 200); };
+    window.addEventListener('resize', onResize);
+    return () => { window.removeEventListener('scroll', handleScroll); window.removeEventListener('resize', onResize); cancelAnimationFrame(maintRaf); clearTimeout(maintResizeTimer); };
+  }, []);
+
+  // Blog derived data
+  const allPublished = blogPosts.filter(p => p.published).sort((a, b) => new Date(b.date) - new Date(a.date));
+  const activeCats = blogPersona ? BLOG_PERSONAS.find(p => p.id === blogPersona)?.categories || [] : [];
+
+  const filteredPosts = allPublished.filter(post => {
+    const matchPersona = !blogPersona || activeCats.includes(post.category);
+    const matchSearch = !blogSearch || post.title.toLowerCase().includes(blogSearch.toLowerCase()) || post.excerpt.toLowerCase().includes(blogSearch.toLowerCase()) || post.category.toLowerCase().includes(blogSearch.toLowerCase());
+    return matchPersona && matchSearch;
+  });
+
+  const sortedPosts = blogSort === 'popular'
+    ? [...filteredPosts].sort((a, b) => {
+        const ai = POPULAR_POST_IDS.indexOf(a.id);
+        const bi = POPULAR_POST_IDS.indexOf(b.id);
+        return (ai === -1 ? 999 : ai) - (bi === -1 ? 999 : bi);
+      })
+    : filteredPosts; // already sorted by date (newest first)
+
+  const visiblePosts = sortedPosts.slice(0, blogVisible);
+  const hasMorePosts = sortedPosts.length > blogVisible;
+
+  const handlePersonaClick = (id) => {
+    if (blogPersona === id) {
+      setBlogPersona(null);
+    } else {
+      setBlogPersona(id);
+    }
+    setBlogVisible(6);
+    setBlogSearch('');
+  };
+
+  const stripRef = useRef(null);
+  const [stripCanScrollLeft, setStripCanScrollLeft] = useState(false);
+  const [stripCanScrollRight, setStripCanScrollRight] = useState(false);
+  const preownedRef = useRef(null);
+  const [preownedCanScrollLeft, setPreownedCanScrollLeft] = useState(false);
+  const [preownedCanScrollRight, setPreownedCanScrollRight] = useState(false);
+
+  // Track strip scroll state
+  useEffect(() => {
+    const el = stripRef.current;
+    if (!el) return;
+    const update = () => {
+      setStripCanScrollLeft(el.scrollLeft > 2);
+      setStripCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    let roTimer;
+    const ro = new ResizeObserver(() => { clearTimeout(roTimer); roTimer = setTimeout(update, 200); });
+    ro.observe(el);
+    return () => { el.removeEventListener('scroll', update); ro.disconnect(); clearTimeout(roTimer); };
+  }, [rebuildView, rebuildDetailOpen]);
+
+  const [barcodeSelected, setBarcodeSelected] = useState(false);
+
+  // Track pre-owned carousel scroll state
+  useEffect(() => {
+    const el = preownedRef.current;
+    if (!el) return;
+    const update = () => {
+      setPreownedCanScrollLeft(el.scrollLeft > 2);
+      setPreownedCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 2);
+    };
+    update();
+    el.addEventListener('scroll', update, { passive: true });
+    let roTimer;
+    const ro = new ResizeObserver(() => { clearTimeout(roTimer); roTimer = setTimeout(update, 200); });
+    ro.observe(el);
+    return () => { el.removeEventListener('scroll', update); ro.disconnect(); clearTimeout(roTimer); };
+  }, [salesExpanded.preowned]);
+
+  const [navCompact, setNavCompact] = useState(false);
+  const [trainingSlide, setTrainingSlide] = useState(0); // Start on Discovery Flight
+
+
   const containerRef = useRef(null);
-  const heroRef = useRef(null);
   const navRef = useRef(null);
   const navSentinelRef = useRef(null);
-  const aboutBtnRef = useRef(null);
-  const aboutLabelRef = useRef(null);
   const videoLinesRef = useRef(null);
   const scrollingStripsWrapperRef = useRef(null);
+  const expedCinematicRef = useRef(null);
+  const expedGlowRef = useRef(null);
+  const trainingInnerRef = useRef(null);
+  const trainingStickyRef = useRef(null);
+  const hscrollRef = useRef(null);
+  const hscrollInnerRef = useRef(null);
+  const hscrollRunwayRef = useRef(null);
+  // hscroll mask driven directly via DOM — no React state to avoid re-renders during scroll
+  const hscrollProgressRef = useRef(0);
+  const updateHscrollMask = (scrollPos, maxScroll) => {
+    const el = hscrollRef.current;
+    if (!el) return;
+    const fadeRange = 260;
+    const leftPct = Math.min(scrollPos / fadeRange, 1) * 6;
+    const rightRemaining = maxScroll - scrollPos;
+    const rightPct = 100 - Math.min(rightRemaining / fadeRange, 1) * 6;
+    const mask = `linear-gradient(to right, transparent, black ${leftPct}%, black ${rightPct}%, transparent)`;
+    el.style.maskImage = mask;
+    el.style.WebkitMaskImage = mask;
+  };
+
+  // Vertical scroll → horizontal scroll mapping for hscroll runway
+  // Uses JS-driven fixed positioning with state tracking to minimize style writes
+  useEffect(() => {
+    const runway = hscrollRunwayRef.current;
+    const scroller = hscrollRef.current;
+    const inner = hscrollInnerRef.current;
+    if (!runway || !scroller || !inner) return;
+
+    const stickyEl = runway.querySelector('.fd-hscroll-sticky');
+    if (!stickyEl) return;
+
+    const setRunwayHeight = () => {
+      const overflow = inner.scrollWidth - scroller.clientWidth;
+      runway.style.height = `${overflow + window.innerHeight}px`;
+    };
+    setRunwayHeight();
+    let hscrollResizeTimer;
+    const debouncedRunway = () => { clearTimeout(hscrollResizeTimer); hscrollResizeTimer = setTimeout(setRunwayHeight, 200); };
+    window.addEventListener('resize', debouncedRunway);
+
+    let lastState = ''; // 'before' | 'fixed' | 'after'
+    let hscrollRaf = 0;
+    const onScrollRaw = () => {
+      const overflow = inner.scrollWidth - scroller.clientWidth;
+      if (overflow <= 0) return;
+
+      const runwayRect = runway.getBoundingClientRect();
+      const headerNav = document.querySelector('.Header');
+      const headerNavHeight = headerNav ? headerNav.offsetHeight : 0;
+      const availableHeight = window.innerHeight - headerNavHeight;
+      const scrollerHeight = stickyEl.offsetHeight;
+      const stickAt = headerNavHeight + (availableHeight - scrollerHeight) / 2 + 20;
+      const scrolled = stickAt - runwayRect.top;
+
+      if (scrolled <= 0) {
+        if (lastState !== 'before') {
+          stickyEl.style.position = '';
+          stickyEl.style.top = '';
+          stickyEl.style.left = '';
+          stickyEl.style.width = '';
+          stickyEl.style.zIndex = '';
+          lastState = 'before';
+        }
+        inner.style.transform = 'translateX(0)';
+        updateHscrollMask(0, overflow);
+      } else if (scrolled < overflow) {
+        if (lastState !== 'fixed') {
+          stickyEl.style.position = 'fixed';
+          stickyEl.style.top = `${stickAt}px`;
+          stickyEl.style.left = `${runwayRect.left}px`;
+          stickyEl.style.width = `${runway.clientWidth}px`;
+          stickyEl.style.zIndex = '1';
+          lastState = 'fixed';
+        }
+        inner.style.transform = `translateX(${-scrolled}px)`;
+        updateHscrollMask(scrolled, overflow);
+      } else {
+        if (lastState !== 'after') {
+          stickyEl.style.position = 'absolute';
+          stickyEl.style.top = `${overflow}px`;
+          stickyEl.style.left = '0';
+          stickyEl.style.width = '';
+          stickyEl.style.zIndex = '';
+          lastState = 'after';
+        }
+        inner.style.transform = `translateX(${-overflow}px)`;
+        updateHscrollMask(overflow, overflow);
+      }
+    };
+    const onScroll = () => { cancelAnimationFrame(hscrollRaf); hscrollRaf = requestAnimationFrame(onScrollRaw); };
+
+    onScrollRaw();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', debouncedRunway);
+      cancelAnimationFrame(hscrollRaf);
+      clearTimeout(hscrollResizeTimer);
+    };
+  }, []);
+
+  const clubhouseRef = useRef(null);
+  const globeRef = useRef(null);
+  const phaseText1Ref = useRef(null);
+  const phaseText2Ref = useRef(null);
+  const [clubhouseOpacity, setClubhouseOpacity] = useState(0.12);
+  const [clubhouseTextPhase, setClubhouseTextPhase] = useState(0); // 0 = "The Clubhouse", 1 = "Escape to the Country"
   const videoLinesInView = useInView(videoLinesRef, { once: true, amount: 0.5, margin: "0px 0px -200px 0px" });
+  const aboutVideoRef = useRef(null);
+  const aboutVideoNearby = useInView(aboutVideoRef, { once: true, margin: "0px 0px 600px 0px" });
+  const aboutVideoVisible = useInView(aboutVideoRef, { amount: 0.15 });
+  const ytPlayerRef = useRef(null);
+  const ytContainerRef = useRef(null);
+  const [videoMuted, setVideoMuted] = useState(true);
+
+  // YouTube IFrame Player API — preload when nearby (600px below viewport)
+  useEffect(() => {
+    if (!aboutVideoNearby || ytPlayerRef.current) return;
+
+    const createPlayer = () => {
+      ytPlayerRef.current = new window.YT.Player(ytContainerRef.current, {
+        videoId: 'gREwO1BDxXA',
+        playerVars: {
+          autoplay: 1,
+          mute: 1,
+          loop: 1,
+          playlist: 'gREwO1BDxXA',
+          controls: 0,
+          showinfo: 0,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          disablekb: 1,
+          fs: 0,
+          playsinline: 1,
+        },
+        events: {
+          onReady: (e) => { e.target.playVideo(); e.target.pauseVideo(); },
+        },
+      });
+    };
+
+    if (window.YT && window.YT.Player) {
+      createPlayer();
+    } else {
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = () => { prev?.(); createPlayer(); };
+      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+    }
+  }, [aboutVideoNearby]);
+
+  // Play when visible, pause when scrolled away
+  useEffect(() => {
+    const p = ytPlayerRef.current;
+    if (!p || !p.playVideo) return;
+    if (aboutVideoVisible) {
+      p.playVideo();
+    } else {
+      p.pauseVideo();
+    }
+  }, [aboutVideoVisible]);
+
+  // Toggle mute/unmute via player API
+  useEffect(() => {
+    const p = ytPlayerRef.current;
+    if (!p || !p.mute) return;
+    if (videoMuted) p.mute(); else p.unMute();
+  }, [videoMuted]);
+
+  // Position globe + glow center on the map pin center
+  useEffect(() => {
+    const positionGlobeAndGlow = () => {
+      const globe = globeRef.current;
+      if (!globe) return;
+      const cinematic = globe.closest('.fd-exped__cinematic');
+      if (!cinematic) return;
+      const pin = cinematic.querySelector('.exp-barcode__pin');
+      if (!pin) return;
+      const cinematicTop = cinematic.getBoundingClientRect().top + window.scrollY;
+      const pinTop = pin.getBoundingClientRect().top + window.scrollY;
+      const pinSvgHeight = pin.querySelector('svg')?.getBoundingClientRect().height || 36;
+      // cy=14 out of viewBox height 36 is the white circle center
+      const pinCenterY = pinTop + (14 / 36) * pinSvgHeight;
+      const topPx = pinCenterY - cinematicTop;
+      globe.style.top = topPx + 'px';
+
+      // Position glow centered on pin within fd-exped
+      const glow = expedGlowRef.current;
+      if (!glow) return;
+      const section = glow.closest('.fd-exped');
+      if (!section) return;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const pinCenterX = pin.getBoundingClientRect().left + pin.getBoundingClientRect().width / 2;
+      const sectionLeft = section.getBoundingClientRect().left;
+      glow.style.top = (pinCenterY - sectionTop) + 'px';
+      glow.style.left = (pinCenterX - sectionLeft) + 'px';
+    };
+    // Wait for layout to settle
+    const t1 = setTimeout(positionGlobeAndGlow, 100);
+    const t2 = setTimeout(positionGlobeAndGlow, 600);
+    const t3 = setTimeout(positionGlobeAndGlow, 1500);
+    let globeResizeTimer;
+    const debouncedGlobe = () => { clearTimeout(globeResizeTimer); globeResizeTimer = setTimeout(positionGlobeAndGlow, 200); };
+    window.addEventListener('resize', debouncedGlobe);
+    return () => {
+      clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(globeResizeTimer);
+      window.removeEventListener('resize', debouncedGlobe);
+    };
+  }, []);
+
+  // Sync phase text heights so cards align during crossfade
+  useEffect(() => {
+    const sync = () => {
+      const a = phaseText1Ref.current;
+      const b = phaseText2Ref.current;
+      if (!a || !b) return;
+      a.style.minHeight = '';
+      b.style.minHeight = '';
+      const max = Math.max(a.scrollHeight, b.scrollHeight);
+      a.style.minHeight = `${max}px`;
+      b.style.minHeight = `${max}px`;
+    };
+    sync();
+    window.addEventListener('resize', sync);
+    return () => window.removeEventListener('resize', sync);
+  }, []);
+
+  // Clubhouse: right side overlay fades in as you scroll
+  useEffect(() => {
+    let clubRaf = 0;
+    const update = () => {
+      const el = clubhouseRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      // Skip if section is far from viewport
+      if (rect.bottom < -200 || rect.top > window.innerHeight + 200) return;
+      const progress = Math.max(0, Math.min(1, (window.innerHeight - rect.top) / el.offsetHeight));
+      const delayed = Math.max(0, (progress - 0.65) / 0.35);
+      setClubhouseOpacity(0.12 + delayed * 0.58);
+      const textPhase = Math.max(0, Math.min(1, (progress - 0.65) / 0.05));
+      setClubhouseTextPhase(textPhase);
+    };
+    const handleClubhouseScroll = () => { cancelAnimationFrame(clubRaf); clubRaf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', handleClubhouseScroll, { passive: true });
+    return () => { window.removeEventListener('scroll', handleClubhouseScroll); cancelAnimationFrame(clubRaf); };
+  }, []);
+
+  // Strips fade: lose opacity as they scroll through the wrapper
+  useEffect(() => {
+    let stripsRaf = 0;
+    const handleStripsFadeRaw = () => {
+      const wrapper = scrollingStripsWrapperRef.current;
+      if (!wrapper) return;
+      const wrapperRect = wrapper.getBoundingClientRect();
+      // Skip if section is far from viewport
+      if (wrapperRect.bottom < -200 || wrapperRect.top > window.innerHeight + 200) return;
+      const stripsEl = wrapper.querySelector('.editorial-strips');
+      if (!stripsEl) return;
+      const wrapperHeight = wrapper.offsetHeight;
+      // How far we've scrolled through the wrapper (0 = top just entered, 1 = bottom leaving)
+      const scrolled = (window.innerHeight - wrapperRect.top) / wrapperHeight;
+      const progress = Math.max(0, Math.min(1, scrolled));
+      // Strips: fully visible until 75%, then fade to 0 by 90%
+      const fade = progress < 0.75 ? 1 : Math.max(0, 1 - (progress - 0.75) / 0.15);
+      stripsEl.style.opacity = fade.toString();
+      // Grid bg: fade to white starting at 10%, completely gone by 50%
+      const bgEl = wrapper.querySelector('.scrolling-strips-bg');
+      if (bgEl) {
+        const bgFade = progress < 0.25 ? 1 : Math.max(0, 1 - (progress - 0.25) / 0.4);
+        bgEl.style.opacity = bgFade.toString();
+      }
+    };
+    const handleStripsFade = () => { cancelAnimationFrame(stripsRaf); stripsRaf = requestAnimationFrame(handleStripsFadeRaw); };
+    window.addEventListener('scroll', handleStripsFade, { passive: true });
+    return () => { window.removeEventListener('scroll', handleStripsFade); cancelAnimationFrame(stripsRaf); };
+  }, []);
 
   // Training carousel slides
   const trainingSlides = [
     {
       title: 'Discovery Flight',
-      image: '/assets/images/gallery/carousel/rotating-4.jpg',
-      description: 'Flying is the ultimate dream pursued by mankind. Should you want to live it for real, the discovery flight will certainly fulfil your expectations: After a pre-flight briefing, you will enjoy a full hands-on flying experience with one of our instructors.',
+      image: '/assets/images/gallery/carousel/rotating1.jpg',
+      description: 'The journey starts here, take the controls. Our trial lessons are hands-on flights where you fly the helicopter under the guidance of an expert instructor. Test your aptitude and feel the adrenaline - say that you\'ve piloted a helicopter!',
       cta: 'Learn More',
-      link: '/training/trial-lessons'
+      link: '/training/trial-lessons',
+      duration: '1 hour',
+      tag: 'First step',
     },
     {
       title: 'Private Pilot Licence',
-      image: '/assets/images/gallery/carousel/rotating-4.jpg',
-      description: 'Let aside the ground exams that most students self study before taking the tests on site, the obtention of a PPL(H) requires a minimum of 45 hrs of flight training, including 10 hrs of solo. The duration varies depending on commitment.',
+      image: '/assets/images/gallery/carousel/rotating2.jpg',
+      description: 'Your ticket to freedom. We tailor the pace to your lifestyle. Our PPL is designed to do more than pass a test; we provide world class instruction that goes beyond the norms, to build highly competent captains. Join the HQ club!',
       cta: 'Learn More',
-      link: '/training/ppl'
+      link: '/training/ppl',
+      duration: '45+ hours',
+      tag: 'Foundation',
+    },
+    {
+      title: 'Self-Fly Hire',
+      image: '/assets/images/gallery/carousel/rotating8.jpg',
+      description: 'With an impressive fleet of over 30 helicopters, HQ will certainly be able to facilitate your flying requirements, either on a short term hiring or on a long term leasing basis.',
+      cta: 'Learn More',
+      link: '/self-fly-hire',
+      duration: 'Flexible',
+      tag: 'Freedom',
     },
     {
       title: 'Commercial Pilot Licence',
-      image: '/assets/images/gallery/carousel/rotating-4.jpg',
+      image: '/assets/images/gallery/carousel/rotating-3.jpg',
       description: 'Holding a Commercial Pilot Licence, CPL(H) gives you the status of professional helicopter pilot. To achieve this, 155 hrs of flying time post licence is required, of which 50 hrs must be Pilot In Command (PIC).',
       cta: 'Learn More',
-      link: '/training'
+      link: '/training',
+      duration: '155+ hours',
+      tag: 'Professional',
+    },
+    {
+      title: 'Night Rating',
+      image: '/assets/images/gallery/carousel/rotating6.jpg',
+      description: 'Holding a night rating gives you the most flexibility, as sunset will no longer prevent you from flying. To achieve this, 100 hrs of flying post licence is required, of which 60 Hrs must be Pilot In Command.',
+      cta: 'Learn More',
+      link: '/training/night-rating',
+      duration: '100+ hours',
+      tag: 'Advanced',
     },
     {
       title: 'Type Rating',
       image: '/assets/images/gallery/carousel/rotating-4.jpg',
       description: 'Having achieved your PPL(H), you may wish to fly different types of helicopter. A type specific ground training course followed by a minimum of 5 Hrs of flight training will suffice to put you to the Type Rating test.',
       cta: 'Learn More',
-      link: '/training/type-rating'
+      link: '/training/type-rating',
+      duration: '5+ hours',
+      tag: 'Specialisation',
     },
     {
-      title: 'Night Rating',
-      image: '/assets/images/gallery/carousel/rotating-4.jpg',
-      description: 'Holding a night rating gives you the most flexibility, as sunset will no longer prevent you from flying. To achieve this, 100 hrs of flying post licence is required, of which 60 Hrs must be Pilot In Command.',
+      title: 'Tours of London',
+      image: '/assets/images/lifestyle/london-battersea-heliport.jpg',
+      description: 'Experience London from above with a breathtaking helicopter tour. Fly over iconic landmarks including the Tower of London, Buckingham Palace, the London Eye, and the Thames — an unforgettable aerial perspective of one of the world\'s greatest cities.',
       cta: 'Learn More',
-      link: '/training'
+      link: '/helicopter-tour-of-london',
+      duration: '30 minutes',
+      tag: 'Experience',
     },
-    {
-      title: 'Self-Fly Hire',
-      image: '/assets/images/gallery/carousel/rotating-4.jpg',
-      description: 'With an impressive fleet of over 30 helicopters, HQ will certainly be able to facilitate your flying requirements, either on a short term hiring or on a long term leasing basis.',
-      cta: 'Learn More',
-      link: '/services'
-    }
   ];
 
-  // Carousel navigation
-  const nextTrainingSlide = () => {
-    setTrainingSlide((prev) => (prev + 1) % trainingSlides.length);
-  };
-
-  const prevTrainingSlide = () => {
-    setTrainingSlide((prev) => (prev - 1 + trainingSlides.length) % trainingSlides.length);
-  };
+  const hscrollTitles = ['Commercial Pilot Licence', 'Type Rating', 'Night Rating', 'Tours of London'];
+  const zigzagSlides = trainingSlides.filter(s => !hscrollTitles.includes(s.title));
+  const hscrollSlides = trainingSlides.filter(s => hscrollTitles.includes(s.title));
 
   // Sections for the scrolling content
   const sections = [
@@ -863,7 +1675,7 @@ function Experimentation() {
       id: 'intro',
       preText: 'Welcome to',
       headline: ['HQ', 'Aviation'],
-      description: 'The Robinson Specialists since 2010',
+      description: 'The Robinson Specialists since 2011',
       image: null,
     },
     {
@@ -891,98 +1703,41 @@ function Experimentation() {
 
   // Navigation items for accordion
   const navItems = [
-    { id: 'training', label: 'Flying', icon: '01' },
-    { id: 'fleet', label: 'Fleet', icon: '02' },
-    { id: 'expeditions', label: 'Expeditions', icon: '03' },
-    { id: 'sales', label: 'Sales', icon: '04' },
-    { id: 'maintenance', label: 'Maintenance', icon: '05' },
-    { id: 'contact', label: 'Contact', icon: '06' },
+    { id: 'training', label: 'Flying', icon: '01', subItems: [
+      { label: 'Discovery Flight', to: '/training/trial-lessons' },
+      { label: 'Private Pilot Licence', to: '/training/ppl' },
+      { label: 'Type Rating', to: '/training/type-rating' },
+      { label: 'Night Rating', to: '/training/night-rating' },
+    ]},
+    { id: 'fleet', label: 'Fleet', icon: '02', subItems: [
+      { label: 'R22', to: '/aircraft/r22' },
+      { label: 'R44', to: '/aircraft/r44' },
+      { label: 'R66', to: '/aircraft/r66' },
+      { label: 'R88', to: '/aircraft/r88' },
+    ]},
+    { id: 'expeditions', label: 'Expeditions', icon: '03', subItems: [
+      { label: 'Worldwide Expeditions', to: '/expeditions' },
+      { label: 'HQ Trips', to: '/expeditions' },
+    ]},
+    { id: 'sales', label: 'Sales', icon: '04', subItems: [
+      { label: 'New Aircraft', to: '/sales/new' },
+      { label: 'Pre-Owned', to: '/sales/pre-owned' },
+      { label: 'Rebuilds', to: '/sales/rebuilds' },
+    ]},
+    { id: 'maintenance', label: 'Maintenance', icon: '05', subItems: [
+      { label: 'Servicing', to: '/maintenance' },
+      { label: 'Parts', to: '/parts' },
+    ]},
+    { id: 'contact', label: 'Contact', icon: '06', subItems: [
+      { label: 'Get in Touch', to: '/contact' },
+    ]},
   ];
 
+  // Nav section highlighting on scroll
   useEffect(() => {
-    // Trigger line animations after mount
-    const timer = setTimeout(() => setLinesVisible(true), 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!containerRef.current) return;
-
-      const scrollTop = window.scrollY;
+    let navRaf = 0;
+    const update = () => {
       const windowHeight = window.innerHeight;
-      const heroHeight = windowHeight * 4; // 4 sections worth of scroll
-
-      // Calculate overall progress (0 to 1)
-      const progress = Math.min(scrollTop / heroHeight, 1);
-      setScrollProgress(progress);
-
-      // Determine active section (0-3)
-      const sectionIndex = Math.min(Math.floor(progress * 4), 3);
-      setActiveSection(sectionIndex);
-
-      // Hide scroll prompt after initial scroll
-      setScrollPromptHidden(scrollTop > 100);
-
-      // Hero elements hide earlier to avoid overlap with About section
-      const shouldHide = scrollTop > heroHeight * 0.85;
-      setImagesExpanded(shouldHide);
-
-      // Trigger hero collapse when overlay disappears, reset when scrolling back up
-      setHeroCollapsed(shouldHide);
-
-      
-      // Track about label sticky state - stops at the headline
-      const aboutHeadline = document.querySelector('.fd-about__headline');
-      const heroThreshold = heroHeight * 0.85;
-
-      // Track when hero collapse first happens to add buffer
-      if (shouldHide && !window._heroCollapseScrollPos) {
-        window._heroCollapseScrollPos = scrollTop;
-        console.log('=== HERO COLLAPSED - Label should appear ===');
-        console.log('Collapse scroll position:', scrollTop);
-
-        // Check actual element state after React re-renders
-        setTimeout(() => {
-          const labelEl = document.querySelector('.fd-about__label');
-          if (labelEl) {
-            console.log('AFTER RENDER - Label classes:', labelEl.className);
-            console.log('AFTER RENDER - Opacity:', window.getComputedStyle(labelEl).opacity);
-          }
-        }, 100);
-      } else if (!shouldHide) {
-        window._heroCollapseScrollPos = null;
-      }
-
-      if (aboutHeadline && shouldHide) {
-        const headlineRect = aboutHeadline.getBoundingClientRect();
-        const stickyTop = 90;
-
-        // Require 100px of scroll after hero collapses before label can become static
-        const scrollSinceCollapse = scrollTop - (window._heroCollapseScrollPos || scrollTop);
-        const canBecomeStatic = scrollSinceCollapse > 100;
-        const newStaticState = canBecomeStatic && headlineRect.top <= stickyTop;
-
-        if (newStaticState !== window._lastStaticState) {
-          console.log('--- STATIC STATE CHANGE ---');
-          console.log('scrollSinceCollapse:', scrollSinceCollapse);
-          console.log('canBecomeStatic (need >100):', canBecomeStatic);
-          console.log('headlineRect.top:', headlineRect.top);
-          console.log('aboutLabelStatic changing to:', newStaticState);
-          window._lastStaticState = newStaticState;
-        }
-
-        setAboutLabelStatic(newStaticState);
-      } else if (!shouldHide) {
-        if (window._lastStaticState !== false) {
-          console.log('--- RESET: scrolled back up past hero ---');
-          window._lastStaticState = false;
-        }
-        setAboutLabelStatic(false);
-      }
-
-      // Detect which content section is in view for nav highlighting
       const navSectionIds = ['training', 'fleet', 'expeditions', 'sales', 'maintenance', 'contact'];
       let currentNavSection = null;
 
@@ -990,7 +1745,6 @@ function Experimentation() {
         const element = document.getElementById(sectionId);
         if (element) {
           const rect = element.getBoundingClientRect();
-          // Section is "active" if its top is in the upper half of viewport
           if (rect.top <= windowHeight * 0.5 && rect.bottom >= 100) {
             currentNavSection = sectionId;
           }
@@ -1000,72 +1754,52 @@ function Experimentation() {
       setActiveNavSection(currentNavSection);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Kill scroll momentum at 0.85 of hero height for 1 second
-  useEffect(() => {
-    let dampingActive = false;
-    let dampingTimeout = null;
-
-    const handleWheel = (e) => {
-      const scrollY = window.scrollY;
-      const windowHeight = window.innerHeight;
-      const heroHeight = windowHeight * 4;
-      const threshold = heroHeight * 0.85;
-
-      // Entering the damping zone - start 1s timer
-      if (scrollY >= threshold && !dampingActive && dampingTimeout === null) {
-        dampingActive = true;
-        dampingTimeout = setTimeout(() => {
-          dampingActive = false;
-        }, 500);
-      }
-
-      // Reset if scrolled back above threshold
-      if (scrollY < threshold) {
-        dampingActive = false;
-        if (dampingTimeout) {
-          clearTimeout(dampingTimeout);
-          dampingTimeout = null;
-        }
-      }
-
-      // Apply damping while active
-      if (dampingActive) {
-        e.preventDefault();
-        const scrollAmount = Math.sign(e.deltaY) * 10;
-        window.scrollBy(0, scrollAmount);
-      }
-    };
-
-    window.addEventListener('wheel', handleWheel, { passive: false });
-    return () => {
-      window.removeEventListener('wheel', handleWheel);
-      if (dampingTimeout) clearTimeout(dampingTimeout);
-    };
-  }, []);
-
-  // Self-contained two-step sticky nav
-  // Step 1: Nav sticks below header (full nav visible with "Explore" header)
-  // Step 2: After scrolling 200px more, "Explore" slides behind header, only tabs remain
-  // Resilient to any DOM changes above the nav
-  useEffect(() => {
-    if (!navSentinelRef.current) return;
-    const HEADER_HEIGHT = 49; // site header height when scrolled
-    const COMPACT_SCROLL_DISTANCE = 200; // px after sticking before going compact
-
-    const handleScroll = () => {
-      const sentinelTop = navSentinelRef.current.getBoundingClientRect().top;
-      const pastHeader = sentinelTop < HEADER_HEIGHT;
-      setNavFixed(pastHeader);
-      setNavCompact(pastHeader && sentinelTop < HEADER_HEIGHT - COMPACT_SCROLL_DISTANCE);
-    };
-
+    const handleScroll = () => { cancelAnimationFrame(navRaf); navRaf = requestAnimationFrame(update); };
     window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => { window.removeEventListener('scroll', handleScroll); cancelAnimationFrame(navRaf); };
+  }, []);
+
+  // Gallery fullscreen auto-rotate + clock
+  useEffect(() => {
+    if (!galleryFullscreen) return;
+    const interval = setInterval(() => {
+      setGallerySlide((prev) => (prev + 1) % galleryImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [galleryFullscreen, galleryImages.length]);
+
+  useEffect(() => {
+    if (!galleryFullscreen || !galleryShowClock) return;
+    const tick = () => {
+      const now = new Date();
+      setClockTime(now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
+    };
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [galleryFullscreen, galleryShowClock]);
+
+  // Compact nav: after the nav has been stuck for 200px, hide the "Explore" header
+  useEffect(() => {
+    if (!navRef.current) return;
+    const COMPACT_SCROLL_DISTANCE = 200;
+    let compactRaf = 0;
+
+    const update = () => {
+      const navTop = navRef.current.getBoundingClientRect().top;
+      const isStuck = navSentinelRef.current
+        ? navSentinelRef.current.getBoundingClientRect().top < navTop
+        : false;
+      const stuckDistance = isStuck
+        ? navTop - navSentinelRef.current.getBoundingClientRect().top
+        : 0;
+      setNavCompact(stuckDistance > COMPACT_SCROLL_DISTANCE);
+    };
+
+    const handleScroll = () => { cancelAnimationFrame(compactRaf); compactRaf = requestAnimationFrame(update); };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    update();
+    return () => { window.removeEventListener('scroll', handleScroll); cancelAnimationFrame(compactRaf); };
   }, []);
 
   // Scroll reveal effect - elements fade in when scrolling into view, reset when leaving
@@ -1082,7 +1816,7 @@ function Experimentation() {
           }
         });
       },
-      { threshold: 0.1 }
+      { threshold: 0.02 }
     );
     reveals.forEach((el) => observer.observe(el));
     return () => observer.disconnect();
@@ -1096,6 +1830,68 @@ function Experimentation() {
     }
   };
 
+  const preownedInventory = [
+    // Available aircraft first
+    {
+      id: 'r66-ghkcc', model: 'R66 Turbine', year: 2021, hours: 485, registration: 'G-HKCC',
+      price: '£995,000', status: 'available',
+      images: [
+        '/assets/images/used-aircraft/r66/r66-turbine-ghkcc.jpg',
+        '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+        '/assets/images/used-aircraft/r66/chris-r66-alps.jpg',
+      ],
+    },
+    {
+      id: 'r44-grrob', model: 'R44 Raven II', year: 2019, hours: 890, registration: 'G-RROB',
+      price: '£385,000', status: 'available',
+      images: [
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      ],
+    },
+    {
+      id: 'r66-gnxg', model: 'R66 Turbine', year: 2020, hours: 650, registration: 'G-NXG1',
+      price: '£925,000', status: 'reserved',
+      images: [
+        '/assets/images/used-aircraft/r66/chris-r66-alps.jpg',
+        '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+      ],
+    },
+    {
+      id: 'r44-cadet', model: 'R44 Cadet', year: 2022, hours: 320, registration: 'G-CADB',
+      price: '£345,000', status: 'available',
+      images: [
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+      ],
+    },
+    {
+      id: 'r44-raven1', model: 'R44 Raven I', year: 2017, hours: 1450, registration: 'G-RAVI',
+      price: '£295,000', status: 'available',
+      images: [
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      ],
+    },
+    // Sold aircraft at the end
+    {
+      id: 'sold-r66-1', model: 'R66 Turbine', year: 2019, registration: 'G-SOLD', status: 'sold',
+      images: ['/assets/images/used-aircraft/r66/r66-turbine-ghkcc.jpg'],
+    },
+    {
+      id: 'sold-r44-1', model: 'R44 Raven II', year: 2020, registration: 'G-SOLD', status: 'sold',
+      images: ['/assets/images/new-aircraft/r44/r44blueprint.jpg'],
+    },
+    {
+      id: 'sold-r22-1', model: 'R22 Beta II', year: 2019, registration: 'G-SOLD', status: 'sold',
+      images: ['/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png'],
+    },
+    {
+      id: 'sold-r44-2', model: 'R44 Cadet', year: 2021, registration: 'G-SOLD', status: 'sold',
+      images: ['/assets/images/new-aircraft/r44/raven-ii-front-alpha.png'],
+    },
+  ];
+
   const rebuildSteps = [
     { label: 'Airframe', before: '/assets/images/rebuilds/airframe-before.jpg', after: '/assets/images/rebuilds/airframe-after.jpg', beforeDesc: 'Corrosion, fatigue cracks and fifteen years of wear across the bare airframe.', afterDesc: 'Stripped, inspected, repaired and re-protected — ready for another lifetime.' },
     { label: 'Engine', before: '/assets/images/rebuilds/engine-before.jpg', after: '/assets/images/rebuilds/engine-after.jpg', beforeDesc: '2,200 hours. Worn bearings, degraded seals, metal particles in the oil filter.', afterDesc: 'Zero-time overhaul. Factory-new components throughout, test-run and certified.' },
@@ -1105,201 +1901,159 @@ function Experimentation() {
     { label: 'Paint', before: '/assets/images/rebuilds/paint-before.jpg', after: '/assets/images/rebuilds/paint-after.jpg', beforeDesc: 'Oxidised, chipped and faded. The livery has seen better days.', afterDesc: 'Stripped to bare metal and refinished in custom livery. Mirror finish, UV-sealed.' },
   ];
 
+  const rebuildPortfolio = [
+    {
+      model: 'R44 Raven II', reg: 'G-RROB', year: 2019,
+      scope: 'Full rebuild — zero-time engine, Garmin G500H TXi, custom leather interior, metallic blue livery.',
+      duration: '8 months',
+      img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      details: 'Complete strip-down and rebuild to zero-time specification. The owner requested a full glass cockpit upgrade with Garmin G500H TXi and GTN 650Xi. Interior finished in hand-stitched navy leather with contrast stitching. Exterior resprayed in a custom metallic blue livery with platinum pinstripe.',
+      highlights: ['Zero-time O-540 engine', 'Garmin G500H TXi glass panel', 'Custom leather interior', 'Metallic blue respray'],
+      gallery: [
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      ],
+    },
+    {
+      model: 'R22 Beta II', reg: 'G-BWZZ', year: 2016,
+      scope: 'Training fleet rebuild — new O-360, glass panel, high-vis paint scheme, noise-dampening kit.',
+      duration: '5 months',
+      img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png',
+      details: 'Fleet rebuild for a UK flight school. Engine replaced with factory-new Lycoming O-360, paired with a Garmin G5 digital display. High-visibility orange and white paint scheme designed for training operations. Noise-dampening kit fitted throughout for student comfort.',
+      highlights: ['Factory-new O-360 engine', 'Garmin G5 display', 'High-vis training livery', 'Acoustic dampening kit'],
+      gallery: [
+        '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png',
+        '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png',
+        '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png',
+      ],
+    },
+    {
+      model: 'R66 Turbine', reg: 'G-NXG1', year: 2018,
+      scope: 'Owner rebuild — RR300 overhaul, GTN 750Xi, Alcantara interior, ceramic-coated paint.',
+      duration: '11 months',
+      img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+      details: 'Comprehensive owner rebuild of a high-time R66. Rolls-Royce RR300 engine overhauled to zero-time, paired with GTN 750Xi navigator and GI 275 standby. Interior retrimmed in charcoal Alcantara with brushed aluminium accents. Exterior finished with a ceramic-coated charcoal-to-slate gradient paint.',
+      highlights: ['RR300 zero-time overhaul', 'GTN 750Xi + GI 275', 'Alcantara interior', 'Ceramic-coated paint'],
+      gallery: [
+        '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+        '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+        '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+      ],
+    },
+    {
+      model: 'R44 Cadet', reg: 'G-CADB', year: 2020,
+      scope: 'School fleet — zero-time IO-540, digital engine monitor, reinforced skid gear.',
+      duration: '6 months',
+      img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      details: 'Training-optimised rebuild for a UK ATO. Zero-timed IO-540 with JPI EDM-900 engine monitor. Reinforced skid gear and ground-handling wheels for student operations. Simplified VFR panel with Garmin GI 275 and GTR 225A comm.',
+      highlights: ['Zero-time IO-540', 'JPI EDM-900 monitor', 'Reinforced skid gear', 'Training-spec panel'],
+      gallery: [
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+      ],
+    },
+    {
+      model: 'R44 Raven II', reg: 'G-HQAV', year: 2015,
+      scope: 'Private owner — full strip, corrosion treatment, bespoke two-tone livery, aux tank fitted.',
+      duration: '9 months',
+      img: '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+      details: 'Full strip-down for a private owner who wanted a touring-spec aircraft. Comprehensive corrosion treatment and NDT inspection of all critical components. Aux fuel tank fitted for extended range. Bespoke two-tone ivory and charcoal livery with gold detailing.',
+      highlights: ['Full corrosion treatment', 'Aux fuel tank fitted', 'Bespoke two-tone livery', 'Touring-spec rebuild'],
+      gallery: [
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+        '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png',
+        '/assets/images/new-aircraft/r44/r44blueprint.jpg',
+      ],
+    },
+  ];
+
   return (
     <div className="final-draft" ref={containerRef}>
-      {/* ===== HEADER WITH SPOTLIGHT ANIMATION ===== */}
-      <FinalDraftHeader />
-
-      {/* ===== HERO SECTION ===== */}
-      <section className={`fd-hero ${heroCollapsed ? 'fd-hero--collapsed' : ''}`} ref={heroRef}>
-        {/* SVG Path that draws on scroll */}
-        <HeroScrollPath containerRef={heroRef} hidden={imagesExpanded} />
-
-        {/* Animated Grid Lines - hides after hero section */}
-        <div className={`fd-hero__grid ${linesVisible ? 'fd-hero__grid--visible' : ''} ${imagesExpanded ? 'fd-hero__grid--hidden' : ''}`}>
-          <div className="fd-hero__line fd-hero__line--v1"></div>
-          <div className="fd-hero__line fd-hero__line--v2"></div>
-          <div className="fd-hero__line fd-hero__line--v3"></div>
-          <div className="fd-hero__line fd-hero__line--v4"></div>
-          <div className={`fd-hero__line fd-hero__line--h1 ${scrollPromptHidden ? 'fd-hero__line--hidden' : ''}`}></div>
-          <div className={`fd-hero__line fd-hero__line--h2 ${scrollPromptHidden ? 'fd-hero__line--hidden' : ''}`}></div>
-        </div>
-
-        {/* Fixed Left Image - Cycles on scroll */}
-        <div
-          className={`fd-hero__image fd-hero__image--left ${imagesExpanded ? 'fd-hero__image--expanded' : ''}`}
-          style={{
-            opacity: linesVisible ? 1 : 0,
-            transform: imagesExpanded ? 'translateX(-100%)' : 'translateX(0)'
-          }}
-        >
-          {leftImages.map((src, index) => (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              className={`fd-hero__cycle-img ${activeSection === index ? 'fd-hero__cycle-img--active' : ''}`}
-            />
-          ))}
-        </div>
-
-        {/* Fixed Right Image - Cycles on scroll */}
-        <div
-          className={`fd-hero__image fd-hero__image--right ${imagesExpanded ? 'fd-hero__image--expanded' : ''}`}
-          style={{
-            opacity: linesVisible ? 1 : 0,
-            transform: imagesExpanded ? 'translateX(100%)' : 'translateX(0)'
-          }}
-        >
-          {rightImages.map((src, index) => (
-            <img
-              key={src}
-              src={src}
-              alt=""
-              className={`fd-hero__cycle-img ${activeSection === index ? 'fd-hero__cycle-img--active' : ''}`}
-            />
-          ))}
-        </div>
-
-        {/* Scrolling Content Container - hides after hero section */}
-        <div className={`fd-hero__scroll-container ${imagesExpanded ? 'fd-hero__scroll-container--hidden' : ''}`}>
-          {sections.map((section, index) => (
-            <div
-              key={section.id}
-              className={`fd-hero__section ${activeSection === index ? 'fd-hero__section--active' : ''} ${section.image ? 'fd-hero__section--with-image' : ''}`}
-            >
-              {/* Text Content */}
-              <div className="fd-hero__section-text">
-                {/* Coordinates */}
-                <div className="fd-hero__coords">
-                  <span>51.5751°N</span>
-                  <UnionJack size={14} id="coords" />
-                  <span>0.5059°W</span>
-                </div>
-
-                {/* Pre-text */}
-                <span className="fd-hero__pre">{section.preText}</span>
-
-                {/* Headline with varying colors */}
-                <h1 className="fd-hero__headline">
-                  {section.headline.map((word, i) => (
-                    <span
-                      key={i}
-                      className={`fd-hero__word fd-hero__word--${i + 1}`}
-                      style={{ '--delay': `${i * 0.1}s` }}
-                    >
-                      {word}
-                    </span>
-                  ))}
-                </h1>
-
-                {/* Description */}
-                <p className="fd-hero__desc">{section.description}</p>
-              </div>
-
-              {/* Section Image (if exists) */}
-              {section.image && (
-                <div className="fd-hero__section-image">
-                  <img src={section.image} alt="" />
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* Scroll Prompt - hides after hero section */}
-        <div className={`fd-hero__scroll-prompt ${scrollPromptHidden ? 'fd-hero__scroll-prompt--hidden' : ''}`}>
-          <span className="fd-hero__scroll-text">Scroll to explore</span>
-          <div className="fd-hero__scroll-line">
-            <span></span>
-          </div>
-        </div>
-
-        {/* Progress Indicator - hides after hero section */}
-        <div className={`fd-hero__progress ${imagesExpanded ? 'fd-hero__progress--hidden' : ''}`}>
-          {sections.map((_, index) => (
-            <div
-              key={index}
-              className={`fd-hero__progress-dot ${activeSection >= index ? 'fd-hero__progress-dot--active' : ''}`}
-            />
-          ))}
-        </div>
-      </section>
+      {/* ===== HERO SECTION (Diagonal Split + Header) ===== */}
+      <HeroSectionFinalTesting />
 
       {/* ===== ABOUT US VIDEO SECTION ===== */}
       <section className="fd-about" id="about">
-        <div className={`fd-about__video-lines ${videoLinesInView ? 'visible' : ''}`}>
-          <span className="fd-about__line fd-about__line--1"></span>
-          <span className="fd-about__line fd-about__line--2"></span>
-          <span className="fd-about__line fd-about__line--3"></span>
-        </div>
         <div className="fd-about__content">
-          <div ref={aboutLabelRef} className={`fd-about__label ${heroCollapsed ? 'fd-about__label--visible' : ''} ${aboutLabelStatic ? 'fd-about__label--static' : ''}`}>
-            <span className="fd-about__label-line"></span>
-            <span>About Us</span>
-            <span className="fd-about__label-line"></span>
-          </div>
-          <h2 className="fd-about__headline fd-about__headline--single-line">
-            <span>The Story</span> <span>Behind the</span> <span>Journey</span>
-          </h2>
-
-          <div className="fd-about__video" ref={videoLinesRef}>
-            <div className="fd-about__video-placeholder">
-              <img src={aboutImage} alt="" />
-              <div className="fd-about__video-overlay">
-                <button className="fd-about__play-btn">
-                  <span></span>
-                </button>
-                <span className="fd-about__video-label">Watch Our Story</span>
-              </div>
-            </div>
-          </div>
-
-          <p className="fd-about__text">
-            Founded in 2010 at Denham Aerodrome, HQ Aviation has grown to become
-            the UK's leading Robinson helicopter specialists. Our commitment to
-            excellence in training, sales, and maintenance has earned us the trust
-            of pilots worldwide.
-          </p>
-
-
-            <div className="wfv wfv-merge" ref={aboutBtnRef}>
-              <button className={`wfv-merge__fly ${whyFlyOpen ? 'wfv-merge__fly--open' : ''}`} onClick={() => setWhyFlyOpen(!whyFlyOpen)}>
-                <div className="wfv-merge__thumbs">
-                  {whyFlyImages.slice(0, 5).map((src, idx) => (
-                    <div key={idx} className="wfv-merge__thumb" style={{ backgroundImage: `url(${src})`, zIndex: 5 - idx }} />
-                  ))}
-                </div>
-                <div className="wfv-merge__center">
-                  <span className="wfv-merge__title">Why We Fly Helicopters</span>
-                  <span className={`wfv-merge__pulse ${whyFlyOpen ? 'wfv-merge__pulse--hidden' : ''}`}></span>
-                </div>
-                <div className="wfv-merge__thumbs">
-                  {whyFlyImages.slice(5, 10).map((src, idx) => (
-                    <div key={idx} className="wfv-merge__thumb" style={{ backgroundImage: `url(${src})`, zIndex: 5 - idx }} />
-                  ))}
-                </div>
-              </button>
-              <div className={`wfv-merge__expand ${whyFlyOpen ? 'wfv-merge__expand--open' : ''}`}>
-                <div className="wfv-merge__expand-inner">
-                <div className="wfi-q__expanded">
-<div className="wfi-q__card-body"><div className="wfi-q__card-text"><h3><span className="wfi-q__verb">{whyFlyBenefits[whyFlySlide].verb}</span>{' '}<span className="wfi-q__noun">{whyFlyBenefits[whyFlySlide].noun}</span></h3><p>{whyFlyBenefits[whyFlySlide].desc}</p></div><div className="wfi-q__card-img">{whyFlyImages.map((src, idx) => (<div key={idx} className={`wfi-q__card-slide ${idx === whyFlySlide ? 'active' : ''}`} style={{ backgroundImage: `url(${src})` }} />))}<div className="wfi-q__card-img-label">Lifestyle</div></div></div>
-                  <div className="wfi-q__card-footer"><div className="wfi-q__footer-left"><div className="wfi-q__dots">{whyFlyBenefits.map((_, idx) => (<div key={idx} className={`wfi-q__dot ${idx === whyFlySlide ? 'active' : ''}`} onClick={() => setWhyFlySlide(idx)} />))}</div><span className="wfi-q__counter">{String(whyFlySlide + 1).padStart(2, '0')} / {whyFlyBenefits.length}</span></div><div className="wfi-q__arrows"><button onClick={() => setWhyFlySlide(prev => prev === 0 ? 13 : prev - 1)} aria-label="Previous"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M15 18l-6-6 6-6" /></svg></button><button onClick={() => setWhyFlySlide(prev => prev === 13 ? 0 : prev + 1)} aria-label="Next"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18l6-6-6-6" /></svg></button></div></div>
-                </div>
+          <div className="fd-about__split" ref={aboutVideoRef}>
+            <div className="fd-about__split-left">
+              <div className="fd-about__video">
+                <div className="fd-about__video-placeholder fd-about__video-placeholder--clean">
+                  <div ref={ytContainerRef} style={{ position: 'absolute', top: '-60px', left: 0, width: '100%', height: 'calc(100% + 120px)' }} />
+                  <div style={{ position: 'absolute', inset: 0, zIndex: 2 }} />
+                  <button
+                    className="fd-about__mute-btn"
+                    onClick={() => setVideoMuted(m => !m)}
+                    aria-label={videoMuted ? 'Unmute' : 'Mute'}
+                  >
+                    {videoMuted ? (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+                    ) : (
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07"/></svg>
+                    )}
+                  </button>
                 </div>
               </div>
-              <Link to="/about" className="wfv-merge__cta">Learn More About HQ Aviation<span>→</span></Link>
+              <h3 className="fd-about__rec-title">Recommendations</h3>
+              <div className="abt-v9__milestones">
+                {[
+                  { year: '2019', icon: 'fas fa-award', text: 'FAI Gold Rotorcraft Medal', sub: 'Lifetime Achievement' },
+                  { year: '2016', icon: 'fas fa-snowflake', text: 'Solo to All 3 North Poles', sub: 'World First' },
+                  { year: '2012', icon: 'fas fa-medal', text: 'Second World Championship', sub: 'Backwards Autorotation' },
+                  { year: '2005', icon: 'fas fa-flag', text: 'First Crew to Both Poles', sub: 'Guinness World Record' },
+                  { year: '2002', icon: 'fas fa-compass', text: 'First Piston Heli to North Pole', sub: 'Guinness World Record' },
+                  { year: '1997', icon: 'fas fa-globe-americas', text: 'First Piston Heli Around the World', sub: 'Now in the Smithsonian' },
+                  { year: '1994', icon: 'fas fa-trophy', text: 'World Aerobatics Gold', sub: 'Moscow, Russia' },
+                ].map((m, i) => (
+                  <div key={i} className="abt-v9__milestone">
+                    <i className={m.icon}></i>
+                    <span className="abt-v9__milestone-year">{m.year}</span>
+                    <span className="abt-v9__milestone-text">{m.text}</span>
+                    <span className="abt-v9__milestone-sub">{m.sub}</span>
+                  </div>
+                ))}
+              </div>
             </div>
+            <div className="fd-about__split-right">
+              <h3 className="fd-about__founder-title">About</h3>
+              <h4 className="fd-about__founder-name">HQ Aviation</h4>
+              <p className="fd-about__body">
+                Founded in 2011 by Captain Quentin Smith at Denham Aerodrome, HQ Aviation has grown to become the United Kingdom's leading Robinson helicopter specialists among operating a variety of other helicopter types. As an Authorized Robinson Dealer, Service Centre, Training Facility and Operator, we provide the full spectrum of helicopter services and have wide ranging experience in the rotary world.
+              </p>
+              <p className="fd-about__body">
+                What started as a single-helicopter training operation has, over three decades, evolved into one of the largest Robinson fleets in Europe, supported by a team of CAA-approved engineers and instructors who share a relentless commitment to rotary flight.
+              </p>
+              <div className="fd-about__founder">
+                <h3 className="fd-about__founder-title">The Founder</h3>
+                <h4 className="fd-about__founder-name">Captain Quentin Smith</h4>
+                <p className="fd-about__body">
+                  Two-time World Helicopter Aerobatics Champion. In Moscow in 1994, he flew a humble Robinson R22 against Russian pilots in turbine machines — and won. Eighteen years later he took gold again, performing a backwards autorotation from 300 feet that experts had deemed impossible.
+                </p>
+
+                <div className="fd-about__pullquote">
+                  <p>&ldquo;Alongside adventure is an obligation to share the beauty of your experience with others. There is absolutely an obligation to do that.&rdquo;</p>
+                  <span>Captain Quentin Smith</span>
+                </div>
+
+                <p className="fd-about__body">
+                  Guinness World Record holder. First piston helicopter circumnavigation of the globe. First to the North Pole. First to the South Pole. Recipient of the FAI Gold Rotorcraft Medal — the highest individual honour in international helicopter aviation.
+                </p>
+              </div>
+
+            </div>
+          </div>
 
         </div>
       </section>
 
-      {/* Sentinel for JS-based sticky nav */}
+
+      {/* Sentinel for compact-mode distance calculation */}
       <div ref={navSentinelRef} style={{ height: 0, margin: 0, padding: 0 }} />
-      {navFixed && <div style={{ height: navRef.current ? navRef.current.offsetHeight : 0 }} />}
 
       {/* ===== HORIZONTAL ACCORDION NAVIGATION ===== */}
-      <nav className={`fd-nav ${navCompact ? 'fd-nav--compact' : ''} ${navFixed ? 'fd-nav--fixed' : ''}`} ref={navRef}>
+      <nav className={`fd-nav ${navCompact ? 'fd-nav--compact' : ''}`} ref={navRef}>
         <div className="fd-nav__header">
           <span className="fd-nav__line"></span>
           <span>Explore</span>
@@ -1308,14 +2062,25 @@ function Experimentation() {
 
         <div className="fd-nav__accordion">
           {navItems.map((item) => (
-            <button
+            <div
               key={item.id}
-              className={`fd-nav__item ${activeNavSection === item.id ? 'fd-nav__item--active' : ''}`}
-              onClick={() => scrollToSection(item.id)}
+              className={`fd-nav__item-wrap ${activeNavSection === item.id ? 'fd-nav__item-wrap--active' : ''}`}
             >
-              <span className="fd-nav__item-icon">{item.icon}</span>
-              <span className="fd-nav__item-label">{item.label}</span>
-            </button>
+              <button
+                className={`fd-nav__item ${activeNavSection === item.id ? 'fd-nav__item--active' : ''}`}
+                onClick={() => scrollToSection(item.id)}
+              >
+                <span className="fd-nav__item-icon">{item.icon}</span>
+                <span className="fd-nav__item-label">{item.label}</span>
+              </button>
+              {item.subItems && item.subItems.length > 0 && (
+                <div className="fd-nav__dropdown">
+                  {item.subItems.map((sub) => (
+                    <Link key={sub.to} to={sub.to} className="fd-nav__dropdown-item">{sub.label}</Link>
+                  ))}
+                </div>
+              )}
+            </div>
           ))}
         </div>
       </nav>
@@ -1332,119 +2097,221 @@ function Experimentation() {
 
       {/* ===== CONTENT SECTIONS ===== */}
       <div className="fd-training-wrapper">
-        <section className="fd-section fd-section--with-carousel reveal-element" id="training">
-          {/* ===== SCROLL PATH ANIMATION ===== */}
-          <div className="fd-scroll-path-wrapper">
-            <ScrollPathAnimation
-              iconSrc="/assets/images/icons/r66-icon-transparent going right.svg"
-              iconSize={60}
-              colorStart="#FFFFFF"
-              colorMid="#5B9BD5"
-              colorEnd="#1E3A5F"
-            />
-          </div>
-
-          {/* ===== TRAINING CAROUSEL ===== */}
-          <div className="fd-carousel-section">
-          <div className="carousel carousel--97">
-            <div className="carousel__tabs-wrapper">
-              <div className="carousel__tabs">
-                {trainingSlides.map((slide, index) => (
-                  <button
-                    key={index}
-                    className={`carousel__tab ${index === trainingSlide ? 'active' : ''}`}
-                    onClick={() => setTrainingSlide(index)}
-                  >
-                    <span className="carousel__tab-num">{String(index + 1).padStart(2, '0')}</span>
-                    <span className="carousel__tab-title">{slide.title}</span>
-                  </button>
-                ))}
+        <section className="fd-training-section" id="training">
+          <div className="fd-training-inner" ref={trainingInnerRef}>
+            <div className="fd-training-sticky" ref={trainingStickyRef}>
+              <div className="fd-training-sticky__bg">
+              </div>
+              <div className="fd-training-sticky__text">
+                <span className="fd-training-header__pretitle">CAA Approved Training Organisation</span>
+                <h2 className="fd-training-header__headline">
+                  <span>Explore Our</span>
+                  <span>Flying Services</span>
+                </h2>
+                <p className="fd-training-header__desc">
+                  From your first discovery flight to advanced commercial ratings, our experienced instructors guide you every step of the way.
+                </p>
+                <hr className="fd-training-header__divider" />
               </div>
             </div>
-            <div className="carousel__body">
-              <button className="carousel__arrow" onClick={prevTrainingSlide}>
-                <svg width="48" height="20" viewBox="0 0 48 20">
-                  <line x1="48" y1="10" x2="6" y2="10" stroke="currentColor" strokeWidth="2"/>
-                  <polyline points="14 3 6 10 14 17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-              <div className="carousel__main">
-                <div className="carousel__content">
-                  <div className="carousel__text-content">
-                    {trainingSlides.map((slide, index) => (
-                      <div key={index} className={`carousel__slide-content ${index === trainingSlide ? 'active' : ''}`}>
-                        <div className="carousel__title-row">
-                          <div className="carousel__number-wrapper">
-                            <span className="carousel__inline-number">{String(index + 1).padStart(2, '0')}</span>
-                          </div>
-                          <h3>{slide.title}</h3>
-                        </div>
-                        <p>{slide.description}</p>
-                        <Link to={slide.link} className="carousel__btn">
+            <div className="fd-training-courses">
+              {zigzagSlides.map((slide, i) => {
+                const isEven = i % 2 === 0;
+                return (
+                  <ZigzagTrainingItem key={i} slide={slide} index={i} isEven={isEven} />
+                );
+              })}
+            </div>
+          <div className="fd-hscroll-runway" ref={hscrollRunwayRef}>
+            <div className="fd-hscroll-sticky">
+              <div className="fd-zigzag__hscroll" ref={hscrollRef}>
+                <div className="fd-zigzag__hscroll-inner" ref={hscrollInnerRef}>
+                {hscrollSlides.map((slide, i) => (
+                  <div key={i} className="fd-zigzag__card">
+                    <div className="fd-zigzag__card-image"><img src={slide.image} alt={slide.title} /></div>
+                    <div className="fd-zigzag__card-body">
+                      <div className="fd-zigzag__card-header">
+                        <span className="fd-zigzag__card-num">{String(zigzagSlides.length + i + 1).padStart(2, '0')}</span>
+                        <span className="fd-zigzag__card-tag">{slide.tag}</span>
+                      </div>
+                      <h3 className="fd-zigzag__card-title">{slide.title}</h3>
+                      <p className="fd-zigzag__card-desc">{slide.description}</p>
+                      <div className="fd-zigzag__card-footer">
+                        <span className="fd-zigzag__card-duration">{slide.duration}</span>
+                        <Link to={slide.link} className="fd-zigzag__card-btn">
                           <span>{slide.cta}</span>
-                          <svg className="carousel__btn-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         </Link>
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </div>
-                <div className="carousel__divider"></div>
-                <div className="carousel__image">
-                  {trainingSlides.map((slide, index) => (
-                    <img key={index} src={slide.image} alt={slide.title} className={index === trainingSlide ? 'active' : ''} />
-                  ))}
+                ))}
+                {[
+                  { num: String(zigzagSlides.length + hscrollSlides.length + 1).padStart(2, '0'), tag: 'Specialist', title: 'SuperYacht Ops & Private Owner Management', description: 'Deck ops, pilot provisioning, maintenance coordination, and worldwide logistics for yacht-based helicopters.', duration: 'Bespoke', link: '/contact?subject=special-ops', cta: 'Enquire', image: '/assets/images/lifestyle/superyacht-ops.jpg' },
+                  { num: String(zigzagSlides.length + hscrollSlides.length + 2).padStart(2, '0'), tag: 'Specialist', title: 'Pilot Provisioning', description: 'Crewing, safety pilots, and ferry flights. Fully rated, insured and experienced across the Robinson range.', duration: 'Bespoke', link: '/contact?subject=pilot-services', cta: 'Enquire', image: '/assets/images/gallery/flying/flying--1.jpg' },
+                  { num: String(zigzagSlides.length + hscrollSlides.length + 3).padStart(2, '0'), tag: 'Advanced', title: 'Advanced Training', description: 'Autorotations with Captain Q, confined area training, mountain flying, and safety courses.', duration: 'Various', link: '/contact?subject=training', cta: 'Enquire', image: '/assets/images/gallery/flying/flying-.jpg' },
+                  { num: String(zigzagSlides.length + hscrollSlides.length + 4).padStart(2, '0'), tag: 'Advisory', title: 'Aircraft Consulting', description: 'Pre-purchase inspections, ownership advice, fleet planning, and bespoke acquisition services for private and corporate clients.', duration: 'Bespoke', link: '/contact?subject=consulting', cta: 'Enquire', image: '/assets/images/facility/hq-0354.jpg' },
+                ].map((item, i) => (
+                  <div key={`serv-${i}`} className="fd-zigzag__card">
+                    <div className="fd-zigzag__card-image"><img src={item.image} alt={item.title} /></div>
+                    <div className="fd-zigzag__card-body">
+                      <div className="fd-zigzag__card-header">
+                        <span className="fd-zigzag__card-num">{item.num}</span>
+                        <span className="fd-zigzag__card-tag">{item.tag}</span>
+                      </div>
+                      <h3 className="fd-zigzag__card-title">{item.title}</h3>
+                      <p className="fd-zigzag__card-desc">{item.description}</p>
+                      <div className="fd-zigzag__card-footer">
+                        <span className="fd-zigzag__card-duration">{item.duration}</span>
+                        <Link to={item.link} className="fd-zigzag__card-btn">
+                          <span>{item.cta}</span>
+                          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
                 </div>
               </div>
-              <button className="carousel__arrow" onClick={nextTrainingSlide}>
-                <svg width="48" height="20" viewBox="0 0 48 20">
-                  <line x1="0" y1="10" x2="42" y2="10" stroke="currentColor" strokeWidth="2"/>
-                  <polyline points="34 3 42 10 34 17" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </button>
-            </div>
-            <div className="carousel__progress">
-              <div className="carousel__progress-bar" style={{ width: `${((trainingSlide + 1) / trainingSlides.length) * 100}%` }}></div>
             </div>
           </div>
-          </div>
+        </div>
         </section>
       </div>
 
-      {/* ===== PARALLAX: FLEET ===== */}
-      <ParallaxSection
-        image="/assets/images/facility/hq-aviation-robinsons.jpg"
-        alt="Our Fleet"
-        className="reveal-element"
-        waves={true}
-      >
-        <h2 className="parallax-section__title">Self-Fly Hire</h2>
-      </ParallaxSection>
+      {/* ===== THE CLUBHOUSE ===== */}
+      <section className="clubhouse reveal-element" ref={clubhouseRef}>
+        <div style={{ margin: '0 auto 1.5rem', position: 'relative', zIndex: 2 }} />
+        <div className="clubhouse__inner">
+          <div className="clubhouse__sticky">
+            <span className="clubhouse__pretitle">Denham Aerodrome</span>
+            <div className="clubhouse__title-wrap">
+              <h3 className="clubhouse__title" style={{ opacity: 1 - clubhouseTextPhase, transform: `translateY(${-clubhouseTextPhase * 10}px)` }}>The Clubhouse</h3>
+              <h3 className="clubhouse__title clubhouse__title--alt" style={{ opacity: clubhouseTextPhase, transform: `translateY(${(1 - clubhouseTextPhase) * 10}px)` }}>Escape to the Country</h3>
+            </div>
+
+            <div className="clubhouse__phases">
+              {/* Phase 1: The Clubhouse content */}
+              <div className="clubhouse__phase" style={{ opacity: 1 - clubhouseTextPhase, pointerEvents: clubhouseTextPhase > 0.5 ? 'none' : 'auto' }}>
+                <div className="clubhouse__phase-text" ref={phaseText1Ref}>
+                <p className="clubhouse__desc">
+                  More than a flight school — a place to belong. Leather sofas, expedition memorabilia,
+                  and the quiet hum of rotors outside.
+                </p>
+                <p className="clubhouse__desc">
+                  This is where pilots debrief over coffee,
+                  swap stories, and plan their next adventure.
+                </p>
+                </div>
+                {/* 3-item grid: HQ Club hero row + two below */}
+                <div className="clubhouse__grid">
+                  <div className="clubhouse__grid-item clubhouse__grid-item--hero">
+                    <h4 className="clubhouse__grid-title clubhouse__grid-title--hero">HQ Club</h4>
+                    <p className="clubhouse__grid-desc clubhouse__grid-desc--hero">You will be joining our groups, sharing helicopters, networking with entrepreneurs and high agency types seeking a new adventure that stands out from other private members clubs.</p>
+                  </div>
+                  <div className="clubhouse__grid-item">
+                    <h4 className="clubhouse__grid-title">7 Days a Week</h4>
+                    <p className="clubhouse__grid-desc">Operations team on site every day of the week.</p>
+                  </div>
+                  <div className="clubhouse__grid-item">
+                    <h4 className="clubhouse__grid-title">Social Events</h4>
+                    <p className="clubhouse__grid-desc">Car races, go-karting, clay pigeon shooting.</p>
+                  </div>
+                </div>
+                <span className="clubhouse__tagline">Friendly. Relaxed. Welcoming.</span>
+              </div>
+
+              {/* Phase 2: Escape to the Country content */}
+              <div className="clubhouse__phase clubhouse__phase--escape" style={{ opacity: clubhouseTextPhase, pointerEvents: clubhouseTextPhase < 0.5 ? 'none' : 'auto' }}>
+                <div className="clubhouse__phase-text" ref={phaseText2Ref}>
+                <p className="clubhouse__desc">
+                  Located just inside the M25 on the Buckinghamshire / Greater London
+                  border, Denham is uniquely positioned — close enough to the city to be
+                  practical, far enough to feel like a different world. Rolling countryside, open
+                  skies, and one of England's most charming aerodromes. Your helicopter is the
+                  gateway to all the destinations the UK has to offer.
+                </p>
+                </div>
+
+                {/* Map card — same layout as HQ Club grid */}
+                <div className="clubhouse__map-card">
+                  <div className="clubhouse__map-card-top">
+                    <div className="clubhouse__map">
+                      <img src="/assets/images/maps/map-of-hq.png" alt="Map of HQ Aviation at Denham Aerodrome" loading="lazy" />
+                    </div>
+                  </div>
+                  <div className="clubhouse__map-card-bottom">
+                    <div className="clubhouse__map-card-stat">
+                      <h4 className="clubhouse__grid-title">25 min</h4>
+                      <p className="clubhouse__grid-desc">From Central London</p>
+                    </div>
+                    <div className="clubhouse__map-card-stat">
+                      <h4 className="clubhouse__grid-title">M25</h4>
+                      <p className="clubhouse__grid-desc">Just Inside the Orbital</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="clubhouse__bg-right" />
+          <div className="clubhouse__bg-border" />
+          <div className="clubhouse__gallery">
+            {/* Wide hero shot */}
+            <div className="clubhouse__img clubhouse__img--wide">
+              <img src="/assets/images/facility/hq-0345.jpg" alt="The clubhouse lounge" loading="lazy" />
+            </div>
+            {/* Two squares side by side */}
+            <div className="clubhouse__img">
+              <img src="/assets/images/facility/hq-0354.jpg" alt="Globe on the clubhouse desk" loading="lazy" />
+            </div>
+            <div className="clubhouse__img">
+              <img src="/assets/images/facility/hq-0053.jpg" alt="Helmet light and framed photos" loading="lazy" />
+            </div>
+            {/* Tall portrait left + square right */}
+            <div className="clubhouse__img clubhouse__img--tall">
+              <img src="/assets/images/facility/hq-0391.jpg" alt="Captain Q expedition photo on the wall" loading="lazy" />
+            </div>
+            <div className="clubhouse__img">
+              <img src="/assets/images/facility/hq-0477.jpg" alt="Helicopter compass instrument" loading="lazy" />
+            </div>
+            {/* Wide cinematic */}
+            <div className="clubhouse__img clubhouse__img--wide">
+              <img src="/assets/images/facility/hq-0300.jpg" alt="R66 Turbine cockpit instruments" loading="lazy" />
+            </div>
+            {/* Two squares */}
+            <div className="clubhouse__img">
+              <img src="/assets/images/facility/hq-0388.jpg" alt="Air Pilot's Manual on vintage trunk" loading="lazy" />
+            </div>
+            <div className="clubhouse__img">
+              <img src="/assets/images/facility/hq-0696.jpg" alt="Captain Q flying" loading="lazy" />
+            </div>
+            {/* Wide closing shot */}
+            <div className="clubhouse__img clubhouse__img--wide">
+              <img src="/assets/images/facility/hq-0153-3.jpg" alt="Helicopters on the airfield" loading="lazy" />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ===== SELF-FLY HIRE — DARK MAP + JOURNEY TIMELINE ===== */}
       <SelfFlyHireSection />
 
-      {/* ===== SCROLLING STRIPS - DESTINATIONS ===== */}
+      {/* ===== SCROLLING STRIPS - DESTINATIONS (V42 Editorial Luxury) ===== */}
       <div className="scrolling-strips-wrapper" ref={scrollingStripsWrapperRef}>
-        <ScrollingStrips wrapperRef={scrollingStripsWrapperRef} />
+        {/* Background texture — scrolls naturally behind sticky strips */}
+        <div className="scrolling-strips-bg" aria-hidden="true">
+          <div className="scrolling-strips-bg__grid"></div>
+        </div>
+        <EditorialStrips wrapperRef={scrollingStripsWrapperRef} />
         <div className="scrolling-strips-spacer"></div>
       </div>
 
-      {/* ===== PARALLAX: EXPEDITIONS ===== */}
-      <ParallaxSection
-        image="/assets/images/expeditions/six-helis-in-North-Pole.jpg"
-        alt="Global Expeditions"
-        className="reveal-element"
-        waves={true}
-      >
-        <h2 className="parallax-section__title">Expeditions</h2>
-      </ParallaxSection>
-
       {/* ===== IMMERSIVE EXPEDITIONS SECTION ===== */}
-      <section className="fd-exped reveal-element" id="expeditions">
+      <section className="fd-exped" id="expeditions">
+        <div className="fd-exped__glow" ref={expedGlowRef} aria-hidden="true" />
         {/* Cinematic Opening */}
-        <div className="fd-exped__cinematic">
+        <div className="fd-exped__cinematic" ref={expedCinematicRef}>
           <div className="fd-exped__cinematic-bg">
             <video autoPlay muted loop playsInline>
               <source src="/assets/video/expedition-reel.mp4" type="video/mp4" />
@@ -1452,166 +2319,63 @@ function Experimentation() {
             <div className="fd-exped__cinematic-overlay"></div>
           </div>
           {/* Globe SVG underlay */}
-          <div className="fd-exped__globe">
+          <div className="fd-exped__globe" ref={globeRef}>
             <svg viewBox="0 0 600 600" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Outer circle */}
-              <circle cx="300" cy="300" r="280" stroke="currentColor" strokeWidth="1" opacity="0.15" />
-              <circle cx="300" cy="300" r="200" stroke="currentColor" strokeWidth="0.75" opacity="0.1" />
-              <circle cx="300" cy="300" r="120" stroke="currentColor" strokeWidth="0.75" opacity="0.08" />
-              {/* Horizontal latitude lines */}
-              <ellipse cx="300" cy="300" rx="280" ry="80" stroke="currentColor" strokeWidth="0.75" opacity="0.1" />
-              <ellipse cx="300" cy="300" rx="280" ry="160" stroke="currentColor" strokeWidth="0.75" opacity="0.08" />
-              <ellipse cx="300" cy="300" rx="280" ry="240" stroke="currentColor" strokeWidth="0.75" opacity="0.06" />
-              {/* Vertical longitude lines */}
-              <ellipse cx="300" cy="300" rx="80" ry="280" stroke="currentColor" strokeWidth="0.75" opacity="0.1" />
-              <ellipse cx="300" cy="300" rx="160" ry="280" stroke="currentColor" strokeWidth="0.75" opacity="0.08" />
-              <ellipse cx="300" cy="300" rx="240" ry="280" stroke="currentColor" strokeWidth="0.75" opacity="0.06" />
-              {/* Axis lines */}
-              <line x1="300" y1="15" x2="300" y2="585" stroke="currentColor" strokeWidth="0.5" opacity="0.08" />
-              <line x1="15" y1="300" x2="585" y2="300" stroke="currentColor" strokeWidth="0.5" opacity="0.08" />
-              {/* Tilted meridian */}
-              <ellipse cx="300" cy="300" rx="140" ry="280" stroke="currentColor" strokeWidth="0.75" opacity="0.07" transform="rotate(30 300 300)" />
-              <ellipse cx="300" cy="300" rx="140" ry="280" stroke="currentColor" strokeWidth="0.75" opacity="0.07" transform="rotate(-30 300 300)" />
-              {/* Tropic lines */}
-              <ellipse cx="300" cy="220" rx="260" ry="40" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 4" opacity="0.06" />
-              <ellipse cx="300" cy="380" rx="260" ry="40" stroke="currentColor" strokeWidth="0.5" strokeDasharray="4 4" opacity="0.06" />
+              {/* V3: Dense Wireframe — tilted 15° toward viewer */}
+              <defs><clipPath id="gc3"><circle cx="300" cy="300" r="279" /></clipPath></defs>
+              <circle cx="300" cy="300" r="280" stroke="currentColor" strokeWidth="1" opacity="0.18" />
+              <g clipPath="url(#gc3)">
+                {/* Axis — pole to pole */}
+                <line x1="300" y1="30" x2="300" y2="570" stroke="currentColor" strokeWidth="0.4" opacity="0.1" />
+                {/* Meridians every 15° — ry = 280·cos(15°) = 270 */}
+                {Array.from({ length: 11 }, (_, i) => {
+                  const d = (i + 1) * 15;
+                  return <ellipse key={`m${i}`} cx="300" cy="300" rx={Math.round(280 * Math.sin(d * Math.PI / 180))} ry="270" stroke="currentColor" strokeWidth="0.6" opacity="0.09" />;
+                })}
+                {/* Equator — ry = 280·sin(15°) = 72 */}
+                <ellipse cx="300" cy="300" rx="280" ry="72" stroke="currentColor" strokeWidth="1" opacity="0.14" />
+                {/* Parallels ±20°, ±40°, ±60° */}
+                {[20, 40, 60].map(lat => {
+                  const latRad = lat * Math.PI / 180;
+                  const cyN = Math.round(300 - 270 * Math.sin(latRad));
+                  const rx = Math.round(280 * Math.cos(latRad));
+                  const ry = Math.round(72 * Math.cos(latRad));
+                  return [
+                    <ellipse key={`n${lat}`} cx="300" cy={cyN} rx={rx} ry={ry} stroke="currentColor" strokeWidth="0.6" opacity="0.09" />,
+                    <ellipse key={`s${lat}`} cx="300" cy={600 - cyN} rx={rx} ry={ry} stroke="currentColor" strokeWidth="0.6" opacity="0.09" />
+                  ];
+                })}
+                {/* Pole markers */}
+                <circle cx="300" cy="30" r="2" fill="currentColor" opacity="0.12" />
+                <circle cx="300" cy="570" r="2" fill="currentColor" opacity="0.12" />
+              </g>
             </svg>
           </div>
           <div className="fd-exped__cinematic-content">
-            <span className="fd-exped__pre-title">With Captain Quentin Smith</span>
+            <span className="fd-exped__pre-title">Explore the World</span>
             <h2 className="fd-exped__title">
-              <span className="fd-exped__title-word fd-exped__title-word--1">Explore</span>
-              <span className="fd-exped__title-word fd-exped__title-word--2">The</span>
-              <span className="fd-exped__title-word fd-exped__title-word--3">Unreachable</span>
+              <span className="fd-exped__title-word fd-exped__title-word--1">Expeditions</span>
             </h2>
+            <ExpeditionBarcode onSelect={(id) => setBarcodeSelected(!!id)} />
+            {!barcodeSelected && (
             <p className="fd-exped__cinematic-desc">
               This isn't transport. This is using the helicopter as a gateway to the world—
               a first-class ticket to the beauty of our planet, seeing places in ways that
               very few have ever experienced before.
             </p>
-          </div>
-        </div>
-
-
-        {/* Journey Map - Barcode Compass Grid */}
-        <div className="fd-exped__journey">
-          <div className="fd-exped__journey-header">
-            <span className="fd-exped__label">From Denham to the Ends of the Earth</span>
-            <h3 className="fd-exped__journey-title">Where Will You Go?</h3>
-            <p className="fd-exped__journey-desc">This isn't transport. This is using the helicopter as a gateway to the world— a first-class ticket to the beauty of our planet, seeing places in ways that very few have ever experienced before.</p>
-          </div>
-          <ExpeditionBarcode />
-        </div>
-
-        {/* Featured Expedition Regions - Large Cards */}
-        <div className="fd-exped__regions">
-          <span className="fd-exped__regions-label">Choose Your Adventure</span>
-          <div className="fd-exped__regions-grid">
-            {/* Polar */}
-            <Link to="/expeditions?region=polar" className="fd-exped__region-card fd-exped__region-card--polar">
-              <div className="fd-exped__region-bg">
-                <img src="/assets/images/expeditions/south-pole-by-helicopter-quentin-smith.webp" alt="Polar Expeditions" />
-              </div>
-              <div className="fd-exped__region-overlay"></div>
-              <div className="fd-exped__region-content">
-                <span className="fd-exped__region-tag">Extreme</span>
-                <h3 className="fd-exped__region-title">Polar Expeditions</h3>
-                <p className="fd-exped__region-desc">North Pole • South Pole • Greenland • Antarctica</p>
-                <div className="fd-exped__region-meta">
-                  <span className="fd-exped__region-duration">10-21 Days</span>
-                  <span className="fd-exped__region-arrow">→</span>
-                </div>
-              </div>
-              <div className="fd-exped__region-badge">
-                <span>World</span>
-                <span>Record</span>
-                <span>Holder</span>
-              </div>
-            </Link>
-
-            {/* European */}
-            <Link to="/expeditions?region=european" className="fd-exped__region-card fd-exped__region-card--euro">
-              <div className="fd-exped__region-bg">
-                <img src="/assets/images/expeditions/channel.jpg" alt="European Expeditions" />
-              </div>
-              <div className="fd-exped__region-overlay"></div>
-              <div className="fd-exped__region-content">
-                <span className="fd-exped__region-tag">Classic</span>
-                <h3 className="fd-exped__region-title">European Journeys</h3>
-                <p className="fd-exped__region-desc">Scottish Highlands • Norwegian Fjords • Swiss Alps • Iceland</p>
-                <div className="fd-exped__region-meta">
-                  <span className="fd-exped__region-duration">4-7 Days</span>
-                  <span className="fd-exped__region-arrow">→</span>
-                </div>
-              </div>
-            </Link>
-
-            {/* Tropical */}
-            <Link to="/expeditions?region=tropical" className="fd-exped__region-card fd-exped__region-card--tropical">
-              <div className="fd-exped__region-bg">
-                <img src="/assets/images/expeditions/helicopter-expeditions-quentin-smith.webp" alt="Tropical Expeditions" />
-              </div>
-              <div className="fd-exped__region-overlay"></div>
-              <div className="fd-exped__region-content">
-                <span className="fd-exped__region-tag">Paradise</span>
-                <h3 className="fd-exped__region-title">Tropical Escapes</h3>
-                <p className="fd-exped__region-desc">Bahamas • Costa Rica • Caribbean Islands</p>
-                <div className="fd-exped__region-meta">
-                  <span className="fd-exped__region-duration">7-10 Days</span>
-                  <span className="fd-exped__region-arrow">→</span>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
-
-
-        {/* Upcoming Expeditions - Departure Board Style */}
-        <div className="fd-exped__departures">
-          <div className="fd-exped__departures-header">
-            <span className="fd-exped__departures-status">NOW BOARDING</span>
-            <h3 className="fd-exped__departures-title">Upcoming Expeditions</h3>
-          </div>
-          <div className="fd-exped__departures-board">
-            <div className="fd-exped__departure">
-              <span className="fd-exped__departure-badge fd-exped__departure-badge--new">NEW</span>
-              <span className="fd-exped__departure-date">AUG 2025</span>
-              <span className="fd-exped__departure-dest">GREENLAND EXPLORER</span>
-              <span className="fd-exped__departure-duration">10 Days</span>
-              <span className="fd-exped__departure-status fd-exped__departure-status--boarding">BOOKING</span>
-            </div>
-            <div className="fd-exped__departure">
-              <span className="fd-exped__departure-badge fd-exped__departure-badge--spaces">SPACES</span>
-              <span className="fd-exped__departure-date">MAR 2026</span>
-              <span className="fd-exped__departure-dest">ICELAND: NORTHERN LIGHTS</span>
-              <span className="fd-exped__departure-duration">7 Days</span>
-              <span className="fd-exped__departure-status fd-exped__departure-status--open">OPEN</span>
-            </div>
-            <div className="fd-exped__departure">
-              <span className="fd-exped__departure-badge fd-exped__departure-badge--filling">FILLING</span>
-              <span className="fd-exped__departure-date">JUN 2026</span>
-              <span className="fd-exped__departure-dest">SCOTTISH HIGHLANDS</span>
-              <span className="fd-exped__departure-duration">5 Days</span>
-              <span className="fd-exped__departure-status fd-exped__departure-status--limited">LIMITED</span>
-            </div>
-          </div>
-        </div>
-
-        {/* CTA Section */}
-        <div className="fd-exped__cta">
-          <div className="fd-exped__cta-content">
-            <p className="fd-exped__cta-text">Ready to embark on the journey of a lifetime?</p>
-            <div className="fd-exped__cta-buttons">
+            )}
+            <div style={{ textAlign: 'center', marginTop: '12px' }}>
               <Link to="/expeditions" className="fd-exped__btn fd-exped__btn--primary">View All Expeditions</Link>
-              <Link to="/contact?subject=expedition" className="fd-exped__btn fd-exped__btn--outline">Enquire Now</Link>
             </div>
           </div>
         </div>
+
+
       </section>
 
       {/* ===== PARALLAX: SALES ===== */}
       <ParallaxSection
-        image="/assets/images/facility/main-sales-pic.jpg"
+        image="/assets/images/facility/fleet-lineup-sunset.jpg"
         alt="Aircraft Sales"
         className="reveal-element"
         waves={true}
@@ -1620,31 +2384,77 @@ function Experimentation() {
       </ParallaxSection>
 
       <section className="fd-sales reveal-element" id="sales">
-        <div className="fd-sales__header">
-          <span className="fd-sales__pre-title">Your Search Starts Here</span>
-          <h2 className="fd-sales__title">
-            <span className="fd-sales__title-word fd-sales__title-word--1">Find</span>
-            <span className="fd-sales__title-word fd-sales__title-word--2">Your Next</span>
-            <span className="fd-sales__title-word fd-sales__title-word--3">Aircraft</span>
-          </h2>
-          <p className="fd-sales__text">
-            New and pre-owned helicopters, expertly sourced and prepared to the highest standards.
-          </p>
-          <div className="fd-sales__header-divider"></div>
+        <div className="fd-sales__intro" ref={salesIntroRef}>
+          <div className="fd-sales__left">
+            <div className="fd-sales__header-sticky" ref={salesHeaderRef}>
+              <span className="fd-sales__pre-title" ref={salesPreTitleRef}>Your Search Starts Here</span>
+              <div ref={salesTitleFadeRef}>
+                <h2 className="fd-sales__title">
+                  <span className="fd-sales__title-word fd-sales__title-word--1">Find</span>
+                  <span className="fd-sales__title-word fd-sales__title-word--2">Your Next</span>
+                  <span className="fd-sales__title-word fd-sales__title-word--3">Aircraft</span>
+                </h2>
+              </div>
+              <div ref={salesTextFadeRef}>
+                <p className="fd-sales__text">
+                  New and pre-owned helicopters, expertly sourced and prepared to the highest standards.
+                </p>
+                <div className="fd-sales__header-divider"></div>
+              </div>
+            </div>
+            <div className="fd-sales__dealer-catch" ref={salesDealerRef}>
+              <DealerSplitDots autoExpand={dealerAutoExpand} />
+            </div>
+          </div>
+          <div className="fd-sales__intro-bg" />
+          <div className="fd-sales__intro-border" />
+          <div className="fd-sales__intro-gallery">
+            <div className="fd-sales__intro-img fd-sales__intro-img--wide">
+              <img src="/assets/images/facility/main-sales-pic.jpg" alt="HQ Aviation showroom" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img fd-sales__intro-img--wide">
+              <img src="/assets/images/facility/hq-aviation-robinsons.jpg" alt="Fleet on the apron" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0477.jpg" alt="Helicopter instruments" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0391.jpg" alt="Engineering workshop" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img fd-sales__intro-img--wide">
+              <img src="/assets/images/facility/hq-0745.jpg" alt="Helicopter on apron" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0354.jpg" alt="Pre-flight checks" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0696.jpg" alt="Cockpit detail" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img fd-sales__intro-img--wide">
+              <img src="/assets/images/facility/hq-0167.jpg" alt="Hangar interior" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0089.jpg" alt="Rotor detail" loading="lazy" />
+            </div>
+            <div className="fd-sales__intro-img">
+              <img src="/assets/images/facility/hq-0035.jpg" alt="Maintenance inspection" loading="lazy" />
+            </div>
+          </div>
         </div>
 
-        {/* Robinson Authorized Dealer — cert-98 Split Dots */}
-        <DealerSplitDots />
 
         {/* ── Section 1: New Aircraft ── */}
         <div className="fd-sales__subsection">
-        <h3 className="fd-sales__section-title">New Aircraft</h3>
+        <h3 className="fd-sales__section-title fd-sales__section-title--toggle" onClick={() => setSalesExpanded(prev => ({ ...prev, new: !prev.new }))}>
+          New Aircraft
+          <span className={`fd-sales__chevron ${salesExpanded.new ? 'fd-sales__chevron--open' : ''}`}><i className="fas fa-chevron-down"></i></span>
+        </h3>
+        <div className={`fd-sales__collapse ${salesExpanded.new ? 'fd-sales__collapse--open' : ''}`}>
         <p className="fd-sales__section-desc">
           As an authorised Robinson dealer, we supply factory-new R22, R44, R66 and R88 helicopters — configured to your specification, delivered with full warranty and backed by our in-house maintenance team from day one.
         </p>
         <div className="fd-sales__grid">
-          <Link to="/sales/new?model=r88" className="fd-sales__card fd-sales__card--featured">
-            <div className="fd-sales__card-badge">NEW</div>
+          <Link to="/aircraft/r88" className="fd-sales__card">
             <div className="fd-sales__card-image">
               <img src="/assets/images/new-aircraft/r88/r88-jellybean-left.png" alt="R88" />
             </div>
@@ -1656,13 +2466,13 @@ function Experimentation() {
                 <span>140 kts</span>
                 <span>Turbine</span>
               </div>
-              <span className="fd-sales__card-price">POA</span>
+              <span className="fd-sales__card-price">$3,300,000</span>
             </div>
           </Link>
 
-          <Link to="/sales/new?model=r66" className="fd-sales__card">
+          <Link to="/aircraft/r66" className="fd-sales__card">
             <div className="fd-sales__card-image">
-              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png" alt="R66" />
+              <img src="/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png" alt="R66" />
             </div>
             <div className="fd-sales__card-info">
               <h3>R66</h3>
@@ -1676,7 +2486,7 @@ function Experimentation() {
             </div>
           </Link>
 
-          <Link to="/sales/new?model=r44" className="fd-sales__card">
+          <Link to="/aircraft/r44" className="fd-sales__card">
             <div className="fd-sales__card-image">
               <img src="/assets/images/new-aircraft/r44/raven-ii-front-alpha.png" alt="R44" />
             </div>
@@ -1692,7 +2502,7 @@ function Experimentation() {
             </div>
           </Link>
 
-          <Link to="/sales/new?model=r22" className="fd-sales__card">
+          <Link to="/aircraft/r22" className="fd-sales__card">
             <div className="fd-sales__card-image">
               <img src="/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png" alt="R22" />
             </div>
@@ -1713,106 +2523,293 @@ function Experimentation() {
           <Link to="/sales/new" className="fd-sales__btn fd-sales__btn--primary">View New Aircraft</Link>
         </div>
         </div>
+        </div>
 
-        {/* ── Section 2: Rebuilt Aircraft ── */}
+        {/* ── Section 2: Pre-Owned Aircraft ── */}
         <div className="fd-sales__subsection">
-        <h3 className="fd-sales__section-title">Rebuilt Aircraft</h3>
-        <p className="fd-sales__section-desc">
-          Complete helicopter rebuilds from airframe up. Zero-time engines, new wiring, custom avionics, fresh paint — returned to you in better-than-new condition.
-        </p>
-        <div className="mv14-beforeafter">
-          <span className="mv14-beforeafter__label">The Transformation</span>
-
-          {/* Step indicators */}
-          <div className="mv14-beforeafter__steps">
-            {rebuildSteps.map((step, i) => (
-              <button
-                key={i}
-                className={`mv14-beforeafter__step ${rebuildStep === i ? 'mv14-beforeafter__step--active' : ''}`}
-                onClick={() => setRebuildStep(i)}
-              >
-                <span className="mv14-beforeafter__step-num">{i + 1}</span>
-                <span className="mv14-beforeafter__step-label">{step.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Active pair */}
-          <div className="mv14-beforeafter__item">
-            <div className="mv14-beforeafter__before">
-              <div className="mv14-beforeafter__img">
-                <img src={rebuildSteps[rebuildStep].before} alt={`${rebuildSteps[rebuildStep].label} — before`} />
-              </div>
-              <span>BEFORE</span>
-              <p>{rebuildSteps[rebuildStep].beforeDesc}</p>
-            </div>
-            <div className="mv14-beforeafter__arrow">&rarr;</div>
-            <div className="mv14-beforeafter__after">
-              <div className="mv14-beforeafter__img">
-                <img src={rebuildSteps[rebuildStep].after} alt={`${rebuildSteps[rebuildStep].label} — after`} />
-              </div>
-              <span>AFTER</span>
-              <p>{rebuildSteps[rebuildStep].afterDesc}</p>
-            </div>
-          </div>
-
-          {/* Prev / Next nav */}
-          <div className="mv14-beforeafter__nav">
-            <button
-              className="mv14-beforeafter__nav-btn"
-              onClick={() => setRebuildStep(prev => Math.max(0, prev - 1))}
-              disabled={rebuildStep === 0}
-            >
-              &larr; Prev
-            </button>
-            <span className="mv14-beforeafter__nav-count">{rebuildStep + 1} / {rebuildSteps.length}</span>
-            <button
-              className="mv14-beforeafter__nav-btn"
-              onClick={() => setRebuildStep(prev => Math.min(rebuildSteps.length - 1, prev + 1))}
-              disabled={rebuildStep === rebuildSteps.length - 1}
-            >
-              Next &rarr;
-            </button>
-          </div>
-        </div>
-
-        <div className="fd-sales__actions">
-          <Link to="/contact?subject=rebuild" className="fd-sales__btn fd-sales__btn--primary">Book Your Aircraft into Our Rebuild Programme</Link>
-          <Link to="/sales/rebuilds" className="fd-sales__btn fd-sales__btn--outline">Browse Rebuilds</Link>
-        </div>
-        </div>
-
-        {/* ── Section 3: Pre-Owned Aircraft ── */}
-        <div className="fd-sales__subsection">
-        <h3 className="fd-sales__section-title">Pre-Owned Aircraft</h3>
+        <h3 className="fd-sales__section-title fd-sales__section-title--toggle" onClick={() => setSalesExpanded(prev => ({ ...prev, preowned: !prev.preowned }))}>
+          Pre-Owned Aircraft
+          <span className={`fd-sales__chevron ${salesExpanded.preowned ? 'fd-sales__chevron--open' : ''}`}><i className="fas fa-chevron-down"></i></span>
+        </h3>
+        <div className={`fd-sales__collapse ${salesExpanded.preowned ? 'fd-sales__collapse--open' : ''}`}>
         <p className="fd-sales__section-desc" style={{ marginBottom: '1.5rem' }}>
           Our clients regularly trade, upgrade and renew their fleets — which means we always have access to quality pre-owned aircraft at every stage of life. Many come directly from owners whose maintenance we've managed for years, so we know every hour, every component and every logbook entry. When the right aircraft isn't already on our doorstep, we'll source it — inspecting the airframe, engine and avionics on-site before it ever reaches you. Looking for something specific? Talk to our sales team and we'll begin the search.
         </p>
-        <div className="fd-sales__carousel">
-          {[
-            { model: 'R44 Raven II', year: 2019, hours: '1,200', img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
-            { model: 'R66 Turbine', year: 2021, hours: '800', img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png' },
-            { model: 'R22 Beta II', year: 2017, hours: '2,100', img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
-            { model: 'R44 Cadet', year: 2020, hours: '950', img: '/assets/images/new-aircraft/r44/raven-ii-front-alpha.png' },
-            { model: 'R66 Turbine', year: 2018, hours: '1,800', img: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png' },
-            { model: 'Cabri G2', year: 2022, hours: '400', img: '/assets/images/new-aircraft/r22/r22-red-volcano-front-alpha-v3.png' },
-          ].map((ac, i) => (
-            <div className="fd-sales__sold-card" key={i}>
-              <div className="fd-sales__sold-badge">SOLD</div>
-              <div className="fd-sales__sold-image">
-                <img src={ac.img} alt={ac.model} />
-              </div>
-              <div className="fd-sales__sold-info">
-                <strong>{ac.model}</strong>
-                <span>{ac.year} &middot; {ac.hours} hrs</span>
-              </div>
-            </div>
-          ))}
+        <div className="fd-sales__carousel-wrap">
+          {preownedCanScrollLeft && (
+            <button className="rb-stats__chevron rb-stats__chevron--left" onClick={() => preownedRef.current.scrollBy({ left: -280, behavior: 'smooth' })}>
+              <i className="fas fa-chevron-left"></i>
+            </button>
+          )}
+          <div className="fd-sales__carousel" ref={preownedRef}>
+            {preownedInventory.map((ac, i) => {
+              const imgIdx = preownedImgIndex[i] || 0;
+              const images = ac.images;
+              const isSold = ac.status === 'sold';
+              const isReserved = ac.status === 'reserved';
+              const cardContent = (
+              <>
+                {isSold && <div className="fd-sales__sold-badge">SOLD</div>}
+                {isReserved && <div className="fd-sales__sold-badge" style={{ background: '#d4880f' }}>UNDER OFFER</div>}
+                {!isSold && !isReserved && ac.price && <div className="fd-sales__sold-badge" style={{ background: '#1a1a1a' }}>{ac.price}</div>}
+                <div className={`fd-sales__sold-image ${isSold ? '' : 'fd-sales__sold-image--active'}`}>
+                  <img src={images[imgIdx]} alt={ac.model} />
+                  {images.length > 1 && (
+                    <>
+                      <button
+                        className="rb-stats__strip-nav rb-stats__strip-nav--prev"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setPreownedImgIndex(prev => ({ ...prev, [i]: (imgIdx - 1 + images.length) % images.length })); }}
+                      >
+                        <i className="fas fa-chevron-left"></i>
+                      </button>
+                      <button
+                        className="rb-stats__strip-nav rb-stats__strip-nav--next"
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); setPreownedImgIndex(prev => ({ ...prev, [i]: (imgIdx + 1) % images.length })); }}
+                      >
+                        <i className="fas fa-chevron-right"></i>
+                      </button>
+                      <div className="rb-stats__strip-dots">
+                        {images.map((_, di) => (
+                          <span
+                            key={di}
+                            className={`rb-stats__strip-dot ${di === imgIdx ? 'rb-stats__strip-dot--active' : ''}`}
+                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setPreownedImgIndex(prev => ({ ...prev, [i]: di })); }}
+                          />
+                        ))}
+                      </div>
+                    </>
+                  )}
+                </div>
+                <div className="fd-sales__sold-info">
+                  <strong>{ac.model}</strong>
+                  <span>{ac.registration} &middot; {ac.year}{ac.hours ? ` · ${ac.hours.toLocaleString()} hrs` : ''}</span>
+                </div>
+              </>
+              );
+              return isSold ? (
+                <div className="fd-sales__sold-card" key={ac.id}>{cardContent}</div>
+              ) : (
+                <Link to={`/sales/pre-owned/${ac.id}`} className="fd-sales__sold-card" key={ac.id} style={{ textDecoration: 'none', color: 'inherit' }}>{cardContent}</Link>
+              );
+            })}
+          </div>
+          {preownedCanScrollRight && (
+            <button className="rb-stats__chevron rb-stats__chevron--right" onClick={() => preownedRef.current.scrollBy({ left: 280, behavior: 'smooth' })}>
+              <i className="fas fa-chevron-right"></i>
+            </button>
+          )}
         </div>
         <div className="fd-sales__actions">
           <Link to="/sales/pre-owned" className="fd-sales__btn fd-sales__btn--primary">Browse Pre-Owned Aircraft</Link>
         </div>
         </div>
+        </div>
+
+        {/* ── Section 3: Rebuilt Aircraft ── */}
+        <div className="fd-sales__subsection">
+        <h3 className="fd-sales__section-title fd-sales__section-title--toggle" onClick={() => setSalesExpanded(prev => ({ ...prev, rebuilt: !prev.rebuilt }))}>
+          Rebuilt Aircraft
+          <span className={`fd-sales__chevron ${salesExpanded.rebuilt ? 'fd-sales__chevron--open' : ''}`}><i className="fas fa-chevron-down"></i></span>
+        </h3>
+        <div className={`fd-sales__collapse ${salesExpanded.rebuilt ? 'fd-sales__collapse--open' : ''}`}>
+        <p className="fd-sales__section-desc">
+          Complete helicopter rebuilds from airframe up. Zero-time engines, custom avionics, fresh paint.
+        </p>
+
+        {/* Rebuilt Aircraft — scrolling strip with showcase detail */}
+        {rebuildDetailOpen === null && (
+        <div className="rb-stats rb-stats--card">
+          <div className="rb-stats__intro">
+            <h4 className="rb-stats__heading">Examples of Some of Our Rebuilds</h4>
+            <p className="rb-stats__text">
+              Complete helicopter rebuilds from airframe up. Zero-time engines, custom avionics, fresh paint.
+              With 35+ rebuilds completed and 30 years of experience rebuilding R22, R44 and R66 types.
+            </p>
+          </div>
+          <div className="rb-stats__strip-wrap">
+            {stripCanScrollLeft && (
+              <button className="rb-stats__chevron rb-stats__chevron--left" onClick={() => stripRef.current.scrollBy({ left: -260, behavior: 'smooth' })}>
+                <i className="fas fa-chevron-left"></i>
+              </button>
+            )}
+            <div className="rb-stats__strip" ref={stripRef}>
+              {rebuildPortfolio.map((rb, i) => {
+                const imgIdx = stripImgIndex[i] || 0;
+                const images = rb.gallery && rb.gallery.length > 0 ? rb.gallery : [rb.img];
+                return (
+                <div className="rb-stats__strip-card" key={i} onClick={() => setRebuildDetailOpen(i)} style={{ cursor: 'pointer' }}>
+                  <div className="rb-stats__strip-gallery">
+                    <img src={images[imgIdx]} alt={rb.model} />
+                    {images.length > 1 && (
+                      <>
+                        <button
+                          className="rb-stats__strip-nav rb-stats__strip-nav--prev"
+                          onClick={(e) => { e.stopPropagation(); setStripImgIndex(prev => ({ ...prev, [i]: (imgIdx - 1 + images.length) % images.length })); }}
+                        >
+                          <i className="fas fa-chevron-left"></i>
+                        </button>
+                        <button
+                          className="rb-stats__strip-nav rb-stats__strip-nav--next"
+                          onClick={(e) => { e.stopPropagation(); setStripImgIndex(prev => ({ ...prev, [i]: (imgIdx + 1) % images.length })); }}
+                        >
+                          <i className="fas fa-chevron-right"></i>
+                        </button>
+                        <div className="rb-stats__strip-dots">
+                          {images.map((_, di) => (
+                            <span
+                              key={di}
+                              className={`rb-stats__strip-dot ${di === imgIdx ? 'rb-stats__strip-dot--active' : ''}`}
+                              onClick={(e) => { e.stopPropagation(); setStripImgIndex(prev => ({ ...prev, [i]: di })); }}
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                  <div className="rb-stats__strip-info">
+                    <strong>{rb.model}</strong>
+                    <span>{rb.reg} · {rb.year}</span>
+                  </div>
+                  <div className="rb-stats__strip-cta">
+                    <span>View Full Rebuild</span>
+                    <i className="fas fa-arrow-right"></i>
+                  </div>
+                </div>
+                );
+              })}
+            </div>
+            {stripCanScrollRight && (
+              <button className="rb-stats__chevron rb-stats__chevron--right" onClick={() => stripRef.current.scrollBy({ left: 260, behavior: 'smooth' })}>
+                <i className="fas fa-chevron-right"></i>
+              </button>
+            )}
+          </div>
+        </div>
+        )}
+
+        {/* Rebuild Detail — inline showcase */}
+        {rebuildDetailOpen !== null && (() => {
+          const rb = rebuildPortfolio[rebuildDetailOpen];
+          return (
+          <>
+          <div className="rb-showcase" ref={rebuildShowcaseRef}>
+            <div className="rb-showcase__inner">
+
+              {/* Top bar */}
+              <div className="rb-showcase__topbar">
+                <div className="rb-showcase__topbar-left">
+                  <span className="rb-showcase__counter">{String(rebuildDetailOpen + 1).padStart(2, '0')} / {String(rebuildPortfolio.length).padStart(2, '0')}</span>
+                </div>
+                <div className="rb-showcase__topbar-center">
+                  <span>HQ Aviation — Rebuild Portfolio</span>
+                </div>
+                <button className="rb-showcase__close" onClick={() => setRebuildDetailOpen(null)}>Close</button>
+              </div>
+
+              {/* Main content — split layout */}
+              <div className="rb-showcase__content">
+
+                {/* Left — Image gallery */}
+                <div className="rb-showcase__gallery">
+                  <div className="rb-showcase__hero-img" onClick={() => setRebuildLightbox({ src: rb.img, alt: rb.model })}>
+                    <img src={rb.img} alt={rb.model} />
+                    <div className="rb-showcase__img-overlay">
+                      <i className="fas fa-search-plus"></i>
+                    </div>
+                  </div>
+                  <div className="rb-showcase__thumbs">
+                    {rb.gallery.map((src, i) => (
+                      <button
+                        key={i}
+                        className="rb-showcase__thumb"
+                        onClick={() => setRebuildLightbox({ src, alt: `${rb.model} — ${i + 1}` })}
+                      >
+                        <img src={src} alt="" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Right — Info */}
+                <div className="rb-showcase__info">
+                  <span className="rb-showcase__overline">Completed Rebuild · {rb.year}</span>
+                  <h2 className="rb-showcase__title">{rb.model}</h2>
+                  <span className="rb-showcase__reg">{rb.reg}</span>
+
+                  <div className="rb-showcase__divider"></div>
+
+                  <p className="rb-showcase__desc">{rb.details}</p>
+
+                  <div className="rb-showcase__spec">
+                    <div className="rb-showcase__spec-item">
+                      <span className="rb-showcase__spec-label">Build Duration</span>
+                      <span className="rb-showcase__spec-value">{rb.duration}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom nav */}
+              <div className="rb-showcase__nav">
+                <button
+                  className="rb-showcase__nav-btn"
+                  disabled={rebuildDetailOpen === 0}
+                  onClick={() => setRebuildDetailOpen(rebuildDetailOpen - 1)}
+                >
+                  <span className="rb-showcase__nav-arrow">&larr;</span>
+                  <span className="rb-showcase__nav-label">
+                    {rebuildDetailOpen > 0 ? rebuildPortfolio[rebuildDetailOpen - 1].model : ''}
+                  </span>
+                </button>
+                <button
+                  className="rb-showcase__nav-btn rb-showcase__nav-btn--next"
+                  disabled={rebuildDetailOpen === rebuildPortfolio.length - 1}
+                  onClick={() => setRebuildDetailOpen(rebuildDetailOpen + 1)}
+                >
+                  <span className="rb-showcase__nav-label">
+                    {rebuildDetailOpen < rebuildPortfolio.length - 1 ? rebuildPortfolio[rebuildDetailOpen + 1].model : ''}
+                  </span>
+                  <span className="rb-showcase__nav-arrow">&rarr;</span>
+                </button>
+              </div>
+
+            </div>
+          </div>
+
+          {/* Image Lightbox */}
+          {rebuildLightbox && (
+          <div className="rb-lightbox" onClick={() => setRebuildLightbox(null)}>
+            <img src={rebuildLightbox.src} alt={rebuildLightbox.alt} className="rb-lightbox__img" />
+          </div>
+          )}
+          </>
+          );
+        })()}
+
+        <div className="fd-sales__actions">
+          <Link to="/sales/rebuilds" className="fd-sales__btn fd-sales__btn--primary">Understand Rebuilds</Link>
+        </div>
+        </div>
+        </div>
+
+        {/* ── Section 4: Robinson Unmanned ── */}
+        <div className="fd-sales__subsection">
+        <h3 className="fd-sales__section-title fd-sales__section-title--toggle" onClick={() => setSalesExpanded(prev => ({ ...prev, unmanned: !prev.unmanned }))}>
+          Robinson Unmanned
+          <span className={`fd-sales__chevron ${salesExpanded.unmanned ? 'fd-sales__chevron--open' : ''}`}><i className="fas fa-chevron-down"></i></span>
+        </h3>
+        <div className={`fd-sales__collapse ${salesExpanded.unmanned ? 'fd-sales__collapse--open' : ''}`}>
+            <p className="fd-sales__section-desc">
+              Robinson's unmanned aerial systems — purpose-built for commercial, agricultural, and industrial operations. Engineered with the same reliability and support that defines the Robinson brand.
+            </p>
+            <div className="fd-sales__unmanned-coming">
+              <span className="fd-sales__unmanned-icon"><i className="fas fa-helicopter"></i></span>
+              <p>More information coming soon. Contact our sales team for early enquiries.</p>
+              <Link to="/contact?subject=unmanned" className="fd-sales__btn fd-sales__btn--primary">Enquire About Robinson Unmanned</Link>
+            </div>
+        </div>
+        </div>
+
       </section>
 
       {/* ===== PARALLAX: MAINTENANCE ===== */}
@@ -1828,130 +2825,260 @@ function Experimentation() {
       {/* ===== MAINTENANCE ===== */}
       <section className="fd-maint fd-maint--cardgrid" id="maintenance">
 
-        {/* Cert card — Robinson primary — cert-97 Split Dots */}
-        <ServiceSplitDots />
-
-        {/* Rich hero text */}
-        <div className="fd-maint__header">
-          <span className="fd-maint__number">05</span>
-          <h2 className="fd-maint__title">Maintenance</h2>
-          <p className="fd-maint__text">
-            The Robinson Specialists since 2010. Founded by Captain Quentin Smith — 2x World
-            Helicopter Aerobatics Champion and the first person to fly a helicopter to both the
-            North and South Poles — HQ Aviation was built on one conviction: maintenance isn't
-            a service, it's a sacred responsibility. As Robinson Authorised Dealer, Factory
-            Distributor, and Designated Service Centre for the full Robinson range — R22, R44,
-            and R66 — plus Guimbal Cabri G2 certified and multi-type experienced across Airbus,
-            Bell, and MD platforms, our 12 factory-trained engineers work from a purpose-built
-            12,000 sq ft climate-controlled facility at Denham Aerodrome. 8 heated service bays
-            run simultaneously, backed by a &pound;500K+ genuine parts inventory — 1,200+ engine
-            parts, 800+ airframe components, 2,000+ consumables — ensuring same-day dispatch
-            and minimal downtime. Spectrometric oil analysis on every service. Flight-tested
-            before every release. Nothing leaves our hangar that we wouldn't fly our own
-            families in.
-          </p>
-        </div>
-
-        {/* Simple 6-card grid (from maint-10) */}
-        <div className="fd-maint__grid6">
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-search"></i></span>
-            <h4>Inspections</h4>
-            <p>50-hour, 100-hour, annual &amp; progressive. Spectrometric oil analysis, compression checks, and full control system review on Robinson &amp; Cabri fleets.</p>
-          </div>
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-cogs"></i></span>
-            <h4>Overhauls &amp; Rebuilds</h4>
-            <p>12-year and 2,200-hour major overhauls. Complete strip-down, NDT testing, factory-spec rebuild. 40+ Robinsons rebuilt by our chief engineer alone.</p>
-          </div>
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-microchip"></i></span>
-            <h4>Avionics &amp; Upgrades</h4>
-            <p>Dedicated avionics workshop. Glass cockpit conversions, GPS/NAV systems, ADS-B, transponder upgrades. Modern situational awareness by qualified specialists.</p>
-          </div>
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-exclamation-triangle"></i></span>
-            <h4>24/7 AOG &amp; Parts</h4>
-            <p>Aircraft on Ground emergency response across Europe. &pound;500K genuine parts inventory — 1,200+ engine, 800+ airframe, 2,000+ consumables. Same-day dispatch.</p>
-          </div>
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-paint-roller"></i></span>
-            <h4>Paint &amp; Refurbishment</h4>
-            <p>Dedicated in-house paint shop. Complete interior/exterior restoration, corrosion treatment, and custom livery. Factory-new finish from our Denham facility.</p>
-          </div>
-          <div className="fd-maint__grid6-card">
-            <span className="fd-maint__grid6-icon"><i className="fas fa-helicopter"></i></span>
-            <h4>Ownership Services</h4>
-            <p>Pre-purchase inspections, aircraft management, leaseback revenue programmes, secure heated hangarage, worldwide ferry flights, and new &amp; used sales.</p>
-          </div>
-        </div>
-
-        {/* Team portraits */}
-        <div className="mv12-portraits">
-          <h3 className="mv12-crosshead">The People Behind the Panels</h3>
-          <div className="mv12-portraits__row">
-            <div className="mv12-portraits__person">
-              <div className="mv12-portraits__circle">DC</div>
-              <strong>David Cross</strong>
-              <span>Chief Engineer &middot; 25+ years &middot; 40+ Robinson rebuilds &middot; EASA Part 66</span>
+        <div className="fd-maint__intro" ref={maintIntroRef}>
+          <div className="fd-maint__left">
+            <div className="fd-maint__header-sticky" ref={maintHeaderRef}>
+              <span className="fd-sales__pre-title" ref={maintPreTitleRef}>The Robinson Specialists Since 2011</span>
+              <div className="fd-maint__title-fade" ref={maintTitleFadeRef}>
+                <h2 className="fd-sales__title">
+                  <span className="fd-sales__title-word fd-sales__title-word--1">Expert</span>
+                  <span className="fd-sales__title-word fd-sales__title-word--2">Aircraft</span>
+                  <span className="fd-sales__title-word fd-sales__title-word--3">Care</span>
+                </h2>
+              </div>
+              <div className="fd-maint__text-fade" ref={maintTextFadeRef}>
+                <p className="fd-maint__text">
+                  A Robinson Authorised Dealer, Part Distributor and Designated Service Centre for the full Robinson range: R22, R44, and R66 — plus Guimbal Cabri G2 certified.
+                </p>
+                <div className="fd-sales__header-divider"></div>
+              </div>
             </div>
-            <div className="mv12-portraits__person">
-              <div className="mv12-portraits__circle">MF</div>
-              <strong>Michael Fowler</strong>
-              <span>Senior Engineer &middot; 18 years &middot; Avionics Specialist &middot; Glass cockpit conversions</span>
+            <div className="fd-maint__service-catch" ref={maintServiceRef}>
+              <ServiceSplitDots autoExpand={serviceAutoExpand} />
             </div>
-            <div className="mv12-portraits__person">
-              <div className="mv12-portraits__circle">DC</div>
-              <strong>David Clarke</strong>
-              <span>Engine Specialist &middot; 15 years &middot; Lycoming &amp; RR300 certified</span>
-            </div>
-            <div className="mv12-portraits__person">
-              <div className="mv12-portraits__circle">+9</div>
-              <strong>Supporting Team</strong>
-              <span>12 factory-trained engineers total &middot; All EASA Part 66 licensed &middot; Robinson type-rated</span>
+            <div className="fd-maint__services-list" ref={maintServicesListRef}>
+              {[
+                { icon: 'fa-search', title: 'Inspections', desc: '50-hour, 100-hour, annual & progressive. Spectrometric oil analysis, compression checks, and full control system review on Robinson & Cabri fleets.' },
+                { icon: 'fa-cogs', title: 'Overhauls & Rebuilds', desc: '12-year and 2,200-hour major overhauls. Complete strip-down, NDT testing, factory-spec rebuild. 40+ Robinsons rebuilt by our chief engineer alone.' },
+                { icon: 'fa-microchip', title: 'Avionics & Upgrades', desc: 'Dedicated avionics workshop. Glass cockpit conversions, GPS/NAV systems, ADS-B, transponder upgrades. Modern situational awareness by qualified specialists.' },
+                { icon: 'fa-exclamation-triangle', title: '24/7 AOG & Parts', desc: 'Aircraft on Ground emergency response across Europe. £500K parts inventory — 1,200+ engine, 800+ airframe, 2,000+ consumables. Same-day dispatch.' },
+                { icon: 'fa-paint-roller', title: 'Paint & Refurbishment', desc: 'Dedicated in-house paint shop. Complete interior/exterior restoration, corrosion treatment, and custom livery. Factory-new finish from our Denham facility.' },
+                { icon: 'fa-helicopter', title: 'Ownership Services', desc: 'Pre-purchase inspections, aircraft management, leaseback revenue programmes, secure heated hangarage, worldwide ferry flights, and new & used sales.' },
+              ].map((s, i) => (
+                <div key={i} className="fd-maint__service-item">
+                  <div className="fd-maint__service-icon"><i className={`fas ${s.icon}`} /></div>
+                  <div>
+                    <h4 className="fd-maint__service-title">{s.title}</h4>
+                    <p className="fd-maint__service-desc">{s.desc}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
+          <div className="fd-maint__intro-bg" />
+          <div className="fd-maint__intro-border" />
+          <MaintScrollGallery />
         </div>
 
-        {/* Facility strip (from maint-12) */}
-        <div className="mv12-strip">
-          <div className="mv12-strip__item">
-            <div className="mv12-strip__img-placeholder"><i className="fas fa-warehouse"></i></div>
-            <span>Main Hangar &middot; 12,000 sq ft</span>
+        {/* Fullscreen gallery overlay */}
+        {galleryFullscreen && (
+          <div className="fd-gallery-fs">
+            <div className="fd-gallery-fs__img-wrap">
+              <img src={galleryImages[gallerySlide].src} alt={galleryImages[gallerySlide].alt} className="fd-gallery-fs__img" />
+            </div>
+            {galleryShowClock && (
+              <div className="fd-gallery-fs__clock">{clockTime}</div>
+            )}
+            <div className="fd-gallery-fs__controls">
+              <button onClick={() => setGallerySlide((prev) => (prev - 1 + galleryImages.length) % galleryImages.length)} aria-label="Previous">&lsaquo;</button>
+              <span className="fd-gallery-fs__counter">{gallerySlide + 1} / {galleryImages.length}</span>
+              <button onClick={() => setGallerySlide((prev) => (prev + 1) % galleryImages.length)} aria-label="Next">&rsaquo;</button>
+            </div>
+            <button className="fd-gallery-fs__clock-toggle" onClick={() => setGalleryShowClock(!galleryShowClock)} aria-label="Toggle clock">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" /></svg>
+            </button>
+            <button className="fd-gallery-fs__close" onClick={() => setGalleryFullscreen(false)} aria-label="Close fullscreen">&times;</button>
           </div>
-          <div className="mv12-strip__item">
-            <div className="mv12-strip__img-placeholder"><i className="fas fa-wrench"></i></div>
-            <span>Service Bay &middot; 8 Heated Bays</span>
-          </div>
-          <div className="mv12-strip__item">
-            <div className="mv12-strip__img-placeholder"><i className="fas fa-spray-can"></i></div>
-            <span>Paint Shop &middot; Custom Livery</span>
-          </div>
-          <div className="mv12-strip__item">
-            <div className="mv12-strip__img-placeholder"><i className="fas fa-microchip"></i></div>
-            <span>Avionics Workshop</span>
-          </div>
-          <div className="mv12-strip__item">
-            <div className="mv12-strip__img-placeholder"><i className="fas fa-boxes"></i></div>
-            <span>Parts Store &middot; &pound;500K+ Inventory</span>
-          </div>
-        </div>
+        )}
 
-        <div className="fd-maint__actions">
-          <Link to="/maintenance" className="fd-maint__btn fd-maint__btn--primary">Explore Our Maintenance</Link>
+        {/* Merged maintenance panel moved to ComponentShowcase */}
+        <div className="fsd__right" style={{ position: 'relative' }}>
+          <div className="fd-maint__actions fd-maint__actions--overlay">
+            <Link to="/maintenance" className="fd-maint__btn fd-maint__btn--primary">Explore Our Maintenance</Link>
+            <Link to="/parts" className="fd-maint__btn fd-maint__btn--secondary">Explore Our Parts Sales</Link>
+          </div>
+          <div className="fsd__img-carousel">
+            <div className="fsd__img-track">
+              <div className="fsd__img-set">
+                {['/assets/images/facility/hq-0345.jpg','/assets/images/facility/hq-0354.jpg','/assets/images/facility/hq-0053.jpg','/assets/images/facility/hq-0300.jpg','/assets/images/facility/hq-0477.jpg'].map((src, i) => (
+                  <div key={i} className="fsd__img"><img src={src} alt="" loading="lazy" /></div>
+                ))}
+              </div>
+              <div className="fsd__img-set">
+                {['/assets/images/facility/hq-0345.jpg','/assets/images/facility/hq-0354.jpg','/assets/images/facility/hq-0053.jpg','/assets/images/facility/hq-0300.jpg','/assets/images/facility/hq-0477.jpg'].map((src, i) => (
+                  <div key={`d-${i}`} className="fsd__img"><img src={src} alt="" loading="lazy" /></div>
+                ))}
+              </div>
+            </div>
+          </div>
+          <div className="fsd__img-carousel fsd__img-carousel--reverse">
+            <div className="fsd__img-track fsd__img-track--reverse">
+              <div className="fsd__img-set">
+                {['/assets/images/facility/hq-0388.jpg','/assets/images/facility/hq-0153-3.jpg','/assets/images/facility/hq-0391.jpg','/assets/images/facility/hq-0696.jpg','/assets/images/facility/hq-0345.jpg'].map((src, i) => (
+                  <div key={i} className="fsd__img"><img src={src} alt="" loading="lazy" /></div>
+                ))}
+              </div>
+              <div className="fsd__img-set">
+                {['/assets/images/facility/hq-0388.jpg','/assets/images/facility/hq-0153-3.jpg','/assets/images/facility/hq-0391.jpg','/assets/images/facility/hq-0696.jpg','/assets/images/facility/hq-0345.jpg'].map((src, i) => (
+                  <div key={`d-${i}`} className="fsd__img"><img src={src} alt="" loading="lazy" /></div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
+      {/* fd-parts-cta removed — Parts CTA now in fd-maint__actions */}
+
+      {/* ===== SECTION: PRIVATE & SPECIALIST SERVICES ===== */}
+
+      {/* ===== SECTION: THE ARRIVAL (Location + Testimonials combined) ===== */}
+      <ParallaxSection
+        image="/assets/images/facility/hq-0035.jpg"
+        alt="Find Us & Contact Us"
+        className="reveal-element"
+        waves={true}
+      >
+        <h2 className="parallax-section__title">Contact & Find Us</h2>
+      </ParallaxSection>
+      <ArrivalSection />
 
       {/* ===== EDITORIAL GRID (Hero 90) ===== */}
       <div className="reveal-element">
         <EditorialGrid />
       </div>
 
-      {/* ===== BLOG SECTION ===== */}
-      <div className="reveal-element">
-        <BlogSection />
+      <div className="fd-about__divider">
+        <span className="fd-about__divider-line"></span>
+        <div className="fd-about__socials">
+          <a href="https://www.instagram.com/haborhelicopters/" target="_blank" rel="noopener noreferrer" className="fd-about__social" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="5"></rect><circle cx="12" cy="12" r="5"></circle><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"></circle></svg>
+          </a>
+          <a href="https://www.facebook.com/haborhelicopters" target="_blank" rel="noopener noreferrer" className="fd-about__social" aria-label="Facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path></svg>
+          </a>
+          <a href="https://www.youtube.com/@hqaviation" target="_blank" rel="noopener noreferrer" className="fd-about__social" aria-label="YouTube">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43z"></path><polygon points="9.75,15.02 15.5,11.75 9.75,8.48" fill="currentColor" stroke="none"></polygon></svg>
+          </a>
+        </div>
+        <span className="fd-about__divider-line"></span>
       </div>
+
+      {/* ===== LATEST FROM HQ — Rich Blog Section ===== */}
+      <section className="lhq reveal-element" style={{ padding: '6rem 0 4rem', background: '#fff' }}>
+        <div style={{ maxWidth: 1200, margin: '0 auto', padding: '0 2rem' }}>
+
+          {/* Header */}
+          <div className="lhq__header">
+            <div className="lhq__header-line" />
+            <h2 className="lhq__title">Latest from HQ</h2>
+            <div className="lhq__header-line" />
+          </div>
+          <p className="lhq__subtitle">Insights, guides and stories from the hangar</p>
+
+          {/* Tier 1: Persona Cards */}
+          <div className="lhq__personas">
+            {BLOG_PERSONAS.map((persona) => (
+              <button
+                key={persona.id}
+                className={`lhq__persona ${blogPersona === persona.id ? 'lhq__persona--active' : ''}`}
+                onClick={() => handlePersonaClick(persona.id)}
+              >
+                <span className="lhq__persona-icon">{persona.icon}</span>
+                <span className="lhq__persona-headline">{persona.headline}</span>
+                <span className="lhq__persona-subtitle">{persona.subtitle}</span>
+              </button>
+            ))}
+          </div>
+
+          {/* Sort Toggle + Search */}
+          <div className="lhq__sort-bar">
+            <div className="lhq__sort-toggle">
+              <button
+                className={`lhq__sort-btn ${blogSort === 'popular' ? 'lhq__sort-btn--active' : ''}`}
+                onClick={() => { setBlogSort('popular'); setBlogVisible(6); }}
+              >
+                Most Popular
+              </button>
+              <button
+                className={`lhq__sort-btn ${blogSort === 'latest' ? 'lhq__sort-btn--active' : ''}`}
+                onClick={() => { setBlogSort('latest'); setBlogVisible(6); }}
+              >
+                Latest
+              </button>
+            </div>
+            <div className="lhq__search-wrap">
+              <svg className="lhq__search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <circle cx="8.5" cy="8.5" r="5.5" />
+                <line x1="12.5" y1="12.5" x2="17" y2="17" />
+              </svg>
+              <input
+                type="text"
+                className="lhq__search"
+                placeholder="Search articles..."
+                value={blogSearch}
+                onChange={(e) => { setBlogSearch(e.target.value); setBlogVisible(6); }}
+              />
+              {blogSearch && (
+                <button className="lhq__search-clear" onClick={() => setBlogSearch('')}>&times;</button>
+              )}
+            </div>
+            <span className="lhq__sort-count">{sortedPosts.length} articles</span>
+          </div>
+
+          {/* Post List */}
+          {sortedPosts.length === 0 ? (
+            <p style={{ textAlign: 'center', padding: '3rem 0', color: '#999', fontFamily: "'Share Tech Mono', monospace" }}>
+              No articles match your current filters.
+            </p>
+          ) : (
+            <div className="lhq__list">
+              {visiblePosts.map((post, i) => {
+                const cardContent = (
+                  <>
+                    <div className="lhq__compact-img-wrap">
+                      <img src={post.image} alt={post.title} className="lhq__compact-img" />
+                      {blogSort === 'popular' && (
+                        <span className="lhq__rank">#{i + 1}</span>
+                      )}
+                    </div>
+                    <div className="lhq__compact-body">
+                      <span className="lhq__cat-label">{post.category}</span>
+                      <h4 className="lhq__compact-title">{post.title}</h4>
+                      <div className="lhq__meta">
+                        <span>{formatBlogDate(post.date)}</span>
+                        <span className="lhq__meta-dot" />
+                        <span>{post.readingTime}</span>
+                      </div>
+                    </div>
+                  </>
+                );
+                return post.externalUrl ? (
+                  <a href={post.externalUrl} target="_blank" rel="noopener noreferrer" key={post.id} className="lhq__compact">
+                    {cardContent}
+                  </a>
+                ) : (
+                  <Link to={`/blog/${post.id}`} key={post.id} className="lhq__compact">
+                    {cardContent}
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Load More + View All */}
+          <div className="lhq__actions">
+            {hasMorePosts && (
+              <button className="lhq__load-more" onClick={() => setBlogVisible(v => v + 6)}>
+                Load more articles
+              </button>
+            )}
+            <Link to="/blog" className="lhq__view-all">
+              View all {allPublished.length} articles &rarr;
+            </Link>
+          </div>
+        </div>
+      </section>
 
       {/* ===== FOOTER ===== */}
       <FooterMinimal />
@@ -1967,6 +3094,7 @@ function Experimentation() {
           font-family: 'Space Grotesk', -apple-system, sans-serif;
           background: #faf9f6;
           color: #1a1a1a;
+          overflow-x: clip;
         }
 
         /* ===== HERO SECTION ===== */
@@ -2399,20 +3527,19 @@ function Experimentation() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 0 2rem 6rem 2rem;
+          padding: 6rem 1rem 2rem 1rem;
           background: #fff;
           position: relative;
           overflow: visible;
         }
 
         .fd-about__content {
-          max-width: 800px;
+          max-width: 1100px;
           text-align: center;
+          width: 100%;
         }
 
         .fd-about__label {
-          position: sticky;
-          top: 2.5rem;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2421,22 +3548,7 @@ function Experimentation() {
           text-transform: uppercase;
           letter-spacing: 0.2em;
           color: #999;
-          margin-top: 20px;
-          margin-bottom: 100px;
-          padding: 1rem 0;
-          background: transparent;
-          z-index: 50;
-          opacity: 0;
-          transition: opacity 0.3s ease, top 0.3s ease;
-        }
-
-        .fd-about__label--visible {
-          opacity: 1;
-        }
-
-        .fd-about__label--static {
-          top: -50px;
-          opacity: 0;
+          margin-bottom: 2rem;
         }
 
         .fd-about__label-line {
@@ -2471,17 +3583,393 @@ function Experimentation() {
           justify-content: center;
         }
 
+        .fd-about__switcher {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+
+        .fd-about__arrow {
+          background: none;
+          border: 1px solid #ddd;
+          color: #999;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 1rem;
+          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.15s ease;
+        }
+
+        .fd-about__arrow:hover {
+          border-color: #999;
+          color: #555;
+        }
+
+        .fd-about__switcher-label {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #bbb;
+          min-width: 90px;
+          text-align: center;
+        }
+
+        .fd-about__text-block {
+          max-width: 720px;
+          margin: 0 auto 2.5rem;
+          text-align: left;
+        }
+
+        .fd-about__video--centred {
+          max-width: 800px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 2.5rem;
+        }
+
+        .fd-about__three-col {
+          display: grid;
+          grid-template-columns: 1fr 1.5fr 1fr;
+          gap: 2rem;
+          align-items: start;
+          text-align: left;
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+          padding: 0 3rem;
+          box-sizing: border-box;
+        }
+
+        .fd-about__three-col-text {
+          padding: 0.25rem 0;
+          font-size: 0.82rem;
+        }
+
+        .fd-about__three-col-text .fd-about__body {
+          font-size: 0.82rem;
+          line-height: 1.6;
+          margin: 0 0 0.75rem;
+        }
+
+        .fd-about__three-col-text .fd-about__founder-name {
+          font-size: 1.1rem;
+          margin: 0 0 0.75rem;
+        }
+
+        .fd-about__three-col-text .fd-about__founder-title {
+          font-size: 0.6rem;
+          margin: 0 0 0.3rem;
+        }
+
+        .fd-about__three-col-video .fd-about__video {
+          max-width: none;
+          margin: 0;
+        }
+
+        @media (max-width: 768px) {
+          .fd-about__three-col {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+        }
+
+        .fd-about__split {
+          display: grid;
+          grid-template-columns: 3fr 2fr;
+          gap: 3rem;
+          align-items: start;
+          text-align: left;
+        }
+
+        .fd-about__split-left {
+          position: sticky;
+          top: calc(50vh - 25%);
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .fd-about__split-left .fd-about__video {
+          max-width: none;
+          margin: 0;
+        }
+
+        .fd-about__split-right {
+          padding: 0.5rem 0;
+          min-width: 0;
+          overflow: hidden;
+        }
+
+        .fd-about__body {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.95rem;
+          line-height: 1.8;
+          color: #4a4a4a;
+          margin: 0 0 1.5rem;
+        }
+
+        .fd-about__founder {
+          margin-top: 2.5rem;
+          padding-top: 2rem;
+          border-top: 1px solid #e8e6e2;
+        }
+
+        .fd-about__founder-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.2em;
+          color: #999;
+          margin: 0 0 0.5rem;
+          font-weight: 400;
+        }
+
+        .fd-about__founder-name {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 1.5rem;
+        }
+
+        .fd-about__pullquote {
+          margin: 1.5rem 0;
+          padding: 1rem 0;
+          border-top: 2px solid #1a1a1a;
+          border-bottom: 2px solid #1a1a1a;
+          text-align: center;
+        }
+
+        .fd-about__pullquote p {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+          font-style: italic;
+          color: #1a1a1a;
+          line-height: 1.5;
+          margin: 0 0 0.5rem;
+        }
+
+        .fd-about__pullquote span {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #999;
+        }
+
+        .fd-about__rec-title {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #a09080;
+          margin: 2.5rem 0 1rem;
+        }
+
+        .abt-v9__milestones {
+          position: relative;
+          display: flex;
+          gap: 0.75rem;
+          margin-bottom: 1.75rem;
+          overflow-x: auto;
+          scrollbar-width: thin;
+          scrollbar-color: #c0b8aa transparent;
+          padding-bottom: 8px;
+          mask-image: linear-gradient(to right, black 80%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, black 80%, transparent 100%);
+        }
+        .abt-v9__milestones::-webkit-scrollbar { height: 4px; }
+        .abt-v9__milestones::-webkit-scrollbar-track { background: transparent; }
+        .abt-v9__milestones::-webkit-scrollbar-thumb { background: #c0b8aa; border-radius: 2px; }
+        .abt-v9__milestone {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          flex-shrink: 0;
+          width: 130px;
+          padding: 1.25rem 0.75rem;
+          border: 1px solid #e8e4df;
+          background: #faf8f5;
+          border-radius: 8px;
+          transition: border-color 0.2s;
+        }
+        .abt-v9__milestone:hover { border-color: #c0b8aa; }
+        .abt-v9__milestone i {
+          font-size: 1rem;
+          color: #a09080;
+          margin-bottom: 0.6rem;
+        }
+        .abt-v9__milestone-year {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          letter-spacing: 0.15em;
+          color: #a09080;
+          margin-bottom: 0.5rem;
+        }
+        .abt-v9__milestone-text {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          color: #2a2218;
+          line-height: 1.3;
+          margin-bottom: 0.3rem;
+        }
+        .abt-v9__milestone-sub {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.48rem;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #b0a898;
+        }
+
+        /* Why Fly horizontal panel */
+        .abt-v9__whyfly {
+          display: grid;
+          grid-template-columns: 280px 1fr;
+          border: 1px solid #e8e6e2;
+          border-radius: 3px;
+          overflow: hidden;
+          background: #fff;
+          margin-bottom: 2rem;
+        }
+        .abt-v9__whyfly-visual {
+          position: relative;
+          min-height: 220px;
+          overflow: hidden;
+        }
+        .abt-v9__whyfly-slide {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          opacity: 0;
+          transition: opacity 0.6s ease;
+        }
+        .abt-v9__whyfly-slide.active { opacity: 1; }
+        .abt-v9__whyfly-content {
+          padding: 1.75rem 2rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .abt-v9__whyfly-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #a09080;
+          margin-bottom: 0.75rem;
+        }
+        .abt-v9__whyfly-items {
+          display: grid;
+          min-height: 90px;
+          align-content: center;
+          margin-bottom: 1rem;
+        }
+        .abt-v9__whyfly-item {
+          grid-area: 1 / 1;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+        }
+        .abt-v9__whyfly-item.active { opacity: 1; }
+        .abt-v9__whyfly-verb {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          text-transform: uppercase;
+          letter-spacing: -0.01em;
+          margin: 0 0 0.4rem;
+        }
+        .abt-v9__whyfly-verb span {
+          font-weight: 400;
+          color: #6b5e50;
+        }
+        .abt-v9__whyfly-content p {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.82rem;
+          line-height: 1.65;
+          color: #6b5e50;
+          margin: 0;
+        }
+        .abt-v9__whyfly-nav {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding-top: 1rem;
+          border-top: 1px solid #f0eeea;
+        }
+        .abt-v9__whyfly-dots {
+          display: flex;
+          gap: 3px;
+        }
+        .abt-v9__whyfly-dot {
+          width: 16px;
+          height: 2px;
+          background: #d8d6d2;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+        .abt-v9__whyfly-dot.active {
+          background: #1a1a1a;
+          width: 24px;
+        }
+        .abt-v9__whyfly-arrows {
+          display: flex;
+          gap: 0.25rem;
+        }
+        .abt-v9__whyfly-arrows button {
+          background: none;
+          border: 1px solid #e8e6e2;
+          border-radius: 2px;
+          padding: 0.3rem;
+          cursor: pointer;
+          color: #999;
+          display: flex;
+          transition: all 0.2s;
+        }
+        .abt-v9__whyfly-arrows button:hover {
+          border-color: #1a1a1a;
+          color: #1a1a1a;
+        }
+
+        @media (max-width: 768px) {
+          .fd-about__split {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .fd-about__split-left {
+            position: static;
+          }
+          .abt-v9__whyfly { grid-template-columns: 1fr; }
+          .abt-v9__whyfly-visual { min-height: 200px; }
+        }
+
         .fd-about__video {
           margin-bottom: 3rem;
           position: relative;
-          z-index: 1;
+          overflow: visible;
+          max-width: 640px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .fd-about__video-lines {
           position: absolute;
-          top: 55%;
-          left: 0;
-          width: 100%;
+          top: 50%;
+          left: -4rem;
+          right: -4rem;
+          transform: translateY(-50%);
           display: flex;
           flex-direction: column;
           gap: 30px;
@@ -2522,6 +4010,7 @@ function Experimentation() {
           overflow: hidden;
           z-index: 1;
           box-shadow: -20px 0 40px -10px rgba(0, 0, 0, 0.15), 20px 0 40px -10px rgba(0, 0, 0, 0.15);
+          border-radius: 12px;
         }
 
         .fd-about__video-placeholder img {
@@ -2539,6 +4028,28 @@ function Experimentation() {
           align-items: center;
           justify-content: center;
           gap: 1rem;
+        }
+
+        .fd-about__mute-btn {
+          position: absolute;
+          bottom: 12px;
+          right: 12px;
+          z-index: 3;
+          background: rgba(0,0,0,0.5);
+          border: none;
+          border-radius: 50%;
+          width: 36px;
+          height: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          color: #fff;
+          backdrop-filter: blur(4px);
+          transition: background 0.2s;
+        }
+        .fd-about__mute-btn:hover {
+          background: rgba(0,0,0,0.7);
         }
 
         
@@ -2602,26 +4113,76 @@ function Experimentation() {
           background: #333;
         }
 
+        /* --- About Split: V8 Warm Tonal --- */
+        .fd-about__socials {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+        }
+        .fd-about__socials-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #999;
+        }
+        .fd-about__social {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border: 1px solid #e8e6e2;
+          border-radius: 50%;
+          color: #999;
+          text-decoration: none;
+          transition: all 0.3s ease;
+        }
+        .fd-about__social:hover {
+          color: #1a1a1a;
+          border-color: #1a1a1a;
+        }
+
+        .fd-about__divider {
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          margin-top: 0;
+          margin-bottom: 0;
+          padding: 2rem;
+          background: #faf9f6;
+        }
+        .fd-about__divider-line {
+          flex: 1;
+          height: 1px;
+          background: #e8e6e2;
+        }
+        .fd-about__divider-text {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #a09080;
+          white-space: nowrap;
+        }
+        @media (max-width: 768px) {
+        }
+
         /* ===== HORIZONTAL ACCORDION NAV ===== */
         .fd-nav {
-          position: relative;
+          position: sticky;
+          top: 49px;
           z-index: 100;
           background: #fff;
           border-top: 1px solid #e8e6e2;
           border-bottom: 1px solid #e8e6e2;
           padding: 0;
-          transition: top 0.3s ease;
+          transition: border-top-color 1.2s ease, box-shadow 0.3s ease;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
         }
 
-        .fd-nav--fixed {
-          position: fixed;
-          top: 49px;
-          left: 0;
-          right: 0;
-        }
-
-        .fd-nav--fixed.fd-nav--compact {
-          top: 20px;
+        .fd-nav--compact {
+          border-top-color: transparent;
         }
 
         .fd-nav__header {
@@ -2629,7 +4190,16 @@ function Experimentation() {
           align-items: center;
           gap: 1rem;
           padding: 0.5rem 2rem;
-          border-bottom: 1px solid #e8e6e2;
+          max-height: 40px;
+          transition: max-height 1.2s ease, padding 1.2s ease, opacity 0.6s ease;
+        }
+
+        .fd-nav--compact .fd-nav__header {
+          max-height: 0;
+          padding-top: 0;
+          padding-bottom: 0;
+          opacity: 0;
+          pointer-events: none;
         }
 
         .fd-nav__header span:nth-child(2) {
@@ -2648,10 +4218,60 @@ function Experimentation() {
 
         .fd-nav__accordion {
           display: flex;
+          border-top: 1px solid #e8e6e2;
+        }
+
+        .fd-nav__item-wrap {
+          flex: 1;
+          position: relative;
+          border-right: 1px solid #e8e6e2;
+        }
+        .fd-nav__item-wrap:last-child {
+          border-right: none;
+        }
+
+        .fd-nav__dropdown {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          border-top: none;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+          opacity: 0;
+          visibility: hidden;
+          transform: translateY(-4px);
+          transition: all 0.2s ease;
+          z-index: 200;
+        }
+        .fd-nav__item-wrap:hover .fd-nav__dropdown {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(0);
+        }
+        .fd-nav__dropdown-item {
+          display: block;
+          padding: 0.6rem 1.2rem;
+          font-size: 0.7rem;
+          font-weight: 500;
+          color: #555;
+          text-decoration: none;
+          letter-spacing: 0.03em;
+          transition: all 0.15s ease;
+          border-bottom: 1px solid #f0eeea;
+        }
+        .fd-nav__dropdown-item:last-child {
+          border-bottom: none;
+        }
+        .fd-nav__dropdown-item:hover {
+          background: #f5f5f2;
+          color: #1a1a1a;
         }
 
         .fd-nav__item {
           flex: 1;
+          width: 100%;
           display: flex;
           flex-direction: row;
           align-items: center;
@@ -2660,13 +4280,8 @@ function Experimentation() {
           padding: 0.75rem 1rem;
           background: transparent;
           border: none;
-          border-right: 1px solid #e8e6e2;
           cursor: pointer;
           transition: all 0.3s ease;
-        }
-
-        .fd-nav__item:last-child {
-          border-right: none;
         }
 
         .fd-nav__item:hover {
@@ -2850,8 +4465,8 @@ function Experimentation() {
 
         /* ===== CAROUSEL SECTION ===== */
         .fd-carousel-section {
-          padding: 2.5rem 2rem 6rem;
-          background: #fff;
+          padding: 0 2rem 3rem;
+          background: #faf9f6;
           width: 100vw;
           margin-left: -50vw;
           margin-right: -50vw;
@@ -2860,7 +4475,250 @@ function Experimentation() {
           box-sizing: border-box;
           position: relative;
           z-index: 10;
-          box-shadow: inset 0 20px 30px -20px rgba(0, 0, 0, 0.15);
+          border-bottom: 1px solid rgba(0,0,0,0.12);
+        }
+
+        /* ===== TRAINING SECTION (two-col like clubhouse) ===== */
+        .fd-training-section {
+          background: #faf9f6;
+          padding: 0;
+          position: relative;
+          overflow-x: clip;
+          z-index: 2;
+        }
+        .fd-training-inner {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+          padding: 4rem 2rem 0;
+        }
+        .fd-training-sticky {
+          position: sticky;
+          top: 35vh;
+          padding: 2rem 3rem 2rem 0;
+          grid-row: 1 / span 2;
+          z-index: 1;
+          align-self: start;
+          max-height: calc(100vh - 35vh);
+          overflow: hidden;
+        }
+        .fd-training-courses {
+          padding: 0;
+          min-width: 0;
+          overflow: hidden;
+          position: relative;
+          z-index: 2;
+          background: #faf9f6;
+        }
+        .fd-training-header__pretitle {
+          display: block;
+          font-size: 0.75rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #888;
+          margin-bottom: 0.75rem;
+          font-family: 'Space Grotesk', sans-serif;
+        }
+        .fd-training-header__headline {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          line-height: 1.1;
+          margin-bottom: 1rem;
+        }
+        .fd-training-header__headline span {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 700;
+          line-height: 1.15;
+          text-transform: uppercase;
+        }
+        .fd-training-header__headline span:nth-child(1) {
+          color: #1a1a1a;
+        }
+        .fd-training-header__headline span:nth-child(2) {
+          color: #999;
+        }
+        .fd-training-header__desc {
+          max-width: 100%;
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #555;
+          font-family: 'Space Grotesk', sans-serif;
+        }
+        .fd-training-header__divider {
+          border: none;
+          border-top: 1px solid #e8e6e2;
+          margin: 1.5rem 0;
+        }
+        .fd-training-sticky__bg {
+          position: absolute;
+          top: 0;
+          left: -2rem;
+          width: 100vw;
+          height: 100%;
+          z-index: 1;
+          overflow: visible;
+          pointer-events: none;
+        }
+        .fd-training-sticky__bg .scroll-path-section {
+          width: 100%;
+          margin-left: 0;
+          margin-right: 0;
+          min-height: 100%;
+          overflow: visible;
+        }
+        .fd-training-sticky__text {
+          position: relative;
+          z-index: 2;
+          max-width: 480px;
+          margin: 0 auto;
+          padding-left: 3rem;
+        }
+        .fd-zigzag__item-content {
+          position: relative;
+          z-index: 2;
+          padding: 1.25rem 1.5rem 1.5rem;
+        }
+
+        /* ===== ZIGZAG TRAINING SECTION ===== */
+        .fd-zigzag-section {
+          padding: 0 2rem 1.5rem;
+          background: #faf9f6;
+          position: relative;
+          z-index: 10;
+        }
+        .fd-zigzag__list { margin: 0; }
+        .fd-zigzag__item {
+          display: grid; grid-template-columns: 1fr;
+          gap: 0; align-items: center;
+          background: #eae8e4;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 8px;
+          overflow: hidden;
+          margin-bottom: 1.5rem;
+        }
+        .fd-zigzag__item:last-child {
+          margin-bottom: 0;
+        }
+        .fd-zigzag__item--right { direction: ltr; }
+        .fd-zigzag__item--right > * { direction: ltr; }
+        .fd-zigzag__item-image {
+          position: relative;
+          overflow: hidden; height: 220px;
+        }
+        .fd-zigzag__item-image img { width: 100%; height: 100%; object-fit: cover; }
+        .fd-zigzag__item-num {
+          position: absolute; top: 0.75rem; left: 0.75rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.5rem; font-weight: 300; color: rgba(255,255,255,0.5);
+        }
+        .fd-zigzag__item-tag {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase;
+          color: #999; display: block; margin-bottom: 0.5rem;
+        }
+        .fd-zigzag__item-title {
+          font-size: 1.2rem; font-weight: 600; text-transform: uppercase;
+          letter-spacing: 0.03em; margin: 0 0 0.75rem; color: #1a1a1a;
+        }
+        .fd-zigzag__item-desc {
+          color: #666; line-height: 1.7; font-size: 0.85rem; margin: 0 0 1.25rem;
+        }
+
+        /* Horizontal scroll cards */
+        .fd-hscroll-runway {
+          position: relative;
+          z-index: 1;
+          grid-column: 2;
+          min-width: 0;
+          margin-top: 0;
+        }
+        .fd-hscroll-sticky {
+          position: relative;
+          width: 100%;
+        }
+        .fd-hscroll-wrap {
+          position: relative;
+        }
+        .fd-zigzag__hscroll {
+          overflow: hidden;
+          padding: 1rem 0 1rem;
+          max-width: none;
+          margin-right: -2rem;
+        }
+        .fd-zigzag__hscroll-inner {
+          display: grid;
+          grid-auto-flow: column;
+          grid-template-rows: 1fr 1fr;
+          gap: 1.5rem;
+          width: max-content;
+          will-change: transform;
+        }
+        .fd-hscroll-chevron {
+          display: none;
+        }
+        .fd-hscroll-chevron:hover {
+          display: none;
+        }
+        .fd-hscroll-chevron--left { display: none; }
+        .fd-hscroll-chevron--right { display: none; }
+        .fd-zigzag__hscroll::-webkit-scrollbar { display: none; }
+        .fd-zigzag__card {
+          flex-shrink: 0; width: 260px; min-width: 260px;
+          scroll-snap-align: start;
+          background: #eae8e4; border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 8px; overflow: hidden;
+        }
+        .fd-zigzag__card-image { height: 140px; overflow: hidden; }
+        .fd-zigzag__card-image img { width: 100%; height: 100%; object-fit: cover; }
+        .fd-zigzag__card-body { padding: 1rem; }
+        .fd-zigzag__card-header {
+          display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem;
+        }
+        .fd-zigzag__card-num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.2rem; font-weight: 300; color: #d1d5db;
+        }
+        .fd-zigzag__card-tag {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+          color: #999;
+        }
+        .fd-zigzag__card-title {
+          font-size: 0.85rem; font-weight: 600; text-transform: uppercase;
+          letter-spacing: 0.03em; margin: 0 0 0.5rem; color: #1a1a1a;
+        }
+        .fd-zigzag__card-desc {
+          color: #666; line-height: 1.5; font-size: 0.75rem; margin: 0 0 0.75rem;
+          display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .fd-zigzag__card-footer {
+          display: flex; align-items: center; justify-content: space-between;
+        }
+        .fd-zigzag__card-duration {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem; color: #999; letter-spacing: 0.1em;
+        }
+        .fd-zigzag__card-btn {
+          display: inline-flex; align-items: center; gap: 0.5rem;
+          font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+          letter-spacing: 0.05em; color: #1a1a1a; text-decoration: none;
+          transition: color 0.2s ease;
+        }
+        .fd-zigzag__card-btn:hover { color: #555; }
+
+        @media (max-width: 768px) {
+          .fd-training-inner {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .fd-training-sticky {
+            position: static;
+          }
+          .fd-zigzag__item { grid-template-columns: 1fr; gap: 1rem; }
+          .fd-zigzag__item--right { direction: ltr; }
+          .fd-zigzag__item-image { height: 180px; }
         }
 
         .fd-carousel-section__header {
@@ -3364,6 +5222,7 @@ function Experimentation() {
 
         .fd-fleet__btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fd-fleet__btn--outline {
@@ -3421,17 +5280,33 @@ function Experimentation() {
 
         /* ===== EXPEDITIONS SECTION (Immersive) ===== */
         .fd-exped {
-          background: #faf9f6;
+          background: transparent;
+          position: relative;
+          z-index: 1;
+        }
+        .fd-exped__glow {
+          position: absolute;
+          transform: translate(-50%, -50%);
+          width: 110vw;
+          aspect-ratio: 1;
+          border-radius: 50%;
+          background: radial-gradient(circle, #faf9f6 0%, #faf9f6 42%, rgba(250,249,246,0) 50%);
+          filter: blur(50px);
+          box-shadow: none;
+          pointer-events: none;
+          z-index: 0;
         }
 
         /* Cinematic Opening */
         .fd-exped__cinematic {
           position: relative;
+          z-index: 1;
           min-height: 70vh;
+          padding-bottom: 3rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .fd-exped__cinematic-bg {
@@ -3454,11 +5329,11 @@ function Experimentation() {
 
         .fd-exped__globe {
           position: absolute;
-          top: 50%;
+          top: 38vh;
           left: 50%;
           transform: translate(-50%, -50%);
-          width: min(90vw, 550px);
-          height: min(90vw, 550px);
+          width: min(90vw, 780px);
+          height: min(90vw, 780px);
           pointer-events: none;
           z-index: 1;
           color: #1a1a1a;
@@ -3469,11 +5344,13 @@ function Experimentation() {
           height: 100%;
         }
 
+
         .fd-exped__cinematic-content {
           position: relative;
           z-index: 2;
           text-align: center;
-          max-width: 900px;
+          max-width: 1100px;
+          width: 100%;
           padding: 4rem 2rem;
         }
 
@@ -3487,7 +5364,7 @@ function Experimentation() {
         }
 
         .fd-exped__title {
-          margin: 0 0 2rem;
+          margin: 0 0 12px;
         }
 
         .fd-exped__title-word {
@@ -3973,6 +5850,7 @@ function Experimentation() {
 
         .fd-exped__btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fd-exped__btn--outline {
@@ -4215,11 +6093,106 @@ function Experimentation() {
           background: #fff;
         }
 
-        .fd-sales__header {
-          text-align: center;
-          padding: 4rem 2rem 32px;
-          margin-bottom: 0;
+        .fd-sales__intro {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
         }
+
+        .fd-sales__left {
+          grid-column: 1;
+          grid-row: 1;
+          align-self: stretch;
+          max-width: 480px;
+          margin: 0 auto;
+          padding: 0 3rem;
+        }
+
+        .fd-sales__header-sticky {
+          position: sticky;
+          top: 10vh;
+          text-align: left;
+          padding: 32px 0 1.25rem;
+          z-index: 3;
+        }
+
+        .fd-sales__dealer-catch {
+          position: sticky;
+          top: 10vh;
+          z-index: 2;
+          padding: 0.5rem 0 8px;
+          margin-bottom: 14px;
+          transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: transform;
+        }
+
+        .fd-sales__dealer-catch .cert-cloud {
+          margin: 0;
+        }
+
+        .fd-sales__intro-bg {
+          grid-column: 2;
+          grid-row: 1;
+          background: rgba(214, 210, 204, 0.12);
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: stretch;
+          margin: -1rem -50vw -1rem 0;
+        }
+
+        .fd-sales__intro-border {
+          grid-column: 2;
+          grid-row: 1;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-right: none;
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: stretch;
+          margin: -1rem -50vw -1rem 0;
+          z-index: 2;
+        }
+
+        .fd-sales__intro-gallery {
+          grid-column: 2;
+          grid-row: 1;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+          z-index: 1;
+          padding: 1.5rem 3rem 0.75rem;
+        }
+
+        .fd-sales__intro-img {
+          overflow: hidden;
+          border-radius: 3px;
+        }
+
+        .fd-sales__intro-img--wide {
+          grid-column: 1 / -1;
+        }
+
+        .fd-sales__intro-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          aspect-ratio: 1 / 1;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          filter: saturate(0.85);
+        }
+
+        .fd-sales__intro-img--wide img {
+          aspect-ratio: 16 / 9;
+        }
+
+        .fd-sales__intro-img:hover img {
+          transform: scale(1.04);
+          filter: saturate(1);
+        }
+
+        .fd-sales__intro-card {
+          grid-column: 1 / -1;
+        }
+        .fd-sales__intro-card .cert-cloud { margin: 0; }
 
         .fd-sales__number {
           display: block;
@@ -4239,13 +6212,13 @@ function Experimentation() {
         }
 
         .fd-sales__title {
-          margin: 0 0 2rem;
+          margin: 0 0 1.25rem;
         }
 
         .fd-sales__title-word {
           display: block;
           font-family: 'Space Grotesk', sans-serif;
-          font-size: clamp(2.5rem, 6vw, 5rem);
+          font-size: clamp(2.2rem, 5vw, 3.8rem);
           font-weight: 700;
           text-transform: uppercase;
           line-height: 1;
@@ -4257,30 +6230,99 @@ function Experimentation() {
         .fd-sales__title-word--3 { color: #7a7a7a; }
 
         .fd-sales__text {
-          font-size: 1.1rem;
-          line-height: 1.8;
+          font-size: 1rem;
+          line-height: 1.7;
           color: #666;
           max-width: 600px;
-          margin: 0 auto;
+          margin: 0;
         }
 
         .fd-sales__header-divider {
           width: 60px;
           height: 1px;
           background: #ccc;
-          margin: 1.5rem auto 0;
+          margin: 1rem 0 0;
+        }
+
+        .fd-sales__toggle-wrap {
+          text-align: center;
+          margin: 2rem 0;
+        }
+
+        .fd-sales__toggle {
+          display: inline-flex;
+          border: 1px solid #e0deda;
+          overflow: hidden;
+        }
+
+        .fd-sales__toggle-btn {
+          padding: 0.65rem 1.75rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          color: #999;
+          transition: all 0.3s ease;
+          position: relative;
+        }
+
+        .fd-sales__toggle-btn:not(:last-child) {
+          border-right: 1px solid #e0deda;
+        }
+
+        .fd-sales__toggle-btn--active {
+          background: #1a1a1a;
+          color: #fff;
+        }
+
+        .fd-sales__toggle-btn:hover:not(.fd-sales__toggle-btn--active) {
+          color: #1a1a1a;
+          background: #f5f4f0;
+        }
+
+        .fd-sales__unmanned-coming {
+          text-align: center;
+          padding: 4rem 2rem;
+          background: #f5f4f0;
+          border: 1px solid #e0deda;
+        }
+
+        .fd-sales__unmanned-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 60px;
+          height: 60px;
+          background: #1a1a1a;
+          color: #fff;
+          border-radius: 50%;
+          margin: 0 auto 1.5rem;
+          font-size: 1.25rem;
+        }
+
+        .fd-sales__unmanned-coming p {
+          color: #666;
+          margin-bottom: 1.5rem;
+          max-width: 500px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .fd-sales__grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           gap: 1.5rem;
-          margin-bottom: 3rem;
+          margin-bottom: 20px;
         }
 
         .fd-sales__card {
           background: #faf9f6;
           border: 1px solid #e8e6e2;
+          border-radius: 6px;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.06);
           text-decoration: none;
           color: inherit;
           transition: all 0.3s ease;
@@ -4394,11 +6436,42 @@ function Experimentation() {
           gap: 1rem;
         }
 
+        .fd-sales__section-title--toggle {
+          cursor: pointer;
+          user-select: none;
+        }
+
+        .fd-sales__chevron {
+          font-size: 0.7rem;
+          transition: transform 0.3s ease;
+          color: #999;
+          flex-shrink: 0;
+          order: 2;
+          width: 1.2rem;
+          text-align: center;
+        }
+        .fd-sales__chevron--open {
+          transform: rotate(180deg);
+        }
+
+        .fd-sales__collapse {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.4s ease, opacity 0.3s ease;
+          opacity: 0;
+        }
+        .fd-sales__collapse--open {
+          max-height: 3000px;
+          opacity: 1;
+          overflow: visible;
+        }
+
         .fd-sales__section-title::after {
           content: '';
           flex: 1;
           height: 1px;
           background: #e8e6e2;
+          order: 1;
         }
 
         .fd-sales__section-desc {
@@ -4409,6 +6482,10 @@ function Experimentation() {
           text-align: left;
         }
 
+        .fd-sales__carousel-wrap {
+          position: relative;
+        }
+
         .fd-sales__carousel {
           display: flex;
           overflow-x: auto;
@@ -4416,27 +6493,20 @@ function Experimentation() {
           gap: 1.5rem;
           padding: 0.5rem 0 1.5rem;
           -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
         }
 
         .fd-sales__carousel::-webkit-scrollbar {
-          height: 6px;
-        }
-
-        .fd-sales__carousel::-webkit-scrollbar-track {
-          background: #f0f0f0;
-          border-radius: 3px;
-        }
-
-        .fd-sales__carousel::-webkit-scrollbar-thumb {
-          background: #ccc;
-          border-radius: 3px;
+          display: none;
         }
 
         .fd-sales__sold-card {
-          flex: 0 0 260px;
+          flex: 0 0 calc((100% - 4.5rem) / 4);
           scroll-snap-align: start;
           background: #faf9f6;
           border: 1px solid #e8e6e2;
+          border-radius: 6px;
           position: relative;
           overflow: hidden;
           transition: all 0.3s ease;
@@ -4463,21 +6533,28 @@ function Experimentation() {
           z-index: 2;
         }
 
+        .fd-sales__sold-badge--rebuild {
+          background: #1a1a1a;
+        }
+
         .fd-sales__sold-image {
+          position: relative;
           aspect-ratio: 4/3;
           background: linear-gradient(135deg, #f5f4f0 0%, #eae8e2 100%);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 1rem;
+          overflow: hidden;
         }
 
         .fd-sales__sold-image img {
-          max-width: 85%;
-          max-height: 85%;
-          object-fit: contain;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
           opacity: 0.7;
           filter: grayscale(30%);
+        }
+
+        .fd-sales__sold-image--active img {
+          opacity: 1;
+          filter: none;
         }
 
         .fd-sales__sold-info {
@@ -4513,13 +6590,318 @@ function Experimentation() {
           }
 
           .fd-sales__sold-card {
-            flex: 0 0 220px;
+            flex: 0 0 calc((100% - 1.5rem) / 2);
+          }
+        }
+
+        /* ===== THE CLUBHOUSE ===== */
+        .clubhouse {
+          padding: 8px 0 48px;
+          background: #fff;
+          position: relative;
+          overflow-x: clip;
+        }
+
+        .clubhouse__bg-right {
+          grid-column: 2;
+          grid-row: 1;
+          background: rgba(214, 210, 204, 0.12);
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: stretch;
+          margin: -1rem -50vw -1rem 0;
+        }
+
+        .clubhouse__bg-border {
+          grid-column: 2;
+          grid-row: 1;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-right: none;
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: stretch;
+          margin: -1rem -50vw -1rem 0;
+          z-index: 2;
+        }
+
+        .clubhouse__inner {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: start;
+        }
+
+        .clubhouse__sticky {
+          position: sticky;
+          top: 90px;
+          max-width: 480px;
+          margin: 0 auto;
+          padding: 48px 3rem 48px;
+        }
+
+        .clubhouse__pretitle {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: #999;
+          display: block;
+          margin-bottom: 0.75rem;
+        }
+
+        .clubhouse__title-wrap {
+          position: relative;
+          min-height: 2.5rem;
+          margin: 0 0 1.25rem;
+        }
+        .clubhouse__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 2rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0;
+          letter-spacing: -0.02em;
+          transition: opacity 0.1s, transform 0.1s;
+          will-change: opacity, transform;
+        }
+        .clubhouse__title--alt {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+        .clubhouse__desc {
+          font-size: 0.88rem;
+          line-height: 1.7;
+          color: #555;
+          margin: 0 0 1.5rem;
+        }
+
+        .clubhouse__tagline {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.72rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #999;
+          border-top: 1px solid rgba(0,0,0,0.08);
+          margin-top: 1.5rem;
+          padding-top: 1rem;
+          display: block;
+        }
+
+        .clubhouse__grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 0;
+          margin-top: 1.5rem;
+          border: 1px solid rgba(0,0,0,0.08);
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .clubhouse__grid-item {
+          padding: 1.25rem;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+          border-right: 1px solid rgba(0,0,0,0.08);
+        }
+        .clubhouse__grid-item--hero {
+          grid-column: 1 / -1;
+          border-right: none;
+          padding: 1.5rem;
+          background: rgba(0,0,0,0.025);
+        }
+        .clubhouse__grid-item:nth-child(2) {
+          border-right: 1px solid rgba(0,0,0,0.08);
+          border-bottom: none;
+        }
+        .clubhouse__grid-item:nth-child(3) {
+          border-right: none;
+          border-bottom: none;
+        }
+        .clubhouse__grid-num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1rem;
+          font-weight: 300;
+          color: #d1d5db;
+          display: block;
+          margin-bottom: 0.35rem;
+        }
+        .clubhouse__grid-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+          color: #1a1a1a;
+          margin: 0 0 0.35rem;
+        }
+        .clubhouse__grid-desc {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.75rem;
+          color: #666;
+          line-height: 1.5;
+          margin: 0;
+        }
+        .clubhouse__grid-title--hero {
+          font-size: 1.15rem;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.5rem;
+        }
+        .clubhouse__grid-desc--hero {
+          font-size: 0.85rem;
+          line-height: 1.6;
+        }
+        .clubhouse__map-card {
+          margin-top: 1.5rem;
+          border: 1px solid rgba(0,0,0,0.08);
+          border-radius: 12px;
+          overflow: hidden;
+          background: #fff;
+        }
+        .clubhouse__map-card-top {
+          padding: 1rem;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        .clubhouse__map {
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .clubhouse__map img {
+          width: 100%;
+          height: auto;
+          display: block;
+        }
+        .clubhouse__map-card-bottom {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+        .clubhouse__map-card-stat {
+          padding: 1.25rem;
+        }
+        .clubhouse__map-card-stat:first-child {
+          border-right: 1px solid rgba(0,0,0,0.08);
+        }
+
+        /* Phase crossfade */
+        .clubhouse__phases {
+          position: relative;
+          display: grid;
+        }
+        .clubhouse__phases > * {
+          grid-area: 1 / 1;
+        }
+        .clubhouse__phase {
+          transition: opacity 0.15s ease;
+          will-change: opacity;
+        }
+        .clubhouse__phase--escape {
+        }
+
+        /* Escape to the Country layout */
+        .clubhouse__escape-stats {
+          display: flex;
+          gap: 0;
+          margin-top: 0.75rem;
+        }
+        .clubhouse__escape-stat {
+          flex: 1;
+          display: flex;
+          align-items: baseline;
+          gap: 0.5rem;
+          padding: 0.5rem 0.75rem;
+          border-right: 1px solid rgba(0,0,0,0.08);
+        }
+        .clubhouse__escape-stat:first-child {
+          padding-left: 0;
+        }
+        .clubhouse__escape-stat:last-child {
+          border-right: none;
+        }
+        .clubhouse__escape-stat-value {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+        .clubhouse__escape-stat-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #999;
+        }
+
+        .clubhouse__gallery {
+          grid-column: 2;
+          grid-row: 1;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+          z-index: 1;
+          padding: 1.5rem 3rem 0.75rem;
+        }
+
+        .clubhouse__img {
+          overflow: hidden;
+          border-radius: 3px;
+        }
+
+        .clubhouse__img--wide {
+          grid-column: 1 / -1;
+        }
+
+        .clubhouse__img--tall {
+          grid-row: span 2;
+        }
+
+        .clubhouse__img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          aspect-ratio: 1 / 1;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+          filter: saturate(0.85);
+        }
+
+        .clubhouse__img--wide img {
+          aspect-ratio: 16 / 9;
+        }
+
+        .clubhouse__img--tall img {
+          aspect-ratio: auto;
+          height: 100%;
+        }
+
+        .clubhouse__img:hover img {
+          transform: scale(1.04);
+          filter: saturate(1);
+        }
+
+        @media (max-width: 768px) {
+          .clubhouse {
+            padding: 2rem 1.5rem 3rem;
+          }
+
+          .clubhouse__inner {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+
+          .clubhouse__sticky {
+            position: static;
+          }
+
+          .clubhouse__title {
+            font-size: 1.6rem;
+          }
+
+          .clubhouse__bg-right {
+            display: none;
           }
         }
 
         /* ===== MAINTENANCE SECTION ===== */
         .fd-maint {
-          padding: 2rem 2rem 5rem;
+          padding: 2rem 2rem 8rem;
           background: #faf9f6;
         }
 
@@ -4643,7 +7025,27 @@ function Experimentation() {
           display: flex;
           justify-content: center;
           gap: 1rem;
+          padding-top: 1.5rem;
         }
+
+        .fd-maint__actions--overlay {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          z-index: 3;
+          padding-top: 0;
+        }
+
+        .fsd__right { overflow: hidden; display: flex; flex-direction: column; gap: 0.75rem; justify-content: center; margin-top: 48px; margin-left: -2rem; margin-right: -2rem; }
+        .fsd__img-carousel { overflow: hidden; }
+        .fsd__img-track { display: flex; animation: fsdScroll 40s linear infinite; }
+        .fsd__img-track--reverse { animation: fsdScrollReverse 35s linear infinite; }
+        .fsd__img-set { display: flex; gap: 0.75rem; flex-shrink: 0; padding-right: 0.75rem; }
+        @keyframes fsdScroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        @keyframes fsdScrollReverse { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+        .fsd__img { flex-shrink: 0; width: 220px; height: 150px; border-radius: 6px; overflow: hidden; }
+        .fsd__img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; }
 
         .fd-maint__btn {
           display: inline-flex;
@@ -4666,6 +7068,19 @@ function Experimentation() {
 
         .fd-maint__btn--primary:hover {
           background: #333;
+          color: #fff;
+        }
+
+        .fd-maint__btn--secondary {
+          background: #faf9f6;
+          color: #1a1a1a;
+          border: 1px solid #1a1a1a;
+        }
+
+        .fd-maint__btn--secondary:hover {
+          background: rgba(0,0,0,0.08);
+          color: #000;
+          border-color: #000;
         }
 
         .fd-maint__btn--outline {
@@ -4799,6 +7214,667 @@ function Experimentation() {
             grid-template-columns: 1fr;
             gap: 2rem;
           }
+        }
+
+        /* ===== MAINTENANCE INTRO (sticky gallery layout) ===== */
+        .fd-maint__intro {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .fd-maint__left {
+          grid-column: 1;
+          grid-row: 1;
+          align-self: stretch;
+          max-width: 480px;
+          margin: 0 auto;
+          padding: 0 3rem;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .fd-maint__header-sticky {
+          position: sticky;
+          top: 10vh;
+          text-align: left;
+          padding: 32px 0 1.25rem;
+          z-index: 3;
+        }
+
+        .fd-maint__service-catch {
+          position: sticky;
+          top: 10vh;
+          z-index: 2;
+          padding: 0.5rem 0 10px;
+          margin-bottom: 48px;
+          transition: transform 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+          will-change: transform;
+          background: #faf9f6;
+          margin-left: -3rem;
+          margin-right: -3rem;
+          padding-left: 3rem;
+          padding-right: 3rem;
+        }
+        .fd-maint__service-catch::before {
+          content: '';
+          position: absolute;
+          bottom: 100%;
+          left: 0;
+          width: 100%;
+          height: 6rem;
+          background: #faf9f6;
+        }
+        .fd-maint__service-catch::after {
+          content: '';
+          position: absolute;
+          top: 100%;
+          left: 0;
+          width: 100%;
+          height: 3rem;
+          background: linear-gradient(to bottom, #faf9f6, transparent);
+        }
+        .fd-maint__title-fade,
+        .fd-maint__text-fade {
+          transition: opacity 0.05s linear;
+        }
+
+        .fd-maint__services-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          padding: 2rem;
+          margin-top: 500px;
+          opacity: 0;
+          transition: opacity 0.05s linear;
+          background: rgba(214, 210, 204, 0.12);
+          border: 1px solid rgba(0,0,0,0.08);
+          border-radius: 8px;
+        }
+        .fd-maint__service-item {
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+          padding: 1.75rem 0;
+          border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .fd-maint__service-item:first-child {
+          padding-top: 0;
+        }
+        .fd-maint__service-item:last-child {
+          padding-bottom: 0;
+          border-bottom: none;
+        }
+        .fd-maint__service-icon {
+          flex-shrink: 0;
+          width: 20px;
+          padding-top: 0.15rem;
+          color: #999;
+          font-size: 0.8rem;
+        }
+        .fd-maint__service-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: #1a1a1a;
+          margin: 0 0 0.3rem;
+        }
+        .fd-maint__service-desc {
+          font-size: 0.78rem;
+          line-height: 1.6;
+          color: #888;
+          margin: 0;
+        }
+
+        .fd-maint__intro-bg {
+          grid-column: 2;
+          grid-row: 1;
+          background: rgba(214, 210, 204, 0.12);
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: start;
+          height: calc(100vh - 120px - 2rem);
+          position: sticky;
+          top: 120px;
+          margin: 0 -50vw 0 0;
+        }
+
+        .fd-maint__intro-border {
+          grid-column: 2;
+          grid-row: 1;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-right: none;
+          border-radius: 8px 0 0 8px;
+          pointer-events: none;
+          align-self: start;
+          height: calc(100vh - 120px - 2rem);
+          position: sticky;
+          top: 120px;
+          margin: 0 -50vw 0 0;
+          z-index: 2;
+        }
+
+        .fd-maint__intro-gallery {
+          grid-column: 2;
+          grid-row: 1;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 6px;
+          z-index: 1;
+          padding: 1.5rem 3rem 0.75rem;
+        }
+
+        .fd-maint__scroll-gallery {
+          grid-column: 2;
+          grid-row: 1;
+          z-index: 1;
+          min-width: 0;
+        }
+
+        .fd-maint__scroll-sticky {
+          position: sticky;
+          top: 120px;
+          height: calc(100vh - 120px - 2rem);
+          display: flex;
+          gap: 0.5rem;
+          overflow: hidden;
+          border-radius: 8px 0 0 8px;
+          padding: 1rem 0;
+        }
+
+        .fd-maint__scroll-col {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          flex: 1;
+          overflow: hidden;
+        }
+
+        .fd-maint__scroll-col--up {
+          padding-left: 1rem;
+        }
+
+        .fd-maint__scroll-col--down {
+        }
+
+        @keyframes maintScrollUp {
+          0% { transform: translateY(0); }
+          100% { transform: translateY(-50%); }
+        }
+
+        @keyframes maintScrollDown {
+          0% { transform: translateY(-50%); }
+          100% { transform: translateY(0); }
+        }
+
+        .fd-maint__scroll-img {
+          flex: 1 1 0;
+          width: 100%;
+          min-height: 0;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+
+        .fd-maint__scroll-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.85;
+        }
+
+        .fd-maint__img-carousel {
+          grid-column: 1 / -1;
+          overflow: hidden;
+          padding: 0.5rem 0;
+        }
+        .fd-maint__img-track {
+          display: flex;
+        }
+        .fd-maint__img-track--reverse {
+          display: flex;
+        }
+        .fd-maint__img-set {
+          display: flex;
+          gap: 6px;
+          flex-shrink: 0;
+          padding-right: 6px;
+        }
+        .fd-maint__img-slide {
+          width: 160px;
+          height: 100px;
+          border-radius: 4px;
+          overflow: hidden;
+          flex-shrink: 0;
+        }
+        .fd-maint__img-slide img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        @keyframes fdMaintScroll {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes fdMaintScrollReverse {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+
+        /* ===== GALLERY FULLSCREEN OVERLAY ===== */
+        .fd-gallery-fs {
+          position: fixed;
+          inset: 0;
+          z-index: 10000;
+          background: #000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .fd-gallery-fs__img-wrap {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .fd-gallery-fs__img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          animation: fdGalleryFade 0.8s ease;
+        }
+        @keyframes fdGalleryFade {
+          from { opacity: 0; transform: scale(1.02); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .fd-gallery-fs__clock {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(3rem, 8vw, 8rem);
+          font-weight: 300;
+          color: #fff;
+          letter-spacing: 0.05em;
+          text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+          z-index: 2;
+          pointer-events: none;
+        }
+        .fd-gallery-fs__controls {
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          align-items: center;
+          gap: 1.5rem;
+          z-index: 3;
+        }
+        .fd-gallery-fs__controls button {
+          width: 40px;
+          height: 40px;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 50%;
+          background: rgba(0,0,0,0.3);
+          backdrop-filter: blur(8px);
+          color: #fff;
+          font-size: 1.2rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s;
+        }
+        .fd-gallery-fs__controls button:hover {
+          background: rgba(255,255,255,0.15);
+        }
+        .fd-gallery-fs__counter {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: rgba(255,255,255,0.6);
+          letter-spacing: 0.1em;
+        }
+        .fd-gallery-fs__close {
+          position: absolute;
+          top: 1.5rem;
+          right: 1.5rem;
+          width: 40px;
+          height: 40px;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 50%;
+          background: rgba(0,0,0,0.3);
+          backdrop-filter: blur(8px);
+          color: #fff;
+          font-size: 1.5rem;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 3;
+          transition: background 0.2s;
+        }
+        .fd-gallery-fs__close:hover {
+          background: rgba(255,255,255,0.15);
+        }
+        .fd-gallery-fs__clock-toggle {
+          position: absolute;
+          top: 1.5rem;
+          right: 4.5rem;
+          width: 40px;
+          height: 40px;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 50%;
+          background: rgba(0,0,0,0.3);
+          backdrop-filter: blur(8px);
+          color: #fff;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 3;
+          transition: background 0.2s;
+        }
+        .fd-gallery-fs__clock-toggle:hover {
+          background: rgba(255,255,255,0.15);
+        }
+
+        /* ===== MERGED MAINTENANCE PANEL ===== */
+        .fd-maint__merged {
+          margin: 1.5rem -2rem 0;
+          background: transparent;
+          padding: 1.5rem 0;
+        }
+        .fd-maint__merged-cols {
+          display: grid;
+          grid-template-columns: 3fr 2fr;
+          grid-template-rows: auto auto auto;
+          gap: 1rem 1.5rem;
+        }
+        .fd-maint__merged-left,
+        .fd-maint__merged-right {
+          grid-row: 1 / -1;
+          display: grid;
+          grid-template-rows: subgrid;
+        }
+        .fd-maint__services-card,
+        .fd-maint__team-card {
+          grid-row: 1 / -1;
+          display: grid;
+          grid-template-rows: subgrid;
+          background: #e8e4df;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 8px;
+          padding: 1.5rem;
+        }
+        .fd-maint__merged .mv12-crosshead {
+          grid-row: 1;
+          margin-bottom: 0;
+        }
+        .fd-maint__facility-card .mv12-crosshead {
+          margin-bottom: 1.25rem;
+        }
+        .fd-maint__merged .fd-maint__grid6 {
+          grid-row: 2 / 4;
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          grid-template-rows: subgrid;
+          gap: 1rem;
+        }
+        .fd-maint__merged .fd-maint__grid6-card {
+          padding: 1.25rem;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          border-radius: 8px;
+          text-align: center;
+          transition: border-color 0.2s;
+        }
+        .fd-maint__merged .fd-maint__grid6-card:hover { border-color: #1a1a1a; }
+        .fd-maint__merged .fd-maint__grid6-icon {
+          display: block;
+          font-size: 1.1rem;
+          color: #1a1a1a;
+          margin-bottom: 0.75rem;
+        }
+        .fd-maint__merged .fd-maint__grid6-card h4 {
+          font-size: 0.78rem;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          margin-bottom: 0.4rem;
+          color: #1a1a1a;
+        }
+        .fd-maint__merged .fd-maint__grid6-card p {
+          font-size: 0.7rem;
+          color: #7a7a7a;
+          margin: 0;
+          line-height: 1.4;
+        }
+        .fd-maint__facility-card {
+          background: #e8e4df;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 8px;
+          padding: 1.5rem 1.5rem 2.5rem;
+          margin-top: 1rem;
+        }
+        .fd-maint__team-photo {
+          grid-row: 2 / 4;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .fd-maint__team-photo img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+        }
+        .fd-maint__team-grid {
+          grid-row: 2 / 4;
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          grid-template-rows: subgrid;
+          gap: 1rem;
+        }
+        .fd-maint__team-member {
+          padding: 1.25rem;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          border-radius: 8px;
+          text-align: center;
+          transition: border-color 0.2s;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 0.25rem;
+        }
+        .fd-maint__team-member:hover { border-color: #1a1a1a; }
+        .fd-maint__team-carousel {
+          position: relative;
+        }
+        .fd-maint__team-chevron {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          font-size: 1.2rem;
+          color: #aaa;
+          cursor: pointer;
+          padding: 0.25rem;
+          line-height: 1;
+          transition: color 0.2s;
+        }
+        .fd-maint__team-chevron:hover { color: #1a1a1a; }
+        .fd-maint__team-chevron--left { left: 0.25rem; }
+        .fd-maint__team-chevron--right { right: 0.25rem; }
+        .fd-maint__team-dots {
+          display: flex;
+          gap: 0.3rem;
+          margin-top: 0.25rem;
+        }
+        .fd-maint__team-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background: #d4d4d4;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .fd-maint__team-dot--active { background: #1a1a1a; }
+        .fd-maint__team-member strong {
+          display: block;
+          font-size: 0.78rem;
+        }
+        .fd-maint__team-member span {
+          font-size: 0.6rem;
+          color: #7a7a7a;
+          line-height: 1.15;
+        }
+        .fd-maint__merged .mv12-portraits__circle {
+          width: 56px;
+          height: 64px;
+          border-radius: 4px;
+          background: #1a1a1a;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.75rem;
+          margin: 0;
+        }
+        .fd-maint__facility-carousel {
+          position: relative;
+          overflow: hidden;
+          border-radius: 8px;
+        }
+        .fd-maint__facility-track {
+          display: flex;
+          transition: transform 0.4s ease;
+        }
+        .fd-maint__facility-slide {
+          flex: 0 0 100%;
+          text-align: center;
+        }
+        .fd-maint__facility-images {
+          display: grid;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 0.5rem;
+          margin-bottom: 0.75rem;
+          justify-content: center;
+          align-items: center;
+        }
+        .fd-maint__facility-img {
+          height: 160px;
+          background: #fff;
+          border-radius: 6px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1.5rem;
+          color: #7a7a7a;
+          overflow: hidden;
+        }
+        .fd-maint__facility-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .fd-maint__facility-slide span {
+          font-size: 0.7rem;
+          color: #7a7a7a;
+          font-family: 'Share Tech Mono', monospace;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        .fd-maint__facility-chevron {
+          position: absolute;
+          top: 80px;
+          transform: translateY(-50%);
+          z-index: 2;
+          width: 36px;
+          height: 36px;
+          border: none;
+          border-radius: 0;
+          background: rgba(0,0,0,0.04);
+          backdrop-filter: blur(4px);
+          font-size: 0.9rem;
+          font-weight: 300;
+          color: #666;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s, color 0.2s;
+        }
+        .fd-maint__facility-chevron:hover {
+          background: rgba(0,0,0,0.08);
+          color: #1a1a1a;
+        }
+        .fd-maint__facility-chevron--left { left: 0; border-radius: 0 4px 4px 0; }
+        .fd-maint__facility-chevron--right { right: 0; border-radius: 4px 0 0 4px; }
+        .fd-maint__facility-dots {
+          display: flex;
+          justify-content: center;
+          gap: 6px;
+          margin-top: 0.75rem;
+        }
+        .fd-maint__facility-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(0,0,0,0.15);
+          cursor: pointer;
+          padding: 0;
+          transition: background 0.2s;
+        }
+        .fd-maint__facility-dot--active {
+          background: rgba(0,0,0,0.5);
+        }
+        .mv12-crosshead {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #7a7a7a;
+          margin-bottom: 1.5rem;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        .mv12-crosshead::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: #e8e6e2;
+        }
+        .fd-maint__merged .mv12-crosshead::before,
+        .fd-maint__merged .mv12-crosshead::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: rgba(0,0,0,0.15);
+        }
+        @media (max-width: 768px) {
+          .fd-maint__merged-cols { grid-template-columns: 1fr; }
+          .fd-maint__merged-left { padding-right: 0; }
+          .fd-maint__merged .fd-maint__grid6 { grid-template-columns: repeat(2, 1fr); }
+          .fd-maint__team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 550px) {
+          .fd-maint__actions {
+            flex-direction: column;
+            align-items: center;
+          }
+          .fd-maint__btn {
+            width: 100%;
+            max-width: 280px;
+          }
+        }
+        @media (max-width: 480px) {
+          .fd-maint__merged .fd-maint__grid6 { grid-template-columns: 1fr; }
         }
 
         /* ===== MAINTENANCE V7 — Image Overlay ===== */
@@ -4975,17 +8051,31 @@ function Experimentation() {
         }
 
         /* ===== MAINTENANCE V10 — Card Grid ===== */
+        .fd-maint__grid6-wrap {
+          background: #e8e4df;
+          color: #1a1a1a;
+          border-top: 1px solid rgba(0, 0, 0, 0.12);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+          padding: 3rem 2rem;
+          margin-top: 3rem;
+          margin-left: -2rem;
+          margin-right: -2rem;
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
         .fd-maint__grid6 {
+          max-width: 1200px;
+          margin: 0 auto;
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 1rem;
-          margin: 1.5rem 0;
         }
 
         .fd-maint__grid6-card {
           padding: 1.25rem;
           background: #fff;
-          border: 1px solid #e8e6e2;
+          border: 1px solid rgba(0, 0, 0, 0.12);
+          border-radius: 8px;
           text-align: center;
           transition: border-color 0.2s;
         }
@@ -5073,6 +8163,7 @@ function Experimentation() {
         /* ===== PARALLAX SECTIONS ===== */
         .parallax-section {
           position: relative;
+          z-index: 2;
           height: 260px;
           overflow: hidden;
           display: flex;
@@ -5124,7 +8215,7 @@ function Experimentation() {
 
         .parallax-section__title {
           font-family: 'Space Grotesk', sans-serif;
-          font-size: clamp(4rem, 12vw, 9rem);
+          font-size: clamp(2rem, 10vw, 9rem);
           font-weight: 700;
           text-transform: uppercase;
           margin: 0 0 1rem;
@@ -5134,6 +8225,7 @@ function Experimentation() {
           opacity: 0.7;
           -webkit-text-stroke: 2px #888;
           paint-order: stroke fill;
+          white-space: nowrap;
         }
 
         .parallax-section__text {
@@ -5173,20 +8265,163 @@ function Experimentation() {
         /* ===== SCROLLING STRIPS WRAPPER ===== */
         .scrolling-strips-wrapper {
           position: relative;
-          overflow: visible;
+          margin-bottom: -100vh;
+          z-index: 0;
+          background: #faf9f6;
         }
 
         .scrolling-strips-spacer {
-          height: 100px;
+          height: 200vh;
           pointer-events: none;
+        }
+
+        /* Background texture — scrolls behind sticky strips */
+        .scrolling-strips-bg {
+          position: absolute;
+          inset: 0;
+          pointer-events: none;
+          overflow: hidden;
+        }
+        .scrolling-strips-bg__num {
+          position: absolute;
+          font-family: 'Space Grotesk', sans-serif;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.03);
+          line-height: 1;
+        }
+        .scrolling-strips-bg__num--1 {
+          font-size: clamp(8rem, 20vw, 18rem);
+          top: 4%;
+          left: -2%;
+          transform: rotate(-4deg);
+        }
+        .scrolling-strips-bg__num--2 {
+          font-size: clamp(6rem, 16vw, 14rem);
+          top: 12%;
+          right: 5%;
+          transform: rotate(2deg);
+        }
+        .scrolling-strips-bg__num--3 {
+          font-size: clamp(5rem, 12vw, 10rem);
+          top: 30%;
+          left: 8%;
+          transform: rotate(-2deg);
+        }
+        .scrolling-strips-bg__num--4 {
+          font-size: clamp(4rem, 10vw, 8rem);
+          top: 35%;
+          right: 12%;
+          transform: rotate(5deg);
+        }
+        .scrolling-strips-bg__num--5 {
+          font-size: clamp(7rem, 18vw, 15rem);
+          top: 55%;
+          left: -1%;
+          transform: rotate(3deg);
+        }
+        .scrolling-strips-bg__num--6 {
+          font-size: clamp(5rem, 14vw, 11rem);
+          top: 60%;
+          right: 2%;
+          transform: rotate(-3deg);
+        }
+        .scrolling-strips-bg__num--7 {
+          font-size: clamp(6rem, 15vw, 12rem);
+          top: 78%;
+          left: 10%;
+          transform: rotate(-5deg);
+        }
+        .scrolling-strips-bg__num--8 {
+          font-size: clamp(4rem, 11vw, 9rem);
+          top: 85%;
+          right: 8%;
+          transform: rotate(2deg);
+        }
+        .scrolling-strips-bg__grid {
+          position: absolute;
+          inset: 0;
+          background-image:
+            linear-gradient(rgba(0,0,0,0.04) 2.5px, transparent 2.5px),
+            linear-gradient(90deg, rgba(0,0,0,0.04) 2.5px, transparent 2.5px);
+          background-size: 140px 140px;
+          -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%);
+          mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,1) 15%, rgba(0,0,0,1) 85%, transparent 100%);
+        }
+        .scrolling-strips-bg__cross {
+          position: absolute;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 1.5rem;
+          color: rgba(0,0,0,0.04);
+          line-height: 1;
+        }
+        .scrolling-strips-bg__cross--1 {
+          top: 160px;
+          left: 240px;
+          transform: translate(-50%, -50%);
+        }
+        .scrolling-strips-bg__cross--2 {
+          top: 320px;
+          left: 560px;
+          transform: translate(-50%, -50%);
+        }
+        .scrolling-strips-bg__cross--3 {
+          top: 480px;
+          left: 160px;
+          transform: translate(-50%, -50%);
+        }
+        .scrolling-strips-bg__cross--4 {
+          top: 65%;
+          left: 70%;
+          transform: translate(-50%, -50%);
+        }
+        .scrolling-strips-bg__cross--5 {
+          top: 82%;
+          left: 40%;
+          transform: translate(-50%, -50%);
+        }
+        .scrolling-strips-bg__label {
+          position: absolute;
+          font-family: 'Share Tech Mono', monospace;
+          letter-spacing: 0.2em;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.035);
+        }
+        .scrolling-strips-bg__label--1 {
+          font-size: 0.65rem;
+          top: 40%;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .scrolling-strips-bg__label--2 {
+          font-size: 0.55rem;
+          top: 25%;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+        .scrolling-strips-bg__label--3 {
+          font-size: 0.6rem;
+          top: 55%;
+          left: 20%;
+        }
+        .scrolling-strips-bg__label--4 {
+          font-size: 0.6rem;
+          top: 75%;
+          right: 15%;
+          left: auto;
+        }
+        .scrolling-strips-bg__label--5 {
+          font-size: 0.55rem;
+          top: 90%;
+          left: 45%;
         }
 
 
         /* ===== SCROLL REVEAL ANIMATION ===== */
         .reveal-element {
           opacity: 0;
-          transform: translateY(80px) scale(0.95);
-          transition: opacity 1s ease, transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+          transform: translateY(30px) scale(0.98);
+          transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .reveal-element.visible {
@@ -6142,8 +9377,15 @@ function Experimentation() {
           letter-spacing: 0.15em;
           color: #7a7a7a;
           margin-bottom: 1.5rem;
-          padding-bottom: 0.5rem;
-          border-bottom: 1px solid #e8e6e2;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+        }
+        .mv12-crosshead::before {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: #e8e6e2;
         }
 
         /* Cover */
@@ -6299,6 +9541,7 @@ function Experimentation() {
 
         /* Portraits */
         .mv12-portraits {
+          margin-top: 3rem;
           margin-bottom: 2.5rem;
         }
         .mv12-portraits__row {
@@ -7490,7 +10733,7 @@ function Experimentation() {
 
         .fd-sales__actions {
           display: flex;
-          justify-content: flex-start;
+          justify-content: flex-end;
           gap: 0.75rem;
           margin: 0.75rem 0 0;
         }
@@ -7499,6 +10742,7 @@ function Experimentation() {
           display: inline-flex;
           align-items: center;
           justify-content: center;
+          width: calc((100% - 4.5rem) / 4);
           padding: 0.65rem 1.4rem;
           font-size: 0.65rem;
           font-weight: 600;
@@ -7506,6 +10750,7 @@ function Experimentation() {
           letter-spacing: 0.08em;
           text-decoration: none;
           transition: all 0.3s ease;
+          white-space: nowrap;
         }
 
         .fd-sales__btn--primary {
@@ -7516,6 +10761,7 @@ function Experimentation() {
 
         .fd-sales__btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fd-sales__btn--outline {
@@ -7818,8 +11064,784 @@ function Experimentation() {
           .mv14-beforeafter__arrow { transform: rotate(90deg); text-align: center; }
           .mv14-beforeafter__steps { gap: 0.35rem; }
           .mv14-beforeafter__step { padding: 0.4rem 0.75rem; }
+          .fd-sales__intro { grid-template-columns: 1fr; }
+          .fd-sales__left { padding: 0 1.5rem; }
+          .fd-sales__header-sticky { position: static; text-align: center; padding: 2rem 0; }
+          .fd-sales__dealer-catch { position: static; transition: none; transform: none !important; }
+          .fd-maint__intro { grid-template-columns: 1fr; }
+          .fd-maint__left { padding: 0 1.5rem; }
+          .fd-maint__header-sticky { position: static; text-align: center; padding: 2rem 0; }
+          .fd-maint__service-catch { position: static; transition: none; transform: none !important; }
+          .fd-maint__intro-bg, .fd-maint__intro-border { display: none; }
+          .fd-maint__intro-gallery { grid-column: 1; grid-row: auto; padding: 0 1.5rem 1.5rem; }
+          .fd-maint__scroll-gallery { grid-column: 1; grid-row: auto; border-radius: 0; }
+          .fd-maint__scroll-sticky { position: static; height: auto; }
+          .fd-maint__scroll-img { width: 160px; height: 120px; }
+          .fd-sales__text { margin: 0 auto; }
+          .fd-sales__header-divider { margin: 1.5rem auto 0; }
+          .fd-sales__intro-bg, .fd-sales__intro-border { display: none; }
+          .fd-sales__intro-gallery { grid-column: 1; grid-row: auto; padding: 0 1.5rem 1.5rem; }
           .fd-sales__actions { flex-direction: column; align-items: center; }
           .fd-sales__btn { width: 100%; max-width: 340px; text-align: center; }
+        }
+
+        /* =================================================================
+           REBUILD PORTFOLIO OPTIONS 3–6
+        ================================================================= */
+
+        /* Option 3: Portfolio Grid */
+        .rb-portfolio-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1.25rem;
+        }
+        .rb-portfolio-card {
+          border: 1px solid #e8e6e2;
+          background: #fff;
+          overflow: hidden;
+          transition: box-shadow 0.3s ease;
+        }
+        .rb-portfolio-card:hover {
+          box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        .rb-portfolio-card__img {
+          position: relative;
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+          background: #f5f4f1;
+        }
+        .rb-portfolio-card__img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .rb-portfolio-card__badge {
+          position: absolute;
+          top: 0.75rem;
+          left: 0.75rem;
+          background: #1a1a1a;
+          color: #fff;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          padding: 0.3rem 0.6rem;
+        }
+        .rb-portfolio-card__body {
+          padding: 1rem 1.25rem 1.25rem;
+        }
+        .rb-portfolio-card__header {
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          margin-bottom: 0.5rem;
+        }
+        .rb-portfolio-card__header strong {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+        .rb-portfolio-card__reg {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #999;
+          letter-spacing: 0.05em;
+        }
+        .rb-portfolio-card__scope {
+          font-size: 0.75rem;
+          line-height: 1.6;
+          color: #4a4a4a;
+          margin: 0 0 0.75rem;
+        }
+        .rb-portfolio-card__meta {
+          display: flex;
+          gap: 1.25rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #7a7a7a;
+          letter-spacing: 0.05em;
+        }
+        .rb-portfolio-card__meta i {
+          margin-right: 0.3rem;
+          font-size: 0.55rem;
+        }
+
+        /* Option 4: Intro Text + Strip */
+        .rb-stats {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        .rb-stats--card {
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          padding: 2rem 2rem 1.5rem;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .rb-stats__intro {
+          max-width: 540px;
+        }
+        .rb-stats__heading {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.1rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 0.6rem;
+        }
+        .rb-stats__text {
+          font-size: 0.78rem;
+          line-height: 1.7;
+          color: #4a4a4a;
+          margin: 0;
+        }
+        .rb-stats__strip-wrap {
+          position: relative;
+        }
+        .rb-stats__strip {
+          display: flex;
+          gap: 1rem;
+          overflow-x: auto;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .rb-stats__strip::-webkit-scrollbar {
+          display: none;
+        }
+        .rb-stats__chevron {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          z-index: 2;
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+          transition: all 0.2s;
+          color: #1a1a1a;
+          font-size: 0.7rem;
+        }
+        .rb-stats__chevron:hover {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
+        }
+        .rb-stats__chevron--left {
+          left: -18px;
+        }
+        .rb-stats__chevron--right {
+          right: -18px;
+        }
+        .rb-stats__strip-card {
+          flex: 0 0 calc((100% - 3rem) / 4);
+          border: 1px solid #e8e6e2;
+          border-radius: 6px;
+          background: #fff;
+          overflow: hidden;
+        }
+        .rb-stats__strip-gallery {
+          position: relative;
+          overflow: hidden;
+        }
+        .rb-stats__strip-gallery img {
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          object-fit: cover;
+          display: block;
+          background: #f5f4f1;
+        }
+        .rb-stats__strip-nav {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.85);
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.2s;
+          z-index: 2;
+        }
+        .rb-stats__strip-nav i {
+          font-size: 0.5rem;
+          color: #1a1a1a;
+        }
+        .rb-stats__strip-nav--prev { left: 6px; }
+        .rb-stats__strip-nav--next { right: 6px; }
+        .rb-stats__strip-card:hover .rb-stats__strip-nav,
+        .fd-sales__sold-card:hover .rb-stats__strip-nav {
+          opacity: 1;
+        }
+        .rb-stats__strip-nav:hover {
+          background: #fff;
+        }
+        .rb-stats__strip-dots {
+          position: absolute;
+          bottom: 8px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          gap: 5px;
+          z-index: 2;
+        }
+        .rb-stats__strip-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.45);
+          border: 1px solid rgba(255,255,255,0.7);
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .rb-stats__strip-dot--active {
+          background: #fff;
+        }
+        .rb-stats__strip-info {
+          padding: 0.75rem 1rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.2rem;
+        }
+        .rb-stats__strip-info strong {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+        .rb-stats__strip-info span {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #7a7a7a;
+          letter-spacing: 0.05em;
+        }
+        .rb-stats__strip-cta {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 0.6rem 1rem;
+          border-top: 1px solid #e8e6e2;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #999;
+          background: #faf9f6;
+          transition: all 0.25s ease;
+        }
+        .rb-stats__strip-cta i {
+          font-size: 0.5rem;
+          transition: transform 0.25s ease;
+        }
+        .rb-stats__strip-card:hover .rb-stats__strip-cta {
+          background: #1a1a1a;
+          color: #fff;
+          border-color: #1a1a1a;
+        }
+        .rb-stats__strip-card:hover .rb-stats__strip-cta i {
+          transform: translateX(3px);
+        }
+
+        /* Option 5: Featured Rebuild */
+        .rb-featured {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+        }
+        .rb-featured__hero {
+          display: grid;
+          grid-template-columns: 1.4fr 1fr;
+          gap: 2rem;
+          border: 1px solid #e8e6e2;
+          background: #fff;
+          overflow: hidden;
+        }
+        .rb-featured__hero-img {
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+          background: #f5f4f1;
+        }
+        .rb-featured__hero-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .rb-featured__hero-info {
+          padding: 2rem 2rem 2rem 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .rb-featured__overline {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #7a7a7a;
+          margin-bottom: 0.75rem;
+        }
+        .rb-featured__hero-info h4 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.4rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 0.5rem;
+        }
+        .rb-featured__reg {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #999;
+          letter-spacing: 0.05em;
+          margin-bottom: 1rem;
+        }
+        .rb-featured__hero-info p {
+          font-size: 0.78rem;
+          line-height: 1.7;
+          color: #4a4a4a;
+          margin: 0 0 1rem;
+        }
+        .rb-featured__duration {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #7a7a7a;
+          letter-spacing: 0.05em;
+        }
+        .rb-featured__duration i {
+          margin-right: 0.4rem;
+        }
+        .rb-featured__thumbs {
+          display: flex;
+          gap: 0.75rem;
+        }
+        .rb-featured__thumb {
+          flex: 1;
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          padding: 0;
+          cursor: pointer;
+          overflow: hidden;
+          transition: border-color 0.2s ease;
+          display: flex;
+          flex-direction: column;
+        }
+        .rb-featured__thumb:hover {
+          border-color: #ccc;
+        }
+        .rb-featured__thumb--active {
+          border-color: #1a1a1a;
+        }
+        .rb-featured__thumb img {
+          width: 100%;
+          aspect-ratio: 16 / 10;
+          object-fit: cover;
+          display: block;
+          background: #f5f4f1;
+        }
+        .rb-featured__thumb span {
+          display: block;
+          padding: 0.5rem 0.75rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #7a7a7a;
+          letter-spacing: 0.05em;
+          text-align: center;
+        }
+        .rb-featured__thumb--active span {
+          color: #1a1a1a;
+        }
+
+        /* Option 6: Minimal List */
+        .rb-list {
+          display: flex;
+          flex-direction: column;
+        }
+        .rb-list__item {
+          display: grid;
+          grid-template-columns: 2.5rem 80px 1fr 1.5fr auto;
+          gap: 1.25rem;
+          align-items: center;
+          padding: 1.25rem 0;
+          border-bottom: 1px solid #e8e6e2;
+        }
+        .rb-list__item:first-child {
+          border-top: 1px solid #e8e6e2;
+        }
+        .rb-list__num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.7rem;
+          color: #ccc;
+          letter-spacing: 0.05em;
+        }
+        .rb-list__img {
+          width: 80px;
+          aspect-ratio: 4 / 3;
+          overflow: hidden;
+          background: #f5f4f1;
+          border: 1px solid #e8e6e2;
+        }
+        .rb-list__img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        .rb-list__info {
+          display: flex;
+          flex-direction: column;
+          gap: 0.15rem;
+        }
+        .rb-list__info strong {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.82rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+        .rb-list__reg {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #999;
+          letter-spacing: 0.05em;
+        }
+        .rb-list__scope {
+          font-size: 0.75rem;
+          color: #4a4a4a;
+          line-height: 1.5;
+          margin: 0;
+        }
+        .rb-list__duration {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #7a7a7a;
+          letter-spacing: 0.05em;
+          white-space: nowrap;
+        }
+
+        /* =========================================================
+           REBUILD SHOWCASE — Full-screen editorial takeover
+        ========================================================= */
+        .rb-showcase {
+          background: #faf9f6;
+          border: 1px solid #e8e6e2;
+          animation: rbShowcaseIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes rbShowcaseIn {
+          from { opacity: 0; transform: translateY(8px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        .rb-showcase__inner {
+          display: flex;
+          flex-direction: column;
+        }
+
+        /* Top bar */
+        .rb-showcase__topbar {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.6rem 1.5rem;
+          border-bottom: 1px solid #e8e6e2;
+          flex-shrink: 0;
+        }
+        .rb-showcase__topbar-left,
+        .rb-showcase__topbar-center {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #999;
+        }
+        .rb-showcase__topbar-center {
+          color: #7a7a7a;
+        }
+        .rb-showcase__counter {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          letter-spacing: 0.08em;
+          color: #1a1a1a;
+        }
+        .rb-showcase__close {
+          background: none;
+          border: 1px solid #e8e6e2;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          padding: 0.35rem 1rem;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+        .rb-showcase__close:hover {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
+        }
+
+        /* Main content — split */
+        .rb-showcase__content {
+          display: grid;
+          grid-template-columns: 1.2fr 1fr;
+          flex: 1;
+          min-height: 0;
+        }
+
+        /* Left — Gallery */
+        .rb-showcase__gallery {
+          padding: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+        .rb-showcase__hero-img {
+          position: relative;
+          min-height: 300px;
+          max-height: 400px;
+          overflow: hidden;
+          background: #eeedeb;
+          cursor: pointer;
+        }
+        .rb-showcase__hero-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .rb-showcase__hero-img:hover img {
+          transform: scale(1.04);
+        }
+        .rb-showcase__img-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.3s;
+        }
+        .rb-showcase__img-overlay i {
+          color: #fff;
+          font-size: 1.2rem;
+          opacity: 0;
+          transform: scale(0.8);
+          transition: all 0.3s;
+        }
+        .rb-showcase__hero-img:hover .rb-showcase__img-overlay {
+          background: rgba(0,0,0,0.15);
+        }
+        .rb-showcase__hero-img:hover .rb-showcase__img-overlay i {
+          opacity: 1;
+          transform: scale(1);
+        }
+        .rb-showcase__thumbs {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0.4rem;
+          flex-shrink: 0;
+        }
+        .rb-showcase__thumb {
+          background: none;
+          border: none;
+          padding: 0;
+          cursor: pointer;
+          overflow: hidden;
+          aspect-ratio: 16 / 10;
+          position: relative;
+        }
+        .rb-showcase__thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.4s ease;
+        }
+        .rb-showcase__thumb:hover img {
+          transform: scale(1.06);
+        }
+
+        /* Right — Info */
+        .rb-showcase__info {
+          padding: 1.5rem 1.75rem;
+          border-left: 1px solid #e8e6e2;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+        .rb-showcase__overline {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: #999;
+          margin-bottom: 0.5rem;
+        }
+        .rb-showcase__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+          font-weight: 700;
+          color: #1a1a1a;
+          margin: 0 0 0.2rem;
+          line-height: 1.1;
+        }
+        .rb-showcase__reg {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #999;
+          letter-spacing: 0.08em;
+        }
+        .rb-showcase__divider {
+          width: 30px;
+          height: 1px;
+          background: #ddd9d3;
+          margin: 1rem 0;
+        }
+        .rb-showcase__desc {
+          font-size: 0.78rem;
+          line-height: 1.7;
+          color: #4a4a4a;
+          margin: 0 0 1rem;
+          max-width: 420px;
+        }
+        .rb-showcase__spec {
+          display: flex;
+          gap: 2.5rem;
+        }
+        .rb-showcase__spec-item {
+          display: flex;
+          flex-direction: column;
+          gap: 0.25rem;
+        }
+        .rb-showcase__spec-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: #999;
+        }
+        .rb-showcase__spec-value {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+        .rb-showcase__tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.4rem;
+        }
+        .rb-showcase__tag {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          letter-spacing: 0.06em;
+          color: #4a4a4a;
+          border: 1px solid #e8e6e2;
+          padding: 0.4rem 0.85rem;
+          background: #fff;
+        }
+
+        /* Bottom nav */
+        .rb-showcase__nav {
+          display: flex;
+          border-top: 1px solid #e8e6e2;
+          flex-shrink: 0;
+        }
+        .rb-showcase__nav-btn {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.7rem 1.5rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          transition: background 0.2s;
+          font-family: 'Share Tech Mono', monospace;
+        }
+        .rb-showcase__nav-btn:first-child {
+          border-right: 1px solid #e8e6e2;
+        }
+        .rb-showcase__nav-btn--next {
+          justify-content: flex-end;
+        }
+        .rb-showcase__nav-btn:hover:not(:disabled) {
+          background: #fff;
+        }
+        .rb-showcase__nav-btn:disabled {
+          opacity: 0.25;
+          cursor: not-allowed;
+        }
+        .rb-showcase__nav-arrow {
+          font-size: 1.1rem;
+          color: #1a1a1a;
+        }
+        .rb-showcase__nav-label {
+          font-size: 0.7rem;
+          letter-spacing: 0.05em;
+          color: #7a7a7a;
+        }
+
+        /* Image Lightbox */
+        .rb-lightbox {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.95);
+          z-index: 9500;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          animation: rbLightboxIn 0.25s ease;
+        }
+        @keyframes rbLightboxIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .rb-lightbox__img {
+          max-width: 90vw;
+          max-height: 90vh;
+          object-fit: contain;
+        }
+
+        /* Strip card hover */
+        .rb-stats__strip-card {
+          transition: all 0.25s ease;
+        }
+        .rb-stats__strip-card:hover {
+          box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+          border-color: #ccc;
+        }
+
+        /* Responsive — Showcase */
+        @media (max-width: 900px) {
+          .rb-showcase__content { grid-template-columns: 1fr; }
+          .rb-showcase__info { border-left: none; border-top: 1px solid #e8e6e2; padding: 2rem; }
+          .rb-showcase__gallery { padding: 2rem; }
+          .rb-showcase__topbar { padding: 1rem 1.5rem; }
+          .rb-showcase__topbar-center { display: none; }
+          .rb-showcase__nav-btn { padding: 1rem 1.5rem; }
+        }
+
+        /* Responsive — Options 3–6 + Modal */
+        @media (max-width: 768px) {
+          .rb-portfolio-grid { grid-template-columns: 1fr; }
+          .rb-stats__intro { max-width: 100%; }
+          .rb-featured__hero { grid-template-columns: 1fr; }
+          .rb-featured__hero-info { padding: 1.5rem; }
+          .rb-featured__thumbs { flex-wrap: wrap; }
+          .rb-featured__thumb { flex: 0 0 calc(50% - 0.375rem); }
+          .rb-list__item { grid-template-columns: 2rem 60px 1fr; gap: 0.75rem; }
+          .rb-list__scope,
+          .rb-list__duration { display: none; }
+          .rb-showcase__content { grid-template-columns: 1fr; }
         }
 
 
@@ -8160,15 +12182,15 @@ function Experimentation() {
           cursor: pointer;
           transition: all 0.3s ease;
           border: 1.5px solid rgba(0, 0, 0, 0.1);
-          box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+          box-shadow: none;
         }
-        .cert-cloud__card:hover { box-shadow: 0 12px 50px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.06); border-color: rgba(0, 0, 0, 0.15); }
+        .cert-cloud__card:hover { box-shadow: none; }
 
         .cert-cloud__dots {
           position: absolute; inset: 0;
           background-image: radial-gradient(circle, rgba(0, 0, 0, 0.04) 2px, transparent 2px);
           background-size: 22px 22px; pointer-events: none; z-index: 0;
-          clip-path: polygon(100% 0, 55% 194px, 0% 194px, 0% 236px, 100% 236px);
+          clip-path: polygon(100% 0, 55% 194px, 0% 194px, 0% calc(100% - 16px), 100% calc(100% - 16px));
         }
 
         .cert-cloud__split { position: relative; display: flex; min-height: 140px; z-index: 1; }
@@ -8179,10 +12201,14 @@ function Experimentation() {
           clip-path: polygon(0 0, 100% 0, 55% 100%, 0 100%);
         }
 
-        .cert-cloud__lower { position: absolute; right: 2rem; top: 65%; transform: translateY(-50%); text-align: right; }
+        .cert-cloud__lower { position: absolute; right: 2rem; top: 65%; transform: translateY(-50%); text-align: right; display: flex; align-items: center; gap: 0.4rem; }
 
         .cert-cloud__logo { height: 130px; width: auto; }
 
+        .cert-cloud__guimbal-amp {
+          display: inline-block; font-family: 'Space Grotesk', sans-serif; font-size: 1.1rem;
+          font-weight: 300; color: rgba(0, 0, 0, 0.2); margin-right: 0.3rem;
+        }
         .cert-cloud__guimbal-name {
           display: block; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
           font-weight: 700; color: rgba(0, 0, 0, 0.3); letter-spacing: 0.15em; text-transform: uppercase;
@@ -8233,6 +12259,1153 @@ function Experimentation() {
           font-size: 0.6rem; font-weight: 600; color: rgba(0, 0, 0, 0.6);
           padding: 0.3rem 0.75rem; border-radius: 20px; background: rgba(0, 0, 0, 0.04); border: 1px solid rgba(0, 0, 0, 0.08);
         }
+
+        /* ===== LATEST FROM HQ BLOG SECTION ===== */
+        .lhq__header {
+          display: flex; align-items: center; gap: 1.5rem; margin-bottom: 0.75rem;
+        }
+        .lhq__header-line {
+          flex: 1; height: 1px; background: #d4d0ca;
+        }
+        .lhq__title {
+          font-family: 'Space Grotesk', sans-serif; font-size: 1.8rem; font-weight: 700;
+          color: #1a1a1a; white-space: nowrap; letter-spacing: -0.02em;
+        }
+        .lhq__subtitle {
+          text-align: center; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+          text-transform: uppercase; letter-spacing: 0.15em; color: rgba(0,0,0,0.4); margin-bottom: 2.5rem;
+        }
+
+        /* Persona Cards */
+        .lhq__personas {
+          display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px;
+          background: #d4d0ca; border: 1px solid #d4d0ca; margin-bottom: 1.5rem;
+        }
+        .lhq__persona {
+          all: unset; cursor: pointer; display: flex; flex-direction: column; align-items: flex-start;
+          padding: 1.25rem 1.5rem; background: #faf9f6; transition: all 0.25s ease;
+          box-sizing: border-box;
+        }
+        .lhq__persona:hover { background: #f5f4f1; }
+        .lhq__persona--active {
+          background: #1a1a1a !important; color: #fff;
+        }
+        .lhq__persona--active .lhq__persona-icon,
+        .lhq__persona--active .lhq__persona-subtitle { color: rgba(255,255,255,0.5); }
+        .lhq__persona--active .lhq__persona-headline { color: #fff; }
+        .lhq__persona-icon {
+          font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+          color: rgba(0,0,0,0.25); margin-bottom: 0.75rem; letter-spacing: 0.1em;
+        }
+        .lhq__persona-headline {
+          font-family: 'Space Grotesk', sans-serif; font-size: 1rem; font-weight: 600;
+          color: #1a1a1a; margin-bottom: 0.25rem;
+        }
+        .lhq__persona-subtitle {
+          font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+          color: rgba(0,0,0,0.4); letter-spacing: 0.02em;
+        }
+
+        /* Category Pills */
+        /* Sort Toggle Bar */
+        .lhq__sort-bar {
+          display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+        }
+        .lhq__sort-toggle {
+          position: relative; display: inline-flex; background: #f0efec;
+          border: 1px solid #d4d0ca; overflow: hidden; box-sizing: border-box;
+        }
+        .lhq__sort-btn {
+          all: unset; cursor: pointer; position: relative; z-index: 1;
+          font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+          text-transform: uppercase; letter-spacing: 0.1em;
+          padding: 0.5rem 1.25rem; transition: color 0.25s ease, background 0.25s ease;
+          color: rgba(0,0,0,0.45); background: transparent;
+          flex: 1; text-align: center;
+        }
+        .lhq__sort-btn--active { color: #fff; background: #1a1a1a; }
+        .lhq__sort-count {
+          font-family: 'Share Tech Mono', monospace; font-size: 0.6rem;
+          color: rgba(0,0,0,0.3); letter-spacing: 0.06em; margin-left: auto; white-space: nowrap;
+        }
+
+        /* Search */
+        .lhq__search-wrap {
+          position: relative; display: flex; align-items: center; flex: 1; max-width: 280px;
+        }
+        .lhq__search-icon {
+          position: absolute; left: 0.75rem; width: 14px; height: 14px;
+          color: rgba(0,0,0,0.3); pointer-events: none;
+        }
+        .lhq__search {
+          width: 100%; border: 1px solid #d4d0ca; background: transparent;
+          font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+          padding: 0.5rem 2rem 0.5rem 2.25rem; outline: none;
+          letter-spacing: 0.04em; color: #1a1a1a;
+          transition: border-color 0.2s;
+        }
+        .lhq__search::placeholder { color: rgba(0,0,0,0.3); }
+        .lhq__search:focus { border-color: #1a1a1a; }
+        .lhq__search-clear {
+          all: unset; cursor: pointer; position: absolute; right: 0.6rem;
+          font-size: 1rem; color: rgba(0,0,0,0.35); line-height: 1;
+          transition: color 0.2s;
+        }
+        .lhq__search-clear:hover { color: #1a1a1a; }
+
+        /* Post List */
+        .lhq__list {
+          display: flex; flex-direction: column; background: #d4d0ca; gap: 1px;
+          border: 1px solid #e8e6e2; margin-bottom: 2rem;
+        }
+
+        /* Compact Card */
+        .lhq__compact {
+          display: flex; gap: 1rem; background: #faf9f6;
+          text-decoration: none; color: inherit; padding: 1rem 1.25rem;
+          transition: background 0.2s;
+        }
+        .lhq__compact:hover { background: #f9f8f5; }
+        .lhq__compact-img-wrap {
+          position: relative; flex-shrink: 0;
+        }
+        .lhq__compact-img {
+          width: 80px; height: 80px; object-fit: cover; display: block;
+        }
+        .lhq__rank {
+          position: absolute; top: 0; left: 0;
+          background: #1a1a1a; color: #fff;
+          font-family: 'Share Tech Mono', monospace; font-size: 0.55rem;
+          letter-spacing: 0.05em; padding: 0.2rem 0.45rem;
+          line-height: 1;
+        }
+        .lhq__compact-body {
+          display: flex; flex-direction: column; justify-content: center; min-width: 0;
+        }
+        .lhq__cat-label {
+          font-family: 'Share Tech Mono', monospace; font-size: 0.55rem;
+          text-transform: uppercase; letter-spacing: 0.12em; color: rgba(0,0,0,0.4);
+          margin-bottom: 0.25rem;
+        }
+        .lhq__compact-title {
+          font-family: 'Space Grotesk', sans-serif; font-size: 0.88rem; font-weight: 600;
+          color: #1a1a1a; line-height: 1.3; margin-bottom: 0.3rem;
+          display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .lhq__meta {
+          display: flex; align-items: center; gap: 0.5rem;
+          font-family: 'Share Tech Mono', monospace; font-size: 0.55rem;
+          color: rgba(0,0,0,0.35); letter-spacing: 0.04em;
+        }
+        .lhq__meta-dot {
+          width: 3px; height: 3px; border-radius: 50%; background: rgba(0,0,0,0.2);
+        }
+
+        /* Actions */
+        .lhq__actions {
+          display: flex; align-items: center; justify-content: space-between;
+          padding-top: 1rem; border-top: 1px solid #e8e6e2;
+        }
+        .lhq__load-more {
+          all: unset; cursor: pointer;
+          font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+          text-transform: uppercase; letter-spacing: 0.12em;
+          padding: 0.6rem 1.5rem; border: 1px solid #1a1a1a;
+          transition: all 0.2s;
+        }
+        .lhq__load-more:hover { background: #1a1a1a; color: #fff; }
+        .lhq__view-all {
+          font-family: 'Share Tech Mono', monospace; font-size: 0.65rem;
+          text-transform: uppercase; letter-spacing: 0.12em;
+          color: rgba(0,0,0,0.5); text-decoration: none;
+          transition: color 0.2s; margin-left: auto;
+        }
+        .lhq__view-all:hover { color: #1a1a1a; }
+
+        /* Mobile Responsive */
+        @media (max-width: 900px) {
+          .lhq__personas { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 560px) {
+          .lhq__personas { grid-template-columns: 1fr; }
+          .lhq__compact-img { width: 64px; height: 64px; }
+          .lhq__actions { flex-direction: column; gap: 1rem; align-items: stretch; text-align: center; }
+          .lhq__view-all { margin-left: 0; }
+          .lhq__sort-bar { flex-wrap: wrap; }
+          .lhq__search-wrap { max-width: 100%; order: 3; width: 100%; }
+        }
+
+        /* ================================================================
+           SHARED SECTION TYPOGRAPHY (fd- prefix)
+           ================================================================ */
+        .fd-section-pre {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #777;
+          margin-bottom: 1.5rem;
+        }
+        .fd-section-title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(2rem, 4vw, 3.5rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 1.1;
+          margin-bottom: 1.5rem;
+        }
+        .fd-section-title__word { display: block; }
+        .fd-section-title__word--1 { color: #1a1a1a; }
+        .fd-section-title__word--2 { color: #999; }
+        .fd-section-title__word--3 { color: #bbb; }
+        .fd-section-title__word--4 { color: #ccc; }
+        .fd-section-desc {
+          font-size: 0.9rem;
+          color: #555;
+          line-height: 1.7;
+          max-width: 680px;
+          margin-bottom: 3rem;
+        }
+        .fd-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.75rem 1.5rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          text-decoration: none;
+          border: 1px solid #1a1a1a;
+          color: #1a1a1a;
+          background: transparent;
+          transition: all 0.3s;
+          cursor: pointer;
+        }
+        .fd-btn:hover { background: #1a1a1a; color: #fff; }
+        .fd-btn--dark {
+          background: #1a1a1a;
+          color: #fff;
+          border-color: #1a1a1a;
+        }
+        .fd-btn--dark:hover { background: #333; }
+
+        /* ================================================================
+           PART SALES
+           ================================================================ */
+        .fd-parts {
+          background: #faf9f6;
+          padding: 6rem 0;
+        }
+        .fd-parts__inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          display: grid;
+          grid-template-columns: 1fr 1px 1fr;
+          gap: 2rem;
+          align-items: start;
+        }
+        .fd-parts__inner::before {
+          content: '';
+          grid-column: 2;
+          grid-row: 1;
+          background: linear-gradient(to bottom, transparent, #d6d2cc, transparent);
+          align-self: stretch;
+        }
+        .fd-parts__text {
+          font-size: 0.9rem;
+          color: #333;
+          line-height: 1.8;
+          margin-bottom: 1.5rem;
+        }
+        .fd-parts__secondary {
+          font-size: 0.85rem;
+          color: #555;
+          line-height: 1.7;
+        }
+        .fd-parts__stats {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        .fd-parts__stat {
+          background: #faf9f6;
+          border: 1px solid #e8e6e2;
+          padding: 1.25rem;
+          text-align: center;
+        }
+        .fd-parts__stat-value {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 0.25rem;
+        }
+        .fd-parts__stat-label {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #999;
+        }
+        .fd-parts__enquiry {
+          background: #fff;
+          border: 1px solid #e8e6e2;
+          border-radius: 8px;
+          padding: 2rem;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .fd-parts__enquiry h4 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin: 0 0 0.35rem;
+        }
+        .fd-parts__enquiry-subtitle {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #999;
+          display: block;
+          margin-bottom: 1.75rem;
+          padding-bottom: 1rem;
+          border-bottom: 1px solid #e8e6e2;
+        }
+        .fd-parts__enquiry-field {
+          margin-bottom: 1.25rem;
+        }
+        .fd-parts__enquiry-field:last-of-type {
+          margin-bottom: 1.75rem;
+        }
+        .fd-parts__enquiry-field label {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          color: #1a1a1a;
+          margin-bottom: 0.4rem;
+        }
+        .fd-parts__enquiry-hint {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #999;
+          letter-spacing: 0.02em;
+        }
+        .fd-parts__enquiry-input {
+          width: 100%;
+          padding: 0.6rem 0.75rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          color: #1a1a1a;
+          background: #faf9f6;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          transition: border-color 0.2s, box-shadow 0.2s;
+          appearance: none;
+          -webkit-appearance: none;
+        }
+        .fd-parts__enquiry-input:focus {
+          outline: none;
+          border-color: #1a1a1a;
+          box-shadow: 0 0 0 3px rgba(26,26,26,0.06);
+        }
+        .fd-parts__enquiry-input::placeholder {
+          color: #bbb;
+        }
+        select.fd-parts__enquiry-input {
+          background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-position: right 0.75rem center;
+          padding-right: 2rem;
+          cursor: pointer;
+        }
+        .fd-parts__aircraft-btns {
+          display: flex;
+          gap: 0.4rem;
+          flex-wrap: wrap;
+        }
+        .fd-parts__aircraft-btn {
+          padding: 0.4rem 0.85rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          letter-spacing: 0.05em;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          background: #faf9f6;
+          color: #777;
+          cursor: pointer;
+          transition: all 0.15s ease;
+        }
+        .fd-parts__aircraft-btn:hover {
+          border-color: #1a1a1a;
+          color: #1a1a1a;
+        }
+        .fd-parts__aircraft-btn--active {
+          background: #1a1a1a;
+          border-color: #1a1a1a;
+          color: #fff;
+        }
+        .fd-parts__aircraft-btn--active:hover {
+          background: #333;
+          border-color: #333;
+          color: #fff;
+        }
+        .fd-parts__submit {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          width: 100%;
+          padding: 0.75rem 1.5rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #fff;
+          background: #1a1a1a;
+          border: 1px solid #1a1a1a;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+        .fd-parts__submit:hover {
+          background: #333;
+        }
+        .fd-parts__submit span {
+          font-size: 0.9rem;
+          transition: transform 0.2s;
+        }
+        .fd-parts__submit:hover span {
+          transform: translateX(3px);
+        }
+        @media (max-width: 900px) {
+          .fd-parts__inner { grid-template-columns: 1fr; }
+          .fd-parts__inner::before { display: none; }
+        }
+
+        /* Parts CTA replacement */
+        .fd-parts-cta {
+          background: #faf9f6;
+          padding: 4rem 0;
+        }
+        .fd-parts-cta__inner {
+          max-width: 700px;
+          margin: 0 auto;
+          padding: 0 2rem;
+          text-align: center;
+        }
+        .fd-parts-cta__card {
+          background: #eae8e4;
+          border: 1px solid rgba(0,0,0,0.12);
+          border-radius: 8px;
+          padding: 2.5rem 2rem;
+          margin-bottom: 1.5rem;
+        }
+        .fd-parts-cta__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.1rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+          color: #1a1a1a;
+          margin: 0.75rem 0;
+        }
+        .fd-parts-cta__desc {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          color: #555;
+          line-height: 1.7;
+          margin: 0 0 1rem;
+        }
+        .fd-parts-cta__placeholder {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #999;
+          border: 1px dashed #d1d5db;
+          padding: 0.5rem 1rem;
+          border-radius: 4px;
+          display: inline-block;
+        }
+        .fd-parts-cta__buttons {
+          display: flex;
+          gap: 1rem;
+          justify-content: center;
+          flex-wrap: wrap;
+        }
+
+        /* ================================================================
+           ADDITIONAL SERVICES — EXPANDABLE DRAWERS
+           ================================================================ */
+        .fd-addserv {
+          background: #faf9f6;
+          padding: 5rem 0;
+        }
+        .fd-addserv__inner {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
+        .fd-addserv__pre {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #999;
+          margin-bottom: 1rem;
+        }
+        .fd-addserv__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.5rem, 3vw, 2.2rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 0 0 1rem 0;
+          letter-spacing: -0.01em;
+        }
+        .fd-addserv__rule {
+          width: 100%;
+          height: 1px;
+          background: #e8e6e2;
+          margin-bottom: 2rem;
+        }
+
+        /* Drawer grid */
+        .fd-addserv__grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 1rem;
+        }
+        .fd-addserv__drawer {
+          all: unset;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          gap: 0.75rem;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          padding: 2rem 1.5rem;
+          cursor: pointer;
+          box-sizing: border-box;
+          background: #fff;
+          transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .fd-addserv__drawer:hover {
+          border-color: #ccc;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .fd-addserv__drawer--open {
+          border-color: #1a1a1a;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+        .fd-addserv__drawer-num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #bbb;
+          letter-spacing: 0.05em;
+        }
+        .fd-addserv__drawer-title {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          letter-spacing: 0.02em;
+          line-height: 1.3;
+        }
+        .fd-addserv__drawer-oneliner {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          color: #999;
+          letter-spacing: 0.02em;
+        }
+        .fd-addserv__drawer-toggle {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.2rem;
+          font-weight: 300;
+          color: #bbb;
+          width: 28px;
+          height: 28px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border: 1px solid #e8e6e2;
+          border-radius: 3px;
+          transition: all 0.3s;
+          margin-top: 0.25rem;
+        }
+        .fd-addserv__drawer--open .fd-addserv__drawer-toggle {
+          color: #1a1a1a;
+          border-color: #1a1a1a;
+        }
+
+        /* Expanded panel — full width below row */
+        .fd-addserv__drawer-panel {
+          grid-column: 1 / -1;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          overflow: hidden;
+        }
+        .fd-addserv__panel-content {
+          padding: 0 1.5rem 2rem 1.5rem;
+          background: #f5f4f1;
+          border-top: 1px solid #e8e6e2;
+        }
+        .fd-addserv__panel-desc {
+          font-size: 0.85rem;
+          color: #666;
+          line-height: 1.7;
+          max-width: 700px;
+          padding-top: 2rem;
+          margin-bottom: 2rem;
+        }
+
+        /* Panel grid for service cards */
+        .fd-addserv__panel-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+          margin-bottom: 2rem;
+        }
+        .fd-addserv__panel-grid--3 {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        .fd-addserv__panel-grid--training {
+          grid-template-columns: 1fr 1fr;
+        }
+        .fd-addserv__panel-card {
+          border: 1px solid #e8e6e2;
+          padding: 1.5rem;
+          border-radius: 4px;
+          background: #fff;
+          transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .fd-addserv__panel-card:hover {
+          border-color: #ccc;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+        }
+        .fd-addserv__panel-card--featured {
+          grid-column: 1 / -1;
+          background: #faf9f6;
+          border-color: #d0cdc8;
+        }
+        .fd-addserv__panel-card-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 36px;
+          height: 36px;
+          border: 1px solid #e8e6e2;
+          border-radius: 50%;
+          margin-bottom: 1rem;
+          color: #999;
+          font-size: 0.9rem;
+        }
+        .fd-addserv__panel-card h4 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.8rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          letter-spacing: 0.02em;
+          margin-bottom: 0.5rem;
+        }
+        .fd-addserv__panel-card p {
+          font-size: 0.78rem;
+          color: #777;
+          line-height: 1.6;
+          margin: 0;
+        }
+        .fd-addserv__panel-card-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+        .fd-addserv__panel-card-num {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          color: #bbb;
+          letter-spacing: 0.05em;
+        }
+        .fd-addserv__panel-card-header i {
+          font-size: 1rem;
+          color: #bbb;
+        }
+        .fd-addserv__panel-card-tag {
+          display: inline-block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #999;
+          border: 1px solid #e8e6e2;
+          padding: 0.2rem 0.5rem;
+          border-radius: 2px;
+          margin-top: 1rem;
+        }
+        .fd-addserv__panel-card-badge {
+          display: inline-block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          padding: 0.25rem 0.65rem;
+          border: 1px solid #1a1a1a;
+          color: #1a1a1a;
+          border-radius: 2px;
+          margin-bottom: 1.25rem;
+        }
+        .fd-addserv__panel-card-icon-wrap {
+          font-size: 1.3rem;
+          color: #999;
+          margin-bottom: 0.75rem;
+        }
+        .fd-addserv__panel-card--featured .fd-addserv__panel-card-icon-wrap {
+          color: #666;
+        }
+        .fd-addserv__panel-card-meta {
+          display: flex;
+          gap: 1.25rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: #999;
+          margin-top: 1rem;
+        }
+        .fd-addserv__panel-card-meta i { margin-right: 0.25rem; }
+
+        /* Panel buttons */
+        .fd-addserv__panel-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.7rem 1.3rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          text-decoration: none;
+          background: #1a1a1a;
+          color: #faf9f6;
+          border: 1px solid #1a1a1a;
+          border-radius: 4px;
+          transition: all 0.3s;
+          cursor: pointer;
+          margin-top: 0.5rem;
+        }
+        .fd-addserv__panel-btn:hover { background: #333; border-color: #333; }
+        .fd-addserv__panel-btn--light {
+          background: transparent;
+          color: #1a1a1a;
+          border-color: #ccc;
+        }
+        .fd-addserv__panel-btn--light:hover {
+          background: rgba(0,0,0,0.04);
+          border-color: #1a1a1a;
+        }
+
+        /* Panel quote */
+        .fd-addserv__panel-quote {
+          text-align: center;
+          padding: 2rem;
+          border: 1px solid #e8e6e2;
+          border-radius: 4px;
+          background: #fff;
+          margin-bottom: 1.5rem;
+        }
+        .fd-addserv__panel-quote blockquote {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.9rem;
+          font-style: italic;
+          color: #555;
+          margin: 0 0 0.5rem 0;
+        }
+        .fd-addserv__panel-quote span {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #bbb;
+        }
+
+        /* Footer link */
+        .fd-addserv__footer {
+          text-align: center;
+          margin-top: 2.5rem;
+        }
+        .fd-addserv__footer-link {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.6rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #999;
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .fd-addserv__footer-link:hover { color: #1a1a1a; }
+        .fd-addserv__footer-link span { margin-left: 0.4rem; }
+
+        @media (max-width: 900px) {
+          .fd-addserv__grid { grid-template-columns: 1fr; }
+          .fd-addserv__panel-grid,
+          .fd-addserv__panel-grid--3,
+          .fd-addserv__panel-grid--training { grid-template-columns: 1fr; }
+        }
+
+        /* ================================================================
+           LOCATION CARD
+           ================================================================ */
+        .fd-location {
+          padding: 5rem 0 3rem;
+          background: #f0eee9;
+        }
+        .fd-location__inner {
+          max-width: none;
+          margin: 0;
+          padding: 0;
+        }
+        .fd-location__card {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          background: #fff;
+          border: none;
+          border-radius: 0;
+          overflow: hidden;
+          box-shadow: none;
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+        }
+        .fd-location__map {
+          min-height: 400px;
+          background: #e8e6e2;
+        }
+        .fd-location__map iframe {
+          display: block;
+          width: 100%;
+          height: 100%;
+        }
+        .fd-location__info {
+          padding: 2.5rem;
+          display: flex;
+          flex-direction: column;
+        }
+        .fd-location__pre {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #999;
+          margin-bottom: 0.75rem;
+        }
+        .fd-location__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+          font-weight: 700;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 0 0 1rem 0;
+          letter-spacing: -0.01em;
+        }
+        .fd-location__rule {
+          width: 100%;
+          height: 1px;
+          background: #e8e6e2;
+          margin-bottom: 1.5rem;
+        }
+        .fd-location__details {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+          margin-bottom: 1.5rem;
+        }
+        .fd-location__detail {
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+        }
+        .fd-location__detail-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 32px;
+          height: 32px;
+          border: 1px solid #e8e6e2;
+          border-radius: 50%;
+          color: #999;
+          font-size: 0.75rem;
+          flex-shrink: 0;
+          margin-top: 2px;
+        }
+        .fd-location__detail-label {
+          display: block;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          text-transform: uppercase;
+          letter-spacing: 0.15em;
+          color: #bbb;
+          margin-bottom: 0.2rem;
+        }
+        .fd-location__detail-text {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.82rem;
+          color: #555;
+          line-height: 1.5;
+          margin: 0;
+        }
+        .fd-location__tags {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-bottom: 1.5rem;
+        }
+        .fd-location__tag {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #999;
+          border: 1px solid #e8e6e2;
+          padding: 0.25rem 0.6rem;
+          border-radius: 2px;
+        }
+        .fd-location__cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.7rem 1.3rem;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          text-decoration: none;
+          background: #1a1a1a;
+          color: #faf9f6;
+          border: 1px solid #1a1a1a;
+          border-radius: 4px;
+          transition: all 0.3s;
+          margin-top: auto;
+          align-self: flex-start;
+        }
+        .fd-location__cta:hover { background: #333; border-color: #333; }
+        @media (max-width: 768px) {
+          .fd-location__card { grid-template-columns: 1fr; }
+          .fd-location__map { min-height: 250px; }
+        }
+
+        /* ================================================================
+           CLIENT REVIEWS / TESTIMONIALS
+           ================================================================ */
+        .fd-testimonials__top {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 3rem 2rem 1.5rem;
+        }
+        .fd-testimonials__heading {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 1.3rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          line-height: 1.2;
+          margin: 0 0 0.5rem;
+          color: #1a1a1a;
+        }
+        .fd-testimonials__heading span {
+          color: #999;
+        }
+        .fd-testimonials__sub {
+          font-size: 0.78rem;
+          color: #777;
+          line-height: 1.6;
+          max-width: 480px;
+          margin: 0 0 0;
+        }
+
+        /* ── Marquee ─────────────────────────────── */
+        .fd-testimonials__marquee {
+          overflow: hidden;
+          padding: 1rem 0;
+          mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+          -webkit-mask-image: linear-gradient(to right, transparent, black 3%, black 97%, transparent);
+        }
+        .fd-testimonials__track {
+          display: flex;
+          gap: 1rem;
+          width: max-content;
+          animation: fdTestimonialScroll 45s linear infinite;
+        }
+        .fd-testimonials__track:hover {
+          animation-play-state: paused;
+        }
+        @keyframes fdTestimonialScroll {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        /* ── Cards ───────────────────────────────── */
+        .fd-testimonials__card {
+          flex-shrink: 0;
+          width: 320px;
+          background: #fff;
+          border: 1px solid #e0ddd7;
+          padding: 1.5rem;
+          position: relative;
+          transition: border-color 0.2s, transform 0.2s;
+        }
+        .fd-testimonials__card:hover {
+          border-color: #aaa;
+          transform: translateY(-2px);
+        }
+        .fd-testimonials__card-stars {
+          display: flex;
+          gap: 1px;
+          color: #d4a853;
+          font-size: 0.75rem;
+          margin-bottom: 0.75rem;
+        }
+        .fd-testimonials__card-text {
+          font-size: 0.78rem;
+          line-height: 1.65;
+          color: #444;
+          margin-bottom: 1rem;
+        }
+        .fd-testimonials__card-author {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+        }
+        .fd-testimonials__avatar--sm {
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          background: #1a1a1a;
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.55rem;
+          font-weight: 700;
+          letter-spacing: 0.05em;
+          flex-shrink: 0;
+        }
+        .fd-testimonials__card-author strong {
+          display: block;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+        }
+        .fd-testimonials__card-author span {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          color: #777;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+        }
+        .fd-testimonials__card-cat {
+          position: absolute;
+          top: 0.75rem;
+          right: 0.75rem;
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.45rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #aaa;
+          border: 1px solid #e8e6e2;
+          padding: 0.15rem 0.4rem;
+        }
+
+        /* ── CTA row ─────────────────────────────── */
+        .fd-testimonials__bottom {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 1.5rem 2rem 0;
+        }
+        .fd-testimonials__cta-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1rem;
+        }
+        .fd-testimonials__cta-card {
+          background: #fff;
+          border: 1px solid #e0ddd7;
+          padding: 1.5rem;
+        }
+        .fd-testimonials__cta-card h4 {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          margin-bottom: 0.5rem;
+        }
+        .fd-testimonials__cta-card p {
+          font-size: 0.78rem;
+          color: #555;
+          line-height: 1.6;
+          margin-bottom: 1rem;
+        }
+        .fd-testimonials__cta-card--google {
+          background: #faf9f6;
+          border-color: #e0ddd7;
+        }
+        .fd-testimonials__google-stars {
+          font-size: 1.1rem;
+          color: #d4a853;
+        }
+        .fd-testimonials__google-stars em {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.65rem;
+          color: #777;
+          font-style: normal;
+          margin-left: 0.5rem;
+        }
+        @media (max-width: 768px) {
+          .fd-testimonials__cta-row { grid-template-columns: 1fr; }
+          .fd-testimonials__card { width: 280px; }
+        }
+
+        /* ===== V30: Hero ===== */
+        .hv30 { position: relative; height: 100vh; background: #faf9f6; overflow: hidden; }
+        .hv30__layout { position: relative; z-index: 1; display: grid; grid-template-columns: 0.6fr 1fr; gap: 2rem; max-width: 1400px; margin: 0 auto; padding: 4rem 3rem; align-items: center; height: 100vh; }
+        .hv30__left { position: relative; z-index: 2; }
+        .hv30__brand-name { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 3rem; font-weight: 700; line-height: 1; margin-bottom: 0; text-transform: uppercase; letter-spacing: -0.01em; -webkit-text-stroke: 2px #faf9f6; paint-order: stroke fill; }
+        .hv30__brand-w1 { color: #1a1a1a; }
+        .hv30__brand-w2 { color: #4a4a4a; }
+        .hv30__brand-tag { display: inline-flex; align-items: center; font-family: 'Share Tech Mono', monospace; font-size: 0.85rem; letter-spacing: 0.15em; text-transform: uppercase; color: #888; -webkit-text-stroke: 1px #faf9f6; paint-order: stroke fill; }
+        .hv30__right { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
+        .hv30__right::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to right, #faf9f6 0%, rgba(250,249,246,0.6) 15%, transparent 40%, transparent 60%, rgba(250,249,246,0.6) 85%, #faf9f6 100%); pointer-events: none; }
+        .hv30__img-panel { position: absolute; inset: 0; border-radius: 0; overflow: hidden; border: none; }
+        .hv30__img { position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 0.8s; }
+        .hv30__img.active { opacity: 1; }
+        .hv30__thumbs {
+          display: flex; gap: 0.5rem; padding: 1.5rem 3rem; overflow-x: auto; scrollbar-width: none;
+          position: absolute; bottom: 0; left: 0; right: 0; z-index: 2;
+        }
+        .hv30__thumbs::-webkit-scrollbar { display: none; }
+        .hv30__thumb {
+          flex: 0 0 auto; width: 100px; height: 65px; border-radius: 4px; overflow: hidden;
+          border: 2px solid transparent; padding: 0; background: none; cursor: pointer; opacity: 0.5; transition: all 0.3s;
+        }
+        .hv30__thumb:hover { opacity: 0.85; }
+        .hv30__thumb--active { opacity: 1; border-color: #1a1a1a; }
+        .hv30__thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
       `}</style>
     </div>
   );

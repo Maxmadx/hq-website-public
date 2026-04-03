@@ -30,35 +30,36 @@ const carouselImages = [
   '/assets/images/facility/carousel/img-10.jpg',
 ];
 
-const FacilityGallery = () => {
+const FacilityGallery = ({ carouselOnly = false }) => {
   return (
     <section className="fgal">
-      {/* Main Gallery Grid */}
-      <div className="fgal__main">
-        <div className="fgal__inner">
-          <div className="fgal__intro">
-            <h2>Our Facility</h2>
-            <div className="fgal__line"></div>
-          </div>
-          <div className="fgal__grid">
-            {facilityImages.map((img, i) => (
-              <motion.div
-                key={img.id}
-                className="fgal__item"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.8, delay: i * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className="fgal__img">
-                  <img src={img.src} alt={img.alt} />
-                </div>
-                <span>{img.alt}</span>
-              </motion.div>
-            ))}
+      {!carouselOnly && (
+        <div className="fgal__main">
+          <div className="fgal__inner">
+            <div className="fgal__intro">
+              <h2>Our Facility</h2>
+              <div className="fgal__line"></div>
+            </div>
+            <div className="fgal__grid">
+              {facilityImages.map((img, i) => (
+                <motion.div
+                  key={img.id}
+                  className="fgal__item"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ duration: 0.8, delay: i * 0.1 }}
+                  viewport={{ once: true }}
+                >
+                  <div className="fgal__img">
+                    <img src={img.src} alt={img.alt} />
+                  </div>
+                  <span>{img.alt}</span>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Carousel Strip - Right to Left */}
       <div className="fgal__carousel">

@@ -26,7 +26,6 @@ import FooterMinimal from '../components/FooterMinimal';
 // Import Expedition components
 import ExpeditionBarcode from '../components/Expeditions/ExpeditionBarcode';
 import ExpeditionVideoSlider from '../components/Expeditions/ExpeditionVideoSlider';
-import ExpeditionDepartureBoard from '../components/Expeditions/ExpeditionDepartureBoard';
 
 /**
  * EXPEDITIONS PAGE HEADER COMPONENT
@@ -930,17 +929,37 @@ function BookingSteps() {
           </div>
         </Reveal>
 
-        <div className="fexp-booking-steps__grid">
-          {bookingSteps.map((step, i) => (
-            <Reveal key={i} delay={i * 0.1}>
-              <div className="fexp-booking-steps__step">
-                <div className="fexp-booking-steps__number">{String(step.step).padStart(2, '0')}</div>
-                <i className={`fas ${step.icon}`}></i>
-                <h4>{step.title}</h4>
-                <p>{step.desc}</p>
+        <div className="fexp-booking-steps__layout">
+          <div className="fexp-booking-steps__left">
+            {bookingSteps.map((step, i) => (
+              <Reveal key={i} delay={i * 0.08}>
+                <div className="fexp-step">
+                  <div className="fexp-step__left">
+                    <div className="fexp-step__number">{String(step.step).padStart(2, '0')}</div>
+                    {i < bookingSteps.length - 1 && <div className="fexp-step__line" />}
+                  </div>
+                  <div className="fexp-step__content">
+                    <div className="fexp-step__icon"><i className={`fas ${step.icon}`}></i></div>
+                    <div>
+                      <h4 className="fexp-step__title">{step.title}</h4>
+                      <p className="fexp-step__desc">{step.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          <Reveal delay={0.4}>
+            <div className="fexp-waitlist">
+              <div className="fexp-waitlist__inner">
+                <span className="fexp-waitlist__pre">Limited Spaces</span>
+                <h3 className="fexp-waitlist__title">Join Our Trip<br />Waitlist</h3>
+                <p className="fexp-waitlist__desc">Expeditions fill quickly. Register your interest to be notified when new trips are announced.</p>
+                <a href="/contact" className="fexp-waitlist__btn">Register Interest <span>→</span></a>
               </div>
-            </Reveal>
-          ))}
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
@@ -1311,7 +1330,6 @@ function FinalExpeditions() {
 
   return (
     <div className="fexp">
-      <ScrollProgress />
       <ExpeditionsHeader />
 
       {/* ========== HERO: Expedition Passport ========== */}
@@ -1430,11 +1448,10 @@ function FinalExpeditions() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.6 }}
             >
-              From polar ice caps to tropical islands, experience adventures only possible by helicopter with Captain Q.
+              From polar ice caps to tropical islands, experience adventures only possible by helicopter.
             </motion.p>
           </div>
         </motion.div>
-        <StatsCounter />
       </section>
 
       {/* ========== EXPEDITION BARCODE GRID ========== */}
@@ -1450,81 +1467,11 @@ function FinalExpeditions() {
         </Reveal>
       </section>
 
-      {/* ========== HIGHLIGHT REEL ========== */}
-      <HighlightReel />
+      {/* ========== VIDEO SLIDER ========== */}
+      <ExpeditionVideoSlider title="Expedition Footage" />
 
       {/* ========== NEW: EXPEDITION HISTORY ========== */}
       <ExpeditionHistory />
-
-
-      {/* ========== DESTINATIONS GRID ========== */}
-      <section className="fexp-destinations">
-        <div className="fexp-destinations__container">
-          <Reveal>
-            <div className="fexp-section-header">
-              <span className="fexp-pre-text">Choose Your Adventure</span>
-              <h2>
-                <span className="fexp-text--dark">Expedition</span>{' '}
-                <span className="fexp-text--mid">Destinations</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          {/* Region Tabs */}
-          <Reveal delay={0.1}>
-            <div className="fexp-destinations__tabs">
-              {[
-                { id: 'polar', label: 'Polar Adventures' },
-                { id: 'european', label: 'European Journeys' },
-                { id: 'tropical', label: 'Tropical Escapes' },
-              ].map((region) => (
-                <button
-                  key={region.id}
-                  className={`fexp-destinations__tab ${activeRegion === region.id ? 'fexp-destinations__tab--active' : ''}`}
-                  onClick={() => setActiveRegion(region.id)}
-                >
-                  {region.label}
-                </button>
-              ))}
-            </div>
-          </Reveal>
-
-          {/* Destination Cards */}
-          <div className="fexp-destinations__grid">
-            {destinations[activeRegion]?.map((dest, i) => (
-              <Reveal key={dest.name} delay={i * 0.1}>
-                <Link to={dest.link} className="fexp-dest-card">
-                  <div className="fexp-dest-card__image">
-                    <img src={dest.image} alt={dest.name} />
-                    <div className="fexp-dest-card__overlay">
-                      <span className="fexp-dest-card__coords">{dest.coords}</span>
-                    </div>
-                  </div>
-                  <div className="fexp-dest-card__content">
-                    <h3>{dest.name}</h3>
-                    <div className="fexp-dest-card__meta">
-                      <span>{dest.duration}</span>
-                      <span className="fexp-dest-card__arrow">→</span>
-                    </div>
-                  </div>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-
-          <Reveal delay={0.4}>
-            <div className="fexp-destinations__bespoke">
-              <Link to="/expeditions/bespoke" className="fexp-btn fexp-btn--primary">
-                Plan a Bespoke Expedition
-              </Link>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-
-      {/* ========== VIDEO SLIDER ========== */}
-      <ExpeditionVideoSlider title="Expedition Footage" />
 
       {/* ========== ITINERARY REMOVED ========== */}
 
@@ -1533,32 +1480,7 @@ function FinalExpeditions() {
 
       {/* ========== FAQ SECTION ========== */}
       <section className="fexp-faq">
-        <div className="fexp-faq__container">
-          {/* Left: Boarding */}
-          <div className="fexp-faq__boarding">
-            <div className="fexp-boarding__announcement">
-              <span className="fexp-boarding__now">NOW BOARDING</span>
-              <span className="fexp-boarding__call">Calling last passengers</span>
-            </div>
-            <div className="fexp-boarding__board">
-              <ExpeditionDepartureBoard
-                title="UPCOMING EXPEDITIONS"
-                origin="GATE: DENHAM AERODROME"
-                flights={[
-                  { code: 'HQ-025', dest: 'BAHAMAS', status: 'BOARDING', distance: '4,200nm', year: '2025' },
-                  { code: 'HQ-026', dest: 'COSTA RICA', status: 'SCHEDULED', distance: '5,100nm', year: '2026' },
-                  { code: 'HQ-027', dest: 'GREENLAND', status: 'SCHEDULED', distance: '2,100nm', year: '2026' },
-                  { code: 'HQ-028', dest: 'ICELAND', status: 'PLANNING', distance: '1,200nm', year: '2026' },
-                ]}
-              />
-            </div>
-            <TripWaitlistForm />
-          </div>
-
-          {/* Divider */}
-          <div className="fexp-faq__divider"></div>
-
-          {/* Right: FAQ List */}
+        <div className="fexp-faq__container fexp-faq__container--full">
           <div className="fexp-faq__right">
             <Reveal>
               <div className="fexp-faq__header">
@@ -1671,6 +1593,7 @@ function FinalExpeditions() {
 
         .fexp-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fexp-btn--outline {
@@ -1733,7 +1656,7 @@ function FinalExpeditions() {
           flex: 1;
           display: flex;
           align-items: center;
-          padding: 2rem 4rem 2rem;
+          padding: 6rem 4rem 2rem;
         }
 
         .fexp-hero__left {
@@ -1952,16 +1875,6 @@ function FinalExpeditions() {
           box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
         }
 
-        .fexp-journey-section::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 200px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, #999, transparent);
-        }
 
         .fexp-journey-section__header {
           text-align: center;
@@ -1980,7 +1893,7 @@ function FinalExpeditions() {
         /* ===== PHILOSOPHY SECTION ===== */
         .fexp-philosophy {
           padding: 30px 2rem 4rem;
-          background: #faf9f6;
+          background: #fff;
           position: relative;
           z-index: 2;
           box-shadow: 0 8px 30px rgba(0,0,0,0.1);
@@ -1995,7 +1908,7 @@ function FinalExpeditions() {
           display: grid;
           grid-template-columns: 1fr 1px 1fr;
           gap: 2.5rem;
-          align-items: start;
+          align-items: center;
         }
 
         .fexp-philosophy__layout::before {
@@ -2032,9 +1945,9 @@ function FinalExpeditions() {
 
         .fexp-philosophy__feature {
           padding: 1.25rem;
-          background: #fff;
+          background: #f2efea;
           border-radius: 8px;
-          border: 1px solid #e8e6e2;
+          border: 1px solid #e0dcd6;
         }
 
         .fexp-philosophy__feature h4 {
@@ -2255,6 +2168,7 @@ function FinalExpeditions() {
           letter-spacing: 0.1em;
         }
 
+
         .fexp-dest-card__content {
           padding: 1.25rem;
         }
@@ -2460,6 +2374,10 @@ function FinalExpeditions() {
           grid-template-columns: 1fr auto 1fr;
           gap: 3rem;
           align-items: start;
+        }
+
+        .fexp-faq__container--full {
+          display: block;
         }
 
         .fexp-faq__divider {
@@ -2787,16 +2705,6 @@ function FinalExpeditions() {
           overflow: hidden;
         }
 
-        .fexp-highlight::after {
-          content: '';
-          position: absolute;
-          bottom: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 200px;
-          height: 1px;
-          background: linear-gradient(90deg, transparent, #999, transparent);
-        }
 
         .fexp-highlight__lines {
           position: absolute;
@@ -3507,69 +3415,169 @@ function FinalExpeditions() {
           margin: 0 auto;
         }
 
-        .fexp-booking-steps__grid {
+        /* STEPS LAYOUT */
+        .fexp-booking-steps__layout {
           display: grid;
-          grid-template-columns: repeat(5, 1fr);
-          gap: 1rem;
+          grid-template-columns: 1fr 1fr;
+          gap: 3rem;
+          align-items: stretch;
         }
 
-        .fexp-booking-steps__step {
-          text-align: center;
-          color: #fff;
-          position: relative;
+        /* VERTICAL STEP LIST */
+        .fexp-booking-steps__left {
+          display: flex;
+          flex-direction: column;
         }
 
-        .fexp-booking-steps__step::after {
-          content: '→';
-          position: absolute;
-          right: -1rem;
-          top: 2rem;
-          color: rgba(255,255,255,0.3);
+        .fexp-step {
+          display: flex;
+          gap: 1.25rem;
         }
 
-        .fexp-booking-steps__step:last-child::after {
-          display: none;
+        .fexp-step__left {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 32px;
+          flex-shrink: 0;
         }
 
-        .fexp-booking-steps__number {
+        .fexp-step__number {
           font-family: 'Share Tech Mono', monospace;
-          font-size: 0.65rem;
-          color: rgba(255,255,255,0.4);
+          font-size: 0.6rem;
+          color: rgba(255,255,255,0.35);
           letter-spacing: 0.1em;
-          margin-bottom: 1rem;
+          width: 32px;
+          height: 32px;
+          border: 1px solid rgba(255,255,255,0.15);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
         }
 
-        .fexp-booking-steps__step i {
-          font-size: 2rem;
-          color: rgba(255,255,255,0.6);
-          margin-bottom: 1rem;
-          display: block;
+        .fexp-step__line {
+          width: 1px;
+          flex: 1;
+          background: linear-gradient(to bottom, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+          min-height: 20px;
         }
 
-        .fexp-booking-steps__step h4 {
-          margin: 0 0 0.5rem;
-          font-size: 1rem;
+        .fexp-step__content {
+          display: flex;
+          gap: 1rem;
+          align-items: flex-start;
+          padding-bottom: 2rem;
         }
 
-        .fexp-booking-steps__step p {
-          margin: 0;
-          font-size: 0.8rem;
+        .fexp-step__icon {
+          width: 40px;
+          height: 40px;
+          border: 1px solid rgba(255,255,255,0.12);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
           color: rgba(255,255,255,0.5);
-          line-height: 1.5;
+          font-size: 0.85rem;
+        }
+
+        .fexp-step__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+          color: #fff;
+          margin: 0 0 0.3rem;
+          text-transform: uppercase;
+          letter-spacing: 0.03em;
+        }
+
+        .fexp-step__desc {
+          font-size: 0.75rem;
+          color: rgba(255,255,255,0.45);
+          line-height: 1.55;
+          margin: 0;
+          max-width: 280px;
+        }
+
+        /* WAITLIST CTA */
+        .fexp-waitlist {
+          border-radius: 12px;
+          height: 100%;
+        }
+        .fexp-waitlist__inner {
+          background: transparent;
+          border-radius: 8px;
+          padding: 3rem 2.5rem;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          height: 100%;
+          box-sizing: border-box;
+          justify-content: center;
+        }
+        .fexp-waitlist__pre {
+          font-family: 'Share Tech Mono', monospace;
+          font-size: 0.5rem;
+          text-transform: uppercase;
+          letter-spacing: 0.3em;
+          color: #999;
+          margin-bottom: 1rem;
+        }
+        .fexp-waitlist__title {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: clamp(1.6rem, 3vw, 2.2rem);
+          font-weight: 800;
+          text-transform: uppercase;
+          color: #1a1a1a;
+          margin: 0 0 1rem;
+          line-height: 1.1;
+          letter-spacing: -0.02em;
+        }
+        .fexp-waitlist__desc {
+          font-size: 0.75rem;
+          color: #777;
+          line-height: 1.6;
+          margin: 0 0 2rem;
+          max-width: 320px;
+        }
+        .fexp-waitlist__btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 0.85rem 2rem;
+          background: #1a1a1a;
+          color: #faf9f6;
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          text-decoration: none;
+          border: none;
+          transition: all 0.3s ease;
+        }
+        .fexp-waitlist__btn:hover {
+          background: #333;
+          color: #faf9f6;
+        }
+        .fexp-waitlist__btn span {
+          transition: transform 0.3s ease;
+        }
+        .fexp-waitlist__btn:hover span {
+          transform: translateX(3px);
         }
 
         @media (max-width: 1024px) {
-          .fexp-booking-steps__grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-          .fexp-booking-steps__step::after {
-            display: none;
+          .fexp-booking-steps__layout {
+            grid-template-columns: 1fr;
           }
         }
 
         @media (max-width: 768px) {
-          .fexp-booking-steps__grid {
-            grid-template-columns: 1fr;
+          .fexp-waitlist__inner {
+            padding: 2rem 1.5rem;
           }
         }
 

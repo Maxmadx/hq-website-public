@@ -14,6 +14,7 @@ export { default as SocialProofWall } from './Trust/SocialProofWall';
 // Content Sections
 export { default as WhyChooseUs } from './Content/WhyChooseUs';
 export { default as FounderStory } from './Content/FounderStory';
+export { default as FounderSpotlight } from './Content/FounderSpotlight';
 export { default as BeforeAfterStory } from './Content/BeforeAfterStory';
 export { default as TeamPreview } from './Content/TeamPreview';
 export { default as ProcessSteps } from './Content/ProcessSteps';
@@ -49,6 +50,8 @@ export { default as CostTransparency } from './Training/CostTransparency';
 export { default as FerryFlightServices } from './Services/FerryFlightServices';
 export { default as AircraftLeasebackRevenue } from './Services/AircraftLeasebackRevenue';
 export { default as SelfFlyHireRates } from './Services/SelfFlyHireRates';
+export { default as DestinationPartners } from './Services/DestinationPartners';
+export { default as AdditionalServices } from './Services/AdditionalServices';
 export { default as HangarageFeatures } from './Services/HangarageFeatures';
 export { default as AircraftManagement } from './Services/AircraftManagement';
 export { default as RegulatoryCompliance } from './Services/RegulatoryCompliance';

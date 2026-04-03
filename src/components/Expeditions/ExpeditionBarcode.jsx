@@ -140,9 +140,11 @@ function generateBarcode(str, length = 30) {
 
 function ExpeditionBarcode({
   destinations = defaultDestinations,
+  onSelect,
 }) {
   const ref = useRef(null);
   const galleryRef = useRef(null);
+  const gridRef = useRef(null);
   const isInView = useInView(ref, { once: true, amount: 0.2 });
   const [selectedId, setSelectedId] = useState(null);
   const [lightboxImage, setLightboxImage] = useState(null);
@@ -159,11 +161,22 @@ function ExpeditionBarcode({
   const handleSelect = (id) => {
     if (selectedId === id) {
       setSelectedId(null);
+      onSelect?.(null);
     } else {
       setSelectedId(id);
-      // Scroll to gallery after a short delay
+      onSelect?.(id);
+      // Scroll down to show first barcode row (never scroll up)
       setTimeout(() => {
-        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        const grid = gridRef.current;
+        if (!grid) return;
+        const firstItem = grid.querySelector('.exp-barcode__item');
+        if (!firstItem) return;
+        const rect = firstItem.getBoundingClientRect();
+        const targetY = window.scrollY + rect.top - 120;
+        // Only scroll down, never up
+        if (targetY > window.scrollY) {
+          window.scrollTo({ top: targetY, behavior: 'smooth' });
+        }
       }, 100);
     }
   };
@@ -173,92 +186,14 @@ function ExpeditionBarcode({
       <div className="exp-barcode__container">
         {/* Grid wrapper with compass background */}
         <div className="exp-barcode__grid-wrapper">
-          {/* Compass background */}
-          <div className="exp-barcode__compass-bg">
-            <svg viewBox="-50 -50 700 700" className="exp-barcode__compass-svg" preserveAspectRatio="xMidYMid meet">
-              {[80, 140, 200, 260].map((radius, i) => (
-                <motion.circle
-                  key={radius}
-                  cx="300"
-                  cy="300"
-                  r={radius}
-                  fill="none"
-                  stroke="#e8e6e2"
-                  strokeWidth="2.5"
-                  strokeDasharray="8 4"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={isInView ? { scale: 1, opacity: 0.6 } : {}}
-                  transition={{ delay: 0.2 + i * 0.1, duration: 0.8, ease: 'easeOut' }}
-                  style={{ transformOrigin: '300px 300px' }}
-                />
-              ))}
-
-              {[
-                { x: -20, y: -20 },
-                { x: 620, y: -20 },
-                { x: -20, y: 620 },
-                { x: 620, y: 620 },
-              ].map((endpoint, i) => (
-                <motion.line
-                  key={`flight-path-${i}`}
-                  x1="300"
-                  y1="300"
-                  x2={endpoint.x}
-                  y2={endpoint.y}
-                  stroke="#3b82f6"
-                  strokeWidth="5"
-                  strokeDasharray="8 8"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={isInView ? { pathLength: 1, opacity: 0.6 } : {}}
-                  transition={{ delay: 0.4 + i * 0.1, duration: 0.6, ease: 'easeOut' }}
-                />
-              ))}
-
-              {[
-                { x: 300, y: 20 },
-                { x: 580, y: 300 },
-                { x: 300, y: 580 },
-                { x: 20, y: 300 },
-              ].map((endpoint, i) => (
-                <motion.line
-                  key={`cardinal-${i}`}
-                  x1="300"
-                  y1="300"
-                  x2={endpoint.x}
-                  y2={endpoint.y}
-                  stroke="#d1d5db"
-                  strokeWidth="2"
-                  strokeDasharray="4 6"
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={isInView ? { pathLength: 1, opacity: 0.4 } : {}}
-                  transition={{ delay: 0.3 + i * 0.1, duration: 0.6, ease: 'easeOut' }}
-                />
-              ))}
-
-              <motion.circle
-                cx="300"
-                cy="300"
-                r="12"
-                fill="#1a1a1a"
-                initial={{ scale: 0 }}
-                animate={isInView ? { scale: 1 } : {}}
-                transition={{ delay: 0.1, duration: 0.4, type: 'spring', stiffness: 200 }}
-              />
-
-              <motion.text x="300" y="-10" textAnchor="middle" className="exp-barcode__compass-dir"
-                initial={{ opacity: 0 }} animate={isInView ? { opacity: 0.4 } : {}} transition={{ delay: 0.7 }}>N</motion.text>
-              <motion.text x="300" y="625" textAnchor="middle" className="exp-barcode__compass-dir"
-                initial={{ opacity: 0 }} animate={isInView ? { opacity: 0.4 } : {}} transition={{ delay: 0.75 }}>S</motion.text>
-              <motion.text x="625" y="305" textAnchor="middle" className="exp-barcode__compass-dir"
-                initial={{ opacity: 0 }} animate={isInView ? { opacity: 0.4 } : {}} transition={{ delay: 0.8 }}>E</motion.text>
-              <motion.text x="-25" y="305" textAnchor="middle" className="exp-barcode__compass-dir"
-                initial={{ opacity: 0 }} animate={isInView ? { opacity: 0.4 } : {}} transition={{ delay: 0.85 }}>W</motion.text>
-              <motion.text x="300" y="330" textAnchor="middle" className="exp-barcode__compass-label"
-                initial={{ opacity: 0 }} animate={isInView ? { opacity: 0.7 } : {}} transition={{ delay: 0.6 }}>DENHAM</motion.text>
-            </svg>
-          </div>
-
-          <div className="exp-barcode__grid">
+          <div className="exp-barcode__grid" ref={gridRef}>
+            {/* Center map pin */}
+            <div className="exp-barcode__pin">
+              <svg width="28" height="36" viewBox="0 0 28 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 0C6.268 0 0 6.268 0 14c0 10.5 14 22 14 22s14-11.5 14-22C28 6.268 21.732 0 14 0z" fill="#1a1a1a"/>
+                <circle cx="14" cy="14" r="5.5" fill="#fff"/>
+              </svg>
+            </div>
             {barcodes.map((item, i) => (
               <motion.div
                 key={item.id}
@@ -268,6 +203,9 @@ function ExpeditionBarcode({
                 transition={{ delay: 0.2 + i * 0.05, duration: 0.4 }}
                 onClick={() => handleSelect(item.id)}
               >
+                <div className="exp-barcode__hover-overlay">
+                  <span className="exp-barcode__hover-text">Click to See Trip</span>
+                </div>
                 <div className="exp-barcode__top">
                   <div className="exp-barcode__thumb">
                     <img src={item.image} alt={item.name} />
@@ -293,15 +231,6 @@ function ExpeditionBarcode({
             ))}
           </div>
 
-          {/* Connectors */}
-          <motion.div className="exp-barcode__connector exp-barcode__connector--top-left"
-            initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : {}} transition={{ delay: 0.5, duration: 0.4 }} />
-          <motion.div className="exp-barcode__connector exp-barcode__connector--top-right"
-            initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : {}} transition={{ delay: 0.55, duration: 0.4 }} />
-          <motion.div className="exp-barcode__connector exp-barcode__connector--bottom-left"
-            initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : {}} transition={{ delay: 0.6, duration: 0.4 }} />
-          <motion.div className="exp-barcode__connector exp-barcode__connector--bottom-right"
-            initial={{ scaleX: 0 }} animate={isInView ? { scaleX: 1 } : {}} transition={{ delay: 0.65, duration: 0.4 }} />
         </div>
 
         {/* Expandable Gallery Section */}
@@ -329,7 +258,7 @@ function ExpeditionBarcode({
                   </div>
                   <button
                     className="exp-barcode__gallery-close"
-                    onClick={() => setSelectedId(null)}
+                    onClick={() => { setSelectedId(null); onSelect?.(null); }}
                     aria-label="Close gallery"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -403,10 +332,10 @@ function ExpeditionBarcode({
       <style>{`
         .exp-barcode {
           font-family: 'Space Grotesk', -apple-system, sans-serif;
-          background: #fff;
-          padding: 4rem 2rem;
+          background: transparent;
+          padding: 12px 2rem 6px;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .exp-barcode__compass-bg {
@@ -450,25 +379,38 @@ function ExpeditionBarcode({
 
         .exp-barcode__grid-wrapper {
           position: relative;
+          max-width: 900px;
+          margin: 0 auto;
         }
 
         .exp-barcode__grid {
           display: grid;
-          grid-template-columns: 1fr 1fr 4rem 1fr 1fr;
+          grid-template-columns: 200px 200px 2rem 200px 200px;
+          justify-content: center;
           gap: 1rem;
           align-items: start;
           position: relative;
           z-index: 2;
         }
 
-        .exp-barcode__item:nth-child(1) { grid-column: 1; }
-        .exp-barcode__item:nth-child(2) { grid-column: 2; }
-        .exp-barcode__item:nth-child(3) { grid-column: 4; }
-        .exp-barcode__item:nth-child(4) { grid-column: 5; }
-        .exp-barcode__item:nth-child(5) { grid-column: 1; grid-row: 2; }
-        .exp-barcode__item:nth-child(6) { grid-column: 2; grid-row: 2; }
-        .exp-barcode__item:nth-child(7) { grid-column: 4; grid-row: 2; }
-        .exp-barcode__item:nth-child(8) { grid-column: 5; grid-row: 2; }
+        .exp-barcode__pin {
+          grid-column: 3;
+          grid-row: 1 / 3;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          align-self: center;
+          opacity: 0.25;
+        }
+
+        .exp-barcode__item:nth-child(2) { grid-column: 1; }
+        .exp-barcode__item:nth-child(3) { grid-column: 2; }
+        .exp-barcode__item:nth-child(4) { grid-column: 4; }
+        .exp-barcode__item:nth-child(5) { grid-column: 5; }
+        .exp-barcode__item:nth-child(6) { grid-column: 1; grid-row: 2; }
+        .exp-barcode__item:nth-child(7) { grid-column: 2; grid-row: 2; }
+        .exp-barcode__item:nth-child(8) { grid-column: 4; grid-row: 2; }
+        .exp-barcode__item:nth-child(9) { grid-column: 5; grid-row: 2; }
 
         .exp-barcode__item {
           padding: 0.85rem 1rem;
@@ -485,6 +427,34 @@ function ExpeditionBarcode({
         .exp-barcode__item:hover {
           transform: scale(1.03);
           box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .exp-barcode__hover-overlay {
+          position: absolute;
+          inset: 0;
+          background: rgba(255,255,255,0.65);
+          backdrop-filter: blur(6px);
+          -webkit-backdrop-filter: blur(6px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+          border-radius: 8px;
+          z-index: 3;
+        }
+        .exp-barcode__item:hover .exp-barcode__hover-overlay {
+          opacity: 1;
+        }
+        .exp-barcode__hover-text {
+          font-family: 'Space Grotesk', sans-serif;
+          font-size: 0.75rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          color: #1a1a1a;
+          padding: 0.4rem 1rem;
+          border: 1px solid rgba(0,0,0,0.3);
+          border-radius: 4px;
         }
 
         .exp-barcode__item--active {
@@ -581,10 +551,11 @@ function ExpeditionBarcode({
         }
 
         .exp-barcode__gallery-inner {
-          background: #faf9f6;
+          background: #fff;
           border-radius: 12px;
           padding: 2rem;
           border: 1px solid #e8e6e2;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.06);
         }
 
         .exp-barcode__gallery-header {
@@ -598,6 +569,7 @@ function ExpeditionBarcode({
 
         .exp-barcode__gallery-title-wrap {
           flex: 1;
+          text-align: left;
         }
 
         .exp-barcode__gallery-pre {

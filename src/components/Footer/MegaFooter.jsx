@@ -59,7 +59,7 @@ const MegaFooter = ({ showNote = true }) => {
             </div>
             <div>
               <h4 style={{ marginBottom: '1rem', fontSize: '0.85rem', textTransform: 'uppercase', letterSpacing: '1px', color: '#888' }}>Opening Hours</h4>
-              <p style={{ color: '#888', lineHeight: 1.6, fontSize: '0.9rem' }}>Monday - Friday: 8am - 6pm<br/>Saturday: 9am - 4pm<br/>Sunday: By appointment</p>
+              <p style={{ color: '#888', lineHeight: 1.6, fontSize: '0.9rem' }}>Monday - Sunday: 8:30am - 5pm</p>
               <address style={{ color: '#888', fontStyle: 'normal', marginTop: '1rem', fontSize: '0.9rem' }}>Denham Aerodrome<br/>Buckinghamshire UB9 5DF</address>
             </div>
           </div>

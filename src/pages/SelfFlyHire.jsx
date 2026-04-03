@@ -226,7 +226,7 @@ function AnimatedNumber({ value, suffix = '' }) {
 const fleetData = [
   {
     model: 'R22',
-    image: '/assets/images/fleet/r22-beta-ii.jpg',
+    image: '/assets/images/fleet/r22-g-ulze.png',
     seats: 2,
     speed: '96 kts',
     range: '185 nm',
@@ -236,7 +236,7 @@ const fleetData = [
   },
   {
     model: 'R44 Raven II',
-    image: '/assets/images/fleet/r44-raven-ii.jpg',
+    image: '/assets/images/fleet/r44-g-mxpi.png',
     seats: 4,
     speed: '113 kts',
     range: '300 nm',
@@ -246,7 +246,7 @@ const fleetData = [
   },
   {
     model: 'R66 Turbine',
-    image: '/assets/images/fleet/r66-turbine.jpg',
+    image: '/assets/images/fleet/r66-g-tlmi.png',
     seats: 5,
     speed: '120 kts',
     range: '350 nm',
@@ -319,6 +319,7 @@ function SelfFlyHire() {
   const [activeFleet, setActiveFleet] = useState(1);
   const [destFilter, setDestFilter] = useState('All');
   const [visibleDests, setVisibleDests] = useState(6);
+  const [destsExpanded, setDestsExpanded] = useState(false);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ['start start', 'end start'],
@@ -453,33 +454,66 @@ function SelfFlyHire() {
       {/* ========== INTRO SECTION ========== */}
       <section className="sfh-intro">
         <div className="sfh-intro__container">
-          <Reveal>
-            <div className="sfh-intro__header">
-              <span className="sfh-pre-text">Freedom to Fly</span>
-              <h2>
-                <span className="sfh-text--dark">Your</span>{' '}
-                <span className="sfh-text--mid">Aircraft</span>{' '}
-                <span className="sfh-text--light">Awaits</span>
-              </h2>
-              <p>
-                With an impressive fleet of over 30 helicopters, HQ Aviation offers unparalleled choice and availability
-                for licensed pilots. Whether you're planning a day trip to the coast, a golf weekend in Scotland, or
-                a business meeting across the country, we have the perfect aircraft for your mission.
-              </p>
-            </div>
-          </Reveal>
+          <div className="sfh-intro__image">
+            <img
+              src="/assets/images/facility/fleet-lineup.jpg"
+              alt="HQ Aviation helicopter fleet lined up"
+            />
+          </div>
 
-          <Reveal delay={0.2}>
-            <div className="sfh-intro__benefits">
-              {benefits.map((benefit, i) => (
-                <div key={i} className="sfh-intro__benefit">
-                  <span className="sfh-intro__benefit-stat"><AnimatedNumber value={benefit.stat} /></span>
-                  <span className="sfh-intro__benefit-label">{benefit.label}</span>
-                  <span className="sfh-intro__benefit-desc">{benefit.desc}</span>
+          <div className="sfh-intro__right">
+            <Reveal>
+              <div className="sfh-intro__header">
+                <span className="sfh-pre-text">Freedom to Fly</span>
+                <h2>
+                  <span className="sfh-text--dark">Self-Fly Hire:</span>{' '}
+                  <span className="sfh-text--mid">Your Aircraft</span>{' '}
+                  <span className="sfh-text--light">Awaits</span>
+                </h2>
+                <p>
+                  With an impressive fleet of over 30 helicopters, HQ Aviation offers unparalleled choice and availability
+                  for licensed pilots. Whether you're planning a day trip to the coast, a golf weekend in Scotland, or
+                  a business meeting across the country, we have the perfect aircraft for your mission.
+                </p>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.2}>
+              <div className="sfh-process__steps sfh-process__steps--horizontal" style={{ marginTop: '1.5rem' }}>
+                <div className="sfh-process__step">
+                  <div className="sfh-process__step-num">01</div>
+                  <div className="sfh-process__step-content">
+                    <h4>Call Operations</h4>
+                    <p className="sfh-process__desc">Confirm Booking</p>
+                    <span className="sfh-process__time">1-2 mins</span>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </Reveal>
+                <div className="sfh-process__arrow">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                  </svg>
+                </div>
+                <div className="sfh-process__step sfh-process__step--fly">
+                  <div className="sfh-process__step-num">02</div>
+                  <div className="sfh-process__step-content">
+                    <h4>Fly</h4>
+                    <p className="sfh-process__desc">Arrive at your aircraft already on the pad ready for your imminent departure.</p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.3}>
+              <div className="sfh-intro__benefits">
+                {benefits.map((benefit, i) => (
+                  <div key={i} className="sfh-intro__benefit">
+                    <span className="sfh-intro__benefit-stat"><AnimatedNumber value={benefit.stat} /></span>
+                    <span className="sfh-intro__benefit-label">{benefit.label}</span>
+                  </div>
+                ))}
+              </div>
+            </Reveal>
+          </div>
         </div>
       </section>
 
@@ -545,139 +579,33 @@ function SelfFlyHire() {
             </div>
           </Reveal>
         </div>
-      </section>
 
-      {/* ========== RATES SECTION ========== */}
-      <section className="sfh-rates">
-        <div className="sfh-rates__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Transparent Pricing</span>
-              <h2>
-                <span className="sfh-text--dark">Hire</span>{' '}
-                <span className="sfh-text--mid">Rates</span>
-              </h2>
-              <p className="sfh-section-desc">
-                All rates include fuel, insurance, and VAT. Block booking discounts available.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-rates__grid">
-              {fleetData.map((aircraft, i) => (
-                <div key={i} className="sfh-rates__card">
-                  <div className="sfh-rates__card-header">
-                    <span className="sfh-rates__card-model">{aircraft.model}</span>
-                    <span className="sfh-rates__card-seats">{aircraft.seats} Seats</span>
-                  </div>
-                  <div className="sfh-rates__card-price">
-                    <span className="sfh-rates__card-amount">{aircraft.hourlyRate}</span>
-                    <span className="sfh-rates__card-unit">/hour</span>
-                  </div>
-                  <ul className="sfh-rates__card-features">
-                    <li>Fuel included</li>
-                    <li>Insurance included</li>
-                    <li>Landing fees extra</li>
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.2}>
-            <div className="sfh-rates__note">
-              <span className="sfh-rates__note-icon">i</span>
-              <p>
-                All prices include VAT. Landing fees at destination airfields are charged separately.
-                Block booking discounts: 10+ hours receive 5% discount, 25+ hours receive 10% discount.
-              </p>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== BOOKING PROCESS ========== */}
-      <section className="sfh-process">
-        <div className="sfh-process__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Simple & Easy</span>
-              <h2>
-                <span className="sfh-text--dark">How</span>{' '}
-                <span className="sfh-text--mid">To</span>{' '}
-                <span className="sfh-text--light">Book</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-process__steps sfh-process__steps--horizontal">
-              <div className="sfh-process__step">
-                <div className="sfh-process__step-num">01</div>
-                <div className="sfh-process__step-content">
-                  <h4>Call Operations</h4>
-                  <p className="sfh-process__desc">Confirm Booking</p>
-                  <span className="sfh-process__time">1-2 mins</span>
-                </div>
-              </div>
-              <div className="sfh-process__arrow">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </div>
-              <div className="sfh-process__step sfh-process__step--fly">
-                <div className="sfh-process__step-num">02</div>
-                <div className="sfh-process__step-content">
-                  <h4>Fly</h4>
-                  <p className="sfh-process__desc">Arrive at your aircraft washed and filled on the pad, ready for your imminent departure.</p>
-                </div>
-              </div>
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== OPS TEAM SECTION (COMPACT) ========== */}
-      <section className="sfh-team sfh-team--compact">
-        <div className="sfh-team__container">
-          <div className="sfh-team__inline">
-            <span className="sfh-team__label">Operations Team</span>
-            <div className="sfh-team__members">
-              {[
-                { name: 'Alex Allison', role: 'Operations Manager' },
-                { name: 'Nicola West', role: 'Dispatch Coordinator' },
-                { name: 'Cian Mickey', role: 'Customer Relations' },
-                { name: 'Joseph Pringle', role: 'Flight Coordinator' },
-              ].map((member, i) => (
-                <div key={i} className="sfh-team__member-compact">
-                  <span className="sfh-team__name">{member.name}</span>
-                  <span className="sfh-team__role-compact">{member.role}</span>
-                </div>
-              ))}
-            </div>
-            <a href="tel:+441895833373" className="sfh-btn sfh-btn--primary sfh-btn--small">
-              Call Now
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== DESTINATIONS SECTION ========== */}
-      <section className="sfh-destinations">
         <div className="sfh-destinations__container">
           <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Where Will You Go?</span>
-              <h2>
-                <span className="sfh-text--dark">Popular</span>{' '}
-                <span className="sfh-text--mid">Destinations</span>
-              </h2>
-              <p className="sfh-section-desc">
-                From coastal escapes to countryside retreats, the helicopter opens doors to destinations unreachable by road.
-              </p>
-            </div>
-          </Reveal>
+            <div className="sfh-destinations__collapsible-card">
+              <button
+                className="sfh-destinations__toggle"
+                onClick={() => setDestsExpanded(!destsExpanded)}
+              >
+                <div>
+                  <span className="sfh-pre-text" style={{ marginBottom: 0 }}>Where Will You Go?</span>
+                  <h2 style={{ margin: '0.25rem 0 0' }}>
+                    <span className="sfh-text--dark">See Where</span>{' '}
+                    <span className="sfh-text--mid">You Can</span>{' '}
+                    <span className="sfh-text--light">Fly To</span>
+                  </h2>
+                </div>
+                <span className={`sfh-destinations__toggle-icon ${destsExpanded ? 'sfh-destinations__toggle-icon--open' : ''}`}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M6 9l6 6 6-6"/>
+                  </svg>
+                </span>
+              </button>
+
+              <div className={`sfh-destinations__collapse ${destsExpanded ? 'sfh-destinations__collapse--open' : ''}`}>
+                <p className="sfh-section-desc" style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                  From coastal escapes to countryside retreats, the helicopter opens doors to destinations unreachable by road.
+                </p>
 
           <Reveal delay={0.1}>
             <div className="sfh-destinations__filters">
@@ -730,138 +658,23 @@ function SelfFlyHire() {
               </div>
             </Reveal>
           )}
-        </div>
-      </section>
-
-      {/* ========== PARTNERS SECTION ========== */}
-      <section className="sfh-partners">
-        <div className="sfh-partners__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Preferred Partners</span>
-              <h2>
-                <span className="sfh-text--dark">Destination</span>{' '}
-                <span className="sfh-text--mid">Partners</span>
-              </h2>
-              <p className="sfh-section-desc">
-                Exclusive benefits at these partner locations when you arrive by helicopter.
-              </p>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-partners__grid">
-              {[
-                { name: 'The Grove', type: 'Hotel & Spa', benefit: '15% discount' },
-                { name: 'Wentworth', type: 'Golf Club', benefit: 'Priority tee times' },
-                { name: 'Gleneagles', type: 'Resort', benefit: '10% room rate' },
-                { name: 'Le Manoir', type: 'Restaurant', benefit: 'Complimentary welcome' },
-                { name: 'Ascot', type: 'Racecourse', benefit: 'VIP parking' },
-                { name: 'Goodwood', type: 'Motor Circuit', benefit: 'Paddock access' },
-              ].map((partner, i) => (
-                <div key={i} className="sfh-partners__card">
-                  <h4>{partner.name}</h4>
-                  <span className="sfh-partners__type">{partner.type}</span>
-                  <span className="sfh-partners__benefit">{partner.benefit}</span>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== SAFETY SECTION ========== */}
-      <section className="sfh-safety sfh-safety--compact">
-        <div className="sfh-safety__container sfh-safety__container--compact">
-          <Reveal>
-            <div className="sfh-safety__header">
-              <span className="sfh-pre-text">Safety First</span>
-              <h2>
-                <span className="sfh-text--dark">Maintained</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <p className="sfh-safety__desc">
-              Every aircraft in our fleet undergoes rigorous maintenance by our CAA Part-145 approved workshop.
-              Our dedicated team of engineers ensures each helicopter exceeds safety standards before every flight.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== GALLERY SECTION ========== */}
-      <section className="sfh-gallery">
-        <div className="sfh-gallery__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">In Flight</span>
-              <h2>
-                <span className="sfh-text--dark">Gallery</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <div className="sfh-gallery__grid">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((num, i) => (
-              <Reveal key={i} delay={i * 0.05}>
-                <div className="sfh-gallery__item">
-                  <img src={`/assets/images/gallery/carousel/rotating${num}.jpg`} alt={`Flight ${num}`} />
-                </div>
-              </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ========== ADDONS SECTION ========== */}
-      <section className="sfh-addons">
-        <div className="sfh-addons__container">
-          <Reveal>
-            <div className="sfh-section-header">
-              <span className="sfh-pre-text">Enhance Your Flight</span>
-              <h2>
-                <span className="sfh-text--dark">Additional</span>{' '}
-                <span className="sfh-text--mid">Services</span>
-              </h2>
-            </div>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="sfh-addons__grid">
-              {[
-                { title: 'Safety Pilot', price: '£150/hr', desc: 'Experienced pilot accompanies your flight' },
-                { title: 'Customs Handling', price: '£75', desc: 'International flight paperwork assistance' },
-                { title: 'PPR Booking', price: 'Free', desc: 'We handle destination PPR requests' },
-              ].map((addon, i) => (
-                <div key={i} className="sfh-addons__card">
-                  <div className="sfh-addons__header">
-                    <h4>{addon.title}</h4>
-                    <span className="sfh-addons__price">{addon.price}</span>
-                  </div>
-                  <p>{addon.desc}</p>
-                </div>
-              ))}
-            </div>
-          </Reveal>
-        </div>
-      </section>
-
-      {/* ========== BLOCK BOOKING SECTION (COMPACT) ========== */}
-      <section className="sfh-block sfh-block--compact">
-        <div className="sfh-block__container">
-          <Reveal>
-            <div className="sfh-block__compact-content">
-              <div className="sfh-block__compact-text">
-                <h3>Block Booking Discounts</h3>
-                <p>Commit to more hours and save: <strong>10-24hrs = 5% off</strong> | <strong>25+ hrs = 10% off</strong></p>
               </div>
-              <a href="/contact?subject=block-booking" className="sfh-btn sfh-btn--outline">Enquire</a>
             </div>
           </Reveal>
         </div>
       </section>
+
+      {/* Hire Rates section moved to /components (ComponentShowcase) as SelfFlyHireRates */}
+
+      {/* Booking process moved into sfh-intro__right */}
+
+      {/* Destination Partners section moved to /components (ComponentShowcase) as DestinationPartners */}
+      {/* Safety/Maintained section removed */}
+
+      {/* Gallery section removed */}
+
+      {/* Additional Services section moved to /components (ComponentShowcase) */}
+
 
       {/* ========== FAQ & LOCATION SECTION ========== */}
       <section className="sfh-faq-location">
@@ -1000,7 +813,6 @@ function SelfFlyHire() {
           font-family: 'Space Grotesk', -apple-system, sans-serif;
           background: #faf9f6;
           color: #1a1a1a;
-          overflow-x: hidden;
         }
 
         .sfh-pre-text {
@@ -1059,6 +871,7 @@ function SelfFlyHire() {
 
         .sfh-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .sfh-btn--outline {
@@ -1212,14 +1025,38 @@ function SelfFlyHire() {
         }
 
         .sfh-intro__container {
-          max-width: 1000px;
+          max-width: 1100px;
           margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 3rem;
+          align-items: start;
+        }
+
+        .sfh-intro__image {
+          position: sticky;
+          top: 120px;
+          border-radius: 6px;
+          max-height: 400px;
+        }
+
+        .sfh-intro__image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          border-radius: 6px;
+          max-height: 400px;
+        }
+
+        .sfh-intro__right {
+          display: flex;
+          flex-direction: column;
         }
 
         .sfh-intro__header {
-          text-align: center;
-          max-width: 800px;
-          margin: 0 auto 3rem;
+          text-align: left;
+          margin: 0;
         }
 
         .sfh-intro__header h2 {
@@ -1236,10 +1073,9 @@ function SelfFlyHire() {
 
         .sfh-intro__benefits {
           display: flex;
-          justify-content: center;
-          align-items: center;
           gap: 2rem;
           flex-wrap: wrap;
+          margin-top: 1.5rem;
         }
 
         .sfh-intro__benefit {
@@ -1266,10 +1102,6 @@ function SelfFlyHire() {
           text-transform: uppercase;
           letter-spacing: 0.05em;
           color: #666;
-        }
-
-        .sfh-intro__benefit-desc {
-          display: none;
         }
 
         /* ===== FLEET ===== */
@@ -1707,15 +1539,13 @@ function SelfFlyHire() {
           border-radius: 8px;
           padding: 1rem 1.25rem;
           flex: 1;
-          max-width: 180px;
           min-height: 120px;
           display: flex;
           justify-content: flex-start;
         }
 
         .sfh-process__steps--horizontal .sfh-process__step--fly {
-          flex: 1.8;
-          max-width: 280px;
+          flex: 1;
           border: 2px solid #1a1a1a;
           background: #faf9f6;
         }
@@ -2157,6 +1987,50 @@ function SelfFlyHire() {
         }
 
         /* ===== DESTINATIONS ===== */
+        .sfh-destinations__collapsible-card {
+          background: #faf9f6;
+          border: 1px solid #e8e6e2;
+          border-radius: 8px;
+          overflow: hidden;
+        }
+        .sfh-destinations__toggle {
+          width: 100%;
+          padding: 1.5rem 2rem;
+          background: none;
+          border: none;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          text-align: left;
+        }
+        .sfh-destinations__toggle:hover {
+          background: rgba(0,0,0,0.02);
+        }
+        .sfh-destinations__toggle h2 {
+          font-size: clamp(1rem, 2vw, 1.4rem);
+        }
+        .sfh-destinations__toggle-icon {
+          transition: transform 0.3s ease;
+          color: #999;
+          flex-shrink: 0;
+        }
+        .sfh-destinations__toggle-icon--open {
+          transform: rotate(180deg);
+        }
+        .sfh-destinations__collapse {
+          max-height: 0;
+          overflow: hidden;
+          transition: max-height 0.5s ease;
+        }
+        .sfh-destinations__collapse--open {
+          max-height: 3000px;
+        }
+        .sfh-destinations__collapse > * {
+          padding-left: 0.5rem;
+          padding-right: 0.5rem;
+        }
+
         .sfh-destinations {
           padding: 5rem 2rem;
           background: #fff;
@@ -2175,14 +2049,15 @@ function SelfFlyHire() {
         }
 
         .sfh-destinations__container {
-          max-width: 1100px;
-          margin: 0 auto;
+          max-width: 1000px;
+          margin: 1.5rem auto 0;
         }
 
         .sfh-destinations__grid {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 1.5rem;
+          padding-bottom: 20px;
         }
 
         .sfh-destinations__card {
@@ -2285,6 +2160,7 @@ function SelfFlyHire() {
           display: flex;
           justify-content: center;
           margin-top: 1.5rem;
+          margin-bottom: 12px;
         }
 
         .sfh-destinations__chevron {
@@ -3926,7 +3802,14 @@ function SelfFlyHire() {
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
+          .sfh-intro__container {
+            grid-template-columns: 1fr;
+          }
+          .sfh-intro__header {
+            text-align: center;
+          }
           .sfh-intro__benefits {
+            justify-content: center;
             gap: 1rem;
           }
 

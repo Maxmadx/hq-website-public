@@ -264,9 +264,7 @@ const CoordinateGridOverlay = () => {
           <div style={styles.hours}>
             <div style={styles.hoursLabel}>Operating Hours</div>
             <div style={styles.hoursText}>
-              Monday - Friday: 08:00 - 18:00<br />
-              Saturday: 09:00 - 17:00<br />
-              Sunday: By appointment
+              Monday - Sunday: 08:30 - 17:00
             </div>
           </div>
         </div>

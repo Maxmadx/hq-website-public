@@ -16,7 +16,7 @@ import '../assets/css/components.css';
 
 // Import FooterMinimal component
 import FooterMinimal from '../components/FooterMinimal';
-import TrainingSummary from '../components/Training/TrainingSummary';
+
 
 /**
  * PPL PAGE HEADER COMPONENT
@@ -448,6 +448,9 @@ function FinalPPL() {
                 exceptionally high standard, develop no bad habits, and become a better pilot at a much faster
                 pace with our rigorous, hands-on training program.
               </p>
+              <p>
+                Let aside the ground exams that most students self study before taking the tests on site, the obtention of a PPL(H) requires a minimum of 45 hrs of flight training, including 10 hrs of solo. The duration varies depending on commitment.
+              </p>
             </div>
           </Reveal>
 
@@ -591,9 +594,6 @@ function FinalPPL() {
         </div>
       </section>
 
-
-      {/* ========== COMPACT SUMMARY: Hours & Costs ========== */}
-      <TrainingSummary />
 
       {/* ========== CTA: Visit Us ========== */}
       <section className="fppl-visit">
@@ -853,6 +853,7 @@ function FinalPPL() {
 
         .fppl-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fppl-btn--outline {
@@ -1480,7 +1481,7 @@ function FinalPPL() {
         /* ===== WHERE & FAQ TWO-COLUMN ===== */
         .fppl-where-faq {
           padding: 5rem 2rem 4rem;
-          background: #fff;
+          background: #faf9f6;
         }
 
         .fppl-where-faq__container {
@@ -2053,7 +2054,7 @@ function FinalPPL() {
 
         /* ===== VISIT CTA ===== */
         .fppl-visit {
-          background: #faf9f6;
+          background: #fff;
         }
 
         .fppl-visit__content-wrap {

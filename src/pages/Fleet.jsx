@@ -1606,6 +1606,7 @@ function Fleet() {
 
         .fleet-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .fleet-btn--outline {

@@ -177,6 +177,23 @@ function Reveal({ children, delay = 0, direction = 'up' }) {
 // Aircraft models data
 const aircraftModels = [
   {
+    id: 'r88',
+    name: 'R88',
+    tagline: 'The Future of Rotorcraft',
+    description: 'Revolutionary 8-seat turbine helicopter with unmatched capability.',
+    seats: 8,
+    speed: '140',
+    range: '400',
+    engine: 'Safran Arriel',
+    price: 'POA',
+    image: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg',
+    cutout: '/assets/images/new-aircraft/r88/r88-jellybean-left.png',
+    featured: true,
+    subtypes: [
+      { id: 'standard', name: 'Standard', description: 'Base configuration with premium features.' },
+    ],
+  },
+  {
     id: 'r66',
     name: 'R66',
     tagline: 'Turbine Performance',
@@ -187,13 +204,12 @@ const aircraftModels = [
     engine: 'RR300',
     price: '$1,290,000',
     image: '/assets/images/new-aircraft/r66/rhc-r66-nxg-riviera-center-spotlight-vertical-format-14184-2.jpg',
-    cutout: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-left-v4.png',
+    cutout: '/assets/images/new-aircraft/r66/blue-r66-palo-verde-front-v4.png',
     featured: false,
     badge: null,
     subtypes: [
       { id: 'standard', name: 'Standard', description: 'Five-seat turbine helicopter with Robinson reliability.' },
       { id: 'turbine-marine', name: 'Turbine Marine', description: 'Equipped with pop-out floats for overwater operations.' },
-      { id: 'newscopter', name: 'Newscopter', description: 'ENG-configured with nose-mounted camera and microwave system.' },
       { id: 'southwood', name: 'Southwood', description: 'Premium leather interior with bespoke finishing by Southwood Aviation.' },
     ],
   },
@@ -234,24 +250,6 @@ const aircraftModels = [
     subtypes: [
       { id: 'beta-ii', name: 'Beta II', description: 'Standard two-seat trainer with proven reliability.' },
       { id: 'mariner', name: 'Mariner', description: 'Float-equipped variant for water operations.' },
-    ],
-  },
-  {
-    id: 'r88',
-    name: 'R88',
-    tagline: 'The Future of Rotorcraft',
-    description: 'Revolutionary 8-seat turbine helicopter with unmatched capability.',
-    seats: 8,
-    speed: '140',
-    range: '400',
-    engine: 'Safran Arriel',
-    price: 'POA',
-    image: '/assets/images/new-aircraft/r88/rhc-r88-3-spotlights-left-side-atmospheric-effect-21794_2.jpg',
-    cutout: '/assets/images/new-aircraft/r88/r88-jellybean-left.png',
-    featured: true,
-    badge: 'NEW',
-    subtypes: [
-      { id: 'standard', name: 'Standard', description: 'Base configuration with premium features.' },
     ],
   },
 ];
@@ -1176,9 +1174,6 @@ function Sales() {
                 <Link to={`/aircraft-sales/new/${activeModel.id}`} className="sales-btn sales-btn--primary">
                   View Details
                 </Link>
-                <Link to="/contact?subject=new-aircraft" className="sales-btn sales-btn--outline">
-                  Request Quote
-                </Link>
               </div>
             </div>
 
@@ -1760,6 +1755,7 @@ function Sales() {
 
         .sales-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .sales-btn--outline {

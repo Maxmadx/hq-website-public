@@ -1317,6 +1317,7 @@ function AircraftR44() {
 
         .r44-btn--primary:hover {
           background: #333;
+          color: #fff;
         }
 
         .r44-btn--light {

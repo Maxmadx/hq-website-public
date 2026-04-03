@@ -23,7 +23,10 @@ const FLIGHT_PATH = `
 `;
 
 // Viewbox dimensions matching the path
-const VIEWBOX = { width: 1800, height: 400 };
+const VIEWBOX = { width: 2000, height: 400 };
+
+// Number of samples for pre-computed lookup table
+const PATH_SAMPLES = 500;
 
 function ScrollPathAnimation({
   className = '',
@@ -34,106 +37,176 @@ function ScrollPathAnimation({
   colorStart = '#FFFFFF',
   colorMid = '#5B9BD5',
   colorEnd = '#1E3A5F',
+  // Optional: external ref to element whose scroll range drives progress
+  scrollTargetRef = null,
+  // Optional: ref to the sticky element — helicopter only moves during stuck phase
+  stickyRef = null,
+  // The CSS `top` value of the sticky element (default 35vh)
+  stickyTop = 0.35,
 }) {
   const containerRef = useRef(null);
   const pathRef = useRef(null);
   const iconRef = useRef(null);
-  const pathLengthRef = useRef(0);
+  // Pre-computed lookup table: [{x, y, angle}, ...] — zero geometry work during animation
+  const lookupRef = useRef(null);
+  // Cached container rect — updated on scroll, NOT every frame
+  const containerRectRef = useRef(null);
 
-  // Get scroll progress within the container
-  // "start 0.7" means progress starts when top of section reaches 70% down the viewport
+  // Framer only used for the path LINE drawing (CSS pathLength — browser composites this)
+  const scrollTarget = scrollTargetRef || containerRef;
   const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start 0.7", "end start"]
+    target: scrollTarget,
+    offset: stickyRef ? [`start ${stickyTop}`, "end end"] : ["start 0.7", "end start"]
   });
 
-  // Smooth spring for the path drawing
   const smoothProgress = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
 
-  // Transform scroll progress to path length (0 to 1)
-  // Fast start, steady through middle, burst at the end
-  const pathDrawLength = useTransform(
-    smoothProgress,
-    [0, 0.08, 0.16, 0.24, 0.32, 0.40, 0.55, 0.65, 0.75],
-    [0, 0.12, 0.25, 0.40, 0.55, 0.68, 0.82, 0.90, 1]
-  );
+  const pathDrawLength = useTransform(smoothProgress, [0, 1], [0, 1]);
 
-  // Get total path length on mount
+  // PRE-COMPUTE: Sample the entire path once at mount → lookup table
+  // This eliminates ALL getPointAtLength / atan2 calls during animation
   useEffect(() => {
-    if (pathRef.current) {
-      pathLengthRef.current = pathRef.current.getTotalLength();
+    if (!pathRef.current) return;
+    const totalLen = pathRef.current.getTotalLength();
+    const table = [];
+
+    for (let i = 0; i <= PATH_SAMPLES; i++) {
+      const t = i / PATH_SAMPLES;
+      const len = t * totalLen;
+      const pt = pathRef.current.getPointAtLength(len);
+      // Look ahead for angle
+      const aheadLen = Math.min(len + 50, totalLen);
+      const ahead = pathRef.current.getPointAtLength(aheadLen);
+      const angle = Math.atan2(ahead.y - pt.y, ahead.x - pt.x) * (180 / Math.PI);
+      table.push({ x: pt.x, y: pt.y, angle });
     }
+
+    lookupRef.current = table;
   }, []);
 
-  // Update icon position directly on the DOM (no setState lag)
+  // Cache refs for sticky-aware scroll calculation
+  const stickyHeightRef = useRef(0);
+
   useEffect(() => {
-    const unsubscribe = pathDrawLength.on('change', (progress) => {
-      if (!pathRef.current || !iconRef.current || pathLengthRef.current === 0) return;
+    const updateRefs = () => {
+      const el = (scrollTargetRef && scrollTargetRef.current) || containerRef.current;
+      if (el) containerRectRef.current = el.getBoundingClientRect();
+      if (stickyRef && stickyRef.current) stickyHeightRef.current = stickyRef.current.offsetHeight;
+    };
+    updateRefs();
+    window.addEventListener('scroll', updateRefs, { passive: true });
+    window.addEventListener('resize', updateRefs, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', updateRefs);
+      window.removeEventListener('resize', updateRefs);
+    };
+  }, [scrollTargetRef, stickyRef]);
 
-      const totalLen = pathLengthRef.current;
-      const clampedProgress = Math.max(0, Math.min(1, progress));
-      const currentLength = clampedProgress * totalLen;
+  // HELICOPTER ICON — pure rAF loop, zero Framer, zero layout thrash, zero geometry calls
+  useEffect(() => {
+    let rafId;
+    let currentProgress = 0;
+    let currentX = 0;
+    let currentY = 300;  // path start Y
+    let currentAngle = 0;
 
-      // Get exact point at the drawn path tip
-      const point = pathRef.current.getPointAtLength(currentLength);
+    const lerp = (a, b, t) => a + (b - a) * t;
 
-      // Get a point slightly ahead for angle calculation
-      const aheadLength = Math.min(currentLength + 20, totalLen);
-      const aheadPoint = pathRef.current.getPointAtLength(aheadLength);
+    // Interpolate from pre-computed lookup table — just math, no DOM/SVG queries
+    const samplePath = (progress) => {
+      const table = lookupRef.current;
+      if (!table) return { x: 0, y: 300, angle: 0 };
 
-      // Calculate angle of travel
-      const dx = aheadPoint.x - point.x;
-      const dy = aheadPoint.y - point.y;
-      const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+      const idx = progress * PATH_SAMPLES;
+      const lo = Math.floor(idx);
+      const hi = Math.min(lo + 1, PATH_SAMPLES);
+      const frac = idx - lo;
 
-      // Update DOM directly — no React render cycle, perfectly in sync with path
-      iconRef.current.setAttribute('x', point.x - 90);
-      iconRef.current.setAttribute('y', point.y - 110);
-      iconRef.current.setAttribute('transform', `rotate(${angle} ${point.x} ${point.y})`);
-    });
+      const a = table[lo];
+      const b = table[hi];
 
-    return () => unsubscribe();
-  }, [pathDrawLength]);
+      return {
+        x: lerp(a.x, b.x, frac),
+        y: lerp(a.y, b.y, frac),
+        angle: lerp(a.angle, b.angle, frac),
+      };
+    };
+
+    const getScrollTarget = () => {
+      const rect = containerRectRef.current;
+      if (!rect) return 0;
+
+      if (stickyRef && stickyRef.current) {
+        // Stuck-only mode: progress 0→1 maps to the stuck scroll range
+        const viewH = window.innerHeight;
+        const stickyTopPx = viewH * stickyTop;
+        const stickyH = stickyHeightRef.current;
+        // Stuck starts when container top = stickyTopPx
+        // Stuck ends when container bottom - stickyH = stickyTopPx
+        const stuckDistance = rect.height - stickyH;
+        if (stuckDistance <= 0) return 0;
+        const scrolled = stickyTopPx - rect.top;
+        return Math.max(0, Math.min(1, scrolled / stuckDistance));
+      }
+
+      // Default: original behavior
+      const viewH = window.innerHeight;
+      const startOffset = viewH * 0.7;
+      const totalDistance = rect.height + startOffset;
+      const scrolled = startOffset - rect.top;
+      const raw = scrolled / totalDistance;
+      const mapped = Math.min(raw / 0.75, 1);
+      return Math.max(0, Math.min(1, mapped));
+    };
+
+    const tick = () => {
+      if (!lookupRef.current || !iconRef.current) {
+        rafId = requestAnimationFrame(tick);
+        return;
+      }
+
+      const target = getScrollTarget();
+
+      // Smooth lerp — 0.12 per frame gives responsive but smooth following
+      const speed = 0.12;
+      currentProgress += (target - currentProgress) * speed;
+
+      // Sample from pre-computed table (pure math — zero DOM access)
+      const sample = samplePath(currentProgress);
+
+      // Smooth position and angle
+      currentX += (sample.x - currentX) * speed;
+      currentY += (sample.y - currentY) * speed;
+      currentAngle += (sample.angle - currentAngle) * speed;
+
+      // GPU-composited CSS transform — no layout thrash
+      const tx = currentX - 100;
+      const ty = currentY - 100;
+      iconRef.current.style.transform = `translate(${tx}px, ${ty}px) rotate(${currentAngle}deg)`;
+
+      rafId = requestAnimationFrame(tick);
+    };
+
+    rafId = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
 
   return (
     <section
       ref={containerRef}
       className={`scroll-path-section ${className}`}
     >
-      <div className="scroll-path-content">
-        {/* Left Column - Headline */}
-        <div className="scroll-path-col scroll-path-col--left">
-          <span className="scroll-path-pretitle">CAA Approved Training Organisation</span>
-          <h2 className="scroll-path-headline">
-            <span>Explore Our</span>
-            <span>Courses</span>
-          </h2>
-          <p className="scroll-path-description">
-            From your first discovery flight to advanced commercial ratings, our experienced instructors guide you every step of the way.
-          </p>
-        </div>
-      </div>
-
       <svg
         className="scroll-path-svg"
         viewBox={`0 0 ${VIEWBOX.width} ${VIEWBOX.height}`}
         preserveAspectRatio="xMidYMid meet"
         fill="none"
       >
-        {/* Glow filter for the path */}
         <defs>
-          <filter id="pathGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-
           {/* Gradient for the path: white → light blue → dark blue */}
           <linearGradient id="pathGradient" x1="0%" y1="100%" x2="100%" y2="0%">
             <stop offset="0%" stopColor={colorStart} stopOpacity="0.9" />
@@ -141,11 +214,11 @@ function ScrollPathAnimation({
             <stop offset="100%" stopColor={colorEnd} stopOpacity="1" />
           </linearGradient>
 
-          {/* Glow gradient */}
+          {/* Glow gradient — thicker semi-transparent stroke, NO blur filter */}
           <linearGradient id="glowGradient" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor={colorStart} stopOpacity="0.2" />
-            <stop offset="50%" stopColor={colorMid} stopOpacity="0.4" />
-            <stop offset="100%" stopColor={colorEnd} stopOpacity="0.5" />
+            <stop offset="0%" stopColor={colorStart} stopOpacity="0.15" />
+            <stop offset="50%" stopColor={colorMid} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={colorEnd} stopOpacity="0.4" />
           </linearGradient>
         </defs>
 
@@ -160,16 +233,15 @@ function ScrollPathAnimation({
           strokeDasharray="8 12"
         />
 
-        {/* Animated path with glow */}
+        {/* Glow path — wider semi-transparent stroke, NO feGaussianBlur */}
         <motion.path
           ref={pathRef}
           d={FLIGHT_PATH}
           stroke="url(#glowGradient)"
-          strokeWidth={pathWidth + 6}
+          strokeWidth={pathWidth + 10}
           strokeLinecap="round"
           strokeLinejoin="round"
           fill="none"
-          filter="url(#pathGlow)"
           style={{
             pathLength: pathDrawLength,
           }}
@@ -188,48 +260,18 @@ function ScrollPathAnimation({
           }}
         />
 
-        {/* Helicopter icon — positioned directly via ref for zero-lag sync with path */}
+        {/* Helicopter icon — positioned via CSS transform (GPU-composited) */}
         <image
           ref={iconRef}
           href={iconSrc}
           width="200"
           height="200"
-          x={-90}
-          y={-110}
-          transform="rotate(0 0 0)"
-          style={{ width: '200px', height: '200px' }}
+          x="0"
+          y="0"
+          className="scroll-path-icon-img"
         />
       </svg>
 
-      {/* Waypoint markers */}
-      <div className="scroll-path-waypoints">
-        <Waypoint
-          progress={smoothProgress}
-          threshold={0.02}
-          label="Training"
-          position={{ x: 5, y: 72 }}
-        />
-        <Waypoint
-          progress={smoothProgress}
-          threshold={0.06}
-          label="Certification"
-          position={{ x: 28, y: 58 }}
-          className="waypoint--certification"
-        />
-        <Waypoint
-          progress={smoothProgress}
-          threshold={0.12}
-          label="Freedom"
-          position={{ x: 68, y: 30 }}
-        />
-        <Waypoint
-          progress={smoothProgress}
-          threshold={0.25}
-          label="Mastery"
-          position={{ x: 88, y: 22 }}
-          className="waypoint--mastery"
-        />
-      </div>
 
       <style>{`
         .scroll-path-section {
@@ -402,10 +444,13 @@ function ScrollPathAnimation({
           width: 100%;
           height: 100%;
           z-index: 1;
+          overflow: visible;
         }
 
-        .scroll-path-svg image {
-          filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.2));
+        /* Icon: GPU layer promotion, NO filters during animation */
+        .scroll-path-icon-img {
+          will-change: transform;
+          transform-origin: 100px 100px;
         }
 
         .scroll-path-waypoints {
